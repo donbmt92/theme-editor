@@ -2,19 +2,59 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { Palette, User, LogOut, Settings, Plus } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Palette, User, LogOut, Settings, Plus, Edit, Eye, Calendar, CreditCard } from 'lucide-react'
 import Link from 'next/link'
+
+interface Project {
+  id: string
+  name: string
+  status: string
+  createdAt: string
+  updatedAt: string
+  theme: {
+    id: string
+    name: string
+    description: string
+  }
+  versions: Array<{
+    id: string
+    versionNumber: number
+  }>
+}
 
 export default function DashboardPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/auth/signin')
     }
   }, [status, router])
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      fetchProjects()
+    }
+  }, [status])
+
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch('/api/projects')
+      const data = await response.json()
+      
+      if (data.success) {
+        setProjects(data.projects)
+      }
+    } catch (error) {
+      console.error('Error fetching projects:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   if (status === 'loading') {
     return (
@@ -74,7 +114,7 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <Link
-            href="/editor/new"
+            href="/templates"
             className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow border-2 border-dashed border-gray-300 hover:border-blue-500"
           >
             <div className="flex items-center space-x-3">
@@ -104,16 +144,16 @@ export default function DashboardPage() {
           </Link>
 
           <Link
-            href="/settings"
+            href="/payment"
             className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
           >
             <div className="flex items-center space-x-3">
               <div className="bg-purple-100 p-3 rounded-lg">
-                <Settings className="h-6 w-6 text-purple-600" />
+                <CreditCard className="h-6 w-6 text-purple-600" />
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">Cài đặt</h3>
-                <p className="text-sm text-gray-600">Quản lý tài khoản</p>
+                <h3 className="font-semibold text-gray-900">Nâng cấp Pro</h3>
+                <p className="text-sm text-gray-600">Mở khóa tất cả tính năng</p>
               </div>
             </div>
           </Link>
@@ -121,17 +161,80 @@ export default function DashboardPage() {
 
         {/* Recent Projects */}
         <div className="bg-white rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Projects gần đây</h2>
-          <div className="text-center py-8">
-            <Palette className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">Chưa có project nào</p>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Projects gần đây</h2>
             <Link
-              href="/editor/new"
-              className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              href="/templates"
+              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
             >
-              Tạo project đầu tiên
+              Xem tất cả templates
             </Link>
           </div>
+          
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <p className="mt-2 text-gray-600">Đang tải projects...</p>
+            </div>
+          ) : projects.length === 0 ? (
+            <div className="text-center py-8">
+              <Palette className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-600">Chưa có project nào</p>
+              <Link
+                href="/templates"
+                className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Tạo project đầu tiên
+              </Link>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {projects.map((project) => (
+                <div key={project.id} className="border rounded-lg p-4 hover:shadow-sm transition-shadow">
+                  <div className="flex justify-between items-start">
+                    <div className="flex-1">
+                      <h3 className="font-medium text-gray-900 mb-1">{project.name}</h3>
+                      <p className="text-sm text-gray-600 mb-2">{project.theme.name}</p>
+                      <div className="flex items-center space-x-4 text-xs text-gray-500">
+                        <span className="flex items-center">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          {new Date(project.updatedAt).toLocaleDateString('vi-VN')}
+                        </span>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          project.status === 'EDITING' 
+                            ? 'bg-blue-100 text-blue-800' 
+                            : 'bg-gray-100 text-gray-800'
+                        }`}>
+                          {project.status === 'EDITING' ? 'Đang chỉnh sửa' : 'Đã lưu'}
+                        </span>
+                        {project.versions.length > 0 && (
+                          <span className="text-gray-500">
+                            Phiên bản {project.versions[0].versionNumber}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Link
+                        href={`/project/${project.id}`}
+                        className="p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        title="Chỉnh sửa"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        href={`/preview/${project.theme.id}`}
+                        className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                        title="Xem trước"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </main>
     </div>

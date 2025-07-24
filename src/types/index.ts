@@ -83,20 +83,25 @@ export interface ThemeColors {
   success?: string
   warning?: string
   error?: string
+  border?: string
+  muted?: string
+  destructive?: string
 }
 
 export interface ThemeTypography {
   fontFamily: string
+  fontSize: string
   headingSize: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
   bodySize: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
-  lineHeight?: 'tight' | 'normal' | 'relaxed'
-  fontWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold'
+  lineHeight: string
+  fontWeight: string
 }
 
 export interface ThemeLayout {
   containerWidth: string
+  sectionSpacing: string
   spacing: 'minimal' | 'comfortable' | 'spacious'
-  borderRadius: 'none' | 'small' | 'medium' | 'large'
+  borderRadius: string
   gridColumns?: number
   maxWidth?: string
 }
@@ -122,11 +127,217 @@ export interface ThemeComponents {
   }
 }
 
+export interface ThemeSections {
+  header?: {
+    backgroundColor?: string
+    textColor?: string
+    sticky?: boolean
+  }
+  hero?: {
+    backgroundColor?: string
+    textColor?: string
+    backgroundImage?: string
+    overlayColor?: string
+  }
+  about?: {
+    backgroundColor?: string
+    textColor?: string
+  }
+  problems?: {
+    backgroundColor?: string
+    textColor?: string
+  }
+  solutions?: {
+    backgroundColor?: string
+    textColor?: string
+  }
+  products?: {
+    backgroundColor?: string
+    textColor?: string
+  }
+  testimonials?: {
+    backgroundColor?: string
+    textColor?: string
+  }
+  cta?: {
+    backgroundColor?: string
+    textColor?: string
+  }
+  footer?: {
+    backgroundColor?: string
+    textColor?: string
+  }
+}
+
+export interface ThemeContent {
+  // Meta/SEO
+  meta?: {
+    title?: string
+    description?: string
+    keywords?: string
+    favicon?: string
+    analyticsId?: string
+    customHeadScripts?: string
+    customBodyScripts?: string
+  }
+  
+  // Header
+  header?: {
+    logo?: string
+    title?: string
+    subtitle?: string
+    menuItems?: Array<{
+      label: string
+      href: string
+    }>
+    contactInfo?: {
+      phone?: string
+      email?: string
+    }
+    socialLinks?: Array<{
+      platform: string
+      url: string
+      icon?: string
+    }>
+  }
+  
+  // Hero
+  hero?: {
+    title?: string
+    subtitle?: string
+    description?: string
+    ctaText?: string
+    secondaryCtaText?: string
+    image?: string
+    overlayOpacity?: number
+    backgroundColor?: string
+    textColor?: string
+    trustIndicators?: Array<{
+      number: string
+      label: string
+    }>
+  }
+  
+  // About
+  about?: {
+    title?: string
+    description?: string
+    backgroundColor?: string
+    textColor?: string
+  }
+  
+  // Problems
+  problems?: {
+    title?: string
+    description?: string
+    backgroundColor?: string
+    textColor?: string
+    items?: Array<{
+      id?: string
+      title: string
+      description: string
+      icon?: string
+    }>
+  }
+  
+  // Solutions
+  solutions?: {
+    title?: string
+    description?: string
+    backgroundColor?: string
+    textColor?: string
+    items?: Array<{
+      id?: string
+      title: string
+      description: string
+      benefit: string
+      icon?: string
+    }>
+  }
+  
+  // CTA
+  cta?: {
+    title?: string
+    description?: string
+    buttonText?: string
+    backgroundColor?: string
+    textColor?: string
+  }
+  
+  // Products
+  products?: {
+    title?: string
+    description?: string
+    items?: Array<{
+      id?: string
+      name: string
+      description: string
+      price?: string
+      category?: string
+      image?: string
+    }>
+  }
+  
+  // Testimonials
+  testimonials?: {
+    title?: string
+    description?: string
+    items?: Array<{
+      id?: string
+      name: string
+      role: string
+      company: string
+      content: string
+      avatar?: string
+      rating?: number
+    }>
+  }
+  
+  // Footer
+  footer?: {
+    logo?: string
+    companyName?: string
+    description?: string
+    quickLinks?: Array<{
+      label: string
+      href: string
+    }>
+    services?: Array<{
+      label: string
+      href: string
+    }>
+    contact?: {
+      phone?: string
+      email?: string
+      address?: string
+    }
+    socialLinks?: Array<{
+      platform: string
+      url: string
+      icon?: string
+    }>
+    newsletter?: {
+      title?: string
+      description?: string
+      placeholder?: string
+      buttonText?: string
+    }
+    legal?: {
+      copyright?: string
+      privacyUrl?: string
+      termsUrl?: string
+      sitemapUrl?: string
+    }
+  }
+}
+
 export interface ThemeParams {
   colors: ThemeColors
   typography: ThemeTypography
   layout: ThemeLayout
   components: ThemeComponents
+  sections?: ThemeSections
+  content?: ThemeContent
   custom?: Record<string, unknown>
 }
 

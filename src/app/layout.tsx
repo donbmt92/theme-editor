@@ -49,7 +49,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <SessionProvider>
           <div id="root">
-            {children}
+        {children}
           </div>
           <div id="modal-root" />
           <div id="toast-root" />

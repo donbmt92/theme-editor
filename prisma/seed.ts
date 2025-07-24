@@ -38,7 +38,7 @@ async function main() {
       description: 'Clean and professional theme for corporate websites',
       previewUrl: '/previews/corporate.png',
       createdBy: adminUser.id,
-      defaultParams: {
+      defaultParams: JSON.stringify({
         colors: {
           primary: '#2563eb',
           secondary: '#64748b',
@@ -66,7 +66,7 @@ async function main() {
             border: true
           }
         }
-      }
+      })
     }
   })
 
@@ -79,7 +79,7 @@ async function main() {
       description: 'Bold and artistic theme for creative professionals',
       previewUrl: '/previews/creative.png',
       createdBy: adminUser.id,
-      defaultParams: {
+      defaultParams: JSON.stringify({
         colors: {
           primary: '#ec4899',
           secondary: '#8b5cf6',
@@ -107,7 +107,7 @@ async function main() {
             border: false
           }
         }
-      }
+      })
     }
   })
 
@@ -120,7 +120,7 @@ async function main() {
       description: 'Simple and clean theme with focus on content',
       previewUrl: '/previews/minimalist.png',
       createdBy: adminUser.id,
-      defaultParams: {
+      defaultParams: JSON.stringify({
         colors: {
           primary: '#000000',
           secondary: '#6b7280',
@@ -148,13 +148,108 @@ async function main() {
             border: true
           }
         }
-      }
+      })
+    }
+  })
+
+  // Create Vietnam Coffee theme
+  const vietnamCoffeeTheme = await prisma.theme.upsert({
+    where: { id: 'vietnam-coffee-theme' },
+    update: {},
+    create: {
+      id: 'vietnam-coffee-theme',
+      name: 'Vietnam Coffee Export',
+      description: 'Professional business theme for coffee export companies with warm coffee colors',
+      previewUrl: '/previews/vietnam-coffee.png',
+      createdBy: adminUser.id,
+      defaultParams: JSON.stringify({
+        colors: {
+          primary: '#8B4513',
+          secondary: '#D2691E',
+          accent: '#FFD700',
+          background: '#F5F5DC',
+          text: '#2D3748',
+          muted: '#718096',
+          destructive: '#E53E3E',
+          border: '#E2E8F0'
+        },
+        typography: {
+          fontFamily: 'Inter',
+          headingSize: '2xl',
+          bodySize: 'base',
+          lineHeight: 'relaxed'
+        },
+        layout: {
+          containerWidth: '1200px',
+          spacing: 'comfortable',
+          borderRadius: 'medium'
+        },
+        components: {
+          button: {
+            style: 'solid',
+            size: 'medium',
+            rounded: true
+          },
+          card: {
+            shadow: 'medium',
+            border: true,
+            padding: 'large'
+          },
+          hero: {
+            overlayColor: 'rgba(139, 69, 19, 0.7)',
+            textAlign: 'center',
+            minHeight: '500px'
+          }
+        },
+        sections: {
+          header: {
+            backgroundColor: '#D2691E',
+            textColor: '#2D3748',
+            sticky: true
+          },
+          hero: {
+            backgroundColor: '#2D3748',
+            textColor: '#FFFFFF',
+            backgroundImage: 'gradient-coffee'
+          },
+          about: {
+            backgroundColor: '#F5F5DC',
+            textColor: '#2D3748'
+          },
+          problems: {
+            backgroundColor: '#FFF8DC',
+            textColor: '#2D3748'
+          },
+          solutions: {
+            backgroundColor: '#F0F8FF',
+            textColor: '#2D3748'
+          },
+          products: {
+            backgroundColor: '#F0F4F8',
+            textColor: '#2D3748'
+          },
+          testimonials: {
+            backgroundColor: '#FDF5E6',
+            textColor: '#2D3748'
+          },
+          cta: {
+            backgroundColor: '#8B4513',
+            textColor: '#FFFFFF'
+          },
+          footer: {
+            backgroundColor: '#D2691E',
+            textColor: '#F9FAFB'
+          }
+        }
+      })
     }
   })
 
   // Create a sample payment for the user
-  await prisma.payment.create({
-    data: {
+  await prisma.payment.upsert({
+    where: { bankTxnId: 'TXN_2024_001' },
+    update: {},
+    create: {
       userId: sampleUser.id,
       amount: 299000, // 299,000 VND
       currency: 'VND',
@@ -164,8 +259,8 @@ async function main() {
     }
   })
 
-  // Create a sample project
-  const sampleProject = await prisma.project.create({
+  // Create sample projects
+  const sampleProject1 = await prisma.project.create({
     data: {
       userId: sampleUser.id,
       themeId: corporateTheme.id,
@@ -174,12 +269,30 @@ async function main() {
     }
   })
 
-  // Create a project version
-  const projectVersion = await prisma.projectVersion.create({
+  const sampleProject2 = await prisma.project.create({
     data: {
-      projectId: sampleProject.id,
+      userId: sampleUser.id,
+      themeId: creativetTheme.id,
+      name: 'Creative Portfolio',
+      status: 'EDITING'
+    }
+  })
+
+  const adminProject = await prisma.project.create({
+    data: {
+      userId: adminUser.id,
+      themeId: corporateTheme.id,
+      name: 'Admin Demo Project',
+      status: 'EDITING'
+    }
+  })
+
+  // Create project versions
+  const projectVersion1 = await prisma.projectVersion.create({
+    data: {
+      projectId: sampleProject1.id,
       versionNumber: 1,
-      snapshot: {
+      snapshot: JSON.stringify({
         colors: {
           primary: '#3b82f6',
           secondary: '#64748b',
@@ -207,7 +320,7 @@ async function main() {
             border: true
           }
         }
-      }
+      })
     }
   })
 
@@ -215,22 +328,22 @@ async function main() {
   await prisma.versionParam.createMany({
     data: [
       {
-        projectVersionId: projectVersion.id,
+        projectVersionId: projectVersion1.id,
         paramKey: 'colors.primary',
         paramValue: '#3b82f6'
       },
       {
-        projectVersionId: projectVersion.id,
+        projectVersionId: projectVersion1.id,
         paramKey: 'colors.secondary',
         paramValue: '#64748b'
       },
       {
-        projectVersionId: projectVersion.id,
+        projectVersionId: projectVersion1.id,
         paramKey: 'typography.fontFamily',
         paramValue: 'Inter'
       },
       {
-        projectVersionId: projectVersion.id,
+        projectVersionId: projectVersion1.id,
         paramKey: 'layout.containerWidth',
         paramValue: '1200px'
       }

@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -15,111 +12,103 @@ model User {
   email        String    @unique
   passwordHash String    @map("password_hash")
   name         String?
+  role         UserRole  @default(USER)
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
-
-  // Relations
-  payments Payment[]
-  projects Project[]
-  themes   Theme[]
+  payments     Payment[]
+  projects     Project[]
+  themes       Theme[]
 
   @@map("users")
 }
 
 model Payment {
-  id        String    @id @default(cuid())
-  userId    String    @map("user_id")
-  amount    Decimal   @db.Decimal(10, 2)
-  currency  String    @default("VND")
+  id        String        @id @default(cuid())
+  userId    String        @map("user_id")
+  amount    Decimal       @db.Decimal(10, 2)
+  currency  String        @default("VND")
   status    PaymentStatus
-  bankTxnId String?   @map("bank_txn_id") @unique
-  paidAt    DateTime? @map("paid_at")
-  createdAt DateTime  @default(now()) @map("created_at")
-
-  // Relations
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bankTxnId String?       @unique @map("bank_txn_id")
+  paidAt    DateTime?     @map("paid_at")
+  createdAt DateTime      @default(now()) @map("created_at")
+  metadata  Json?         // Store additional payment data like planId, customerInfo, etc.
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("payments")
 }
 
 model Theme {
-  id            String   @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String
-  description   String?  @db.Text
-  previewUrl    String?  @map("preview_url")
-  defaultParams Json     @map("default_params")
-  createdBy     String   @map("created_by")
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-
-  // Relations
-  creator  User      @relation(fields: [createdBy], references: [id])
-  projects Project[]
+  description   String?
+  previewUrl    String?   @map("preview_url")
+  defaultParams Json      @map("default_params")
+  createdBy     String    @map("created_by")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  projects      Project[]
+  creator       User      @relation(fields: [createdBy], references: [id])
 
   @@map("themes")
 }
 
 model Project {
-  id        String        @id @default(cuid())
-  userId    String        @map("user_id")
-  themeId   String        @map("theme_id")
+  id        String           @id @default(cuid())
+  userId    String           @map("user_id")
+  themeId   String           @map("theme_id")
   name      String
-  status    ProjectStatus @default(EDITING)
-  createdAt DateTime      @default(now()) @map("created_at")
-  updatedAt DateTime      @updatedAt @map("updated_at")
-
-  // Relations
-  user     User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  theme    Theme            @relation(fields: [themeId], references: [id])
-  versions ProjectVersion[]
+  status    ProjectStatus    @default(EDITING)
+  createdAt DateTime         @default(now()) @map("created_at")
+  updatedAt DateTime         @updatedAt @map("updated_at")
+  versions  ProjectVersion[]
+  theme     Theme            @relation(fields: [themeId], references: [id])
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("projects")
 }
 
 model ProjectVersion {
-  id            String   @id @default(cuid())
-  projectId     String   @map("project_id")
-  versionNumber Int      @map("version_number")
+  id            String         @id @default(cuid())
+  projectId     String         @map("project_id")
+  versionNumber Int            @map("version_number")
   snapshot      Json
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  // Relations
-  project Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  params  VersionParam[]
-  exports Export[]
+  createdAt     DateTime       @default(now()) @map("created_at")
+  exports       Export[]
+  project       Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  params        VersionParam[]
 
   @@unique([projectId, versionNumber])
   @@map("project_versions")
 }
 
 model VersionParam {
-  id               String @id @default(cuid())
-  projectVersionId String @map("project_version_id")
-  paramKey         String @map("param_key")
-  paramValue       String @map("param_value")
-
-  // Relations
-  projectVersion ProjectVersion @relation(fields: [projectVersionId], references: [id], onDelete: Cascade)
+  id               String         @id @default(cuid())
+  projectVersionId String         @map("project_version_id")
+  paramKey         String         @map("param_key")
+  paramValue       String         @map("param_value")
+  projectVersion   ProjectVersion @relation(fields: [projectVersionId], references: [id], onDelete: Cascade)
 
   @@index([projectVersionId, paramKey])
   @@map("version_params")
 }
 
 model Export {
-  id               String      @id @default(cuid())
-  projectVersionId String      @map("project_version_id")
-  repoUrl          String?     @map("repo_url")
-  zipPath          String?     @map("zip_path")
-  buildStatus      BuildStatus @default(PENDING) @map("build_status")
-  createdAt        DateTime    @default(now()) @map("created_at")
-
-  // Relations
-  projectVersion ProjectVersion @relation(fields: [projectVersionId], references: [id], onDelete: Cascade)
+  id               String         @id @default(cuid())
+  projectVersionId String         @map("project_version_id")
+  repoUrl          String?        @map("repo_url")
+  zipPath          String?        @map("zip_path")
+  buildStatus      BuildStatus    @default(PENDING) @map("build_status")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  projectVersion   ProjectVersion @relation(fields: [projectVersionId], references: [id], onDelete: Cascade)
 
   @@map("exports")
 }
 
-// Enums
+enum UserRole {
+  USER
+  ADMIN
+}
+
 enum PaymentStatus {
   PENDING
   PAID
@@ -137,4 +126,4 @@ enum BuildStatus {
   BUILDING
   SUCCESS
   FAILED
-} 
+}

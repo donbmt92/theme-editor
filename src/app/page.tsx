@@ -16,6 +16,9 @@ export default function HomePage() {
             <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
               Tính năng
             </Link>
+            <Link href="/templates" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Templates
+            </Link>
             <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
               Giá cả
             </Link>
@@ -237,13 +240,21 @@ export default function HomePage() {
                     <span className="text-gray-700">Hỗ trợ kỹ thuật 24/7</span>
           </li>
                 </ul>
-                
-                <Link
-                  href="/auth/signup"
-                  className="w-full bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-block text-center"
-                >
-                  Bắt đầu ngay
-                </Link>
+
+                <div className="flex space-x-4">
+                  <Link
+                    href="/auth/signup"
+                    className="flex-1 bg-blue-600 text-white py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors inline-block text-center"
+                  >
+                    Đăng ký miễn phí
+                  </Link>
+                  <Link
+                    href="/payment"
+                    className="flex-1 bg-green-600 text-white py-4 rounded-lg font-semibold hover:bg-green-700 transition-colors inline-block text-center"
+                  >
+                    Nâng cấp Pro
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

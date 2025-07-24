@@ -58,6 +58,7 @@ export const authOptions: NextAuthOptions = {
             id: user.id,
             email: user.email,
             name: user.name,
+            role: user.role,
             hasPaidAccess: user.payments.length > 0
           }
         } catch (error) {
@@ -74,6 +75,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id
+        token.role = user.role
         token.hasPaidAccess = user.hasPaidAccess
       }
       return token
@@ -81,20 +83,21 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id as string
+        session.user.role = token.role as string
         session.user.hasPaidAccess = token.hasPaidAccess as boolean
       }
       return session
     }
   },
   pages: {
-    signIn: '/auth/signin',
-    signUp: '/auth/signup'
+    signIn: '/auth/signin'
   },
   secret: process.env.NEXTAUTH_SECRET
 }
 
 declare module 'next-auth' {
   interface User {
+    role?: string
     hasPaidAccess?: boolean
   }
 
@@ -103,6 +106,7 @@ declare module 'next-auth' {
       id: string
       email: string
       name?: string | null
+      role?: string
       hasPaidAccess?: boolean
     }
   }
@@ -111,6 +115,7 @@ declare module 'next-auth' {
 declare module 'next-auth/jwt' {
   interface JWT {
     id?: string
+    role?: string
     hasPaidAccess?: boolean
   }
 } 
