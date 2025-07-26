@@ -1,4 +1,6 @@
+
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Palette, Download, Zap, Shield, Users, Star } from 'lucide-react'
 
 export default function HomePage() {
@@ -68,11 +70,13 @@ export default function HomePage() {
           
           <div className="mt-12">
             <div className="relative rounded-xl overflow-hidden shadow-2xl">
-                             <img
-                 src="/placeholder-hero.png"
-                 alt="Theme Editor Interface"
-                 className="w-full h-auto"
-               />
+              <Image
+                src="/placeholder-hero.png"
+                alt="Theme Editor Interface"
+                width={1200}
+                height={600}
+                className="w-full h-auto"
+              />
             </div>
           </div>
         </div>

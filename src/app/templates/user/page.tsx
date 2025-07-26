@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { Plus, Edit, Eye } from 'lucide-react'
+import { Plus, Eye } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface ThemeData {
   id: string
@@ -103,10 +104,11 @@ const UserTemplatesPage = () => {
               {/* Preview Image */}
               <div className="h-48 bg-gray-200 relative">
                 {theme.previewUrl ? (
-                  <img 
+                  <Image 
                     src={theme.previewUrl} 
                     alt={theme.name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-500">
@@ -136,7 +138,7 @@ const UserTemplatesPage = () => {
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Tạo Project từ "{theme.name}"</DialogTitle>
+                        <DialogTitle>Tạo Project từ &quot;{theme.name}&quot;</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4">
                         <div>

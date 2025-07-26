@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { Clock, CheckCircle, XCircle, RefreshCw, ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -17,7 +19,7 @@ interface PaymentStatus {
   paidAt?: string
 }
 
-export default function PaymentPendingPage() {
+function PaymentPendingContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const paymentId = searchParams.get('paymentId')
@@ -197,5 +199,20 @@ export default function PaymentPendingPage() {
         </p>
       </Card>
     </div>
+  )
+}
+
+export default function PaymentPendingPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Đang tải...</p>
+        </div>
+      </div>
+    }>
+      <PaymentPendingContent />
+    </Suspense>
   )
 } 

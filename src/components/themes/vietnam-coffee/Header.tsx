@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, Phone, Download, Globe, Coffee } from "lucide-react";
 import { useState } from "react";
 import { ThemeParams } from "@/types";
+import Image from "next/image";
 
 interface HeaderContent {
   title?: string;
@@ -35,10 +36,12 @@ const Header = ({ theme, content }: HeaderProps) => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             {content.logo ? (
-              <img 
+              <Image 
                 src={content.logo} 
                 alt="Logo"
-                className="w-10 h-10 rounded-lg object-cover"
+                width={40}
+                height={40}
+                className="rounded-lg object-cover"
               />
             ) : (
               <div 

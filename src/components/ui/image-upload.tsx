@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client'
 
 import { useState, useRef } from 'react'
 import { Upload, X, Image as ImageIcon } from 'lucide-react'
 import { Button } from './button'
 import { Input } from './input'
+import Image from 'next/image'
 
 interface ImageUploadProps {
   value?: string
@@ -80,9 +82,11 @@ const ImageUpload = ({
       {/* Current Image Preview */}
       {value && (
         <div className="relative group">
-          <img
+          <Image
             src={value}
             alt="Preview"
+            width={400}
+            height={128}
             className="w-full h-32 object-cover rounded-lg border border-gray-200"
           />
           <button

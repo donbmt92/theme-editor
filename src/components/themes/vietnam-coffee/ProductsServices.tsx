@@ -1,5 +1,6 @@
 'use client'
 
+import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Coffee } from "lucide-react";
@@ -90,10 +91,11 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
               {/* Product Image */}
               <div className="h-48 overflow-hidden bg-gradient-to-br from-amber-100 to-orange-100">
                 {product.image ? (
-                  <img
+                  <Image
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">

@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-interface BusinessInfo {
-  companyName: string
-  industry: string
-  description: string
-  targetAudience: string
-  services: string
-  location: string
-  website?: string
-  tone: 'professional' | 'friendly' | 'modern' | 'traditional'
-  language: 'vietnamese' | 'english' | 'both'
-}
+// interface BusinessInfo {
+//   companyName: string
+//   industry: string
+//   description: string
+//   targetAudience: string
+//   services: string
+//   location: string
+//   website?: string
+//   tone: 'professional' | 'friendly' | 'modern' | 'traditional'
+//   language: 'vietnamese' | 'english' | 'both'
+// }
 
 export async function POST(request: NextRequest) {
   try {

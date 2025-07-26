@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Palette, Search, Filter, ArrowRight, Star, Coffee, Building, Minimize, Eye } from 'lucide-react'
 
@@ -17,7 +16,7 @@ interface Theme {
 
 export default function TemplatesPage() {
   const { data: session, status } = useSession()
-  const router = useRouter()
+  // Removed unused router variable
   const [themes, setThemes] = useState<Theme[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -41,21 +40,7 @@ export default function TemplatesPage() {
     }
   }
 
-  const handleSelectTheme = (themeId: string) => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin')
-      return
-    }
-    
-    // Check if user has paid access
-    if (!session?.user?.hasPaidAccess) {
-      router.push('/payment')
-      return
-    }
-
-    // Create new project with selected theme
-    router.push(`/editor/new?theme=${themeId}`)
-  }
+  // Removed unused function - functionality moved to user templates page
 
   const getThemeIcon = (themeName: string) => {
     if (themeName.toLowerCase().includes('coffee')) return Coffee
@@ -229,12 +214,12 @@ export default function TemplatesPage() {
           ? JSON.parse(theme.defaultParams) 
           : theme.defaultParams
                             const colors = params.colors || {}
-                            return Object.values(colors).slice(0, 4).map((color: any, index) => (
-                              <div
-                                key={index}
-                                className="w-4 h-4 rounded-full border border-gray-200"
-                                style={{ backgroundColor: color }}
-                              />
+                            return Object.values(colors).slice(0, 4).map((color: unknown, index) => (
+                                                              <div
+                                  key={index}
+                                  className="w-4 h-4 rounded-full border border-gray-200"
+                                  style={{ backgroundColor: color as string }}
+                                />
                             ))
                           } catch {
                             return null
@@ -300,14 +285,14 @@ export default function TemplatesPage() {
             </h3>
             {session.user?.role === 'ADMIN' ? (
               <div className="text-gray-700">
-                <p className="mb-2">• <strong>Chỉnh sửa Theme:</strong> Click "Chỉnh sửa" để mở Theme Editor</p>
+                <p className="mb-2">• <strong>Chỉnh sửa Theme:</strong> Click &quot;Chỉnh sửa&quot; để mở Theme Editor</p>
                 <p className="mb-2">• <strong>Tạo Theme mới:</strong> Tạo template cho users sử dụng</p>
                 <p>• <strong>Quản lý:</strong> Kiểm soát tất cả themes trong hệ thống</p>
               </div>
             ) : (
               <div className="text-gray-700">
-                <p className="mb-2">• <strong>Xem Template:</strong> Click "Xem trước" để xem demo</p>
-                <p className="mb-2">• <strong>Tạo Project:</strong> Click "Tạo Project" để bắt đầu tùy chỉnh</p>
+                <p className="mb-2">• <strong>Xem Template:</strong> Click &quot;Xem trước&quot; để xem demo</p>
+                <p className="mb-2">• <strong>Tạo Project:</strong> Click &quot;Tạo Project&quot; để bắt đầu tùy chỉnh</p>
                 <p>• <strong>Chỉnh sửa:</strong> Sau khi tạo project, bạn có thể tùy chỉnh theo ý muốn</p>
               </div>
             )}
