@@ -180,7 +180,7 @@ GITHUB_TOKEN="your_github_personal_access_token"
 
 # Environment
 NODE_ENV="production"
-PORT=3000
+PORT=3080
 
 # Optional: Analytics
 GOOGLE_ANALYTICS_ID="G-XXXXXXXXXX"
@@ -225,7 +225,7 @@ module.exports = {
     exec_mode: 'cluster',
     env: {
       NODE_ENV: 'production',
-      PORT: 3000
+      PORT: 3080
     },
     error_file: '/home/deploy/logs/onghoangdohieu-error.log',
     out_file: '/home/deploy/logs/onghoangdohieu-out.log',
@@ -322,7 +322,7 @@ server {
     location / {
         limit_req zone=onghoangdohieu_general burst=50 nodelay;
         
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3080;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -342,7 +342,7 @@ server {
     location /api/ {
         limit_req zone=onghoangdohieu_api burst=20 nodelay;
         
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3080;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -356,7 +356,7 @@ server {
 
     # Next.js static assets with aggressive caching
     location /_next/static/ {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3080;
         expires 1y;
         add_header Cache-Control "public, immutable";
         add_header Vary "Accept-Encoding";
@@ -364,14 +364,14 @@ server {
 
     # Images and media
     location ~* \.(jpg|jpeg|png|gif|ico|svg|webp)$ {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3080;
         expires 30d;
         add_header Cache-Control "public, no-transform";
     }
 
     # Favicon
     location = /favicon.ico {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3080;
         expires 1y;
         add_header Cache-Control "public, immutable";
         access_log off;
@@ -379,7 +379,7 @@ server {
 
     # Robots.txt
     location = /robots.txt {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3080;
         expires 1d;
         add_header Cache-Control "public";
         access_log off;
@@ -387,7 +387,7 @@ server {
 
     # Sitemap
     location = /sitemap.xml {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3080;
         expires 1h;
         add_header Cache-Control "public";
     }
@@ -805,8 +805,8 @@ sudo systemctl status nginx
 # Check nginx logs
 sudo tail -f /var/log/nginx/onghoangdohieu.com.error.log
 
-# Check if port 3000 is running
-netstat -tulpn | grep :3000
+# Check if port 3080 is running
+netstat -tulpn | grep :3080
 
 # Restart services
 sudo systemctl restart nginx
