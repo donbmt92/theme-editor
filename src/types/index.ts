@@ -209,7 +209,9 @@ export interface ThemeContent {
     ctaText?: string
     secondaryCtaText?: string
     image?: string
+    backgroundImage?: string
     overlayOpacity?: number
+    overlayColor?: string
     backgroundColor?: string
     textColor?: string
     trustIndicators?: Array<{
@@ -222,6 +224,7 @@ export interface ThemeContent {
   about?: {
     title?: string
     description?: string
+    image?: string
     backgroundColor?: string
     textColor?: string
   }
@@ -298,6 +301,8 @@ export interface ThemeContent {
     logo?: string
     companyName?: string
     description?: string
+    backgroundColor?: string
+    textColor?: string
     quickLinks?: Array<{
       label: string
       href: string

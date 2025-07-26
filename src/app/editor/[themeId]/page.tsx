@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Save, Download, Eye, Palette, Type, Layout, Settings, FileText, Undo, Redo } from 'lucide-react'
+import { Save, Download, Eye, Palette, Type, Layout, Settings, FileText, Undo, Redo, Wand2 } from 'lucide-react'
 import VietnamCoffeeTheme from '@/components/themes/VietnamCoffeeTheme'
 import ImageUpload from '@/components/ui/image-upload'
+import AIContentGenerator from '@/components/ui/ai-content-generator'
+import ExportProjectDialog from '@/components/ui/export-project-dialog'
 import { useUndoRedo } from '@/hooks/use-undo-redo'
 import { ThemeParams } from '@/types'
 
@@ -30,6 +32,8 @@ const ThemeEditor = () => {
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true)
+  const [showAIDialog, setShowAIDialog] = useState(false)
+  const [showExportDialog, setShowExportDialog] = useState(false)
   
   // Undo/Redo functionality
   const {
@@ -151,8 +155,14 @@ const ThemeEditor = () => {
   }
 
   const exportTheme = async () => {
-    // TODO: Implement export functionality
-    console.log('Exporting theme:', themeParams)
+    setShowExportDialog(true)
+  }
+
+  const handleAIGenerate = (generatedTheme: ThemeParams) => {
+    setThemeParams(generatedTheme)
+    updateThemeParamsWithHistory(generatedTheme)
+    setSaveMessage('✨ Nội dung AI đã được áp dụng thành công!')
+    setTimeout(() => setSaveMessage(''), 3000)
   }
 
   if (loading) {
@@ -215,6 +225,15 @@ const ThemeEditor = () => {
               </Button>
             </div>
             
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowAIDialog(true)}
+              className="bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200"
+            >
+              <Wand2 size={16} className="mr-2" />
+              AI Tạo Nội Dung
+            </Button>
             <Button
               variant="outline"
               size="sm"
@@ -649,6 +668,23 @@ const ThemeEditor = () => {
                         />
                       </div>
                       <div>
+                        <label className="block text-sm font-medium mb-2">Màu overlay</label>
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="color"
+                            value={themeParams?.content?.hero?.overlayColor || '#8B4513'}
+                            onChange={(e) => updateThemeParam(['content', 'hero', 'overlayColor'], e.target.value)}
+                            className="w-12 h-10 rounded border border-gray-300"
+                          />
+                          <Input
+                            value={themeParams?.content?.hero?.overlayColor || '#8B4513'}
+                            onChange={(e) => updateThemeParam(['content', 'hero', 'overlayColor'], e.target.value)}
+                            className="flex-1"
+                            placeholder="rgba(139, 69, 19, 0.7)"
+                          />
+                        </div>
+                      </div>
+                      <div>
                         <label className="block text-sm font-medium mb-2">Màu nền</label>
                         <Input
                           type="color"
@@ -988,6 +1024,23 @@ const ThemeEditor = () => {
           </div>
         </div>
       )}
+
+      {/* AI Content Generator Dialog */}
+      <AIContentGenerator
+        open={showAIDialog}
+        onOpenChange={setShowAIDialog}
+        onGenerate={handleAIGenerate}
+        currentTheme={themeParams}
+      />
+
+      {/* Export Project Dialog */}
+      <ExportProjectDialog
+        open={showExportDialog}
+        onOpenChange={setShowExportDialog}
+        themeParams={themeParams}
+        projectId={themeId}
+        projectName={theme?.name || 'My Theme'}
+      />
     </div>
   )
 }

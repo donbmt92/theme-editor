@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Save, Download, Eye, Palette, Type, Layout, Settings, FileText, Undo, Redo, ArrowLeft } from 'lucide-react'
+import { Save, Download, Eye, Palette, Type, Layout, Settings, FileText, Undo, Redo, ArrowLeft, Wand2 } from 'lucide-react'
 import VietnamCoffeeTheme from '@/components/themes/VietnamCoffeeTheme'
 import ImageUpload from '@/components/ui/image-upload'
+import AIContentGenerator from '@/components/ui/ai-content-generator'
+import ExportProjectDialog from '@/components/ui/export-project-dialog'
 import { useUndoRedo } from '@/hooks/use-undo-redo'
 import { ThemeParams } from '@/types'
 
@@ -40,6 +42,8 @@ const ProjectEditor = () => {
   const [isSaving, setIsSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState('')
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true)
+  const [showAIDialog, setShowAIDialog] = useState(false)
+  const [showExportDialog, setShowExportDialog] = useState(false)
   
   // Undo/Redo functionality
   const {
@@ -162,6 +166,13 @@ const ProjectEditor = () => {
     }
   }
 
+  const handleAIGenerate = (generatedTheme: ThemeParams) => {
+    setThemeParams(generatedTheme)
+    updateThemeParamsWithHistory(generatedTheme)
+    setSaveMessage('✨ Nội dung AI đã được áp dụng thành công!')
+    setTimeout(() => setSaveMessage(''), 3000)
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -226,6 +237,15 @@ const ProjectEditor = () => {
             <Button
               variant="outline"
               size="sm"
+              onClick={() => setShowAIDialog(true)}
+              className="bg-purple-50 hover:bg-purple-100 text-purple-700 border-purple-200"
+            >
+              <Wand2 size={16} className="mr-2" />
+              AI Tạo Nội Dung
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => setIsPreviewMode(!isPreviewMode)}
             >
               <Eye size={16} className="mr-2" />
@@ -243,7 +263,7 @@ const ProjectEditor = () => {
             </Button>
             <Button
               size="sm"
-              onClick={() => {/* TODO: Implement export */}}
+              onClick={() => setShowExportDialog(true)}
               style={{ backgroundColor: themeParams?.colors.primary }}
             >
               <Download size={16} className="mr-2" />
@@ -578,6 +598,14 @@ const ProjectEditor = () => {
                     <h3 className="text-lg font-semibold mb-4">Header</h3>
                     <div className="space-y-4">
                       <div>
+                        <label className="block text-sm font-medium mb-2">Logo</label>
+                        <ImageUpload
+                          value={themeParams?.content?.header?.logo || ''}
+                          onChange={(url) => updateThemeParam(['content', 'header', 'logo'], url)}
+                          placeholder="Upload logo công ty"
+                        />
+                      </div>
+                      <div>
                         <label className="block text-sm font-medium mb-2">Tên công ty</label>
                         <Input
                           value={themeParams?.content?.header?.title || ''}
@@ -599,6 +627,14 @@ const ProjectEditor = () => {
                   <Card className="p-4">
                     <h3 className="text-lg font-semibold mb-4">Hero Section</h3>
                     <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Hình ảnh nền</label>
+                        <ImageUpload
+                          value={themeParams?.content?.hero?.backgroundImage || ''}
+                          onChange={(url) => updateThemeParam(['content', 'hero', 'backgroundImage'], url)}
+                          placeholder="Upload hình ảnh nền hero"
+                        />
+                      </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Tiêu đề chính</label>
                         <Input
@@ -632,12 +668,49 @@ const ProjectEditor = () => {
                           placeholder="Tìm hiểu thêm"
                         />
                       </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Độ mờ overlay (0-1)</label>
+                        <Input
+                          type="number"
+                          min="0"
+                          max="1"
+                          step="0.1"
+                          value={themeParams?.content?.hero?.overlayOpacity || 0.7}
+                          onChange={(e) => updateThemeParam(['content', 'hero', 'overlayOpacity'], parseFloat(e.target.value))}
+                          placeholder="0.7"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Màu overlay</label>
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="color"
+                            value={themeParams?.content?.hero?.overlayColor || '#8B4513'}
+                            onChange={(e) => updateThemeParam(['content', 'hero', 'overlayColor'], e.target.value)}
+                            className="w-12 h-10 rounded border border-gray-300"
+                          />
+                          <Input
+                            value={themeParams?.content?.hero?.overlayColor || '#8B4513'}
+                            onChange={(e) => updateThemeParam(['content', 'hero', 'overlayColor'], e.target.value)}
+                            className="flex-1"
+                            placeholder="rgba(139, 69, 19, 0.7)"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </Card>
 
                   <Card className="p-4">
                     <h3 className="text-lg font-semibold mb-4">Về chúng tôi</h3>
                     <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Hình ảnh</label>
+                        <ImageUpload
+                          value={themeParams?.content?.about?.image || ''}
+                          onChange={(url) => updateThemeParam(['content', 'about', 'image'], url)}
+                          placeholder="Upload hình ảnh về công ty"
+                        />
+                      </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Tiêu đề</label>
                         <Input
@@ -1000,7 +1073,7 @@ const ProjectEditor = () => {
                               <label className="block text-sm font-medium mb-1">Tên sản phẩm</label>
                               <Input
                                 value={themeParams?.content?.products?.items?.[index]?.name || ''}
-                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index, 'name'], e.target.value)}
+                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index.toString(), 'name'], e.target.value)}
                                 placeholder="Tên sản phẩm"
                               />
                             </div>
@@ -1008,7 +1081,7 @@ const ProjectEditor = () => {
                               <label className="block text-sm font-medium mb-1">Mô tả</label>
                               <Textarea
                                 value={themeParams?.content?.products?.items?.[index]?.description || ''}
-                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index, 'description'], e.target.value)}
+                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index.toString(), 'description'], e.target.value)}
                                 placeholder="Mô tả sản phẩm"
                                 rows={2}
                               />
@@ -1017,15 +1090,23 @@ const ProjectEditor = () => {
                               <label className="block text-sm font-medium mb-1">Giá</label>
                               <Input
                                 value={themeParams?.content?.products?.items?.[index]?.price || ''}
-                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index, 'price'], e.target.value)}
+                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index.toString(), 'price'], e.target.value)}
                                 placeholder="2.50 USD/kg"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Hình ảnh sản phẩm</label>
+                              <ImageUpload
+                                value={themeParams?.content?.products?.items?.[index]?.image || ''}
+                                onChange={(url) => updateThemeParam(['content', 'products', 'items', index.toString(), 'image'], url)}
+                                placeholder="Upload hình ảnh sản phẩm"
                               />
                             </div>
                             <div>
                               <label className="block text-sm font-medium mb-1">Danh mục</label>
                               <Input
                                 value={themeParams?.content?.products?.items?.[index]?.category || ''}
-                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index, 'category'], e.target.value)}
+                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index.toString(), 'category'], e.target.value)}
                                 placeholder="Robusta"
                               />
                             </div>
@@ -1043,6 +1124,14 @@ const ProjectEditor = () => {
                   <Card className="p-4">
                     <h3 className="text-lg font-semibold mb-4">Footer</h3>
                     <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Logo Footer</label>
+                        <ImageUpload
+                          value={themeParams?.content?.footer?.logo || ''}
+                          onChange={(url) => updateThemeParam(['content', 'footer', 'logo'], url)}
+                          placeholder="Upload logo footer"
+                        />
+                      </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Tên công ty</label>
                         <Input
@@ -1191,6 +1280,23 @@ const ProjectEditor = () => {
           </div>
         </div>
       )}
+
+      {/* AI Content Generator Dialog */}
+      <AIContentGenerator
+        open={showAIDialog}
+        onOpenChange={setShowAIDialog}
+        onGenerate={handleAIGenerate}
+        currentTheme={themeParams}
+      />
+
+      {/* Export Project Dialog */}
+      <ExportProjectDialog
+        open={showExportDialog}
+        onOpenChange={setShowExportDialog}
+        themeParams={themeParams}
+        projectId={projectId}
+        projectName={project?.name || 'My Project'}
+      />
     </div>
   )
 }

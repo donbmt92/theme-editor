@@ -13,8 +13,8 @@ async function testSepayWebhook() {
     content: "Thanh toan QR SE123456",
     transferType: "in", // "in" for incoming money, "out" for outgoing
     description: "Thanh toan QR SE123456",
-    transferAmount: 599000, // Amount in VND
-    referenceCode: "TXN_1753295069539_ll26z947j", // This should match bankTxnId in payment
+    transferAmount: 5000, // Amount in VND
+    referenceCode: "TXN_1753422718777_yki7kt7ux", // This should match bankTxnId in payment
     accumulated: 0,
     id: 123456
   }

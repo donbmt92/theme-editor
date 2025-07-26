@@ -28,6 +28,7 @@ export default function VietnamCoffeeTheme({ theme, content }: VietnamCoffeeThem
       description: "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
       ctaText: "Tìm hiểu thêm",
       image: "/assets/hero-coffee.jpg",
+      backgroundImage: "/assets/hero-coffee.jpg",
       backgroundColor: "#2D3748",
       textColor: "#FFFFFF",
       overlayColor: "rgba(139, 69, 19, 0.7)"

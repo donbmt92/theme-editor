@@ -10,9 +10,11 @@ interface HeroContent {
   description?: string;
   ctaText?: string;
   image?: string;
+  backgroundImage?: string;
   backgroundColor?: string;
   textColor?: string;
   overlayColor?: string;
+  overlayOpacity?: number;
 }
 
 interface HeroSectionProps {
@@ -21,21 +23,43 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ theme, content }: HeroSectionProps) => {
+  // Convert overlayOpacity to overlayColor if needed
+  const getOverlayColor = () => {
+    if (content.overlayColor) {
+      // If it's already a hex color, convert to rgba with opacity
+      if (content.overlayColor.startsWith('#')) {
+        const opacity = content.overlayOpacity || 0.7;
+        return `${content.overlayColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`;
+      }
+      return content.overlayColor;
+    }
+    if (content.overlayOpacity !== undefined) {
+      // Convert hex color to rgba with opacity
+      const baseColor = theme.colors.primary || '#8B4513';
+      const opacity = content.overlayOpacity;
+      return `${baseColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`;
+    }
+    return theme.sections?.hero?.overlayColor || 'rgba(139, 69, 19, 0.7)';
+  };
+  
   return (
     <section 
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
       style={{ backgroundColor: content.backgroundColor || theme.sections?.hero?.backgroundColor || theme.colors.background }}
     >
       {/* Background Image */}
-      {content.image && (
+      {(content.image || content.backgroundImage) && (
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url(${content.image})` }}
+          style={{ backgroundImage: `url(${content.backgroundImage || content.image})` }}
         >
-          <div 
-            className="absolute inset-0"
-            style={{ backgroundColor: content.overlayColor || theme.sections?.hero?.overlayColor || 'rgba(139, 69, 19, 0.7)' }}
-          ></div>
+          {/* Only show overlay if there's a background image and overlay settings */}
+          {(content.overlayColor || content.overlayOpacity !== undefined) && (
+            <div 
+              className="absolute inset-0"
+              style={{ backgroundColor: getOverlayColor() }}
+            ></div>
+          )}
         </div>
       )}
 
