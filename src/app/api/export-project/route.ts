@@ -11,6 +11,13 @@ interface ExportOptions {
   includeAssets: boolean
 }
 
+interface ThemeParamsType {
+  colors?: Record<string, string>
+  content?: Record<string, any>
+  sections?: Record<string, any>
+  [key: string]: any
+}
+
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
   console.log('🚀 [EXPORT] Starting project export process...')

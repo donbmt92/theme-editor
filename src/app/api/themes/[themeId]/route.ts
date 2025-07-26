@@ -5,12 +5,13 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { themeId: string } }
+  { params }: { params: Promise<{ themeId: string }> }
 ) {
   try {
+    const { themeId } = await params
     const theme = await prisma.theme.findUnique({
       where: {
-        id: params.themeId
+        id: themeId
       },
       select: {
         id: true,
@@ -51,9 +52,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { themeId: string } }
+  { params }: { params: Promise<{ themeId: string }> }
 ) {
   try {
+    const { themeId } = await params
     const body = await request.json()
     const { themeParams } = body
 
@@ -80,7 +82,7 @@ export async function PUT(
 
     // Check if theme exists
     const theme = await prisma.theme.findUnique({
-      where: { id: params.themeId },
+      where: { id: themeId },
       select: { createdBy: true }
     })
 
@@ -94,7 +96,7 @@ export async function PUT(
 
     const updatedTheme = await prisma.theme.update({
       where: {
-        id: params.themeId
+        id: themeId
       },
       data: {
         defaultParams: themeParams

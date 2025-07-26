@@ -5,9 +5,10 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
+  { params }: { params: Promise<{ projectId: string }> }
 ) {
   try {
+    const { projectId } = await params
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
@@ -15,7 +16,7 @@ export async function GET(
 
     const project = await prisma.project.findFirst({
       where: {
-        id: params.projectId,
+        id: projectId,
         userId: session.user.id
       },
       include: {
@@ -56,9 +57,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
+  { params }: { params: Promise<{ projectId: string }> }
 ) {
   try {
+    const { projectId } = await params
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
@@ -70,7 +72,7 @@ export async function PUT(
     // Check if project exists and user owns it
     const project = await prisma.project.findFirst({
       where: {
-        id: params.projectId,
+        id: projectId,
         userId: session.user.id
       }
     })
@@ -84,7 +86,7 @@ export async function PUT(
 
     // Update project
     const updatedProject = await prisma.project.update({
-      where: { id: params.projectId },
+      where: { id: projectId },
       data: {
         name: name || project.name,
         updatedAt: new Date()
@@ -104,7 +106,7 @@ export async function PUT(
     // Create new version if themeParams provided
     if (themeParams) {
       const latestVersion = await prisma.projectVersion.findFirst({
-        where: { projectId: params.projectId },
+        where: { projectId: projectId },
         orderBy: { versionNumber: 'desc' }
       })
 
@@ -112,7 +114,7 @@ export async function PUT(
 
       await prisma.projectVersion.create({
         data: {
-          projectId: params.projectId,
+          projectId: projectId,
           versionNumber: newVersionNumber,
           snapshot: themeParams
         }

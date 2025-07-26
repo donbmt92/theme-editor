@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
+  { params }: { params: Promise<{ projectId: string }> }
 ) {
   const startTime = Date.now()
   console.log('📥 [DOWNLOAD] Starting project download...')
   
   try {
-    const projectId = params.projectId
+    const { projectId } = await params
     console.log('📋 [DOWNLOAD] Download request for project:', projectId)
     
     // Get the stored ZIP file (in production, use proper storage)
