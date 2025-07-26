@@ -1,0 +1,604 @@
+{\rtf1\ansi\deff0 {\fonttbl {\f0 Times New Roman;}}
+\fs36\b 🚀 HƯỚNG DẪN DEPLOY THEME EDITOR LÊN VPS\b0\fs24\par\par
+\par
+\fs28\b 📋 \b MỤC LỤC \b0\b0\fs24\par\par
+1. [Yêu cầu hệ thống](#yêu-cầu-hệ-thống)\par
+2. [Chuẩn bị VPS](#chuẩn-bị-vps)\par
+3. [Cài đặt môi trường](#cài-đặt-môi-trường)\par
+4. [Deploy ứng dụng](#deploy-ứng-dụng)\par
+5. [Cấu hình Nginx](#cấu-hình-nginx)\par
+6. [SSL Certificate](#ssl-certificate)\par
+7. [Database Setup](#database-setup)\par
+8. [Monitoring & Logs](#monitoring--logs)\par
+9. [Backup & Maintenance](#backup--maintenance)\par
+\par
+---\par
+\par
+\fs28\b 🖥️ \b YÊU CẦU HỆ THỐNG \b0\b0\fs24\par\par
+\par
+\fs24\b \b Minimum Requirements: \b0\b0\fs24\par\par
+- \b CPU: \b0 2 cores\par
+- \b RAM: \b0 4GB\par
+- \b Storage: \b0 20GB SSD\par
+- \b OS: \b0 Ubuntu 20.04 LTS hoặc mới hơn\par
+- \b Bandwidth: \b0 100Mbps\par
+\par
+\fs24\b \b Recommended: \b0\b0\fs24\par\par
+- \b CPU: \b0 4 cores\par
+- \b RAM: \b0 8GB\par
+- \b Storage: \b0 50GB SSD\par
+- \b OS: \b0 Ubuntu 22.04 LTS\par
+\par
+---\par
+\par
+\fs28\b 🔧 \b CHUẨN BỊ VPS \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. Kết nối VPS: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b SSH vào VPS\b0\fs24\par\par
+ssh root@your-vps-ip\par
+\par
+\fs36\b Hoặc với user khác\b0\fs24\par\par
+ssh username@your-vps-ip -p 22 \f0\fs24\par\par
+\par
+\fs24\b \b 2. Update hệ thống: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Update package list\b0\fs24\par\par
+sudo apt update && sudo apt upgrade -y\par
+\par
+\fs36\b Cài đặt các package cần thiết\b0\fs24\par\par
+sudo apt install -y curl wget git unzip software-properties-common \f0\fs24\par\par
+\par
+\fs24\b \b 3. Tạo user deploy: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Tạo user mới\b0\fs24\par\par
+sudo adduser deploy\par
+\par
+\fs36\b Thêm vào sudo group\b0\fs24\par\par
+sudo usermod -aG sudo deploy\par
+\par
+\fs36\b Chuyển sang user deploy\b0\fs24\par\par
+su - deploy \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 🛠️ \b CÀI ĐẶT MÔI TRƯỜNG \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. Cài đặt Node.js (v20): \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Cài đặt NodeSource repository\b0\fs24\par\par
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -\par
+\par
+\fs36\b Cài đặt Node.js\b0\fs24\par\par
+sudo apt-get install -y nodejs\par
+\par
+\fs36\b Kiểm tra version\b0\fs24\par\par
+node --version\par
+npm --version \f0\fs24\par\par
+\par
+\fs24\b \b 2. Cài đặt PM2: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Cài đặt PM2 globally\b0\fs24\par\par
+sudo npm install -g pm2\par
+\par
+\fs36\b Thiết lập PM2 startup\b0\fs24\par\par
+pm2 startup\par
+sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy \f0\fs24\par\par
+\par
+\fs24\b \b 3. Cài đặt Nginx: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Cài đặt Nginx\b0\fs24\par\par
+sudo apt install -y nginx\par
+\par
+\fs36\b Khởi động Nginx\b0\fs24\par\par
+sudo systemctl start nginx\par
+sudo systemctl enable nginx\par
+\par
+\fs36\b Kiểm tra status\b0\fs24\par\par
+sudo systemctl status nginx \f0\fs24\par\par
+\par
+\fs24\b \b 4. Cài đặt PostgreSQL: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Cài đặt PostgreSQL\b0\fs24\par\par
+sudo apt install -y postgresql postgresql-contrib\par
+\par
+\fs36\b Khởi động PostgreSQL\b0\fs24\par\par
+sudo systemctl start postgresql\par
+sudo systemctl enable postgresql\par
+\par
+\fs36\b Tạo database và user\b0\fs24\par\par
+sudo -u postgres psql\par
+CREATE DATABASE theme_editor;\par
+CREATE USER deploy WITH PASSWORD 'your_secure_password';\par
+GRANT ALL PRIVILEGES ON DATABASE theme_editor TO deploy;\par
+\q \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 🚀 \b DEPLOY ỨNG DỤNG \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. Clone repository: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Chuyển về home directory\b0\fs24\par\par
+cd /home/deploy\par
+\par
+\fs36\b Clone repo\b0\fs24\par\par
+git clone https://github.com/donbmt92/theme-editor.git\par
+cd theme-editor/theme-editor\par
+\par
+\fs36\b Cài đặt dependencies\b0\fs24\par\par
+npm install \f0\fs24\par\par
+\par
+\fs24\b \b 2. Cấu hình Environment: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Copy env example\b0\fs24\par\par
+cp env.example .env\par
+\par
+\fs36\b Chỉnh sửa .env\b0\fs24\par\par
+nano .env \f0\fs24\par\par
+\par
+#### \b Nội dung .env: \b0\par
+\f1\fs20 \fs36\b Database\b0\fs24\par\par
+DATABASE_URL="postgresql://deploy:your_secure_password@localhost:5432/theme_editor"\par
+\par
+\fs36\b Next Auth\b0\fs24\par\par
+NEXTAUTH_URL="https://yourdomain.com"\par
+NEXTAUTH_SECRET="your_very_long_random_secret_key_here"\par
+\par
+\fs36\b Google AI\b0\fs24\par\par
+GOOGLE_AI_API_KEY="your_google_ai_api_key"\par
+\par
+\fs36\b GitHub Integration\b0\fs24\par\par
+GITHUB_TOKEN="your_github_token"\par
+\par
+\fs36\b Environment\b0\fs24\par\par
+NODE_ENV="production"\par
+PORT=3000 \f0\fs24\par\par
+\par
+\fs24\b \b 3. Setup Database: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Generate Prisma client\b0\fs24\par\par
+npx prisma generate\par
+\par
+\fs36\b Run migrations\b0\fs24\par\par
+npx prisma db push\par
+\par
+\fs36\b Seed database (optional)\b0\fs24\par\par
+npx prisma db seed \f0\fs24\par\par
+\par
+\fs24\b \b 4. Build ứng dụng: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Build Next.js app\b0\fs24\par\par
+npm run build\par
+\par
+\fs36\b Test production build\b0\fs24\par\par
+npm start \f0\fs24\par\par
+\par
+\fs24\b \b 5. Chạy với PM2: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Tạo PM2 config\b0\fs24\par\par
+cat > ecosystem.config.js << 'EOF'\par
+module.exports = {\par
+  apps: [{\par
+    name: 'theme-editor',\par
+    script: 'npm',\par
+    args: 'start',\par
+    cwd: '/home/deploy/theme-editor/theme-editor',\par
+    instances: 'max',\par
+    exec_mode: 'cluster',\par
+    env: {\par
+      NODE_ENV: 'production',\par
+      PORT: 3000\par
+    },\par
+    error_file: '/home/deploy/logs/theme-editor-error.log',\par
+    out_file: '/home/deploy/logs/theme-editor-out.log',\par
+    log_file: '/home/deploy/logs/theme-editor.log',\par
+    time: true\par
+  }]\par
+}\par
+EOF\par
+\par
+\fs36\b Tạo thư mục logs\b0\fs24\par\par
+mkdir -p /home/deploy/logs\par
+\par
+\fs36\b Start với PM2\b0\fs24\par\par
+pm2 start ecosystem.config.js\par
+\par
+\fs36\b Save PM2 processes\b0\fs24\par\par
+pm2 save \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 🌐 \b CẤU HÌNH NGINX \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. Tạo Nginx config: \b0\b0\fs24\par\par
+\f1\fs20 sudo nano /etc/nginx/sites-available/theme-editor \f0\fs24\par\par
+\par
+#### \b Nội dung config: \b0\par
+\f1\fs20 server {\par
+    listen 80;\par
+    server_name yourdomain.com www.yourdomain.com;\par
+\par
+    # Redirect HTTP to HTTPS\par
+    return 301 https://$server_name$request_uri;\par
+}\par
+\par
+server {\par
+    listen 443 ssl http2;\par
+    server_name yourdomain.com www.yourdomain.com;\par
+\par
+    # SSL Configuration\par
+    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;\par
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;\par
+    \par
+    # SSL Security\par
+    ssl_protocols TLSv1.2 TLSv1.3;\par
+    ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384;\par
+    ssl_prefer_server_ciphers off;\par
+    ssl_session_cache shared:SSL:10m;\par
+    ssl_session_timeout 10m;\par
+\par
+    # Security Headers\par
+    add_header X-Frame-Options "SAMEORIGIN" always;\par
+    add_header X-XSS-Protection "1; mode=block" always;\par
+    add_header X-Content-Type-Options "nosniff" always;\par
+    add_header Referrer-Policy "no-referrer-when-downgrade" always;\par
+    add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'" always;\par
+\par
+    # Gzip Compression\par
+    gzip on;\par
+    gzip_vary on;\par
+    gzip_min_length 1024;\par
+    gzip_proxied expired no-cache no-store private must-revalidate auth;\par
+    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml+rss application/javascript;\par
+\par
+    # Rate Limiting\par
+    limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;\par
+    \par
+    location / {\par
+        proxy_pass http://localhost:3000;\par
+        proxy_http_version 1.1;\par
+        proxy_set_header Upgrade $http_upgrade;\par
+        proxy_set_header Connection 'upgrade';\par
+        proxy_set_header Host $host;\par
+        proxy_set_header X-Real-IP $remote_addr;\par
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\par
+        proxy_set_header X-Forwarded-Proto $scheme;\par
+        proxy_cache_bypass $http_upgrade;\par
+        proxy_read_timeout 86400;\par
+    }\par
+\par
+    # API Rate Limiting\par
+    location /api/ {\par
+        limit_req zone=api burst=20 nodelay;\par
+        proxy_pass http://localhost:3000;\par
+        proxy_http_version 1.1;\par
+        proxy_set_header Upgrade $http_upgrade;\par
+        proxy_set_header Connection 'upgrade';\par
+        proxy_set_header Host $host;\par
+        proxy_set_header X-Real-IP $remote_addr;\par
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\par
+        proxy_set_header X-Forwarded-Proto $scheme;\par
+        proxy_cache_bypass $http_upgrade;\par
+    }\par
+\par
+    # Static Files Caching\par
+    location /_next/static/ {\par
+        proxy_pass http://localhost:3000;\par
+        proxy_cache_valid 200 1y;\par
+        add_header Cache-Control "public, immutable";\par
+    }\par
+\par
+    # Error Pages\par
+    error_page 500 502 503 504 /50x.html;\par
+    location = /50x.html {\par
+        root /var/www/html;\par
+    }\par
+} \f0\fs24\par\par
+\par
+\fs24\b \b 2. Enable site: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Enable site\b0\fs24\par\par
+sudo ln -s /etc/nginx/sites-available/theme-editor /etc/nginx/sites-enabled/\par
+\par
+\fs36\b Test config\b0\fs24\par\par
+sudo nginx -t\par
+\par
+\fs36\b Reload Nginx\b0\fs24\par\par
+sudo systemctl reload nginx \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 🔒 \b SSL CERTIFICATE \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. Cài đặt Certbot: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Cài đặt snapd\b0\fs24\par\par
+sudo apt install -y snapd\par
+\par
+\fs36\b Cài đặt certbot\b0\fs24\par\par
+sudo snap install --classic certbot\par
+\par
+\fs36\b Tạo symlink\b0\fs24\par\par
+sudo ln -s /snap/bin/certbot /usr/bin/certbot \f0\fs24\par\par
+\par
+\fs24\b \b 2. Tạo SSL Certificate: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Dừng Nginx tạm thời\b0\fs24\par\par
+sudo systemctl stop nginx\par
+\par
+\fs36\b Tạo certificate\b0\fs24\par\par
+sudo certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com\par
+\par
+\fs36\b Start lại Nginx\b0\fs24\par\par
+sudo systemctl start nginx \f0\fs24\par\par
+\par
+\fs24\b \b 3. Auto-renewal: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Test renewal\b0\fs24\par\par
+sudo certbot renew --dry-run\par
+\par
+\fs36\b Crontab cho auto-renewal\b0\fs24\par\par
+sudo crontab -e\par
+\par
+\fs36\b Thêm dòng này:\b0\fs24\par\par
+0 12 * * * /usr/bin/certbot renew --quiet && systemctl reload nginx \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 🗄️ \b DATABASE SETUP \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. Backup Script: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Tạo backup script\b0\fs24\par\par
+cat > /home/deploy/backup_db.sh << 'EOF'\par
+#!/bin/bash\par
+BACKUP_DIR="/home/deploy/backups"\par
+DATE=$(date +%Y%m%d_%H%M%S)\par
+BACKUP_FILE="theme_editor_backup_$DATE.sql"\par
+\par
+mkdir -p $BACKUP_DIR\par
+\par
+pg_dump -h localhost -U deploy -d theme_editor > $BACKUP_DIR/$BACKUP_FILE\par
+\par
+\fs36\b Giữ lại 7 backup gần nhất\b0\fs24\par\par
+find $BACKUP_DIR -name "theme_editor_backup_*.sql" -type f -mtime +7 -delete\par
+\par
+echo "Database backup completed: $BACKUP_FILE"\par
+EOF\par
+\par
+chmod +x /home/deploy/backup_db.sh \f0\fs24\par\par
+\par
+\fs24\b \b 2. Crontab cho backup tự động: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Crontab\b0\fs24\par\par
+crontab -e\par
+\par
+\fs36\b Backup hàng ngày lúc 2h sáng\b0\fs24\par\par
+0 2 * * * /home/deploy/backup_db.sh >> /home/deploy/logs/backup.log 2>&1 \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 📊 \b MONITORING & LOGS \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. PM2 Monitoring: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Xem processes\b0\fs24\par\par
+pm2 list\par
+\par
+\fs36\b Monitor real-time\b0\fs24\par\par
+pm2 monit\par
+\par
+\fs36\b Logs\b0\fs24\par\par
+pm2 logs theme-editor\par
+\par
+\fs36\b Restart app\b0\fs24\par\par
+pm2 restart theme-editor\par
+\par
+\fs36\b Reload without downtime\b0\fs24\par\par
+pm2 reload theme-editor \f0\fs24\par\par
+\par
+\fs24\b \b 2. System Monitoring: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Cài đặt htop\b0\fs24\par\par
+sudo apt install -y htop\par
+\par
+\fs36\b Check system resources\b0\fs24\par\par
+htop\par
+df -h\par
+free -h \f0\fs24\par\par
+\par
+\fs24\b \b 3. Log Management: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Tạo logrotate config\b0\fs24\par\par
+sudo nano /etc/logrotate.d/theme-editor\par
+\par
+\fs36\b Nội dung:\b0\fs24\par\par
+/home/deploy/logs/*.log {\par
+    daily\par
+    missingok\par
+    rotate 14\par
+    compress\par
+    delaycompress\par
+    notifempty\par
+    create 0644 deploy deploy\par
+    postrotate\par
+        pm2 reload theme-editor > /dev/null\par
+    endscript\par
+} \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 🔄 \b BACKUP & MAINTENANCE \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. Complete Backup Script: \b0\b0\fs24\par\par
+\f1\fs20 cat > /home/deploy/full_backup.sh << 'EOF'\par
+#!/bin/bash\par
+BACKUP_DIR="/home/deploy/backups/full"\par
+DATE=$(date +%Y%m%d_%H%M%S)\par
+APP_DIR="/home/deploy/theme-editor"\par
+\par
+mkdir -p $BACKUP_DIR\par
+\par
+\fs36\b Database backup\b0\fs24\par\par
+pg_dump -h localhost -U deploy -d theme_editor > $BACKUP_DIR/db_$DATE.sql\par
+\par
+\fs36\b Application backup\b0\fs24\par\par
+tar -czf $BACKUP_DIR/app_$DATE.tar.gz -C /home/deploy theme-editor\par
+\par
+\fs36\b Config backup\b0\fs24\par\par
+tar -czf $BACKUP_DIR/config_$DATE.tar.gz /etc/nginx/sites-available/theme-editor\par
+\par
+echo "Full backup completed: $DATE"\par
+EOF\par
+\par
+chmod +x /home/deploy/full_backup.sh \f0\fs24\par\par
+\par
+\fs24\b \b 2. Deployment Script: \b0\b0\fs24\par\par
+\f1\fs20 cat > /home/deploy/deploy.sh << 'EOF'\par
+#!/bin/bash\par
+APP_DIR="/home/deploy/theme-editor/theme-editor"\par
+\par
+echo "Starting deployment..."\par
+\par
+\fs36\b Navigate to app directory\b0\fs24\par\par
+cd $APP_DIR\par
+\par
+\fs36\b Pull latest changes\b0\fs24\par\par
+git pull origin main\par
+\par
+\fs36\b Install dependencies\b0\fs24\par\par
+npm ci\par
+\par
+\fs36\b Build application\b0\fs24\par\par
+npm run build\par
+\par
+\fs36\b Generate Prisma client\b0\fs24\par\par
+npx prisma generate\par
+\par
+\fs36\b Run migrations\b0\fs24\par\par
+npx prisma db push\par
+\par
+\fs36\b Reload PM2\b0\fs24\par\par
+pm2 reload theme-editor\par
+\par
+echo "Deployment completed!"\par
+EOF\par
+\par
+chmod +x /home/deploy/deploy.sh \f0\fs24\par\par
+\par
+\fs24\b \b 3. Health Check Script: \b0\b0\fs24\par\par
+\f1\fs20 cat > /home/deploy/health_check.sh << 'EOF'\par
+#!/bin/bash\par
+HEALTH_URL="https://yourdomain.com/api/health"\par
+\par
+if curl -f -s $HEALTH_URL > /dev/null; then\par
+    echo "$(date): Application is healthy"\par
+else\par
+    echo "$(date): Application is down! Restarting..."\par
+    pm2 restart theme-editor\par
+fi\par
+EOF\par
+\par
+chmod +x /home/deploy/health_check.sh\par
+\par
+\fs36\b Crontab cho health check (mỗi 5 phút)\b0\fs24\par\par
+crontab -e\par
+\fs36\b Thêm:\b0\fs24\par\par
+*/5 * * * * /home/deploy/health_check.sh >> /home/deploy/logs/health.log 2>&1 \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 🚨 \b TROUBLESHOOTING \b0\b0\fs24\par\par
+\par
+\fs24\b \b Common Issues: \b0\b0\fs24\par\par
+\par
+#### \b 1. Application không start: \b0\par
+\f1\fs20 \fs36\b Check logs\b0\fs24\par\par
+pm2 logs theme-editor\par
+\par
+\fs36\b Check system resources\b0\fs24\par\par
+free -h\par
+df -h\par
+\par
+\fs36\b Restart application\b0\fs24\par\par
+pm2 restart theme-editor \f0\fs24\par\par
+\par
+#### \b 2. Database connection error: \b0\par
+\f1\fs20 \fs36\b Check PostgreSQL status\b0\fs24\par\par
+sudo systemctl status postgresql\par
+\par
+\fs36\b Test connection\b0\fs24\par\par
+psql -h localhost -U deploy -d theme_editor\par
+\par
+\fs36\b Restart PostgreSQL\b0\fs24\par\par
+sudo systemctl restart postgresql \f0\fs24\par\par
+\par
+#### \b 3. Nginx 502 Error: \b0\par
+\f1\fs20 \fs36\b Check Nginx logs\b0\fs24\par\par
+sudo tail -f /var/log/nginx/error.log\par
+\par
+\fs36\b Check application port\b0\fs24\par\par
+netstat -tulpn | grep :3000\par
+\par
+\fs36\b Test Nginx config\b0\fs24\par\par
+sudo nginx -t \f0\fs24\par\par
+\par
+#### \b 4. SSL Issues: \b0\par
+\f1\fs20 \fs36\b Check certificate\b0\fs24\par\par
+sudo certbot certificates\par
+\par
+\fs36\b Renew certificate\b0\fs24\par\par
+sudo certbot renew\par
+\par
+\fs36\b Test SSL\b0\fs24\par\par
+openssl s_client -connect yourdomain.com:443 \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 🔧 \b PERFORMANCE OPTIMIZATION \b0\b0\fs24\par\par
+\par
+\fs24\b \b 1. Server Optimization: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Increase file limits\b0\fs24\par\par
+echo "* soft nofile 65536" | sudo tee -a /etc/security/limits.conf\par
+echo "* hard nofile 65536" | sudo tee -a /etc/security/limits.conf\par
+\par
+\fs36\b Kernel optimization\b0\fs24\par\par
+echo "net.core.somaxconn = 65536" | sudo tee -a /etc/sysctl.conf\par
+echo "net.core.netdev_max_backlog = 5000" | sudo tee -a /etc/sysctl.conf\par
+sudo sysctl -p \f0\fs24\par\par
+\par
+\fs24\b \b 2. Database Optimization: \b0\b0\fs24\par\par
+\f1\fs20 -- PostgreSQL tuning\par
+ALTER SYSTEM SET shared_buffers = '1GB';\par
+ALTER SYSTEM SET effective_cache_size = '3GB';\par
+ALTER SYSTEM SET maintenance_work_mem = '256MB';\par
+ALTER SYSTEM SET checkpoint_completion_target = 0.9;\par
+ALTER SYSTEM SET wal_buffers = '16MB';\par
+ALTER SYSTEM SET default_statistics_target = 100;\par
+SELECT pg_reload_conf(); \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b 📱 \b MOBILE ACCESS \b0\b0\fs24\par\par
+\par
+\fs24\b \b Setup SSH Key cho mobile: \b0\b0\fs24\par\par
+\f1\fs20 \fs36\b Tạo SSH key trên mobile (Termux)\b0\fs24\par\par
+ssh-keygen -t rsa -b 4096\par
+\par
+\fs36\b Copy public key lên server\b0\fs24\par\par
+cat ~/.ssh/id_rsa.pub | ssh deploy@your-vps-ip 'mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys' \f0\fs24\par\par
+\par
+---\par
+\par
+\fs28\b ✅ \b CHECKLIST DEPLOY \b0\b0\fs24\par\par
+\par
+- [ ] VPS đã cài đặt Ubuntu 20.04+\par
+- [ ] Node.js 20+ đã cài đặt\par
+- [ ] PostgreSQL đã setup\par
+- [ ] Nginx đã cấu hình\par
+- [ ] SSL Certificate đã cài đặt\par
+- [ ] PM2 đã setup\par
+- [ ] Environment variables đã cấu hình\par
+- [ ] Database migrations đã chạy\par
+- [ ] Application đã build thành công\par
+- [ ] Backup scripts đã setup\par
+- [ ] Monitoring đã cấu hình\par
+- [ ] Firewall đã cấu hình\par
+- [ ] DNS đã trỏ đúng\par
+- [ ] Health checks đã test\par
+- [ ] Auto-renewal SSL đã setup\par
+\par
+---\par
+\par
+\fs28\b 🆘 \b SUPPORT \b0\b0\fs24\par\par
+\par
+Nếu gặp vấn đề, vui lòng:\par
+1. Check logs trước: \f1 pm2 logs theme-editor \f0\par
+2. Check system resources: \f1 htop \f0, \f1 df -h \f0\par
+3. Test connectivity: \f1 curl -I https://yourdomain.com \f0\par
+4. Contact: your-support-email@domain.com\par
+\par
+---\par
+\par
+\b 🎉 Chúc bạn deploy thành công! \b0 
+}

@@ -1,0 +1,17 @@
+
+📝 HƯỚNG DẪN TẠO DOCX THỦ CÔNG
+
+1. Mở Microsoft Word
+2. Tạo document mới
+3. Copy nội dung từ file VPS_DEPLOYMENT_GUIDE_FORMATTED.txt
+4. Áp dụng formatting:
+   - Title: Font 24pt, Bold, Center
+   - Headings: Font 18pt, Bold
+   - Sub-headings: Font 14pt, Bold
+   - Code: Font Consolas 10pt, Background Gray
+   - Normal text: Font 12pt
+
+5. Thêm page breaks trước các section chính
+6. Save as DOCX format
+
+✅ Hoàn thành!
