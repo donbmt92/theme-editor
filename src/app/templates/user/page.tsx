@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -8,6 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Plus, Eye } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
+import AIContentGenerator from '@/components/ui/ai-content-generator'
+import { ThemeParams } from '@/types'
 
 interface ThemeData {
   id: string
@@ -18,11 +21,18 @@ interface ThemeData {
 }
 
 const UserTemplatesPage = () => {
+  const searchParams = useSearchParams()
+  const preselectedThemeId = searchParams.get('themeId')
+  
   const [themes, setThemes] = useState<ThemeData[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedTheme, setSelectedTheme] = useState<ThemeData | null>(null)
   const [projectName, setProjectName] = useState('')
   const [isCreating, setIsCreating] = useState(false)
+  const [showAIGenerator, setShowAIGenerator] = useState(false)
+  const [createdProject, setCreatedProject] = useState<any>(null)
+  const [showCreateDialog, setShowCreateDialog] = useState(false)
+  const [isShowingAI, setIsShowingAI] = useState(false)
 
   useEffect(() => {
     const loadThemes = async () => {
@@ -32,6 +42,15 @@ const UserTemplatesPage = () => {
         
         if (data.success) {
           setThemes(data.themes)
+          
+          // Nếu có themeId được truyền từ URL, tự động chọn theme đó
+          if (preselectedThemeId) {
+            const preselectedTheme = data.themes.find((theme: ThemeData) => theme.id === preselectedThemeId)
+            if (preselectedTheme) {
+              setSelectedTheme(preselectedTheme)
+              setShowCreateDialog(true) // Mở dialog tạo project ngay lập tức
+            }
+          }
         }
       } catch (error) {
         console.error('Error loading themes:', error)
@@ -41,7 +60,7 @@ const UserTemplatesPage = () => {
     }
 
     loadThemes()
-  }, [])
+  }, [preselectedThemeId])
 
   const createProject = async () => {
     if (!selectedTheme || !projectName.trim()) return
@@ -63,8 +82,22 @@ const UserTemplatesPage = () => {
       const data = await response.json()
       
       if (data.success) {
-        // Redirect to project editor
-        window.location.href = `/project/${data.project.id}`
+        // Lưu project đã tạo và hiển thị popup AI
+        setCreatedProject(data.project)
+        // Đóng dialog tạo project trước
+        setShowCreateDialog(false)
+        setProjectName('')
+        setSelectedTheme(null)
+        
+        // Hiển thị popup AI sau một chút để đảm bảo dialog đã đóng
+        setIsShowingAI(true)
+        setTimeout(() => {
+          setShowAIGenerator(true)
+          setIsShowingAI(false)
+        }, 300)
+        
+        // Thông báo cho người dùng
+        console.log('Project đã được tạo thành công! Popup AI sẽ hiển thị để bạn có thể tạo nội dung.')
       } else {
         alert(`Lỗi: ${data.error}`)
       }
@@ -73,6 +106,52 @@ const UserTemplatesPage = () => {
       alert('Có lỗi xảy ra khi tạo project')
     } finally {
       setIsCreating(false)
+    }
+  }
+
+  const handleAIGenerate = async (themeParams: ThemeParams) => {
+    if (!createdProject) return
+
+    try {
+      console.log('Updating project with AI data:', themeParams)
+      
+      // Cập nhật project với nội dung AI đã tạo
+      const response = await fetch(`/api/projects/${createdProject.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          themeParams: themeParams // Gửi trực tiếp object, không stringify
+        })
+      })
+
+      const data = await response.json()
+      
+      if (data.success) {
+        console.log('Project updated successfully, redirecting to editor...')
+        // Chuyển đến project editor với query param để force reload
+        window.location.href = `/project/${createdProject.id}?updated=${Date.now()}`
+      } else {
+        console.error('Update failed:', data.error)
+        alert(`Lỗi: ${data.error}`)
+      }
+    } catch (error) {
+      console.error('Error updating project:', error)
+      alert('Có lỗi xảy ra khi cập nhật project')
+    }
+  }
+
+  const handleAIClose = async (open: boolean) => {
+    // Với forceOpen = true, không cho phép đóng popup khi chưa hoàn thành
+    if (!open && createdProject) {
+      console.log('Không thể đóng popup AI - bắt buộc phải hoàn thành thông tin')
+      // Không cho phép đóng popup khi đã tạo project
+      return
+    }
+    setShowAIGenerator(open)
+    if (!open) {
+      setCreatedProject(null)
     }
   }
 
@@ -126,11 +205,14 @@ const UserTemplatesPage = () => {
 
                 {/* Actions */}
                 <div className="flex space-x-2">
-                  <Dialog>
+                  <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
                     <DialogTrigger asChild>
                       <Button 
                         className="flex-1"
-                        onClick={() => setSelectedTheme(theme)}
+                        onClick={() => {
+                          setSelectedTheme(theme)
+                          setShowCreateDialog(true)
+                        }}
                       >
                         <Plus size={16} className="mr-2" />
                         Tạo Project
@@ -138,7 +220,7 @@ const UserTemplatesPage = () => {
                     </DialogTrigger>
                     <DialogContent>
                       <DialogHeader>
-                        <DialogTitle>Tạo Project từ &quot;{theme.name}&quot;</DialogTitle>
+                        <DialogTitle>Tạo Project từ &quot;{selectedTheme?.name || theme.name}&quot;</DialogTitle>
                       </DialogHeader>
                       <div className="space-y-4">
                         <div>
@@ -188,6 +270,30 @@ const UserTemplatesPage = () => {
           </div>
         )}
       </div>
+
+      {/* Loading overlay khi đang hiển thị AI */}
+      {isShowingAI && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <p className="text-gray-700">Đang khởi tạo AI Content Generator...</p>
+          </div>
+        </div>
+      )}
+
+      <AIContentGenerator
+        open={showAIGenerator}
+        onOpenChange={handleAIClose}
+        onGenerate={handleAIGenerate}
+        currentTheme={createdProject ? (() => {
+          try {
+            return JSON.parse(createdProject.themeParams || '{}')
+          } catch {
+            return undefined
+          }
+        })() : undefined}
+        forceOpen={true}
+      />
     </div>
   )
 }

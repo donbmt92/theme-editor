@@ -160,8 +160,8 @@ export default function VietnamCoffeeTheme({ theme, content }: VietnamCoffeeThem
 
   return (
     <div className="min-h-screen" style={{ 
-      fontFamily: theme.typography.fontFamily,
-      color: theme.colors.text 
+      fontFamily: theme.typography?.fontFamily || 'Inter',
+      color: theme.colors?.text || '#2D3748' 
     }}>
       <Header theme={theme} content={finalContent.header} />
       <HeroSection theme={theme} content={finalContent.hero} />

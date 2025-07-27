@@ -69,6 +69,8 @@ export async function PUT(
     const body = await request.json()
     const { themeParams, name } = body
 
+    console.log('Received update request:', { themeParams: !!themeParams, name })
+
     // Check if project exists and user owns it
     const project = await prisma.project.findFirst({
       where: {
@@ -112,11 +114,27 @@ export async function PUT(
 
       const newVersionNumber = (latestVersion?.versionNumber || 0) + 1
 
+      // Parse themeParams if it's a string
+      let parsedThemeParams = themeParams
+      if (typeof themeParams === 'string') {
+        try {
+          parsedThemeParams = JSON.parse(themeParams)
+        } catch (error) {
+          console.error('Failed to parse themeParams:', error)
+          return NextResponse.json(
+            { success: false, error: 'Invalid themeParams format' },
+            { status: 400 }
+          )
+        }
+      }
+
+      console.log('Creating new version with params:', parsedThemeParams)
+
       await prisma.projectVersion.create({
         data: {
           projectId: projectId,
           versionNumber: newVersionNumber,
-          snapshot: themeParams
+          snapshot: parsedThemeParams
         }
       })
     }
@@ -130,6 +148,54 @@ export async function PUT(
     console.error('Error updating project:', error)
     return NextResponse.json(
       { success: false, error: 'Có lỗi xảy ra khi cập nhật project' },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ projectId: string }> }
+) {
+  try {
+    const { projectId } = await params
+    const session = await getServerSession(authOptions)
+    if (!session?.user?.id) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Check if project exists and user owns it
+    const project = await prisma.project.findFirst({
+      where: {
+        id: projectId,
+        userId: session.user.id
+      }
+    })
+
+    if (!project) {
+      return NextResponse.json(
+        { success: false, error: 'Project không tồn tại hoặc bạn không có quyền truy cập' },
+        { status: 404 }
+      )
+    }
+
+    // Delete project and all related data
+    await prisma.projectVersion.deleteMany({
+      where: { projectId: projectId }
+    })
+
+    await prisma.project.delete({
+      where: { id: projectId }
+    })
+
+    return NextResponse.json({
+      success: true,
+      message: 'Project đã được xóa thành công'
+    })
+  } catch (error) {
+    console.error('Error deleting project:', error)
+    return NextResponse.json(
+      { success: false, error: 'Có lỗi xảy ra khi xóa project' },
       { status: 500 }
     )
   }

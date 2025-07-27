@@ -32,6 +32,173 @@ interface ProjectData {
   }>
 }
 
+// Create default theme params
+const createDefaultThemeParams = (): ThemeParams => ({
+  colors: {
+    primary: "#8B4513",
+    secondary: "#D2691E", 
+    accent: "#F4A460",
+    background: "#FFFFFF",
+    text: "#2D3748"
+  },
+  typography: {
+    fontFamily: "Inter",
+    fontSize: "16px",
+    headingSize: "2xl",
+    bodySize: "base",
+    lineHeight: "1.6",
+    fontWeight: "400"
+  },
+  layout: {
+    containerWidth: "1200px",
+    sectionSpacing: "80px",
+    spacing: "comfortable",
+    borderRadius: "8px"
+  },
+  components: {
+    button: {
+      style: "solid",
+      size: "medium",
+      rounded: true
+    },
+    card: {
+      shadow: "medium",
+      border: true,
+      padding: "medium"
+    },
+    form: {
+      style: "default",
+      validation: "inline"
+    },
+    navigation: {
+      style: "horizontal",
+      sticky: true
+    }
+  },
+  content: {
+    meta: {
+      title: "Cà Phê Việt Nam - Chất Lượng Quốc Tế",
+      description: "Chuyên cung cấp cà phê Việt Nam chất lượng cao cho thị trường quốc tế",
+      keywords: "cà phê việt nam, xuất khẩu cà phê, robusta, arabica"
+    },
+    header: {
+      title: "Cà Phê Việt Plus",
+      subtitle: "Premium Export Coffee",
+      logo: ""
+    },
+    hero: {
+      title: "Cà Phê Việt Nam - Chất Lượng Quốc Tế",
+      subtitle: "Xuất khẩu cà phê chất lượng cao",
+      description: "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
+      ctaText: "Tìm hiểu thêm",
+      backgroundImage: "/assets/hero-coffee.jpg",
+      overlayOpacity: 0.7,
+      overlayColor: "#8B4513"
+    },
+    about: {
+      title: "Về Chúng Tôi",
+      description: "Với hơn 20 năm kinh nghiệm trong ngành cà phê, chúng tôi tự hào là đối tác tin cậy của các nhà nhập khẩu quốc tế.",
+      image: ""
+    },
+    problems: {
+      title: "Thách Thức Hiện Tại",
+      description: "Những khó khăn mà doanh nghiệp Việt Nam gặp phải khi xuất khẩu cà phê",
+      backgroundColor: "#FFF8DC",
+      textColor: "#2D3748",
+      items: [
+        {
+          title: "Thiếu kết nối thị trường",
+          description: "Doanh nghiệp Việt gặp khó khăn trong việc tiếp cận khách hàng quốc tế",
+          icon: "AlertCircle"
+        },
+        {
+          title: "Quy trình phức tạp",
+          description: "Thủ tục xuất khẩu phức tạp, tốn thời gian và chi phí",
+          icon: "Clock"
+        },
+        {
+          title: "Giá cả không ổn định",
+          description: "Biến động giá cả khiến khó lập kế hoạch kinh doanh dài hạn",
+          icon: "TrendingDown"
+        }
+      ]
+    },
+    solutions: {
+      title: "Giải Pháp Của Chúng Tôi",
+      description: "Những giải pháp toàn diện để vượt qua thách thức và phát triển bền vững",
+      backgroundColor: "#F0F8FF",
+      textColor: "#2D3748",
+      items: [
+        {
+          title: "Kết nối trực tiếp",
+          description: "Mạng lưới đối tác nhập khẩu rộng khắp tại Mỹ, loại bỏ trung gian",
+          benefit: "Tăng lợi nhuận 30-40%",
+          icon: "Globe"
+        },
+        {
+          title: "Hỗ trợ toàn diện",
+          description: "Từ chứng nhận chất lượng đến logistics và thủ tục hải quan",
+          benefit: "Tiết kiệm 80% thời gian",
+          icon: "Shield"
+        },
+        {
+          title: "Quy trình tối ưu",
+          description: "Hệ thống quản lý hiện đại, theo dõi đơn hàng realtime",
+          benefit: "Minh bạch 100%",
+          icon: "Zap"
+        }
+      ]
+    },
+    cta: {
+      title: "Sẵn sàng bắt đầu hành trình xuất khẩu?",
+      description: "Tư vấn miễn phí về quy trình xuất khẩu cà phê sang Mỹ",
+      buttonText: "Đăng ký tư vấn miễn phí",
+      backgroundColor: "#8B4513",
+      textColor: "#FFFFFF"
+    },
+    products: {
+      title: "Sản Phẩm Của Chúng Tôi",
+      description: "Khám phá các loại cà phê đặc trưng của Việt Nam",
+      backgroundColor: "#F0F4F8",
+      textColor: "#2D3748",
+      items: [
+        {
+          name: "Cà Phê Robusta",
+          description: "Cà phê Robusta Việt Nam với hương vị đậm đà, hàm lượng caffeine cao",
+          price: "2.50 USD/kg",
+          category: "Robusta",
+          image: ""
+        },
+        {
+          name: "Cà Phê Arabica",
+          description: "Cà phê Arabica Tây Nguyên với hương vị tinh tế, chua nhẹ",
+          price: "4.20 USD/kg",
+          category: "Arabica",
+          image: ""
+        },
+        {
+          name: "Cà Phê Chồn",
+          description: "Cà phê chồn cao cấp với hương vị độc đáo",
+          price: "150 USD/kg",
+          category: "Premium",
+          image: ""
+        }
+      ]
+    },
+    footer: {
+      companyName: "Cà Phê Việt",
+      description: "Chuyên cung cấp cà phê chất lượng cao cho thị trường quốc tế",
+      backgroundColor: "#D2691E",
+      textColor: "#F9FAFB",
+      contact: {
+        phone: "+84 123 456 789",
+        email: "info@capheviet.com",
+        address: "123 Đường ABC, Quận 1, TP.HCM"
+      }
+    }
+  }
+})
+
 const ProjectEditor = () => {
   const params = useParams()
   const projectId = params.projectId as string
@@ -57,38 +224,131 @@ const ProjectEditor = () => {
     canRedo
   } = useUndoRedo<ThemeParams | null>(null)
 
-  // Load project data
-  useEffect(() => {
-    const loadProject = async () => {
-      try {
-        const response = await fetch(`/api/projects/${projectId}`)
-        const data = await response.json()
+  // Load project data function
+  const loadProject = async () => {
+    try {
+      console.log('Loading project data for:', projectId)
+      const response = await fetch(`/api/projects/${projectId}`)
+      const data = await response.json()
+      
+      if (data.success) {
+        console.log('Project loaded successfully:', data.project)
+        setProject(data.project)
         
-        if (data.success) {
-          setProject(data.project)
-          
-          // Use latest version or theme default params
-          const latestVersion = data.project.versions[0]
-          const params = latestVersion 
-            ? latestVersion.snapshot 
-            : (typeof data.project.theme.defaultParams === 'string' 
-            ? JSON.parse(data.project.theme.defaultParams) 
-            : data.project.theme.defaultParams)
-          console.log(params);
-          
-          setThemeParams(params)
-          updateThemeParamsWithHistory(params)
+        // Use latest version or create default params
+        const latestVersion = data.project.versions[0]
+        let params: ThemeParams
+        
+        if (latestVersion && latestVersion.snapshot) {
+          console.log('Using latest version snapshot:', latestVersion)
+          params = latestVersion.snapshot as ThemeParams
+        } else if (data.project.theme.defaultParams) {
+          try {
+            const parsedParams = typeof data.project.theme.defaultParams === 'string' 
+              ? JSON.parse(data.project.theme.defaultParams) 
+              : data.project.theme.defaultParams
+            params = { ...createDefaultThemeParams(), ...parsedParams }
+          } catch {
+            params = createDefaultThemeParams()
+          }
+        } else {
+          params = createDefaultThemeParams()
         }
-      } catch (error) {
-        console.error('Error loading project:', error)
-      } finally {
-        setLoading(false)
+        
+        // Deep merge with default params to ensure all required properties exist
+        const defaultParams = createDefaultThemeParams()
+        params = {
+          ...defaultParams,
+          ...params,
+          colors: { ...defaultParams.colors, ...params.colors },
+          typography: { ...defaultParams.typography, ...params.typography },
+          layout: { ...defaultParams.layout, ...params.layout },
+          components: { ...defaultParams.components, ...params.components },
+          content: {
+            ...defaultParams.content,
+            ...params.content,
+            // Deep merge for nested content objects
+            meta: { ...defaultParams.content?.meta, ...params.content?.meta },
+            header: { ...defaultParams.content?.header, ...params.content?.header },
+            hero: { ...defaultParams.content?.hero, ...params.content?.hero },
+            about: { ...defaultParams.content?.about, ...params.content?.about },
+            problems: { 
+              ...defaultParams.content?.problems, 
+              ...params.content?.problems,
+              items: params.content?.problems?.items || defaultParams.content?.problems?.items
+            },
+            solutions: { 
+              ...defaultParams.content?.solutions, 
+              ...params.content?.solutions,
+              items: params.content?.solutions?.items || defaultParams.content?.solutions?.items
+            },
+            products: { 
+              ...defaultParams.content?.products, 
+              ...params.content?.products,
+              items: params.content?.products?.items || defaultParams.content?.products?.items
+            },
+            cta: { ...defaultParams.content?.cta, ...params.content?.cta },
+            footer: { 
+              ...defaultParams.content?.footer, 
+              ...params.content?.footer,
+              contact: { 
+                ...defaultParams.content?.footer?.contact, 
+                ...params.content?.footer?.contact 
+              }
+            }
+          }
+        }
+        
+        console.log('Final merged params:', params)
+        setThemeParams(params)
+        updateThemeParamsWithHistory(params)
       }
+    } catch (error) {
+      console.error('Error loading project:', error)
+      // Fallback to default params
+      const defaultParams = createDefaultThemeParams()
+      setThemeParams(defaultParams)
+      updateThemeParamsWithHistory(defaultParams)
+    } finally {
+      setLoading(false)
     }
+  }
 
+  // Load project data on mount
+  useEffect(() => {
     if (projectId) {
       loadProject()
     }
+  }, [projectId])
+
+  // Check for updated query param and reload if needed
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const updatedParam = urlParams.get('updated')
+    
+    if (updatedParam && projectId) {
+      console.log('Detected update parameter, reloading project data...')
+      // Remove the query param from URL
+      const newUrl = window.location.pathname
+      window.history.replaceState({}, '', newUrl)
+      // Reload project data
+      setTimeout(() => {
+        loadProject()
+      }, 100)
+    }
+  }, [projectId])
+
+  // Force reload when page becomes visible (useful when returning from AI)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden && projectId) {
+        console.log('Page became visible, reloading project data...')
+        loadProject()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
   }, [projectId])
 
   // Auto-save functionality
@@ -266,7 +526,7 @@ const ProjectEditor = () => {
             <Button
               size="sm"
               onClick={() => setShowExportDialog(true)}
-              style={{ backgroundColor: themeParams?.colors.primary }}
+              style={{ backgroundColor: themeParams?.colors?.primary || '#8B4513' }}
             >
               <Download size={16} className="mr-2" />
               Xuất file
@@ -411,12 +671,12 @@ const ProjectEditor = () => {
                         <div className="flex items-center space-x-3">
                           <input
                             type="color"
-                            value={themeParams.colors.primary}
+                            value={themeParams.colors?.primary || '#8B4513'}
                             onChange={(e) => updateThemeParam(['colors', 'primary'], e.target.value)}
                             className="w-12 h-10 rounded border border-gray-300"
                           />
                           <Input
-                            value={themeParams.colors.primary}
+                            value={themeParams.colors?.primary || '#8B4513'}
                             onChange={(e) => updateThemeParam(['colors', 'primary'], e.target.value)}
                             className="flex-1"
                           />
@@ -428,12 +688,12 @@ const ProjectEditor = () => {
                         <div className="flex items-center space-x-3">
                           <input
                             type="color"
-                            value={themeParams.colors.secondary}
+                            value={themeParams.colors?.secondary || '#D2691E'}
                             onChange={(e) => updateThemeParam(['colors', 'secondary'], e.target.value)}
                             className="w-12 h-10 rounded border border-gray-300"
                           />
                           <Input
-                            value={themeParams.colors.secondary}
+                            value={themeParams.colors?.secondary || '#D2691E'}
                             onChange={(e) => updateThemeParam(['colors', 'secondary'], e.target.value)}
                             className="flex-1"
                           />
@@ -445,12 +705,12 @@ const ProjectEditor = () => {
                         <div className="flex items-center space-x-3">
                           <input
                             type="color"
-                            value={themeParams.colors.accent}
+                            value={themeParams.colors?.accent || '#F4A460'}
                             onChange={(e) => updateThemeParam(['colors', 'accent'], e.target.value)}
                             className="w-12 h-10 rounded border border-gray-300"
                           />
                           <Input
-                            value={themeParams.colors.accent}
+                            value={themeParams.colors?.accent || '#F4A460'}
                             onChange={(e) => updateThemeParam(['colors', 'accent'], e.target.value)}
                             className="flex-1"
                           />
@@ -462,12 +722,12 @@ const ProjectEditor = () => {
                         <div className="flex items-center space-x-3">
                           <input
                             type="color"
-                            value={themeParams.colors.background}
+                            value={themeParams.colors?.background || '#FFFFFF'}
                             onChange={(e) => updateThemeParam(['colors', 'background'], e.target.value)}
                             className="w-12 h-10 rounded border border-gray-300"
                           />
                           <Input
-                            value={themeParams.colors.background}
+                            value={themeParams.colors?.background || '#FFFFFF'}
                             onChange={(e) => updateThemeParam(['colors', 'background'], e.target.value)}
                             className="flex-1"
                           />
@@ -479,12 +739,12 @@ const ProjectEditor = () => {
                         <div className="flex items-center space-x-3">
                           <input
                             type="color"
-                            value={themeParams.colors.text}
+                            value={themeParams.colors?.text || '#2D3748'}
                             onChange={(e) => updateThemeParam(['colors', 'text'], e.target.value)}
                             className="w-12 h-10 rounded border border-gray-300"
                           />
                           <Input
-                            value={themeParams.colors.text}
+                            value={themeParams.colors?.text || '#2D3748'}
                             onChange={(e) => updateThemeParam(['colors', 'text'], e.target.value)}
                             className="flex-1"
                           />
@@ -504,7 +764,7 @@ const ProjectEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Font Family</label>
                         <select
-                          value={themeParams.typography.fontFamily}
+                          value={themeParams.typography?.fontFamily || 'Inter'}
                           onChange={(e) => updateThemeParam(['typography', 'fontFamily'], e.target.value)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
@@ -518,7 +778,7 @@ const ProjectEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Heading Size</label>
                         <select
-                          value={themeParams.typography.headingSize}
+                          value={themeParams.typography?.headingSize || '2xl'}
                           onChange={(e) => updateThemeParam(['typography', 'headingSize'], e.target.value)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
@@ -533,7 +793,7 @@ const ProjectEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Body Size</label>
                         <select
-                          value={themeParams.typography.bodySize}
+                          value={themeParams.typography?.bodySize || 'base'}
                           onChange={(e) => updateThemeParam(['typography', 'bodySize'], e.target.value)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
@@ -558,7 +818,7 @@ const ProjectEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Container Width</label>
                         <Input
-                          value={themeParams.layout.containerWidth}
+                          value={themeParams.layout?.containerWidth || '1200px'}
                           onChange={(e) => updateThemeParam(['layout', 'containerWidth'], e.target.value)}
                           placeholder="1200px"
                         />
@@ -566,7 +826,7 @@ const ProjectEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Spacing</label>
                         <select
-                          value={themeParams.layout.spacing}
+                          value={themeParams.layout?.spacing || 'comfortable'}
                           onChange={(e) => updateThemeParam(['layout', 'spacing'], e.target.value)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
@@ -578,7 +838,7 @@ const ProjectEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Border Radius</label>
                         <select
-                          value={themeParams.layout.borderRadius}
+                          value={themeParams.layout?.borderRadius || '8px'}
                           onChange={(e) => updateThemeParam(['layout', 'borderRadius'], e.target.value)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >

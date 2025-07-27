@@ -33,13 +33,15 @@ interface AIContentGeneratorProps {
   onOpenChange: (open: boolean) => void
   onGenerate: (themeParams: ThemeParams) => void
   currentTheme?: ThemeParams
+  forceOpen?: boolean
 }
 
 const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
   open,
   onOpenChange,
   onGenerate,
-  currentTheme
+  currentTheme,
+  forceOpen = false
 }) => {
   const [businessInfo, setBusinessInfo] = useState<BusinessInfo>({
     companyName: '',
@@ -125,7 +127,16 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog 
+      open={open} 
+      onOpenChange={(newOpen) => {
+        // Nếu forceOpen = true và đang ở step form, không cho phép đóng
+        if (forceOpen && step === 'form' && !newOpen) {
+          return
+        }
+        onOpenChange(newOpen)
+      }}
+    >
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         {step === 'form' && (
           <>
@@ -135,7 +146,18 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                 AI Tạo Nội Dung Thông Minh
               </DialogTitle>
               <DialogDescription>
-                Nhập thông tin doanh nghiệp để AI tự động tạo nội dung và màu sắc phù hợp cho website của bạn
+                {forceOpen ? (
+                  <div className="space-y-2">
+                    <span className="text-orange-600 font-medium block">
+                      ⚠️ Vui lòng điền thông tin bắt buộc để tiếp tục tạo project
+                    </span>
+                    <span className="text-sm text-gray-600 block">
+                      Bạn không thể đóng popup này cho đến khi hoàn thành việc điền thông tin và tạo nội dung AI.
+                    </span>
+                  </div>
+                ) : (
+                  'Nhập thông tin doanh nghiệp để AI tự động tạo nội dung và màu sắc phù hợp cho website của bạn'
+                )}
               </DialogDescription>
             </DialogHeader>
 
@@ -265,9 +287,16 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
             </div>
 
             <DialogFooter>
-              <Button variant="outline" onClick={() => onOpenChange(false)}>
-                Hủy
-              </Button>
+              {!forceOpen ? (
+                <Button variant="outline" onClick={() => onOpenChange(false)}>
+                  Hủy
+                </Button>
+              ) : (
+                <div className="text-sm text-orange-600 flex items-center gap-1">
+                  <AlertCircle className="h-4 w-4" />
+                  Vui lòng hoàn thành thông tin để tiếp tục
+                </div>
+              )}
               <Button 
                 onClick={generateContent}
                 disabled={isGenerating || !businessInfo.companyName || !businessInfo.industry || !businessInfo.description}
@@ -340,21 +369,99 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
               {/* Content Preview */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Nội dung được tạo</CardTitle>
+                  <CardTitle className="text-lg">Nội dung Header & Hero</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
+                  <div>
+                    <p className="font-medium">Tên công ty:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.header?.title}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Slogan:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.header?.subtitle}</p>
+                  </div>
                   <div>
                     <p className="font-medium">Tiêu đề Hero:</p>
                     <p className="text-sm text-gray-600">{generatedContent.content?.hero?.title}</p>
                   </div>
                   <div>
-                    <p className="font-medium">Mô tả:</p>
+                    <p className="font-medium">Mô tả Hero:</p>
                     <p className="text-sm text-gray-600">{generatedContent.content?.hero?.description}</p>
                   </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Vấn đề & Giải pháp</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <p className="font-medium">Vấn đề khách hàng gặp phải:</p>
+                    {generatedContent.content?.problems?.items?.map((problem, index) => (
+                      <div key={index} className="ml-4 mb-2">
+                        <p className="text-sm font-medium">• {problem.title}</p>
+                        <p className="text-xs text-gray-600 ml-2">{problem.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4">
+                    <p className="font-medium">Giải pháp của chúng tôi:</p>
+                    {generatedContent.content?.solutions?.items?.map((solution, index) => (
+                      <div key={index} className="ml-4 mb-2">
+                        <p className="text-sm font-medium">• {solution.title}</p>
+                        <p className="text-xs text-gray-600 ml-2">{solution.description}</p>
+                        {solution.benefit && (
+                          <p className="text-xs text-green-600 ml-2 font-medium">✓ {solution.benefit}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Sản phẩm/Dịch vụ</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {generatedContent.content?.products?.items?.map((product, index) => (
+                    <div key={index} className="border-l-4 border-gray-200 pl-3 mb-3">
+                      <p className="font-medium">{product.name}</p>
+                      <p className="text-sm text-gray-600">{product.description}</p>
+                      {product.price && (
+                        <p className="text-sm font-medium text-green-600">{product.price}</p>
+                      )}
+                      {product.category && (
+                        <p className="text-xs text-gray-500">Danh mục: {product.category}</p>
+                      )}
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Thông tin liên hệ</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
                   <div>
                     <p className="font-medium">Về chúng tôi:</p>
                     <p className="text-sm text-gray-600">{generatedContent.content?.about?.description}</p>
                   </div>
+                  <div>
+                    <p className="font-medium">Call to Action:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.cta?.title}</p>
+                    <p className="text-xs text-gray-500">{generatedContent.content?.cta?.description}</p>
+                  </div>
+                  {generatedContent.content?.footer?.contact && (
+                    <div>
+                      <p className="font-medium">Liên hệ:</p>
+                      <p className="text-sm text-gray-600">📞 {generatedContent.content?.footer?.contact?.phone}</p>
+                      <p className="text-sm text-gray-600">✉️ {generatedContent.content?.footer?.contact?.email}</p>
+                      <p className="text-sm text-gray-600">📍 {generatedContent.content?.footer?.contact?.address}</p>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

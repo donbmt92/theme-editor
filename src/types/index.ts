@@ -271,6 +271,8 @@ export interface ThemeContent {
   products?: {
     title?: string
     description?: string
+    backgroundColor?: string
+    textColor?: string
     items?: Array<{
       id?: string
       name: string

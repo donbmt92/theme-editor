@@ -250,7 +250,7 @@ export default function TemplatesPage() {
                       </Link>
                     ) : (
                       <Link
-                        href="/templates/user"
+                        href={`/templates/user?themeId=${theme.id}`}
                         className="flex-1 bg-green-600 text-white py-2 px-3 rounded-lg font-medium hover:bg-green-700 transition-colors flex items-center justify-center text-sm group"
                       >
                         <span>Tạo Project</span>
