@@ -104,6 +104,11 @@ export interface ThemeLayout {
   borderRadius: string
   gridColumns?: number
   maxWidth?: string
+  containerPadding?: string
+  itemGap?: string
+  maxContentWidth?: string
+  headerHeight?: string
+  footerPadding?: string
 }
 
 export interface ThemeComponents {
@@ -210,6 +215,7 @@ export interface ThemeContent {
     secondaryCtaText?: string
     image?: string
     backgroundImage?: string
+    unsplashImageUrl?: string // Add Unsplash URL field
     overlayOpacity?: number
     overlayColor?: string
     backgroundColor?: string

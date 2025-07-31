@@ -416,7 +416,7 @@ const ProjectEditor = () => {
       
       if (data.success) {
         setSaveMessage('✅ Project đã được lưu thành công!')
-        setTimeout(() => setSaveMessage(''), 3000)
+        setTimeout(() => setSaveMessage(''), 15000)
       } else {
         setSaveMessage(`❌ Lỗi: ${data.error}`)
       }
@@ -750,6 +750,40 @@ const ProjectEditor = () => {
                           />
                         </div>
                       </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Màu viền</label>
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="color"
+                            value={themeParams.colors?.border || '#E2E8F0'}
+                            onChange={(e) => updateThemeParam(['colors', 'border'], e.target.value)}
+                            className="w-12 h-10 rounded border border-gray-300"
+                          />
+                          <Input
+                            value={themeParams.colors?.border || '#E2E8F0'}
+                            onChange={(e) => updateThemeParam(['colors', 'border'], e.target.value)}
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Màu mờ</label>
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="color"
+                            value={themeParams.colors?.muted || '#718096'}
+                            onChange={(e) => updateThemeParam(['colors', 'muted'], e.target.value)}
+                            className="w-12 h-10 rounded border border-gray-300"
+                          />
+                          <Input
+                            value={themeParams.colors?.muted || '#718096'}
+                            onChange={(e) => updateThemeParam(['colors', 'muted'], e.target.value)}
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </Card>
                 </div>
@@ -791,6 +825,23 @@ const ProjectEditor = () => {
                         </select>
                       </div>
                       <div>
+                        <label className="block text-sm font-medium mb-2">Heading Weight</label>
+                        <select
+                          value={themeParams.typography?.fontSize || '16px'}
+                          onChange={(e) => updateThemeParam(['typography', 'fontSize'], e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="12px">12px</option>
+                          <option value="14px">14px</option>
+                          <option value="16px">16px</option>
+                          <option value="18px">18px</option>
+                          <option value="20px">20px</option>
+                          <option value="22px">22px</option>
+                          <option value="24px">24px</option>
+                          <option value="26px">26px</option>
+                        </select>
+                      </div>
+                      <div>
                         <label className="block text-sm font-medium mb-2">Body Size</label>
                         <select
                           value={themeParams.typography?.bodySize || 'base'}
@@ -802,6 +853,35 @@ const ProjectEditor = () => {
                           <option value="base">Base</option>
                           <option value="lg">Large</option>
                           <option value="xl">XL</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Line Height</label>
+                        <select
+                          value={themeParams.typography?.lineHeight || '1.6'}
+                          onChange={(e) => updateThemeParam(['typography', 'lineHeight'], e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="1.2">1.2 (Tight)</option>
+                          <option value="1.4">1.4 (Normal)</option>
+                          <option value="1.6">1.6 (Comfortable)</option>
+                          <option value="1.8">1.8 (Loose)</option>
+                          <option value="2.0">2.0 (Very Loose)</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Font Weight</label>
+                        <select
+                          value={themeParams.typography?.fontWeight || '400'}
+                          onChange={(e) => updateThemeParam(['typography', 'fontWeight'], e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="300">Light (300)</option>
+                          <option value="400">Normal (400)</option>
+                          <option value="500">Medium (500)</option>
+                          <option value="600">Semi Bold (600)</option>
+                          <option value="700">Bold (700)</option>
+                          <option value="800">Extra Bold (800)</option>
                         </select>
                       </div>
                     </div>
@@ -836,6 +916,14 @@ const ProjectEditor = () => {
                         </select>
                       </div>
                       <div>
+                        <label className="block text-sm font-medium mb-2">Section Spacing</label>
+                        <Input
+                          value={themeParams.layout?.sectionSpacing || '80px'}
+                          onChange={(e) => updateThemeParam(['layout', 'sectionSpacing'], e.target.value)}
+                          placeholder="80px"
+                        />
+                      </div>
+                      <div>
                         <label className="block text-sm font-medium mb-2">Border Radius</label>
                         <select
                           value={themeParams.layout?.borderRadius || '8px'}
@@ -850,6 +938,80 @@ const ProjectEditor = () => {
                       </div>
                     </div>
                   </Card>
+
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Button Settings</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Button Style</label>
+                        <select
+                          value={themeParams.components?.button?.style || 'solid'}
+                          onChange={(e) => updateThemeParam(['components', 'button', 'style'], e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="solid">Solid</option>
+                          <option value="outline">Outline</option>
+                          <option value="ghost">Ghost</option>
+                          <option value="gradient">Gradient</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Button Size</label>
+                        <select
+                          value={themeParams.components?.button?.size || 'medium'}
+                          onChange={(e) => updateThemeParam(['components', 'button', 'size'], e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="small">Small</option>
+                          <option value="medium">Medium</option>
+                          <option value="large">Large</option>
+                        </select>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="buttonRounded"
+                          checked={themeParams.components?.button?.rounded || false}
+                          onChange={(e) => updateThemeParam(['components', 'button', 'rounded'], e.target.checked.toString())}
+                          className="rounded border-gray-300"
+                        />
+                        <label htmlFor="buttonRounded" className="text-sm font-medium">
+                          Rounded Buttons
+                        </label>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Card Settings</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Card Shadow</label>
+                        <select
+                          value={themeParams.components?.card?.shadow || 'medium'}
+                          onChange={(e) => updateThemeParam(['components', 'card', 'shadow'], e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value="none">None</option>
+                          <option value="small">Small</option>
+                          <option value="medium">Medium</option>
+                          <option value="large">Large</option>
+                        </select>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="checkbox"
+                          id="cardBorder"
+                          checked={themeParams.components?.card?.border || false}
+                          onChange={(e) => updateThemeParam(['components', 'card', 'border'], e.target.checked.toString())}
+                          className="rounded border-gray-300"
+                        />
+                        <label htmlFor="cardBorder" className="text-sm font-medium">
+                          Show Card Border
+                        </label>
+                      </div>
+                    </div>
+                  </Card>
                 </div>
               )}
 
@@ -861,10 +1023,15 @@ const ProjectEditor = () => {
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Logo</label>
+                        <div className="mb-2">
+                          <p className="text-xs text-gray-500">Gợi ý: 200x80px hoặc 160x60px (tỷ lệ 2.5:1)</p>
+                        </div>
                         <ImageUpload
                           value={themeParams?.content?.header?.logo || ''}
                           onChange={(url) => updateThemeParam(['content', 'header', 'logo'], url)}
                           placeholder="Upload logo công ty"
+                          recommendedSize="200x80px hoặc 160x60px"
+                          aspectRatio="2.5:1"
                         />
                       </div>
                       <div>
@@ -891,10 +1058,15 @@ const ProjectEditor = () => {
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Hình ảnh nền</label>
+                        <div className="mb-2">
+                          <p className="text-xs text-gray-500">Gợi ý: 1920x1080px hoặc 1600x900px (tỷ lệ 16:9)</p>
+                        </div>
                         <ImageUpload
                           value={themeParams?.content?.hero?.backgroundImage || ''}
                           onChange={(url) => updateThemeParam(['content', 'hero', 'backgroundImage'], url)}
                           placeholder="Upload hình ảnh nền hero"
+                          recommendedSize="1920x1080px hoặc 1600x900px"
+                          aspectRatio="16:9"
                         />
                       </div>
                       <div>
@@ -967,10 +1139,15 @@ const ProjectEditor = () => {
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Hình ảnh</label>
+                        <div className="mb-2">
+                          <p className="text-xs text-gray-500">Gợi ý: 600x400px hoặc 800x600px (tỷ lệ 3:2 hoặc 4:3)</p>
+                        </div>
                         <ImageUpload
                           value={themeParams?.content?.about?.image || ''}
                           onChange={(url) => updateThemeParam(['content', 'about', 'image'], url)}
                           placeholder="Upload hình ảnh về công ty"
+                          recommendedSize="600x400px hoặc 800x600px"
+                          aspectRatio="3:2 hoặc 4:3"
                         />
                       </div>
                       <div>
@@ -1358,10 +1535,15 @@ const ProjectEditor = () => {
                             </div>
                             <div>
                               <label className="block text-sm font-medium mb-1">Hình ảnh sản phẩm</label>
+                              <div className="mb-2">
+                                <p className="text-xs text-gray-500">Gợi ý: 400x300px hoặc 600x450px (tỷ lệ 4:3)</p>
+                              </div>
                               <ImageUpload
                                 value={themeParams?.content?.products?.items?.[index]?.image || ''}
                                 onChange={(url) => updateThemeParam(['content', 'products', 'items', index.toString(), 'image'], url)}
                                 placeholder="Upload hình ảnh sản phẩm"
+                                recommendedSize="400x300px hoặc 600x450px"
+                                aspectRatio="4:3"
                               />
                             </div>
                             <div>
@@ -1388,10 +1570,15 @@ const ProjectEditor = () => {
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium mb-2">Logo Footer</label>
+                        <div className="mb-2">
+                          <p className="text-xs text-gray-500">Gợi ý: 180x72px hoặc 150x60px (tỷ lệ 2.5:1)</p>
+                        </div>
                         <ImageUpload
                           value={themeParams?.content?.footer?.logo || ''}
                           onChange={(url) => updateThemeParam(['content', 'footer', 'logo'], url)}
                           placeholder="Upload logo footer"
+                          recommendedSize="180x72px hoặc 150x60px"
+                          aspectRatio="2.5:1"
                         />
                       </div>
                       <div>
@@ -1513,6 +1700,9 @@ const ProjectEditor = () => {
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-2">Favicon URL</label>
+                        <div className="mb-2">
+                          <p className="text-xs text-gray-500">Gợi ý: 32x32px hoặc 16x16px (định dạng .ico, .png)</p>
+                        </div>
                         <Input
                           value={themeParams?.content?.meta?.favicon || ''}
                           onChange={(e) => updateThemeParam(['content', 'meta', 'favicon'], e.target.value)}

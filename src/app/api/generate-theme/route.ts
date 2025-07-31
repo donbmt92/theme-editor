@@ -200,10 +200,78 @@ Hãy đảm bảo:
 - Nội dung cụ thể cho ngành nghề, không generic
 `
 
-    // Generate content using Gemini AI
-    const result = await model.generateContent(prompt)
-    const response = await result.response
-    const text = response.text()
+    // Generate content using Gemini AI with retry logic
+    let result, response, text
+    let retryCount = 0
+    const maxRetries = 3
+    
+    while (retryCount < maxRetries) {
+      try {
+        console.log(`Attempting to generate content (attempt ${retryCount + 1}/${maxRetries})`)
+        result = await model.generateContent(prompt)
+        response = await result.response
+        text = response.text()
+        break // Success, exit retry loop
+                    } catch (aiError: unknown) {
+         retryCount++
+         console.error(`AI generation error (attempt ${retryCount}):`, aiError)
+         
+         if (retryCount >= maxRetries) {
+           // Type guard to check if aiError has expected properties
+           const error = aiError as { status?: number; message?: string }
+           
+           // If we've exhausted retries, return appropriate error
+           if (error?.status === 503 || error?.message?.includes('overloaded')) {
+             return NextResponse.json(
+               { 
+                 success: false, 
+                 error: 'Dịch vụ AI đang quá tải. Vui lòng thử lại sau vài phút.',
+                 errorType: 'AI_OVERLOADED',
+                 retryAfter: 300 // 5 minutes
+               },
+               { status: 503 }
+             )
+           } else if (error?.status === 429 || error?.message?.includes('quota')) {
+             return NextResponse.json(
+               { 
+                 success: false, 
+                 error: 'Đã vượt quá giới hạn sử dụng API. Vui lòng thử lại sau.',
+                 errorType: 'QUOTA_EXCEEDED',
+                 retryAfter: 3600 // 1 hour
+               },
+               { status: 429 }
+             )
+           } else {
+             return NextResponse.json(
+               { 
+                 success: false, 
+                 error: 'Có lỗi xảy ra khi tạo nội dung. Vui lòng thử lại.',
+                 errorType: 'AI_ERROR',
+                 details: process.env.NODE_ENV === 'development' ? error?.message : undefined
+               },
+               { status: 500 }
+             )
+           }
+         }
+        
+        // Wait before retry (exponential backoff)
+        const waitTime = Math.pow(2, retryCount) * 1000 // 1s, 2s, 4s
+        console.log(`Waiting ${waitTime}ms before retry...`)
+        await new Promise(resolve => setTimeout(resolve, waitTime))
+      }
+    }
+
+    // Validate AI response
+    if (!text) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Không nhận được phản hồi từ AI. Vui lòng thử lại.',
+          errorType: 'NO_AI_RESPONSE'
+        },
+        { status: 500 }
+      )
+    }
 
     // Clean and parse the JSON response
     let generatedData

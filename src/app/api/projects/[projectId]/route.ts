@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { logError, getUserFriendlyMessage, isDatabaseError, createErrorResponse, withTimeout } from '@/lib/error-handler'
 
 export async function GET(
   request: NextRequest,
@@ -10,34 +11,52 @@ export async function GET(
   try {
     const { projectId } = await params
     const session = await getServerSession(authOptions)
+    
     if (!session?.user?.id) {
+      logError(new Error('Unauthorized project access'), 'GET /api/projects/[projectId]', { projectId })
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
     }
 
-    const project = await prisma.project.findFirst({
-      where: {
-        id: projectId,
-        userId: session.user.id
-      },
-      include: {
-        theme: {
-          select: {
-            id: true,
-            name: true,
-            description: true,
-            defaultParams: true
-          }
+    if (!projectId || typeof projectId !== 'string') {
+      logError(new Error('Invalid project ID'), 'GET /api/projects/[projectId]', { projectId, userId: session.user.id })
+      return NextResponse.json(
+        { success: false, error: 'Project ID không hợp lệ' },
+        { status: 400 }
+      )
+    }
+
+    const project = await withTimeout(
+      prisma.project.findFirst({
+        where: {
+          id: projectId,
+          userId: session.user.id
         },
-        versions: {
-          orderBy: { versionNumber: 'desc' },
-          take: 1
+        include: {
+          theme: {
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              defaultParams: true
+            }
+          },
+          versions: {
+            orderBy: { versionNumber: 'desc' },
+            take: 1
+          }
         }
-      }
-    })
+      }),
+      8000,
+      'Database timeout while fetching project'
+    )
 
     if (!project) {
+      logError(new Error('Project not found'), 'GET /api/projects/[projectId]', { 
+        projectId, 
+        userId: session.user.id 
+      })
       return NextResponse.json(
-        { success: false, error: 'Project không tồn tại' },
+        { success: false, error: 'Project không tồn tại hoặc bạn không có quyền truy cập' },
         { status: 404 }
       )
     }
@@ -47,10 +66,22 @@ export async function GET(
       project
     })
   } catch (error) {
-    console.error('Error fetching project:', error)
+    logError(error, 'GET /api/projects/[projectId]', { 
+      projectId: (await params).projectId,
+      userId: (await getServerSession(authOptions))?.user?.id 
+    })
+    
+    const errorResponse = createErrorResponse(error, 'Có lỗi xảy ra khi tải project')
+    const status = isDatabaseError(error) ? 503 : 500
+    
     return NextResponse.json(
-      { success: false, error: 'Có lỗi xảy ra khi tải project' },
-      { status: 500 }
+      { 
+        success: false, 
+        error: getUserFriendlyMessage(error),
+        type: errorResponse.type,
+        ...(process.env.NODE_ENV === 'development' && { details: errorResponse.details })
+      },
+      { status }
     )
   }
 }

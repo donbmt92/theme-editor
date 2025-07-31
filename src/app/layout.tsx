@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import SessionProvider from '@/components/providers/SessionProvider'
+import ErrorBoundary from '@/components/ui/error-boundary'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -47,13 +48,15 @@ export default function RootLayout({
   return (
     <html lang="vi" suppressHydrationWarning>
       <body className={inter.className}>
-        <SessionProvider>
-          <div id="root">
-        {children}
-          </div>
-          <div id="modal-root" />
-          <div id="toast-root" />
-        </SessionProvider>
+        <ErrorBoundary>
+          <SessionProvider>
+            <div id="root">
+              {children}
+            </div>
+            <div id="modal-root" />
+            <div id="toast-root" />
+          </SessionProvider>
+        </ErrorBoundary>
       </body>
     </html>
   )

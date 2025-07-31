@@ -68,7 +68,7 @@ export default function HomePage() {
             </Link>
           </div>
           
-          <div className="mt-12">
+          {/* <div className="mt-12">
             <div className="relative rounded-xl overflow-hidden shadow-2xl">
               <Image
                 src="/placeholder-hero.png"
@@ -78,7 +78,7 @@ export default function HomePage() {
                 className="w-full h-auto"
               />
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
 

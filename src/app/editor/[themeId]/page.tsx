@@ -491,6 +491,7 @@ const ThemeEditor = () => {
                         <Input
                           value={themeParams.layout.containerWidth}
                           onChange={(e) => updateThemeParam(['layout', 'containerWidth'], e.target.value)}
+                          placeholder="1200px"
                         />
                       </div>
 
@@ -499,6 +500,7 @@ const ThemeEditor = () => {
                         <Input
                           value={themeParams.layout.sectionSpacing}
                           onChange={(e) => updateThemeParam(['layout', 'sectionSpacing'], e.target.value)}
+                          placeholder="80px"
                         />
                       </div>
 
@@ -507,6 +509,61 @@ const ThemeEditor = () => {
                         <Input
                           value={themeParams.layout.borderRadius}
                           onChange={(e) => updateThemeParam(['layout', 'borderRadius'], e.target.value)}
+                          placeholder="8px"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Padding container</label>
+                        <Input
+                          value={themeParams.layout.containerPadding}
+                          onChange={(e) => updateThemeParam(['layout', 'containerPadding'], e.target.value)}
+                          placeholder="0 20px"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Grid columns</label>
+                        <Input
+                          value={themeParams.layout.gridColumns}
+                          onChange={(e) => updateThemeParam(['layout', 'gridColumns'], e.target.value)}
+                          placeholder="3"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Gap giữa các items</label>
+                        <Input
+                          value={themeParams.layout.itemGap}
+                          onChange={(e) => updateThemeParam(['layout', 'itemGap'], e.target.value)}
+                          placeholder="32px"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Max width content</label>
+                        <Input
+                          value={themeParams.layout.maxContentWidth}
+                          onChange={(e) => updateThemeParam(['layout', 'maxContentWidth'], e.target.value)}
+                          placeholder="800px"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Header height</label>
+                        <Input
+                          value={themeParams.layout.headerHeight}
+                          onChange={(e) => updateThemeParam(['layout', 'headerHeight'], e.target.value)}
+                          placeholder="80px"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Footer padding</label>
+                        <Input
+                          value={themeParams.layout.footerPadding}
+                          onChange={(e) => updateThemeParam(['layout', 'footerPadding'], e.target.value)}
+                          placeholder="60px 0 20px"
                         />
                       </div>
                     </div>

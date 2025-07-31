@@ -2,179 +2,172 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Upload, X, Image as ImageIcon } from 'lucide-react'
 import { Button } from './button'
-import { Input } from './input'
-import Image from 'next/image'
+import { Upload, X, Image as ImageIcon } from 'lucide-react'
 
 interface ImageUploadProps {
-  value?: string
+  value: string
   onChange: (url: string) => void
   placeholder?: string
-  className?: string
-  accept?: string
+  recommendedSize?: string
+  aspectRatio?: string
 }
 
 const ImageUpload = ({ 
   value, 
   onChange, 
-  placeholder = "Upload image or enter URL", 
-  className = "",
-  accept = "image/*"
+  placeholder = "Upload image",
+  recommendedSize,
+  aspectRatio 
 }: ImageUploadProps) => {
-  const [isDragOver, setIsDragOver] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
-  const [showUrlInput, setShowUrlInput] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const handleFileSelect = async (file: File) => {
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
     if (!file) return
 
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file')
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB')
+      return
+    }
+
     setIsUploading(true)
+
     try {
-      // For now, we'll use a mock upload - in real app, upload to cloud storage
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const result = e.target?.result as string
-        onChange(result)
-        setIsUploading(false)
-      }
-      reader.readAsDataURL(file)
+      // Create a preview URL for immediate display
+      const previewUrl = URL.createObjectURL(file)
+      onChange(previewUrl)
+
+      // Here you would typically upload to your server
+      // For now, we'll just use the preview URL
+      // In a real app, you'd upload to your server and get back a URL
+      
+      // Simulate upload delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // For demo purposes, keep the preview URL
+      // In production, replace with actual uploaded URL
+      onChange(previewUrl)
     } catch (error) {
       console.error('Upload failed:', error)
+      alert('Upload failed. Please try again.')
+    } finally {
       setIsUploading(false)
     }
   }
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-    
-    const files = e.dataTransfer.files
-    if (files.length > 0) {
-      handleFileSelect(files[0])
-    }
-  }
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(true)
-  }
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragOver(false)
-  }
-
-  const handleUrlSubmit = (url: string) => {
-    if (url.trim()) {
-      onChange(url.trim())
-      setShowUrlInput(false)
-    }
-  }
-
-  const removeImage = () => {
+  const handleRemove = () => {
     onChange('')
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
+  const handleClick = () => {
+    fileInputRef.current?.click()
   }
 
   return (
-    <div className={`space-y-3 ${className}`}>
-      {/* Current Image Preview */}
-      {value && (
-        <div className="relative group">
-          <Image
-            src={value}
-            alt="Preview"
-            width={400}
-            height={128}
-            className="w-full h-32 object-cover rounded-lg border border-gray-200"
-          />
-          <button
-            onClick={removeImage}
-            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <X size={16} />
-          </button>
+    <div className="space-y-3">
+      {/* Image Size Recommendations */}
+      {recommendedSize && (
+        <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded-md">
+          <strong>Kích thước khuyến nghị:</strong> {recommendedSize}
+          {aspectRatio && <span className="ml-2">• Tỷ lệ: {aspectRatio}</span>}
         </div>
       )}
 
       {/* Upload Area */}
-      {!value && (
-        <div
-          className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-            isDragOver 
-              ? 'border-blue-500 bg-blue-50' 
-              : 'border-gray-300 hover:border-gray-400'
-          }`}
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-        >
-          <Upload className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-          <p className="text-sm text-gray-600 mb-2">
-            Kéo thả ảnh vào đây hoặc
-          </p>
-          <div className="flex space-x-2 justify-center">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-            >
-              {isUploading ? 'Đang upload...' : 'Chọn file'}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowUrlInput(!showUrlInput)}
-            >
-              Nhập URL
-            </Button>
+      <div className="space-y-2">
+        {value ? (
+          <div className="relative group">
+            <div className="relative w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
+              <img
+                src={value}
+                alt="Uploaded"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-200 flex items-center justify-center">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleRemove}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white text-gray-900 hover:bg-gray-100"
+                >
+                  <X size={16} />
+                </Button>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
-
-      {/* URL Input */}
-      {showUrlInput && (
-        <div className="flex space-x-2">
-          <Input
-            placeholder="Nhập URL ảnh..."
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                handleUrlSubmit(e.currentTarget.value)
-              }
-            }}
-          />
-          <Button
-            size="sm"
-            onClick={() => {
-              const input = document.querySelector('input[placeholder="Nhập URL ảnh..."]') as HTMLInputElement
-              if (input) handleUrlSubmit(input.value)
-            }}
+        ) : (
+          <div
+            onClick={handleClick}
+            className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors duration-200"
           >
-            OK
-          </Button>
+            <div className="flex flex-col items-center space-y-2">
+              <ImageIcon size={24} className="text-gray-400" />
+              <div>
+                <p className="text-sm font-medium text-gray-900">{placeholder}</p>
+                <p className="text-xs text-gray-500">
+                  Click to upload • PNG, JPG, GIF up to 5MB
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileSelect}
+          className="hidden"
+        />
+
+        {!value && (
           <Button
+            type="button"
             variant="outline"
             size="sm"
-            onClick={() => setShowUrlInput(false)}
+            onClick={handleClick}
+            disabled={isUploading}
+            className="w-full"
           >
-            Hủy
+            {isUploading ? (
+              <div className="flex items-center space-x-2">
+                <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin"></div>
+                <span>Uploading...</span>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Upload size={16} />
+                <span>Choose Image</span>
+              </div>
+            )}
           </Button>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Hidden File Input */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept={accept}
-        onChange={(e) => {
-          const file = e.target.files?.[0]
-          if (file) handleFileSelect(file)
-        }}
-        className="hidden"
-      />
+      {/* URL Input for external images */}
+      <div className="space-y-2">
+        <label className="text-xs font-medium text-gray-700">Hoặc nhập URL hình ảnh:</label>
+        <input
+          type="url"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder="https://example.com/image.jpg"
+          className="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
+      </div>
     </div>
   )
 }

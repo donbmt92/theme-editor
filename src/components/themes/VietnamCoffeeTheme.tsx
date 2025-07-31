@@ -11,9 +11,10 @@ import Footer from './vietnam-coffee/Footer'
 interface VietnamCoffeeThemeProps {
   theme: ThemeParams
   content?: Record<string, unknown>
+  onContentUpdate?: (content: Record<string, unknown>) => void // Add callback for content updates
 }
 
-export default function VietnamCoffeeTheme({ theme, content }: VietnamCoffeeThemeProps) {
+export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: VietnamCoffeeThemeProps) {
   // Load content from vietnam-coffee-project-2025-07-19.json structure
   const defaultContent = {
     header: {
@@ -158,13 +159,77 @@ export default function VietnamCoffeeTheme({ theme, content }: VietnamCoffeeThem
     finalContent.solutions.items = defaultContent.solutions.items
   }
 
-  return (
-    <div className="min-h-screen" style={{ 
+  // Handle hero content update
+  const handleHeroContentUpdate = (updatedHeroContent: any) => {
+    if (onContentUpdate) {
+      const updatedContent = {
+        ...finalContent,
+        hero: updatedHeroContent
+      };
+      onContentUpdate(updatedContent);
+    }
+  };
+
+  // Get spacing class based on theme layout spacing
+  const getSpacingClass = () => {
+    switch (theme.layout?.spacing) {
+      case 'minimal':
+        return 'py-8'
+      case 'spacious':
+        return 'py-20'
+      case 'comfortable':
+      default:
+        return 'py-16'
+    }
+  }
+
+  // Get container width style
+  const getContainerStyle = () => {
+    const maxWidth = theme.layout?.containerWidth || '1200px'
+    return {
+      maxWidth,
+      margin: '0 auto',
+      padding: '0 1rem'
+    }
+  }
+
+  // Get typography styles
+  const getTypographyStyles = () => {
+    return {
       fontFamily: theme.typography?.fontFamily || 'Inter',
-      color: theme.colors?.text || '#2D3748' 
-    }}>
+      fontSize: theme.typography?.fontSize || '16px',
+      lineHeight: theme.typography?.lineHeight || '1.6',
+      fontWeight: theme.typography?.fontWeight || '400',
+      color: theme.colors?.text || '#2D3748'
+    }
+  }
+
+  // Get border radius class
+  const getBorderRadiusClass = () => {
+    switch (theme.layout?.borderRadius) {
+      case 'none':
+        return 'rounded-none'
+      case 'small':
+        return 'rounded-sm'
+      case 'large':
+        return 'rounded-lg'
+      case 'medium':
+      default:
+        return 'rounded-md'
+    }
+  }
+
+  return (
+    <div 
+      className="min-h-screen" 
+      style={getTypographyStyles()}
+    >
       <Header theme={theme} content={finalContent.header} />
-      <HeroSection theme={theme} content={finalContent.hero} />
+      <HeroSection 
+        theme={theme} 
+        content={finalContent.hero}
+        onContentUpdate={handleHeroContentUpdate}
+      />
       <ProblemSolution 
         theme={theme} 
         content={{

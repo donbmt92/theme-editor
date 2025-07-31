@@ -2,6 +2,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { 
   Dialog, 
   DialogContent, 
@@ -14,20 +15,23 @@ import { Button } from './button'
 import { Input } from './input'
 import { Textarea } from './textarea'
 import { Card, CardContent, CardHeader, CardTitle } from './card'
-import { Download, Github, Globe, Loader2, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react'
+import { Download, Github, Globe, Loader2, CheckCircle, AlertCircle, ExternalLink, Terminal } from 'lucide-react'
 import { ThemeParams } from '@/types'
 
 interface ExportOptions {
   projectName: string
   description: string
-  framework: 'react' | 'nextjs'
+  framework: 'react' | 'nextjs' | 'html'
   typescript: boolean
-  cssFramework: 'tailwind' | 'styled-components' | 'css-modules'
+  cssFramework: 'tailwind' | 'styled-components' | 'css-modules' | 'vanilla'
   includeAssets: boolean
   createGitHubRepo: boolean
   deployToVercel: boolean
   gitHubRepoName: string
   gitHubRepoPrivate: boolean
+  createUserFolder: boolean
+  generateDeployScript: boolean
+  serverType: 'nginx' | 'apache' | 'node' | 'docker'
 }
 
 interface ExportProjectDialogProps {
@@ -45,6 +49,7 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
   projectId,
   projectName
 }) => {
+  const { data: session } = useSession()
   const [options, setOptions] = useState<ExportOptions>({
     projectName: projectName || 'my-react-app',
     description: 'Exported from Theme Editor',
@@ -55,7 +60,10 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
     createGitHubRepo: false,
     deployToVercel: false,
     gitHubRepoName: (projectName || 'my-react-app').toLowerCase().replace(/\s+/g, '-'),
-    gitHubRepoPrivate: false
+    gitHubRepoPrivate: false,
+    createUserFolder: true,
+    generateDeployScript: true,
+    serverType: 'nginx'
   })
   
   const [step, setStep] = useState<'options' | 'exporting' | 'success' | 'error'>('options')
@@ -63,6 +71,9 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
     downloadUrl?: string
     gitHubRepoUrl?: string
     vercelUrl?: string
+    deployScriptPath?: string
+    userFolderPath?: string
+    filesystemPath?: string
     error?: string
     logs: string[]
   }>({
@@ -70,10 +81,20 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
   })
 
   const updateOption = <K extends keyof ExportOptions>(key: K, value: ExportOptions[K]) => {
-    setOptions(prev => ({
-      ...prev,
-      [key]: value
-    }))
+    setOptions(prev => {
+      const newOptions = {
+        ...prev,
+        [key]: value
+      }
+      
+      // Auto-adjust settings when HTML framework is selected
+      if (key === 'framework' && value === 'html') {
+        newOptions.typescript = false
+        newOptions.cssFramework = 'vanilla'
+      }
+      
+      return newOptions
+    })
   }
 
   const addLog = (message: string) => {
@@ -84,13 +105,23 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
   }
 
   const startExport = async () => {
+    if (!session?.user?.id) {
+      addLog('❌ Lỗi: Bạn cần đăng nhập để xuất project')
+      setStep('error')
+      return
+    }
+
     setStep('exporting')
     setExportProgress({ logs: [] })
     
     try {
       addLog('🚀 Bắt đầu xuất project...')
       
-      // Step 1: Export ReactJS project
+      // Step 1: Export ReactJS project với user folder
+      if (options.createUserFolder) {
+        addLog(`📁 Tạo folder riêng cho user: ${session.user.id}`)
+      }
+      
       addLog('📦 Tạo ReactJS project từ theme...')
       const exportResponse = await fetch('/api/export-project', {
         method: 'POST',
@@ -99,6 +130,7 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
         },
         body: JSON.stringify({
           projectId,
+          userId: session.user.id,
           projectName: options.projectName,
           description: options.description,
           framework: options.framework,
@@ -109,6 +141,9 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
           githubRepoName: options.gitHubRepoName,
           githubPrivate: options.gitHubRepoPrivate,
           deployToVercel: options.deployToVercel,
+          createUserFolder: options.createUserFolder,
+          generateDeployScript: options.generateDeployScript,
+          serverType: options.serverType,
           themeParams
         })
       })
@@ -120,9 +155,20 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
       const exportResult = await exportResponse.json()
       addLog('✅ Tạo ReactJS project thành công!')
       
+      if (options.createUserFolder && exportResult.userFolderPath) {
+        addLog(`📁 Folder user được tạo tại: ${exportResult.userFolderPath}`)
+      }
+      
+      if (options.generateDeployScript && exportResult.deployScriptPath) {
+        addLog(`📜 Deploy script được tạo: ${exportResult.deployScriptPath}`)
+      }
+      
       setExportProgress(prev => ({
         ...prev,
-        downloadUrl: exportResult.downloadUrl
+        downloadUrl: exportResult.downloadUrl,
+        deployScriptPath: exportResult.deployScriptPath,
+        userFolderPath: exportResult.userFolderPath,
+        filesystemPath: exportResult.filesystemPath
       }))
 
       // Step 2: Create GitHub repository (if requested)
@@ -214,10 +260,10 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <Download className="h-5 w-5 text-blue-600" />
-                Xuất Project ReactJS
+                Xuất Project Web
               </DialogTitle>
               <DialogDescription>
-                Xuất project thành ứng dụng ReactJS hoàn chỉnh, tạo GitHub repo và deploy lên Vercel
+                Xuất project thành ứng dụng web hoàn chỉnh (ReactJS, Next.js hoặc Static HTML), tạo GitHub repo và deploy lên Vercel
               </DialogDescription>
             </DialogHeader>
 
@@ -252,11 +298,12 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
                       <label className="block text-sm font-medium mb-2">Framework</label>
                       <select
                         value={options.framework}
-                        onChange={(e) => updateOption('framework', e.target.value as 'react' | 'nextjs')}
+                        onChange={(e) => updateOption('framework', e.target.value as 'react' | 'nextjs' | 'html')}
                         className="w-full p-2 border border-gray-300 rounded-md"
                       >
                         <option value="react">React + Vite</option>
                         <option value="nextjs">Next.js</option>
+                        <option value="html">Static HTML</option>
                       </select>
                     </div>
 
@@ -268,8 +315,11 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
                         className="w-full p-2 border border-gray-300 rounded-md"
                       >
                         <option value="tailwind">Tailwind CSS</option>
-                        <option value="styled-components">Styled Components</option>
+                        {options.framework !== 'html' && (
+                          <option value="styled-components">Styled Components</option>
+                        )}
                         <option value="css-modules">CSS Modules</option>
+                        <option value="vanilla">Vanilla CSS</option>
                       </select>
                     </div>
                   </div>
@@ -280,9 +330,13 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
                         type="checkbox"
                         checked={options.typescript}
                         onChange={(e) => updateOption('typescript', e.target.checked)}
+                        disabled={options.framework === 'html'}
                         className="mr-2"
                       />
                       TypeScript
+                      {options.framework === 'html' && (
+                        <span className="text-sm text-gray-500 ml-2">(Không áp dụng cho HTML)</span>
+                      )}
                     </label>
                     
                     <label className="flex items-center">
@@ -366,6 +420,55 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
                   </label>
                 </CardContent>
               </Card>
+
+              {/* Server Deployment Options */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Terminal className="h-5 w-5" />
+                    Tùy chọn Deploy & Folder
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={options.createUserFolder}
+                        onChange={(e) => updateOption('createUserFolder', e.target.checked)}
+                        className="mr-2"
+                      />
+                      Tạo folder riêng cho user (tránh trùng file)
+                    </label>
+                    
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={options.generateDeployScript}
+                        onChange={(e) => updateOption('generateDeployScript', e.target.checked)}
+                        className="mr-2"
+                      />
+                      Tạo script deploy tự động
+                    </label>
+                  </div>
+
+                  {options.generateDeployScript && (
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Loại server</label>
+                      <select
+                        value={options.serverType}
+                        onChange={(e) => updateOption('serverType', e.target.value as 'nginx' | 'apache' | 'node' | 'docker')}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                      >
+                        <option value="nginx">Nginx</option>
+                        <option value="apache">Apache</option>
+                        <option value="node">Node.js Server</option>
+                        <option value="docker">Docker</option>
+                      </select>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
 
             <DialogFooter>
@@ -374,7 +477,7 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
               </Button>
               <Button onClick={startExport} className="bg-blue-600 hover:bg-blue-700">
                 <Download className="mr-2 h-4 w-4" />
-                Bắt đầu xuất file
+                Bắt đầu xuất project
               </Button>
             </DialogFooter>
           </>
@@ -473,6 +576,42 @@ const ExportProjectDialog: React.FC<ExportProjectDialogProps> = ({
                           <ExternalLink className="ml-1 h-3 w-3" />
                         </a>
                       </Button>
+                    </div>
+                  )}
+
+                  {exportProgress.userFolderPath && (
+                    <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                      <div>
+                        <p className="font-medium">User Folder</p>
+                        <p className="text-sm text-gray-600">Folder riêng cho user: {exportProgress.userFolderPath}</p>
+                      </div>
+                      <div className="text-purple-600">
+                        📁
+                      </div>
+                    </div>
+                  )}
+
+                  {exportProgress.deployScriptPath && (
+                    <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                      <div>
+                        <p className="font-medium">Deploy Script</p>
+                        <p className="text-sm text-gray-600">Script deploy tự động cho {options.serverType}</p>
+                      </div>
+                      <div className="text-orange-600">
+                        <Terminal className="h-5 w-5" />
+                      </div>
+                    </div>
+                  )}
+
+                  {exportProgress.filesystemPath && (
+                    <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                      <div>
+                        <p className="font-medium">Filesystem Path</p>
+                        <p className="text-sm text-gray-600">Đường dẫn lưu file trên server</p>
+                      </div>
+                      <div className="text-blue-600 text-xs font-mono">
+                        {exportProgress.filesystemPath}
+                      </div>
                     </div>
                   )}
                 </CardContent>
