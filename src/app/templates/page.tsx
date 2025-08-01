@@ -42,15 +42,8 @@ export default function TemplatesPage() {
 
   
   
-  const filteredThemes = themes.filter(theme => {
-    const matchesSearch = theme.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         theme.description.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    if (selectedCategory === 'all') return matchesSearch
-    
-    const category = selectedCategory.toLowerCase()
-    return matchesSearch && theme.name.toLowerCase().includes(category)
-  }).slice(0, 1) // Chỉ lấy theme đầu tiên
+  // Simplified filtering - just get the first theme
+  const filteredThemes = themes.slice(0, 1) // Chỉ lấy theme đầu tiên
 
   if (loading) {
     return (
