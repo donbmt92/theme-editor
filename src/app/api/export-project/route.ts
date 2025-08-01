@@ -47,13 +47,10 @@ export async function POST(request: NextRequest) {
       typescript, 
       cssFramework, 
       includeAssets,
-      createGitHubRepo,
-      githubRepoName,
-      githubPrivate,
-      deployToVercel,
       createUserFolder,
       generateDeployScript,
       serverType,
+      domain,
       themeParams 
     } = await request.json()
 
@@ -65,11 +62,10 @@ export async function POST(request: NextRequest) {
       typescript,
       cssFramework,
       includeAssets,
-      createGitHubRepo,
-      deployToVercel,
       createUserFolder,
       generateDeployScript,
-      serverType
+      serverType,
+      domain
     })
 
     // Validate required fields
@@ -119,7 +115,7 @@ export async function POST(request: NextRequest) {
     let deployScriptPath = ''
     if (generateDeployScript) {
       console.log('📜 [EXPORT] Adding deploy script...')
-      const deployScript = generateDeployScript_func(projectName, serverType, framework)
+      const deployScript = generateDeployScript_func(projectName, serverType, framework, domain)
       const scriptName = getDeployScriptName(serverType)
       projectFiles[scriptName] = deployScript
       deployScriptPath = scriptName
@@ -199,56 +195,7 @@ export async function POST(request: NextRequest) {
       console.log(`✅ [EXPORT] ZIP stored in memory only for project ${projectId}`)
     }
 
-    // Step 4: GitHub Integration (skip for static HTML)
-    let githubResult = null
-    if (createGitHubRepo && framework !== 'static-html' && framework !== 'html') {
-      console.log('🐙 [EXPORT] Step 4: Creating GitHub repository...')
-      try {
-        const githubResponse = await fetch(`${request.nextUrl.origin}/api/create-github-repo`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            projectId,
-            repoName: githubRepoName || projectName,
-            description,
-            private: githubPrivate,
-            projectFiles
-          })
-        })
-        githubResult = await githubResponse.json()
-        console.log('✅ [EXPORT] GitHub repository created:', githubResult)
-      } catch (error) {
-        console.error('❌ [EXPORT] GitHub creation failed:', error)
-        githubResult = { success: false, error: 'GitHub creation failed' }
-      }
-    } else {
-      console.log('⏭️ [EXPORT] Step 4: Skipping GitHub creation')
-    }
 
-    // Step 5: Vercel Deployment (skip for static HTML)
-    let vercelResult = null
-    if (deployToVercel && githubResult?.success && framework !== 'static-html' && framework !== 'html') {
-      console.log('🚀 [EXPORT] Step 5: Deploying to Vercel...')
-      try {
-        const vercelResponse = await fetch(`${request.nextUrl.origin}/api/deploy-vercel`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            projectId,
-            repoUrl: githubResult.repoUrl,
-            projectName,
-            framework
-          })
-        })
-        vercelResult = await vercelResponse.json()
-        console.log('✅ [EXPORT] Vercel deployment successful:', vercelResult)
-      } catch (error) {
-        console.error('❌ [EXPORT] Vercel deployment failed:', error)
-        vercelResult = { success: false, error: 'Vercel deployment failed' }
-      }
-    } else {
-      console.log('⏭️ [EXPORT] Step 5: Skipping Vercel deployment')
-    }
 
     // Calculate total time
     const totalTime = Date.now() - startTime
@@ -262,8 +209,6 @@ export async function POST(request: NextRequest) {
       downloadUrl: `/api/download-project/${projectId}`,
       fileSize: zipBuffer.byteLength,
       fileCount: Object.keys(projectFiles).length,
-      github: githubResult,
-      vercel: vercelResult,
       deployScriptPath: deployScriptPath || null,
       userFolderPath: userFolderPath || null,
       filesystemPath: projectDir || null, // Thêm đường dẫn filesystem
@@ -275,8 +220,8 @@ export async function POST(request: NextRequest) {
       projectName,
       fileSize: `${(zipBuffer.byteLength / 1024).toFixed(2)}KB`,
       fileCount: Object.keys(projectFiles).length,
-      githubSuccess: githubResult?.success,
-      vercelSuccess: vercelResult?.success,
+      deployScriptPath: deployScriptPath || null,
+      userFolderPath: userFolderPath || null,
       isStaticHtml: framework === 'static-html' || framework === 'html'
     })
 
@@ -2233,18 +2178,19 @@ function generateManifestFile(projectName: string, themeParams: any) {
 }
 
 // Helper functions for deploy script generation
-function generateDeployScript_func(projectName: string, serverType: string, framework: string): string {
+function generateDeployScript_func(projectName: string, serverType: string, framework: string, domain?: string): string {
+  const finalDomain = domain || 'your-domain.com'
   switch (serverType) {
     case 'nginx':
-      return generateNginxDeployScript(projectName, framework)
+      return generateNginxDeployScript(projectName, framework, finalDomain)
     case 'apache':
-      return generateApacheDeployScript(projectName, framework)
+      return generateApacheDeployScript(projectName, framework, finalDomain)
     case 'node':
       return generateNodeDeployScript(projectName, framework)
     case 'docker':
-      return generateDockerDeployScript(projectName, framework)
+      return generateDockerDeployScript(projectName, framework, finalDomain)
     default:
-      return generateNginxDeployScript(projectName, framework)
+      return generateNginxDeployScript(projectName, framework, finalDomain)
   }
 }
 
@@ -2263,7 +2209,7 @@ function getDeployScriptName(serverType: string): string {
   }
 }
 
-function generateNginxDeployScript(projectName: string, framework: string): string {
+function generateNginxDeployScript(projectName: string, framework: string, domain: string): string {
   const isStatic = framework === 'html' || framework === 'static-html'
   const buildCommand = framework === 'nextjs' ? 'npm run build' : framework === 'react' ? 'npm run build' : ''
   const buildDir = framework === 'nextjs' ? 'out' : framework === 'react' ? 'dist' : '.'
@@ -2279,7 +2225,7 @@ echo "🚀 Bắt đầu deploy ${projectName}..."
 
 # Cấu hình
 PROJECT_NAME="${projectName}"
-DOMAIN="your-domain.com"  # Thay đổi domain của bạn
+DOMAIN="${domain}"
 NGINX_ROOT="/var/www/\$PROJECT_NAME"
 NGINX_CONFIG="/etc/nginx/sites-available/\$PROJECT_NAME"
 USER_ID=\$(id -u)
@@ -2369,7 +2315,7 @@ else
 fi`
 }
 
-function generateApacheDeployScript(projectName: string, framework: string): string {
+function generateApacheDeployScript(projectName: string, framework: string, domain: string): string {
   const isStatic = framework === 'html' || framework === 'static-html'
   const buildCommand = framework === 'nextjs' ? 'npm run build' : framework === 'react' ? 'npm run build' : ''
   const buildDir = framework === 'nextjs' ? 'out' : framework === 'react' ? 'dist' : '.'
@@ -2385,7 +2331,7 @@ echo "🚀 Bắt đầu deploy ${projectName}..."
 
 # Cấu hình
 PROJECT_NAME="${projectName}"
-DOMAIN="your-domain.com"  # Thay đổi domain của bạn
+DOMAIN="${domain}"
 APACHE_ROOT="/var/www/html/\$PROJECT_NAME"
 APACHE_CONFIG="/etc/apache2/sites-available/\$PROJECT_NAME.conf"
 
@@ -2558,7 +2504,7 @@ echo "   pm2 stop \$PM2_APP_NAME  # Stop app"
 echo "   pm2 restart \$PM2_APP_NAME # Restart app"`
 }
 
-function generateDockerDeployScript(projectName: string, framework: string): string {
+function generateDockerDeployScript(projectName: string, framework: string, domain: string): string {
   const isNextJs = framework === 'nextjs'
   const isStatic = framework === 'html' || framework === 'static-html'
   
@@ -2576,6 +2522,7 @@ PROJECT_NAME="${projectName}"
 CONTAINER_NAME="\$PROJECT_NAME-container"
 IMAGE_NAME="\$PROJECT_NAME:latest"
 PORT="3000"
+DOMAIN="${domain}"
 
 echo "📝 Tạo Dockerfile..."
 ${isStatic ? `

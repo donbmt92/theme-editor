@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -11,7 +11,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import AIContentGenerator from '@/components/ui/ai-content-generator'
 import { Toast, ToastContainer, useToast } from '@/components/ui/toast'
-import { LoadingSpinner, PageLoader } from '@/components/ui/loading-spinner'
+import { PageLoader } from '@/components/ui/loading-spinner'
 import { ErrorMessage } from '@/components/ui/error-message'
 import { useErrorHandler } from '@/components/ui/error-boundary'
 import { ThemeParams } from '@/types'
@@ -39,7 +39,7 @@ const UserTemplatesPage = () => {
   const [projectName, setProjectName] = useState('')
   const [isCreating, setIsCreating] = useState(false)
   const [showAIGenerator, setShowAIGenerator] = useState(false)
-  const [createdProject, setCreatedProject] = useState<any>(null)
+  const [createdProject, setCreatedProject] = useState<{ id: string; themeParams?: string } | null>(null)
   const [showCreateDialog, setShowCreateDialog] = useState(false)
   const [isShowingAI, setIsShowingAI] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -72,20 +72,22 @@ const UserTemplatesPage = () => {
           console.error(`HTTP ${response.status} error fetching image for theme: ${theme.name}`)
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Network error fetching Unsplash image:', error)
       
       // Handle specific network errors
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        console.error('Network connection failed when fetching theme image')
-      } else if (error.name === 'AbortError') {
-        console.warn('Theme image fetch was aborted')
+      if (error instanceof Error) {
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+          console.error('Network connection failed when fetching theme image')
+        } else if (error.name === 'AbortError') {
+          console.warn('Theme image fetch was aborted')
+        }
       }
     }
     return null
   }
 
-  const loadThemes = async () => {
+  const loadThemes = useCallback(async () => {
       try {
         const response = await fetch('/api/themes')
         const data = await response.json()
@@ -130,7 +132,7 @@ const UserTemplatesPage = () => {
             }
           }
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Error loading themes:', error)
         setError('Không thể tải danh sách themes. Vui lòng kiểm tra kết nối internet và thử lại.')
         toast({
@@ -140,17 +142,17 @@ const UserTemplatesPage = () => {
         })
         
         // If it's a critical error, trigger error boundary
-        if (error.name === 'TypeError' || error.message?.includes('fetch')) {
+        if (error instanceof Error && (error.name === 'TypeError' || error.message?.includes('fetch'))) {
           throwError(new Error('Network error loading themes'))
         }
-      } finally {
-        setLoading(false)
-      }
-    }
+              } finally {
+          setLoading(false)
+        }
+      }, [preselectedThemeId, toast, throwError])
 
   useEffect(() => {
     loadThemes()
-  }, [preselectedThemeId])
+  }, [preselectedThemeId, loadThemes])
 
   const createProject = async () => {
     if (!selectedTheme || !projectName.trim()) return
@@ -199,7 +201,7 @@ const UserTemplatesPage = () => {
           variant: "destructive"
         })
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error creating project:', error)
       toast({
         title: "Lỗi kết nối",
@@ -251,7 +253,7 @@ const UserTemplatesPage = () => {
           variant: "destructive"
         })
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error updating project:', error)
       toast({
         title: "Lỗi kết nối",

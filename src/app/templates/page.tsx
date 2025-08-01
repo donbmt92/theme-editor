@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { Palette, Search, Filter, ArrowRight, Star, Coffee, Building, Minimize, Eye } from 'lucide-react'
+import { Palette, Coffee, Building, Minimize, Eye } from 'lucide-react'
 
 interface Theme {
   id: string
@@ -19,9 +19,7 @@ export default function TemplatesPage() {
   // Removed unused router variable
   const [themes, setThemes] = useState<Theme[]>([])
   const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('all')
-
+ 
   useEffect(() => {
     fetchThemes()
   }, [])
@@ -42,12 +40,7 @@ export default function TemplatesPage() {
 
   // Removed unused function - functionality moved to user templates page
 
-  const getThemeIcon = (themeName: string) => {
-    if (themeName.toLowerCase().includes('coffee')) return Coffee
-    if (themeName.toLowerCase().includes('corporate')) return Building
-    if (themeName.toLowerCase().includes('minimalist')) return Minimize
-    return Palette
-  }
+  
   
   const filteredThemes = themes.filter(theme => {
     const matchesSearch = theme.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

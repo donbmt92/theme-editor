@@ -12,7 +12,7 @@ import { Save, Download, Eye, Palette, Type, Layout, Settings, FileText, Undo, R
 import VietnamCoffeeTheme from '@/components/themes/VietnamCoffeeTheme'
 import ImageUpload from '@/components/ui/image-upload'
 import AIContentGenerator from '@/components/ui/ai-content-generator'
-import ExportProjectDialog from '@/components/ui/export-project-dialog'
+import DeployProjectDialog from '@/components/ui/export-project-dialog'
 import { useUndoRedo } from '@/hooks/use-undo-redo'
 import { ThemeParams } from '@/types'
 
@@ -212,7 +212,7 @@ const ProjectEditor = () => {
   const [saveMessage, setSaveMessage] = useState('')
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true)
   const [showAIDialog, setShowAIDialog] = useState(false)
-  const [showExportDialog, setShowExportDialog] = useState(false)
+  const [showDeployDialog, setShowDeployDialog] = useState(false)
   
   // Undo/Redo functionality
   const {
@@ -525,7 +525,7 @@ const ProjectEditor = () => {
             </Button>
             <Button
               size="sm"
-              onClick={() => setShowExportDialog(true)}
+              onClick={() => setShowDeployDialog(true)}
               style={{ backgroundColor: themeParams?.colors?.primary || '#8B4513' }}
             >
               <Download size={16} className="mr-2" />
@@ -1741,10 +1741,10 @@ const ProjectEditor = () => {
         currentTheme={themeParams}
       />
 
-      {/* Export Project Dialog */}
-      <ExportProjectDialog
-        open={showExportDialog}
-        onOpenChange={setShowExportDialog}
+      {/* Deploy Project Dialog */}
+      <DeployProjectDialog
+        open={showDeployDialog}
+        onOpenChange={setShowDeployDialog}
         themeParams={themeParams}
         projectId={projectId}
         projectName={project?.name || 'My Project'}
