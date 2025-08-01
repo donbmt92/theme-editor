@@ -117,7 +117,7 @@ const UserTemplatesPage = () => {
               // Still update the theme to remove loading state
               setThemes(prev => prev.map(t => 
                 t.id === theme.id 
-                  ? { ...t, unsplashImageUrl: null, isLoadingImage: false }
+                  ? { ...t, unsplashImageUrl: undefined, isLoadingImage: false }
                   : t
               ))
             }
