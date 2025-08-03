@@ -6,13 +6,13 @@ import { ThemeParams } from "@/types";
 import Image from "next/image";
 
 interface Testimonial {
-  id: string;
+  id?: string;
   name: string;
   position: string;
   company: string;
   content: string;
-  rating: number;
-  avatar: string; // This can be either image URL or initials
+  rating?: number;
+  avatar?: string; // This can be either image URL or initials
   avatarImage?: string; // New field for image URL
 }
 
