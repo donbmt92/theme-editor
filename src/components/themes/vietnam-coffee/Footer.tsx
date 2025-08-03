@@ -25,17 +25,17 @@ interface FooterProps {
 }
 
 const Footer = ({ theme, content }: FooterProps) => {
-  // Get typography styles
+  // Get typography styles - same as Header
   const getTypographyStyles = () => {
     return {
-      fontFamily: theme.typography?.fontFamily || 'Inter',
+      fontFamily: theme.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
       fontSize: theme.typography?.fontSize || '16px',
       lineHeight: theme.typography?.lineHeight || '1.6',
       fontWeight: theme.typography?.fontWeight || '400',
     }
   }
 
-  // Get border radius class
+  // Get border radius class - same as Header
   const getBorderRadiusClass = () => {
     switch (theme.layout?.borderRadius) {
       case 'none':
@@ -50,27 +50,27 @@ const Footer = ({ theme, content }: FooterProps) => {
     }
   }
 
-  // Get button styles based on component settings
-  const getButtonStyles = (variant: 'ghost' | 'hero' = 'ghost') => {
+  // Get button styles based on component settings - same as Header
+  const getButtonStyles = (variant: 'outline' | 'premium' = 'outline') => {
     const baseStyles = {
-      fontFamily: theme.typography?.fontFamily || 'Inter',
+      fontFamily: theme.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
       fontSize: theme.typography?.fontSize || '16px',
       fontWeight: theme.typography?.fontWeight || '400',
     }
 
-    if (variant === 'ghost') {
+    if (variant === 'outline') {
       return {
         ...baseStyles,
-        color: content.textColor || '#F9FAFB',
-        backgroundColor: `${content.textColor || '#F9FAFB'}1A`,
+        borderColor: theme.colors?.border || theme.colors?.primary,
+        color: content.textColor || theme.colors?.text,
         borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
       }
     }
 
     return {
       ...baseStyles,
-      backgroundColor: theme.colors.accent,
-      color: theme.colors.text,
+      backgroundColor: theme.colors?.accent,
+      color: theme.colors?.text,
       borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
     }
   }
@@ -114,18 +114,19 @@ const Footer = ({ theme, content }: FooterProps) => {
   return (
     <footer 
       id="contact"
+      className={`backdrop-blur-sm border-t z-50 shadow-lg ${getBorderRadiusClass()}`}
       style={{ 
-        backgroundColor: content.backgroundColor || theme.sections?.footer?.backgroundColor || theme.colors.secondary,
-        color: content.textColor || theme.sections?.footer?.textColor || '#F9FAFB',
+        backgroundColor: content.backgroundColor || theme.sections?.header?.backgroundColor || theme.colors.secondary,
+        color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
+        borderColor: theme.colors?.border || theme.colors?.primary,
         ...getTypographyStyles()
       }}
     >
       <div 
-        className="py-16"
+        className="px-4 py-4"
         style={{
           maxWidth: theme.layout?.containerWidth || '1200px',
-          margin: '0 auto',
-          padding: '0 1rem'
+          margin: '0 auto'
         }}
       >
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -155,7 +156,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                 <h3 
                   className={`font-bold ${getHeadingSize()}`}
                   style={{ 
-                    color: content.textColor || '#F9FAFB',
+                    color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
                     fontWeight: theme.typography?.fontWeight || '700'
                   }}
                 >
@@ -164,7 +165,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                 <p 
                   className={getBodySize()}
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.bodySize === 'sm' ? '0.875rem' : '0.75rem'
                   }}
                 >
@@ -175,7 +176,7 @@ const Footer = ({ theme, content }: FooterProps) => {
             <p 
               className={`leading-relaxed ${getBodySize()}`}
               style={{ 
-                color: `${content.textColor || '#F9FAFB'}CC`,
+                color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                 lineHeight: theme.typography?.lineHeight || '1.6'
               }}
             >
@@ -183,26 +184,26 @@ const Footer = ({ theme, content }: FooterProps) => {
             </p>
             <div className="flex space-x-3">
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 size="icon" 
                 className="hover:bg-opacity-20"
-                style={getButtonStyles('ghost')}
+                style={getButtonStyles('outline')}
               >
                 <Facebook size={20} />
               </Button>
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 size="icon" 
                 className="hover:bg-opacity-20"
-                style={getButtonStyles('ghost')}
+                style={getButtonStyles('outline')}
               >
                 <Linkedin size={20} />
               </Button>
               <Button 
-                variant="ghost" 
+                variant="outline" 
                 size="icon" 
                 className="hover:bg-opacity-20"
-                style={getButtonStyles('ghost')}
+                style={getButtonStyles('outline')}
               >
                 <Twitter size={20} />
               </Button>
@@ -214,7 +215,7 @@ const Footer = ({ theme, content }: FooterProps) => {
             <h4 
               className={`font-semibold mb-4 ${getHeadingSize()}`}
               style={{ 
-                color: content.textColor || '#F9FAFB',
+                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
                 fontWeight: theme.typography?.fontWeight || '600'
               }}
             >
@@ -226,7 +227,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#about" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -238,7 +239,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#products" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -250,7 +251,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#resources" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -262,7 +263,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#blog" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -274,7 +275,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#contact" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -289,7 +290,7 @@ const Footer = ({ theme, content }: FooterProps) => {
             <h4 
               className={`font-semibold mb-4 ${getHeadingSize()}`}
               style={{ 
-                color: content.textColor || '#F9FAFB',
+                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
                 fontWeight: theme.typography?.fontWeight || '600'
               }}
             >
@@ -301,7 +302,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -313,7 +314,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -325,7 +326,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -337,7 +338,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -349,7 +350,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   href="#" 
                   className="hover:opacity-80 transition-colors"
                   style={{ 
-                    color: `${content.textColor || '#F9FAFB'}CC`,
+                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 >
@@ -364,7 +365,7 @@ const Footer = ({ theme, content }: FooterProps) => {
             <h4 
               className={`font-semibold mb-4 ${getHeadingSize()}`}
               style={{ 
-                color: content.textColor || '#F9FAFB',
+                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
                 fontWeight: theme.typography?.fontWeight || '600'
               }}
             >
@@ -374,7 +375,7 @@ const Footer = ({ theme, content }: FooterProps) => {
               <div className="flex items-center space-x-3">
                 <MapPin size={16} style={{ color: theme.colors.accent }} />
                 <span style={{ 
-                  color: `${content.textColor || '#F9FAFB'}CC`,
+                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                   fontSize: theme.typography?.fontSize || '16px'
                 }}>
                   {content.contact?.address}
@@ -383,7 +384,7 @@ const Footer = ({ theme, content }: FooterProps) => {
               <div className="flex items-center space-x-3">
                 <Phone size={16} style={{ color: theme.colors.accent }} />
                 <span style={{ 
-                  color: `${content.textColor || '#F9FAFB'}CC`,
+                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                   fontSize: theme.typography?.fontSize || '16px'
                 }}>
                   {content.contact?.phone}
@@ -392,7 +393,7 @@ const Footer = ({ theme, content }: FooterProps) => {
               <div className="flex items-center space-x-3">
                 <Mail size={16} style={{ color: theme.colors.accent }} />
                 <span style={{ 
-                  color: `${content.textColor || '#F9FAFB'}CC`,
+                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                   fontSize: theme.typography?.fontSize || '16px'
                 }}>
                   {content.contact?.email}
@@ -404,7 +405,7 @@ const Footer = ({ theme, content }: FooterProps) => {
               <h5 
                 className={`font-semibold mb-3 ${getHeadingSize()}`}
                 style={{ 
-                  color: content.textColor || '#F9FAFB',
+                  color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
                   fontWeight: theme.typography?.fontWeight || '600'
                 }}
               >
@@ -416,18 +417,18 @@ const Footer = ({ theme, content }: FooterProps) => {
                   placeholder="Email của bạn"
                   className="placeholder:opacity-60"
                   style={{ 
-                    backgroundColor: `${content.textColor || '#F9FAFB'}1A`,
-                    borderColor: `${content.textColor || '#F9FAFB'}33`,
-                    color: content.textColor || '#F9FAFB',
+                    backgroundColor: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}1A`,
+                    borderColor: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}33`,
+                    color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
                     borderRadius: getBorderRadiusClass().replace('rounded-', ''),
                     fontFamily: theme.typography?.fontFamily || 'Inter',
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 />
                 <Button 
-                  variant="hero" 
+                  variant="premium" 
                   size="sm"
-                  style={getButtonStyles('hero')}
+                  style={getButtonStyles('premium')}
                 >
                   Đăng ký
                 </Button>
@@ -439,13 +440,13 @@ const Footer = ({ theme, content }: FooterProps) => {
         {/* Bottom Bar */}
         <div 
           className="border-t mt-12 pt-8"
-          style={{ borderColor: `${content.textColor || '#F9FAFB'}33` }}
+          style={{ borderColor: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}33` }}
         >
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div 
               className={getBodySize()}
               style={{ 
-                color: `${content.textColor || '#F9FAFB'}CC`,
+                color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                 fontSize: theme.typography?.fontSize || '16px'
               }}
             >
@@ -456,7 +457,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                 href="#" 
                 className="hover:opacity-80 transition-colors"
                 style={{ 
-                  color: `${content.textColor || '#F9FAFB'}CC`,
+                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                   fontSize: theme.typography?.fontSize || '16px'
                 }}
               >
@@ -466,7 +467,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                 href="#" 
                 className="hover:opacity-80 transition-colors"
                 style={{ 
-                  color: `${content.textColor || '#F9FAFB'}CC`,
+                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                   fontSize: theme.typography?.fontSize || '16px'
                 }}
               >
@@ -476,7 +477,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                 href="#" 
                 className="hover:opacity-80 transition-colors"
                 style={{ 
-                  color: `${content.textColor || '#F9FAFB'}CC`,
+                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
                   fontSize: theme.typography?.fontSize || '16px'
                 }}
               >

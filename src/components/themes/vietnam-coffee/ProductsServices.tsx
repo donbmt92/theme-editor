@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Coffee } from "lucide-react";
+import { ArrowRight, Coffee, Truck, FileCheck, Users, Lightbulb, Shield } from "lucide-react";
 import { ThemeParams } from "@/types";
 import ProductImage from "./ProductImage";
 
@@ -68,6 +68,14 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
         ...baseStyles,
         borderColor: theme.colors.primary,
         color: theme.colors.primary,
+        borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
+      }
+    }
+    if (variant === 'premium') {
+      return {
+        ...baseStyles,
+        backgroundColor: theme.colors.primary,
+        color: '#FFFFFF',
         borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
       }
     }
@@ -147,6 +155,52 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
     }
   }
 
+  // Services data
+  const services = [
+    {
+      icon: Coffee,
+      title: "Cà Phê Chất Lượng Cao",
+      description: "Robusta và Arabica từ các vùng đất tốt nhất Việt Nam",
+      features: ["Chứng nhận organic", "Rang xay theo yêu cầu", "Đóng gói chuyên nghiệp"],
+      image: content.items?.[0]?.image || ""
+    },
+    {
+      icon: Truck,
+      title: "Logistics & Vận Chuyển",
+      description: "Dịch vụ vận chuyển toàn cầu an toàn và nhanh chóng",
+      features: ["Bảo hiểm hàng hóa", "Theo dõi realtime", "Giao hàng tận nơi"],
+      image: content.items?.[1]?.image || ""
+    },
+    {
+      icon: FileCheck,
+      title: "Tư Vấn Thủ Tục",
+      description: "Hỗ trợ đầy đủ về giấy tờ và chứng nhận xuất khẩu",
+      features: ["Chứng nhận FDA", "Certificate of Origin", "Phytosanitary Certificate"],
+      image: content.items?.[2]?.image || ""
+    },
+    {
+      icon: Users,
+      title: "Đào Tạo & Phát Triển",
+      description: "Nâng cao năng lực xuất nhập khẩu cho doanh nghiệp",
+      features: ["Workshop chuyên sâu", "Mentoring 1-1", "Networking events"],
+      image: ""
+    },
+    {
+      icon: Lightbulb,
+      title: "Tư Vấn Chiến Lược",
+      description: "Lập kế hoạch phát triển thị trường Mỹ bền vững",
+      features: ["Market research", "Branding support", "Sales strategy"],
+      image: ""
+    },
+    {
+      icon: Shield,
+      title: "Kiểm Soát Chất Lượng",
+      description: "Đảm bảo tiêu chuẩn quốc tế cho từng lô hàng",
+      features: ["Lab testing", "Quality certificates", "Traceability system"],
+      image: ""
+    }
+  ];
+
   return (
     <section 
       id="products" 
@@ -173,7 +227,13 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
               lineHeight: theme.typography?.lineHeight || '1.2'
             }}
           >
-            {content.title}
+            Dịch Vụ
+            <span 
+              className="block"
+              style={{ color: theme.colors.primary }}
+            >
+              Xuất Khẩu Toàn Diện
+            </span>
           </h2>
           <p 
             className={`max-w-3xl mx-auto ${getBodySize()}`}
@@ -182,37 +242,16 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
               lineHeight: theme.typography?.lineHeight || '1.6'
             }}
           >
-            {content.description}
+            Từ sản phẩm cà phê chất lượng cao đến dịch vụ logistics và tư vấn chuyên sâu, 
+            chúng tôi cung cấp giải pháp một cửa cho việc xuất khẩu sang Mỹ.
           </p>
         </div>
 
-        {/* Products Grid */}
+        {/* Services Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {(content.items || [
-            {
-              id: "1",
-              name: "Cà Phê Robusta",
-              description: "Cà phê Robusta Việt Nam với hương vị đậm đà, hàm lượng caffeine cao, phù hợp cho espresso",
-              price: "2.50 USD/kg",
-              category: "Robusta"
-            },
-            {
-              id: "2", 
-              name: "Cà Phê Arabica",
-              description: "Cà phê Arabica Tây Nguyên với hương vị tinh tế, chua nhẹ, hương hoa quả đặc trưng",
-              price: "4.20 USD/kg",
-              category: "Arabica"
-            },
-            {
-              id: "3",
-              name: "Cà Phê Chồn", 
-              description: "Cà phê chồn cao cấp với hương vị độc đáo, được chế biến tự nhiên qua hệ tiêu hóa của chồn",
-              price: "150 USD/kg",
-              category: "Premium"
-            }
-          ]).map((product, index) => (
+          {services.map((service, index) => (
             <Card
-              key={product.id || index}
+              key={index}
               className={`group hover:shadow-xl transition-all duration-300 overflow-hidden animate-slide-up ${getBorderRadiusClass()}`}
               style={{ 
                 animationDelay: `${index * 0.1}s`,
@@ -220,17 +259,29 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                 fontSize: theme.typography?.fontSize || '16px'
               }}
             >
-              {/* Product Image */}
-              <ProductImage
-                image={product.image}
-                productName={product.name}
-                index={index}
-                primaryColor={theme.colors.primary}
-                borderRadiusClass={getBorderRadiusClass()}
-              />
+              {service.image && (
+                <div className="h-48 overflow-hidden">
+                  <ProductImage
+                    image={service.image}
+                    productName={service.title}
+                    index={index}
+                    primaryColor={theme.colors.primary}
+                    borderRadiusClass="rounded-none"
+                  />
+                </div>
+              )}
               
               <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center mb-4">
+                  <div 
+                    className="w-12 h-12 rounded-lg flex items-center justify-center mr-4"
+                    style={{ backgroundColor: `${theme.colors.primary}1A` }}
+                  >
+                    <service.icon 
+                      style={{ color: theme.colors.primary }} 
+                      size={24} 
+                    />
+                  </div>
                   <h3 
                     className={`font-bold ${getHeadingSize('small')}`}
                     style={{ 
@@ -238,9 +289,8 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    {product.name}
+                    {service.title}
                   </h3>
-                
                 </div>
                 
                 <p 
@@ -251,20 +301,20 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                     lineHeight: theme.typography?.lineHeight || '1.6'
                   }}
                 >
-                  {product.description}
+                  {service.description}
                 </p>
                 
-                {product.price && (
-                  <div 
-                    className={`font-bold mb-4 ${getHeadingSize('small')}`}
-                    style={{ 
-                      color: theme.colors.primary,
-                      fontWeight: theme.typography?.fontWeight || '700'
-                    }}
-                  >
-                    {product.price}
-                  </div>
-                )}
+                <ul className="space-y-2 mb-6">
+                  {service.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center text-sm" style={{ color: theme.colors.muted || '#718096' }}>
+                      <div 
+                        className="w-1.5 h-1.5 rounded-full mr-3"
+                        style={{ backgroundColor: theme.colors.primary }}
+                      ></div>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
                 
                 <Button 
                   variant="outline" 
@@ -284,7 +334,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
           <Card 
             className={`p-8 border-2 max-w-3xl mx-auto ${getBorderRadiusClass()}`}
             style={{
-              backgroundColor: 'rgba(255,255,255,0.8)',
+              background: `linear-gradient(135deg, ${theme.colors.primary || '#FFFFFF'}, ${theme.colors.secondary || '#D2691E'}15)`,
               borderColor: `${theme.colors.primary}33`,
               fontFamily: theme.typography?.fontFamily || 'Inter',
               fontSize: theme.typography?.fontSize || '16px'
@@ -312,7 +362,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
-                variant="premium" 
+                variant="default" 
                 size="lg"
                 style={getButtonStyles('premium')}
               >

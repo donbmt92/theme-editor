@@ -296,11 +296,17 @@ Hãy đảm bảo:
       }
     }
 
-    // Merge with current theme structure
+    // Merge with current theme structure - prioritize generated colors
     const themeParams = {
       colors: {
-        ...currentTheme?.colors,
-        ...generatedData.colors
+        ...currentTheme?.colors,  // Base colors from current theme
+        ...generatedData.colors,  // Override with AI generated colors (priority)
+        // Fallback defaults if AI doesn't provide colors
+        primary: generatedData.colors?.primary || currentTheme?.colors?.primary || "#007bff",
+        secondary: generatedData.colors?.secondary || currentTheme?.colors?.secondary || "#6c757d",
+        accent: generatedData.colors?.accent || currentTheme?.colors?.accent || "#28a745",
+        background: generatedData.colors?.background || currentTheme?.colors?.background || "#ffffff",
+        text: generatedData.colors?.text || currentTheme?.colors?.text || "#2D3748",
       },
       typography: currentTheme?.typography || {
         fontFamily: "Inter",

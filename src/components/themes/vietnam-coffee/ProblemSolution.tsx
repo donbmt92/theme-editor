@@ -292,9 +292,9 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
           {content.solutions && (
             <div 
               className={`space-y-8 p-8 ${getBorderRadiusClass()}`}
-              style={{ 
-                backgroundColor: content.solutions.backgroundColor || 'transparent'
-              }}
+              // style={{ 
+              //   backgroundColor: content.solutions.backgroundColor || 'transparent'
+              // }}
             >
               <h3 
                 className={`font-bold mb-8 flex items-center ${getHeadingSize('medium')}`}
@@ -321,7 +321,8 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       animationDelay: `${index * 0.2}s`,
                       borderLeftColor: theme.colors.primary,
                       fontFamily: theme.typography?.fontFamily || 'Inter',
-                      fontSize: theme.typography?.fontSize || '16px'
+                      fontSize: theme.typography?.fontSize || '16px',
+                      backgroundColor: content.solutions?.backgroundColor || 'transparent'
                     }}
                   >
                     <div className="flex items-start space-x-4">
@@ -376,7 +377,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
             <Card 
               className={`p-8 shadow-lg max-w-2xl mx-auto ${getBorderRadiusClass()}`}
               style={{ 
-                backgroundColor: content.cta.backgroundColor || theme.colors.primary,
+                backgroundColor:  theme.colors.primary,
                 color: content.cta.textColor || '#FFFFFF',
                 fontFamily: theme.typography?.fontFamily || 'Inter',
                 fontSize: theme.typography?.fontSize || '16px'
@@ -402,7 +403,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                 {content.cta.description || "Liên hệ với chúng tôi để được tư vấn miễn phí"}
               </p>
               <Button 
-                variant="hero" 
+                variant="default" 
                 size="lg"
                 style={getButtonStyles()}
               >

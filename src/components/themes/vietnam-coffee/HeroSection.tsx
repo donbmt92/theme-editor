@@ -115,21 +115,33 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
 
   // Convert overlayOpacity to overlayColor if needed
   const getOverlayColor = () => {
-    if (content.overlayColor) {
-      // If it's already a hex color, convert to rgba with opacity
-      if (content.overlayColor.startsWith('#')) {
-        const opacity = content.overlayOpacity || 0.7;
-        return `${content.overlayColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`;
-      }
-      return content.overlayColor;
+    console.log('🔍 getOverlayColor - Debug values:', {
+      contentOverlayColor: content.overlayColor,
+      contentOverlayOpacity: content.overlayOpacity,
+      themeColorsPrimary: theme.colors.primary,
+      themeSectionsHeroOverlayColor: theme.sections?.hero?.overlayColor
+    });
+
+    // Luôn sử dụng theme.colors.primary làm màu overlay mặc định
+    const baseColor = content.overlayColor || theme.colors.primary;
+    const opacity = content.overlayOpacity !== undefined ? content.overlayOpacity : 0.7;
+    
+    console.log('✅ Using base color:', baseColor, 'with opacity:', opacity);
+    
+    // Convert hex to rgba
+    if (baseColor.startsWith('#')) {
+      const hex = baseColor.replace('#', '');
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
+      const result = `rgba(${r}, ${g}, ${b}, ${opacity})`;
+      console.log('🎨 Generated rgba from hex:', result);
+      return result;
     }
-    if (content.overlayOpacity !== undefined) {
-      // Convert hex color to rgba with opacity
-      const baseColor = theme.colors.primary || '#8B4513';
-      const opacity = content.overlayOpacity;
-      return `${baseColor}${Math.round(opacity * 255).toString(16).padStart(2, '0')}`;
-    }
-    return theme.sections?.hero?.overlayColor || 'rgba(139, 69, 19, 0.7)';
+    
+    // Nếu không phải hex color, trả về nguyên giá trị
+    console.log('🎨 Returning color as is:', baseColor);
+    return baseColor;
   };
 
   // Get typography styles
@@ -168,12 +180,15 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
     if (variant === 'hero') {
       return {
         ...baseStyles,
-        backgroundColor: theme.colors.accent,
-        color: theme.colors.text,
+        backgroundColor: theme.colors.accent || '#28a745',
+        color: theme.colors.text || '#2D3748',
         borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
+        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        transition: 'all 0.3s ease',
+        transform: 'translateY(0)'
       }
     }
-
+    
     return {
       ...baseStyles,
       backgroundColor: 'rgba(255,255,255,0.1)',
@@ -260,8 +275,17 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
             </div>
           )}
           
-          {/* Only show overlay if there's a background image and overlay settings */}
-          {(content.overlayColor || content.overlayOpacity !== undefined) && (
+          {/* Always show overlay when there's a background image */}
+          {(() => {
+            const shouldShowOverlay = true; // Luôn hiển thị overlay khi có background image
+            console.log('🔍 Overlay rendering condition:', {
+              contentOverlayColor: content.overlayColor,
+              contentOverlayOpacity: content.overlayOpacity,
+              themeColorsPrimary: theme.colors.primary,
+              shouldShowOverlay: shouldShowOverlay
+            });
+            return shouldShowOverlay;
+          })() && (
             <div 
               className="absolute inset-0 z-10"
               style={{ backgroundColor: getOverlayColor() }}
@@ -271,14 +295,14 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
       )}
 
       {/* Content */}
-      <div 
-        className="relative z-10 px-4 text-center"
-        style={{ 
-          color: content.textColor || theme.sections?.hero?.textColor || theme.colors.text,
-          maxWidth: theme.layout?.containerWidth || '1200px',
-          margin: '0 auto'
-        }}
-      >
+             <div 
+         className="relative z-10 px-4 text-center"
+         style={{ 
+           color: content.textColor || theme.sections?.hero?.textColor || theme.colors.text || '#2D3748',
+           maxWidth: theme.layout?.containerWidth || '1200px',
+           margin: '0 auto'
+         }}
+       >
         <div className="max-w-4xl mx-auto animate-fade-in">
           <h1 
             className={`font-bold mb-6 leading-tight ${getHeadingSize()}`}
@@ -309,12 +333,12 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           </p>
 
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-12">
-            <Button 
-              variant="hero" 
-              size="lg" 
-              className="group"
-              style={getButtonStyles('hero')}
-            >
+                         <Button 
+               variant="default" 
+               size="lg" 
+               className="group hover:scale-105 hover:shadow-xl transition-all duration-300"
+               style={getButtonStyles('hero')}
+             >
               {content.ctaText || "Tìm hiểu thêm"}
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Button>

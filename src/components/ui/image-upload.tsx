@@ -26,7 +26,7 @@ const ImageUpload = ({
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
-
+    console.log('file', file)
     // Validate file type
     if (!file.type.startsWith('image/')) {
       alert('Please select an image file')

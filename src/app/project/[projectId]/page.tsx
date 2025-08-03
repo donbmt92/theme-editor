@@ -195,6 +195,45 @@ const createDefaultThemeParams = (): ThemeParams => ({
         email: "info@capheviet.com",
         address: "123 Đường ABC, Quận 1, TP.HCM"
       }
+    },
+    testimonials: {
+      title: "Khách Hàng Nói Gì Về Chúng Tôi",
+      subtitle: "Lời chứng thực từ các đối tác và khách hàng quốc tế",
+      backgroundColor: "#F5F5DC",
+      textColor: "#2D3748",
+      testimonials: [
+        {
+          name: "Sarah Johnson",
+          position: "Coffee Buyer",
+          company: "Starbucks Reserve",
+          content: "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
+          rating: 5,
+          avatar: "SJ"
+        },
+        {
+          name: "Michael Chen",
+          position: "Quality Manager",
+          company: "Blue Bottle Coffee",
+          content: "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
+          rating: 5,
+          avatar: "MC"
+        },
+        {
+          name: "David Rodriguez",
+          position: "Import Director",
+          company: "Intelligentsia",
+          content: "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
+          rating: 5,
+          avatar: "DR"
+        }
+      ],
+
+      stats: [
+        { number: "500+", label: "Lô hàng xuất khẩu" },
+        { number: "200+", label: "Khách hàng tin tưởng" },
+        { number: "15+", label: "Năm kinh nghiệm" },
+        { number: "98%", label: "Tỷ lệ hài lòng" }
+      ]
     }
   }
 })
@@ -257,10 +296,14 @@ const ProjectEditor = () => {
         
         // Deep merge with default params to ensure all required properties exist
         const defaultParams = createDefaultThemeParams()
+        
         params = {
           ...defaultParams,
           ...params,
-          colors: { ...defaultParams.colors, ...params.colors },
+          colors: { 
+            ...defaultParams.colors,  // Base colors
+            ...params.colors          // AI colors override defaults (higher priority)
+          },
           typography: { ...defaultParams.typography, ...params.typography },
           layout: { ...defaultParams.layout, ...params.layout },
           components: { ...defaultParams.components, ...params.components },
@@ -288,6 +331,13 @@ const ProjectEditor = () => {
               items: params.content?.products?.items || defaultParams.content?.products?.items
             },
             cta: { ...defaultParams.content?.cta, ...params.content?.cta },
+            testimonials: { 
+              ...defaultParams.content?.testimonials, 
+              ...params.content?.testimonials,
+              testimonials: params.content?.testimonials?.testimonials || defaultParams.content?.testimonials?.testimonials,
+              partners: params.content?.testimonials?.partners || defaultParams.content?.testimonials?.partners,
+              stats: params.content?.testimonials?.stats || defaultParams.content?.testimonials?.stats
+            },
             footer: { 
               ...defaultParams.content?.footer, 
               ...params.content?.footer,
@@ -389,7 +439,27 @@ const ProjectEditor = () => {
           current[path[i]] = {}
         }
       }
-      current = current[path[i]] as Record<string, unknown>
+      
+      // Handle case where array element might be a string instead of object
+      if (!isNaN(Number(path[i])) && Array.isArray(current[path[i]])) {
+        const arrayIndex = Number(path[i])
+        const array = current[path[i]] as unknown[]
+        
+        // If the element at this index is a string, convert it to an object
+        if (typeof array[arrayIndex] === 'string') {
+          array[arrayIndex] = { name: array[arrayIndex] as string }
+        }
+        
+        // If the element doesn't exist, create a default object
+        if (array[arrayIndex] === undefined) {
+          array[arrayIndex] = { name: '' }
+        }
+        
+        // Set current to the array element (object) instead of the array itself
+        current = array[arrayIndex] as Record<string, unknown>
+      } else {
+        current = current[path[i]] as Record<string, unknown>
+      }
     }
     
     current[path[path.length - 1]] = value
@@ -798,10 +868,11 @@ const ProjectEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Font Family</label>
                         <select
-                          value={themeParams.typography?.fontFamily || 'Inter'}
+                          value={themeParams.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'}
                           onChange={(e) => updateThemeParam(['typography', 'fontFamily'], e.target.value)}
                           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
+                          <option value='ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'>System Default</option>
                           <option value="Inter">Inter</option>
                           <option value="Poppins">Poppins</option>
                           <option value="Roboto">Roboto</option>
@@ -1169,6 +1240,152 @@ const ProjectEditor = () => {
                       </div>
                     </div>
                   </Card>
+
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Đánh giá & Chứng thực</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề</label>
+                        <Input
+                          value={themeParams?.content?.testimonials?.title || ''}
+                          onChange={(e) => updateThemeParam(['content', 'testimonials', 'title'], e.target.value)}
+                          placeholder="Khách Hàng Nói Gì Về Chúng Tôi"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Mô tả</label>
+                        <Input
+                          value={themeParams?.content?.testimonials?.subtitle || ''}
+                          onChange={(e) => updateThemeParam(['content', 'testimonials', 'subtitle'], e.target.value)}
+                          placeholder="Lời chứng thực từ các đối tác và khách hàng quốc tế"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Background Color</label>
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="color"
+                            value={themeParams?.content?.testimonials?.backgroundColor || '#F5F5DC'}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'backgroundColor'], e.target.value)}
+                            className="w-12 h-10 rounded border border-gray-300"
+                          />
+                          <Input
+                            value={themeParams?.content?.testimonials?.backgroundColor || '#F5F5DC'}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'backgroundColor'], e.target.value)}
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Text Color</label>
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="color"
+                            value={themeParams?.content?.testimonials?.textColor || '#2D3748'}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'textColor'], e.target.value)}
+                            className="w-12 h-10 rounded border border-gray-300"
+                          />
+                          <Input
+                            value={themeParams?.content?.testimonials?.textColor || '#2D3748'}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'textColor'], e.target.value)}
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Testimonials Items */}
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Đánh giá khách hàng</h3>
+                    <div className="space-y-4">
+                      {[0, 1, 2].map((index) => (
+                        <div key={index} className="border rounded-lg p-4">
+                          <h4 className="font-medium mb-3">Đánh giá {index + 1}</h4>
+                          <div className="space-y-3">
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Tên khách hàng</label>
+                              <Input
+                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.name || ''}
+                                onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'name'], e.target.value)}
+                                placeholder="Tên khách hàng"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Chức vụ</label>
+                              <Input
+                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.position || ''}
+                                onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'position'], e.target.value)}
+                                placeholder="Coffee Buyer"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Công ty</label>
+                              <Input
+                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.company || ''}
+                                onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'company'], e.target.value)}
+                                placeholder="Starbucks Reserve"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Nội dung đánh giá</label>
+                              <Textarea
+                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.content || ''}
+                                onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'content'], e.target.value)}
+                                placeholder="Nội dung đánh giá của khách hàng"
+                                rows={3}
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Hình ảnh đại diện</label>
+                              <div className="mb-2">
+                                <p className="text-xs text-gray-500">Gợi ý: 100x100px hoặc 200x200px (tỷ lệ 1:1)</p>
+                              </div>
+                              <ImageUpload
+                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.avatarImage || ''}
+                                onChange={(url) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'avatarImage'], url)}
+                                placeholder="Upload hình ảnh đại diện"
+                                recommendedSize="100x100px hoặc 200x200px"
+                                aspectRatio="1:1"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
+
+
+
+                  {/* Statistics */}
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Thống kê</h3>
+                    <div className="space-y-4">
+                      {[0, 1, 2, 3].map((index) => (
+                        <div key={index} className="border rounded-lg p-4">
+                          <h4 className="font-medium mb-3">Thống kê {index + 1}</h4>
+                          <div className="space-y-3">
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Số liệu</label>
+                              <Input
+                                value={themeParams?.content?.testimonials?.stats?.[index]?.number || ''}
+                                onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', index.toString(), 'number'], e.target.value)}
+                                placeholder="500+"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-sm font-medium mb-1">Nhãn</label>
+                              <Input
+                                value={themeParams?.content?.testimonials?.stats?.[index]?.label || ''}
+                                onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', index.toString(), 'label'], e.target.value)}
+                                placeholder="Lô hàng xuất khẩu"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </Card>
                 </div>
               )}
 
@@ -1446,14 +1663,14 @@ const ProjectEditor = () => {
               {activeTab === 'products' && (
                 <div className="space-y-6">
                   <Card className="p-4">
-                    <h3 className="text-lg font-semibold mb-4">Sản phẩm</h3>
+                    <h3 className="text-lg font-semibold mb-4">Dịch Vụ Xuất Khẩu</h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">Tiêu đề</label>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề chính</label>
                         <Input
                           value={themeParams?.content?.products?.title || ''}
                           onChange={(e) => updateThemeParam(['content', 'products', 'title'], e.target.value)}
-                          placeholder="Sản Phẩm Của Chúng Tôi"
+                          placeholder="Dịch Vụ Xuất Khẩu Toàn Diện"
                         />
                       </div>
                       <div>
@@ -1461,7 +1678,7 @@ const ProjectEditor = () => {
                         <Textarea
                           value={themeParams?.content?.products?.description || ''}
                           onChange={(e) => updateThemeParam(['content', 'products', 'description'], e.target.value)}
-                          placeholder="Khám phá các loại cà phê đặc trưng của Việt Nam"
+                          placeholder="Từ sản phẩm cà phê chất lượng cao đến dịch vụ logistics và tư vấn chuyên sâu, chúng tôi cung cấp giải pháp một cửa cho việc xuất khẩu sang Mỹ."
                           rows={3}
                         />
                       </div>
@@ -1500,48 +1717,47 @@ const ProjectEditor = () => {
                     </div>
                   </Card>
 
-                  {/* Product Items */}
+                  {/* Service Items */}
                   <Card className="p-4">
-                    <h3 className="text-lg font-semibold mb-4">Danh sách sản phẩm</h3>
+                    <h3 className="text-lg font-semibold mb-4">Danh sách dịch vụ</h3>
                     <div className="space-y-4">
-                      {[0, 1, 2].map((index) => (
-                        <div key={index} className="border rounded-lg p-4">
-                          <h4 className="font-medium mb-3">Sản phẩm {index + 1}</h4>
+                      {[
+                        { index: 0, name: "Cà Phê Chất Lượng Cao", icon: "Coffee" },
+                        { index: 1, name: "Logistics & Vận Chuyển", icon: "Truck" },
+                        { index: 2, name: "Tư Vấn Thủ Tục", icon: "FileCheck" },
+                        { index: 3, name: "Đào Tạo & Phát Triển", icon: "Users" },
+                        { index: 4, name: "Tư Vấn Chiến Lược", icon: "Lightbulb" },
+                        { index: 5, name: "Kiểm Soát Chất Lượng", icon: "Shield" }
+                      ].map((service) => (
+                        <div key={service.index} className="border rounded-lg p-4">
+                          <h4 className="font-medium mb-3">{service.name}</h4>
                           <div className="space-y-3">
                             <div>
-                              <label className="block text-sm font-medium mb-1">Tên sản phẩm</label>
+                              <label className="block text-sm font-medium mb-1">Tiêu đề</label>
                               <Input
-                                value={themeParams?.content?.products?.items?.[index]?.name || ''}
-                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index.toString(), 'name'], e.target.value)}
-                                placeholder="Tên sản phẩm"
+                                value={themeParams?.content?.products?.items?.[service.index]?.name || service.name}
+                                onChange={(e) => updateThemeParam(['content', 'products', 'items', service.index.toString(), 'name'], e.target.value)}
+                                placeholder={service.name}
                               />
                             </div>
                             <div>
                               <label className="block text-sm font-medium mb-1">Mô tả</label>
                               <Textarea
-                                value={themeParams?.content?.products?.items?.[index]?.description || ''}
-                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index.toString(), 'description'], e.target.value)}
-                                placeholder="Mô tả sản phẩm"
+                                value={themeParams?.content?.products?.items?.[service.index]?.description || ''}
+                                onChange={(e) => updateThemeParam(['content', 'products', 'items', service.index.toString(), 'description'], e.target.value)}
+                                placeholder="Mô tả dịch vụ"
                                 rows={2}
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-medium mb-1">Giá</label>
-                              <Input
-                                value={themeParams?.content?.products?.items?.[index]?.price || ''}
-                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index.toString(), 'price'], e.target.value)}
-                                placeholder="2.50 USD/kg"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-sm font-medium mb-1">Hình ảnh sản phẩm</label>
+                              <label className="block text-sm font-medium mb-1">Hình ảnh dịch vụ</label>
                               <div className="mb-2">
                                 <p className="text-xs text-gray-500">Gợi ý: 400x300px hoặc 600x450px (tỷ lệ 4:3)</p>
                               </div>
                               <ImageUpload
-                                value={themeParams?.content?.products?.items?.[index]?.image || ''}
-                                onChange={(url) => updateThemeParam(['content', 'products', 'items', index.toString(), 'image'], url)}
-                                placeholder="Upload hình ảnh sản phẩm"
+                                value={themeParams?.content?.products?.items?.[service.index]?.image || ''}
+                                onChange={(url) => updateThemeParam(['content', 'products', 'items', service.index.toString(), 'image'], url)}
+                                placeholder="Upload hình ảnh dịch vụ"
                                 recommendedSize="400x300px hoặc 600x450px"
                                 aspectRatio="4:3"
                               />
@@ -1549,9 +1765,9 @@ const ProjectEditor = () => {
                             <div>
                               <label className="block text-sm font-medium mb-1">Danh mục</label>
                               <Input
-                                value={themeParams?.content?.products?.items?.[index]?.category || ''}
-                                onChange={(e) => updateThemeParam(['content', 'products', 'items', index.toString(), 'category'], e.target.value)}
-                                placeholder="Robusta"
+                                value={themeParams?.content?.products?.items?.[service.index]?.category || service.icon}
+                                onChange={(e) => updateThemeParam(['content', 'products', 'items', service.index.toString(), 'category'], e.target.value)}
+                                placeholder={service.icon}
                               />
                             </div>
                           </div>

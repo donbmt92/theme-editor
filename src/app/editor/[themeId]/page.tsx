@@ -444,6 +444,7 @@ const ThemeEditor = () => {
                           onChange={(e) => updateThemeParam(['typography', 'fontFamily'], e.target.value)}
                           className="w-full p-2 border border-gray-300 rounded-md"
                         >
+                          <option value='ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"'>System Default</option>
                           <option value="Inter">Inter</option>
                           <option value="Roboto">Roboto</option>
                           <option value="Open Sans">Open Sans</option>
@@ -978,6 +979,193 @@ const ThemeEditor = () => {
                           placeholder="Khám phá các loại cà phê đặc trưng của Việt Nam..."
                           rows={3}
                         />
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Testimonials Content */}
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Đánh giá & Chứng thực</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề section</label>
+                        <Input
+                          value={themeParams?.content?.testimonials?.title || ''}
+                          onChange={(e) => updateThemeParam(['content', 'testimonials', 'title'], e.target.value)}
+                          placeholder="Khách Hàng Nói Gì Về Chúng Tôi"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Mô tả</label>
+                        <Textarea
+                          value={themeParams?.content?.testimonials?.subtitle || ''}
+                          onChange={(e) => updateThemeParam(['content', 'testimonials', 'subtitle'], e.target.value)}
+                          placeholder="Lời chứng thực từ các đối tác và khách hàng quốc tế"
+                          rows={2}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Màu nền</label>
+                        <Input
+                          type="color"
+                          value={themeParams?.content?.testimonials?.backgroundColor || '#F5F5DC'}
+                          onChange={(e) => updateThemeParam(['content', 'testimonials', 'backgroundColor'], e.target.value)}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Màu chữ</label>
+                        <Input
+                          type="color"
+                          value={themeParams?.content?.testimonials?.textColor || '#2D3748'}
+                          onChange={(e) => updateThemeParam(['content', 'testimonials', 'textColor'], e.target.value)}
+                        />
+                      </div>
+                      
+                      {/* Testimonial 1 */}
+                      <div className="border-t pt-4">
+                        <h4 className="font-medium mb-3">Đánh giá 1</h4>
+                        <div className="space-y-3">
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[0]?.name || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '0', 'name'], e.target.value)}
+                            placeholder="Tên khách hàng"
+                          />
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[0]?.position || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '0', 'position'], e.target.value)}
+                            placeholder="Chức vụ"
+                          />
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[0]?.company || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '0', 'company'], e.target.value)}
+                            placeholder="Công ty"
+                          />
+                          <Textarea
+                            value={themeParams?.content?.testimonials?.testimonials?.[0]?.content || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '0', 'content'], e.target.value)}
+                            placeholder="Nội dung đánh giá"
+                            rows={3}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Testimonial 2 */}
+                      <div className="border-t pt-4">
+                        <h4 className="font-medium mb-3">Đánh giá 2</h4>
+                        <div className="space-y-3">
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[1]?.name || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '1', 'name'], e.target.value)}
+                            placeholder="Tên khách hàng"
+                          />
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[1]?.position || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '1', 'position'], e.target.value)}
+                            placeholder="Chức vụ"
+                          />
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[1]?.company || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '1', 'company'], e.target.value)}
+                            placeholder="Công ty"
+                          />
+                          <Textarea
+                            value={themeParams?.content?.testimonials?.testimonials?.[1]?.content || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '1', 'content'], e.target.value)}
+                            placeholder="Nội dung đánh giá"
+                            rows={3}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Testimonial 3 */}
+                      <div className="border-t pt-4">
+                        <h4 className="font-medium mb-3">Đánh giá 3</h4>
+                        <div className="space-y-3">
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[2]?.name || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '2', 'name'], e.target.value)}
+                            placeholder="Tên khách hàng"
+                          />
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[2]?.position || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '2', 'position'], e.target.value)}
+                            placeholder="Chức vụ"
+                          />
+                          <Input
+                            value={themeParams?.content?.testimonials?.testimonials?.[2]?.company || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '2', 'company'], e.target.value)}
+                            placeholder="Công ty"
+                          />
+                          <Textarea
+                            value={themeParams?.content?.testimonials?.testimonials?.[2]?.content || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '2', 'content'], e.target.value)}
+                            placeholder="Nội dung đánh giá"
+                            rows={3}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Stats */}
+                      <div className="border-t pt-4">
+                        <h4 className="font-medium mb-3">Thống kê</h4>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <label className="block text-sm font-medium mb-1">Số liệu 1</label>
+                            <Input
+                              value={themeParams?.content?.testimonials?.stats?.[0]?.number || ''}
+                              onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', '0', 'number'], e.target.value)}
+                              placeholder="500+"
+                            />
+                            <Input
+                              value={themeParams?.content?.testimonials?.stats?.[0]?.label || ''}
+                              onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', '0', 'label'], e.target.value)}
+                              placeholder="Lô hàng xuất khẩu"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-1">Số liệu 2</label>
+                            <Input
+                              value={themeParams?.content?.testimonials?.stats?.[1]?.number || ''}
+                              onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', '1', 'number'], e.target.value)}
+                              placeholder="200+"
+                            />
+                            <Input
+                              value={themeParams?.content?.testimonials?.stats?.[1]?.label || ''}
+                              onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', '1', 'label'], e.target.value)}
+                              placeholder="Khách hàng tin tưởng"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-1">Số liệu 3</label>
+                            <Input
+                              value={themeParams?.content?.testimonials?.stats?.[2]?.number || ''}
+                              onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', '2', 'number'], e.target.value)}
+                              placeholder="15+"
+                            />
+                            <Input
+                              value={themeParams?.content?.testimonials?.stats?.[2]?.label || ''}
+                              onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', '2', 'label'], e.target.value)}
+                              placeholder="Năm kinh nghiệm"
+                              className="mt-1"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium mb-1">Số liệu 4</label>
+                            <Input
+                              value={themeParams?.content?.testimonials?.stats?.[3]?.number || ''}
+                              onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', '3', 'number'], e.target.value)}
+                              placeholder="98%"
+                            />
+                            <Input
+                              value={themeParams?.content?.testimonials?.stats?.[3]?.label || ''}
+                              onChange={(e) => updateThemeParam(['content', 'testimonials', 'stats', '3', 'label'], e.target.value)}
+                              placeholder="Tỷ lệ hài lòng"
+                              className="mt-1"
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </Card>

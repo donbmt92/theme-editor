@@ -25,7 +25,7 @@ const Header = ({ theme, content }: HeaderProps) => {
   // Get typography styles
   const getTypographyStyles = () => {
     return {
-      fontFamily: theme.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+      fontFamily: theme.typography?.fontFamily || 'Inter',
       fontSize: theme.typography?.fontSize || '16px',
       lineHeight: theme.typography?.lineHeight || '1.6',
       fontWeight: theme.typography?.fontWeight || '400',
@@ -50,7 +50,7 @@ const Header = ({ theme, content }: HeaderProps) => {
   // Get button styles based on component settings
   const getButtonStyles = (variant: 'outline' | 'premium' = 'outline') => {
     const baseStyles = {
-      fontFamily: theme.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+      fontFamily: theme.typography?.fontFamily || 'Inter',
       fontSize: theme.typography?.fontSize || '16px',
       fontWeight: theme.typography?.fontWeight || '400',
     }
@@ -204,9 +204,9 @@ const Header = ({ theme, content }: HeaderProps) => {
               Cẩm nang XNK 2024
             </Button>
             <Button 
+              variant="premium" 
               size="sm"
-              style={{ backgroundColor: theme.colors.primary }}
-              className={`hover:${theme.colors.secondary} transition-colors`}
+              style={getButtonStyles('premium')}
             >
               <Phone size={16} />
               Tư vấn miễn phí
@@ -303,10 +303,10 @@ const Header = ({ theme, content }: HeaderProps) => {
                 Cẩm nang XNK 2024
               </Button>
               <Button 
-                variant="default" 
+                variant="premium" 
                 size="sm" 
                 className="w-full"
-                style={{...getButtonStyles('premium'), backgroundColor: theme.colors.primary}}
+                style={getButtonStyles('premium')}
               >
                 <Phone size={16} />
                 Tư vấn miễn phí

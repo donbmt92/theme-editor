@@ -18,8 +18,8 @@ export default function HomePage() {
             <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
               Tính năng
             </Link>
-            <Link href="/templates" className="text-gray-600 hover:text-gray-900 transition-colors">
-              Templates
+            <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
+              Dashboard
             </Link>
             <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
               Giá cả

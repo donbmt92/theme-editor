@@ -292,15 +292,23 @@ export interface ThemeContent {
   // Testimonials
   testimonials?: {
     title?: string
-    description?: string
-    items?: Array<{
+    subtitle?: string
+    backgroundColor?: string
+    textColor?: string
+    testimonials?: Array<{
       id?: string
       name: string
-      role: string
+      position: string
       company: string
       content: string
       avatar?: string
+      avatarImage?: string
       rating?: number
+    }>
+    partners?: Array<{ name: string; logo?: string }>
+    stats?: Array<{
+      number: string
+      label: string
     }>
   }
   

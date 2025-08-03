@@ -6,6 +6,7 @@ import Header from './vietnam-coffee/Header'
 import HeroSection from './vietnam-coffee/HeroSection'
 import ProblemSolution from './vietnam-coffee/ProblemSolution'
 import ProductsServices from './vietnam-coffee/ProductsServices'
+import Testimonials from './vietnam-coffee/Testimonials'
 import Footer from './vietnam-coffee/Footer'
 
 interface VietnamCoffeeThemeProps {
@@ -30,9 +31,6 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
       ctaText: "Tìm hiểu thêm",
       image: "/assets/hero-coffee.jpg",
       backgroundImage: "/assets/hero-coffee.jpg",
-      backgroundColor: "#2D3748",
-      textColor: "#FFFFFF",
-      overlayColor: "rgba(139, 69, 19, 0.7)"
     },
     about: {
       title: "Về Chúng Tôi",
@@ -127,6 +125,55 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
           price: "150 USD/kg",
           category: "Premium"
         }
+      ]
+    },
+    testimonials: {
+      title: "Khách Hàng Nói Gì Về Chúng Tôi",
+      subtitle: "Lời chứng thực từ các đối tác và khách hàng quốc tế",
+      backgroundColor: "#F5F5DC",
+      textColor: "#2D3748",
+      testimonials: [
+        {
+          id: "1",
+          name: "Sarah Johnson",
+          position: "Coffee Buyer",
+          company: "Starbucks Reserve",
+          content: "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
+          rating: 5,
+          avatar: "SJ"
+        },
+        {
+          id: "2",
+          name: "Michael Chen",
+          position: "Quality Manager",
+          company: "Blue Bottle Coffee",
+          content: "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
+          rating: 5,
+          avatar: "MC"
+        },
+        {
+          id: "3",
+          name: "David Rodriguez",
+          position: "Import Director",
+          company: "Intelligentsia",
+          content: "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
+          rating: 5,
+          avatar: "DR"
+        }
+      ],
+      partners: [
+        "Starbucks Reserve",
+        "Blue Bottle Coffee",
+        "Intelligentsia",
+        "Counter Culture",
+        "Stumptown Coffee",
+        "La Colombe"
+      ],
+      stats: [
+        { number: "500+", label: "Lô hàng xuất khẩu" },
+        { number: "200+", label: "Khách hàng tin tưởng" },
+        { number: "15+", label: "Năm kinh nghiệm" },
+        { number: "98%", label: "Tỷ lệ hài lòng" }
       ]
     },
     footer: {
@@ -240,6 +287,7 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
         }} 
       />
       <ProductsServices theme={theme} content={finalContent.products} />
+      <Testimonials theme={theme} content={finalContent.testimonials} />
       <Footer theme={theme} content={finalContent.footer} />
     </div>
   )

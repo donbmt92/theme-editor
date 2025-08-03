@@ -553,6 +553,9 @@ function generateStaticHtml(projectName: string, description: string, themeParam
         
         <!-- Products Section -->
         ${generateStaticProductsSection(content, colors)}
+        
+        <!-- Testimonials Section -->
+        ${generateStaticTestimonialsSection(content, colors)}
     </main>
     
     <!-- Footer -->
@@ -913,58 +916,259 @@ function generateStaticSolutionsSection(content: any, colors: any): string {
 }
 
 function generateStaticProductsSection(content: any, colors: any): string {
-  return `<section id="products" style="padding: 5rem 0; background: #f8f9fa;">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem; text-align: center;">
-      <h2 style="font-size: 2.5rem; margin-bottom: 3rem;">Our Products</h2>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
-        <div style="background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-          <div style="height: 200px; background: ${colors.accent || '#CD853F'}; margin-bottom: 1rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 3rem;">📦</div>
-          <h3>Product 1</h3>
-          <p>Description of our first product.</p>
-        </div>
-        <div style="background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-          <div style="height: 200px; background: ${colors.accent || '#CD853F'}; margin-bottom: 1rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 3rem;">📦</div>
-          <h3>Product 2</h3>
-          <p>Description of our second product.</p>
-        </div>
-        <div style="background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-          <div style="height: 200px; background: ${colors.accent || '#CD853F'}; margin-bottom: 1rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; font-size: 3rem;">📦</div>
-          <h3>Product 3</h3>
-          <p>Description of our third product.</p>
+  const services = [
+    {
+      icon: "☕",
+      title: "Cà Phê Chất Lượng Cao",
+      description: "Robusta và Arabica từ các vùng đất tốt nhất Việt Nam",
+      features: ["Chứng nhận organic", "Rang xay theo yêu cầu", "Đóng gói chuyên nghiệp"]
+    },
+    {
+      icon: "🚚",
+      title: "Logistics & Vận Chuyển",
+      description: "Dịch vụ vận chuyển toàn cầu an toàn và nhanh chóng",
+      features: ["Bảo hiểm hàng hóa", "Theo dõi realtime", "Giao hàng tận nơi"]
+    },
+    {
+      icon: "📋",
+      title: "Tư Vấn Thủ Tục",
+      description: "Hỗ trợ đầy đủ về giấy tờ và chứng nhận xuất khẩu",
+      features: ["Chứng nhận FDA", "Certificate of Origin", "Phytosanitary Certificate"]
+    },
+    {
+      icon: "👥",
+      title: "Đào Tạo & Phát Triển",
+      description: "Nâng cao năng lực xuất nhập khẩu cho doanh nghiệp",
+      features: ["Workshop chuyên sâu", "Mentoring 1-1", "Networking events"]
+    },
+    {
+      icon: "💡",
+      title: "Tư Vấn Chiến Lược",
+      description: "Lập kế hoạch phát triển thị trường Mỹ bền vững",
+      features: ["Market research", "Branding support", "Sales strategy"]
+    },
+    {
+      icon: "🛡️",
+      title: "Kiểm Soát Chất Lượng",
+      description: "Đảm bảo tiêu chuẩn quốc tế cho từng lô hàng",
+      features: ["Lab testing", "Quality certificates", "Traceability system"]
+    }
+  ];
+
+  return `<section id="products" style="padding: 5rem 0; background: ${content?.products?.backgroundColor || '#F0F4F8'};">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
+      <div style="text-align: center; margin-bottom: 4rem;">
+        <h2 style="font-size: 3rem; margin-bottom: 1rem; color: ${content?.products?.textColor || colors.text || '#2D3748'}; font-weight: 700;">
+          Dịch Vụ
+          <span style="color: ${colors.primary || '#8B4513'}; display: block;">Xuất Khẩu Toàn Diện</span>
+        </h2>
+        <p style="font-size: 1.25rem; color: ${colors.muted || '#718096'}; max-width: 800px; margin: 0 auto;">
+          Từ sản phẩm cà phê chất lượng cao đến dịch vụ logistics và tư vấn chuyên sâu, 
+          chúng tôi cung cấp giải pháp một cửa cho việc xuất khẩu sang Mỹ.
+        </p>
+      </div>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+        ${services.map((service, index) => `
+          <div style="background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.1); transition: transform 0.3s ease;">
+            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+              <div style="width: 48px; height: 48px; background: ${colors.primary || '#8B4513'}1A; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin-right: 1rem; font-size: 1.5rem;">
+                ${service.icon}
+              </div>
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: ${content?.products?.textColor || colors.text || '#2D3748'}; margin: 0;">
+                ${service.title}
+              </h3>
+            </div>
+            
+            <p style="color: ${colors.muted || '#718096'}; margin-bottom: 1.5rem; line-height: 1.6;">
+              ${service.description}
+            </p>
+            
+            <ul style="list-style: none; padding: 0; margin-bottom: 1.5rem;">
+              ${service.features.map(feature => `
+                <li style="display: flex; align-items: center; margin-bottom: 0.5rem; font-size: 0.875rem; color: ${colors.muted || '#718096'};">
+                  <div style="width: 6px; height: 6px; background: ${colors.primary || '#8B4513'}; border-radius: 50%; margin-right: 0.75rem;"></div>
+                  ${feature}
+                </li>
+              `).join('')}
+            </ul>
+            
+            <button style="width: 100%; padding: 0.75rem; border: 2px solid ${colors.primary || '#8B4513'}; background: transparent; color: ${colors.primary || '#8B4513'}; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+              Tìm hiểu thêm →
+            </button>
+          </div>
+        `).join('')}
+      </div>
+      
+      <div style="text-align: center; margin-top: 4rem;">
+        <div style="background: linear-gradient(135deg, white, ${colors.secondary || '#D2691E'}15); padding: 2rem; border: 2px solid ${colors.primary || '#8B4513'}33; border-radius: 0.5rem; max-width: 800px; margin: 0 auto;">
+          <h3 style="font-size: 1.5rem; font-weight: 700; color: ${content?.products?.textColor || colors.text || '#2D3748'}; margin-bottom: 1rem;">
+            Cần tư vấn dịch vụ phù hợp?
+          </h3>
+          <p style="color: ${colors.muted || '#718096'}; margin-bottom: 1.5rem; line-height: 1.6;">
+            Đội ngũ chuyên gia của chúng tôi sẽ tư vấn miễn phí về gói dịch vụ 
+            phù hợp nhất với nhu cầu và quy mô của doanh nghiệp bạn.
+          </p>
+          <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button style="padding: 0.75rem 1.5rem; background: ${colors.primary || '#8B4513'}; color: white; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+              Tư vấn miễn phí
+            </button>
+            <button style="padding: 0.75rem 1.5rem; border: 2px solid ${colors.primary || '#8B4513'}; background: transparent; color: ${colors.primary || '#8B4513'}; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+              Xem báo giá
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </section>`
 }
 
-function generateStaticFooter(content: any, colors: any): string {
-  return `<footer id="contact" style="background-color: ${colors.secondary || '#D2691E'}; color: white; padding: 3rem 0;">
+function generateStaticTestimonialsSection(content: any, colors: any): string {
+  const testimonials = content?.testimonials?.testimonials || [
+    {
+      name: "Sarah Johnson",
+      position: "Coffee Buyer",
+      company: "Starbucks Reserve",
+      content: "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
+      rating: 5,
+      avatar: "SJ"
+    },
+    {
+      name: "Michael Chen",
+      position: "Quality Manager",
+      company: "Blue Bottle Coffee",
+      content: "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
+      rating: 5,
+      avatar: "MC"
+    },
+    {
+      name: "David Rodriguez",
+      position: "Import Director",
+      company: "Intelligentsia",
+      content: "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
+      rating: 5,
+      avatar: "DR"
+    }
+  ];
+
+  const partners = content?.testimonials?.partners || [
+    { name: "Starbucks Reserve", logo: undefined },
+    { name: "Blue Bottle Coffee", logo: undefined },
+    { name: "Intelligentsia", logo: undefined },
+    { name: "Counter Culture", logo: undefined },
+    { name: "Stumptown Coffee", logo: undefined },
+    { name: "La Colombe", logo: undefined }
+  ];
+
+  const stats = content?.testimonials?.stats || [
+    { number: "500+", label: "Lô hàng xuất khẩu" },
+    { number: "200+", label: "Khách hàng tin tưởng" },
+    { number: "15+", label: "Năm kinh nghiệm" },
+    { number: "98%", label: "Tỷ lệ hài lòng" }
+  ];
+
+  return `<section style="padding: 5rem 0; background: ${content?.testimonials?.backgroundColor || '#F5F5DC'};">
     <div style="max-width: 1200px; margin: 0 auto; padding: 0 1rem;">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-        <div>
-          <h3 style="margin-bottom: 1rem;">${content?.footer?.companyName || 'Your Company'}</h3>
-          <p style="opacity: 0.8;">Professional services for your business needs.</p>
-        </div>
-        <div>
-          <h3 style="margin-bottom: 1rem;">Quick Links</h3>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <a href="#about" style="color: rgba(255,255,255,0.8); text-decoration: none;">About</a>
-            <a href="#products" style="color: rgba(255,255,255,0.8); text-decoration: none;">Products</a>
-            <a href="#contact" style="color: rgba(255,255,255,0.8); text-decoration: none;">Contact</a>
-          </div>
-        </div>
-        <div>
-          <h3 style="margin-bottom: 1rem;">Contact Info</h3>
-          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-            <div>📍 123 Business St, City</div>
-            <div>📞 +1 (555) 123-4567</div>
-            <div>✉️ info@yourbusiness.com</div>
-          </div>
-        </div>
+      <div style="text-align: center; margin-bottom: 4rem;">
+        <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: ${colors.primary || '#8B4513'};">
+          ${content?.testimonials?.title || "Khách Hàng Nói Gì Về Chúng Tôi"}
+        </h2>
+        <p style="font-size: 1.25rem; color: ${content?.testimonials?.textColor || '#2D3748'}; max-width: 600px; margin: 0 auto;">
+          ${content?.testimonials?.subtitle || "Lời chứng thực từ các đối tác và khách hàng quốc tế"}
+        </p>
       </div>
-      <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 2rem; text-align: center; opacity: 0.8;">
-        © 2024 ${content?.footer?.companyName || 'Your Company'}. All rights reserved. | Optimized Deploy v2.0
+
+      <!-- Testimonials -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
+        ${testimonials.map((testimonial: any) => `
+          <div style="background: white; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <div style="display: flex; margin-bottom: 1rem;">
+              ${[...Array(testimonial.rating || 5)].map(() => '⭐').join('')}
+            </div>
+            <p style="margin-bottom: 1rem; color: #2D3748; font-style: italic;">"${testimonial.content}"</p>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+              <div style="width: 40px; height: 40px; background: ${colors.accent || '#CD853F'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; overflow: hidden;">
+                                                ${testimonial.avatarImage ?
+                                  `<img src="${testimonial.avatarImage}" alt="${testimonial.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">` :
+                                  testimonial.avatar
+                                }
+              </div>
+              <div>
+                <p style="font-weight: bold; color: ${colors.primary || '#8B4513'}; margin: 0;">${testimonial.name}</p>
+                <p style="font-size: 0.875rem; color: #666; margin: 0;">${testimonial.position} - ${testimonial.company}</p>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Partners -->
+      <div style="margin-bottom: 4rem;">
+        <h3 style="text-align: center; font-size: 1.5rem; margin-bottom: 2rem; color: ${colors.primary || '#8B4513'};">
+          Đối Tác Tin Cậy
+        </h3>
+                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem; align-items: center;">
+           ${partners.map((partner: any) => `
+             <div style="text-align: center;">
+               <div style="width: 64px; height: 64px; background: #F0F4F8; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; overflow: hidden;">
+                                                 ${partner.logo ?
+                                  `<img src="${partner.logo}" alt="${partner.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">` :
+                                  `<span style="color: ${colors.primary || '#8B4513'}; font-weight: bold; font-size: 0.75rem;">
+                                    ${partner.name.split(' ').map((word: string) => word[0]).join('')}
+                                  </span>`
+                                }
+               </div>
+               <p style="font-size: 0.875rem; color: #666;">${partner.name}</p>
+             </div>
+           `).join('')}
+         </div>
+      </div>
+
+      <!-- Stats -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+        ${stats.map((stat: any) => `
+          <div style="text-align: center;">
+            <div style="font-size: 2.5rem; font-weight: bold; color: ${colors.secondary || '#D2691E'}; margin-bottom: 0.5rem;">
+              ${stat.number}
+            </div>
+            <div style="color: ${content?.testimonials?.textColor || '#2D3748'};">
+              ${stat.label}
+            </div>
+          </div>
+        `).join('')}
       </div>
     </div>
-  </footer>`
+  </section>`
+}
+
+function generateStaticFooter(content: any, colors: any): string {
+  return `<footer id="contact" style="background-color: ${content?.footer?.backgroundColor || colors.secondary || '#D2691E'}; color: ${content?.footer?.textColor || colors.text || '#2D3748'}; backdrop-filter: blur(8px); border-top: 1px solid ${colors.border || colors.primary || '#8B4513'}; box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1); position: sticky; bottom: 0; z-index: 50; border-radius: 0;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 1rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+          <div>
+            <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700; color: ${content?.footer?.textColor || colors.text || '#2D3748'};">${content?.footer?.companyName || 'Your Company'}</h3>
+            <p style="opacity: 0.8; color: ${content?.footer?.textColor || colors.text || '#2D3748'};">Professional services for your business needs.</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700; color: ${content?.footer?.textColor || colors.text || '#2D3748'};">Quick Links</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <a href="#about" style="color: ${content?.footer?.textColor || colors.text || '#2D3748'}; opacity: 0.8; text-decoration: none; transition: opacity 0.2s;">About</a>
+              <a href="#products" style="color: ${content?.footer?.textColor || colors.text || '#2D3748'}; opacity: 0.8; text-decoration: none; transition: opacity 0.2s;">Products</a>
+              <a href="#contact" style="color: ${content?.footer?.textColor || colors.text || '#2D3748'}; opacity: 0.8; text-decoration: none; transition: opacity 0.2s;">Contact</a>
+            </div>
+          </div>
+          <div>
+            <h3 style="margin-bottom: 1rem; font-size: 1.25rem; font-weight: 700; color: ${content?.footer?.textColor || colors.text || '#2D3748'};">Contact Info</h3>
+            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+              <div style="color: ${content?.footer?.textColor || colors.text || '#2D3748'}; opacity: 0.8;">📍 123 Business St, City</div>
+              <div style="color: ${content?.footer?.textColor || colors.text || '#2D3748'}; opacity: 0.8;">📞 +1 (555) 123-4567</div>
+              <div style="color: ${content?.footer?.textColor || colors.text || '#2D3748'}; opacity: 0.8;">✉️ info@yourbusiness.com</div>
+            </div>
+          </div>
+        </div>
+        <div style="border-top: 1px solid ${content?.footer?.textColor || colors.text || '#2D3748'}; opacity: 0.2; padding-top: 2rem; text-align: center; opacity: 0.8; color: ${content?.footer?.textColor || colors.text || '#2D3748'};">
+          © 2024 ${content?.footer?.companyName || 'Your Company'}. All rights reserved. | Optimized Deploy v2.0
+        </div>
+      </div>
+    </footer>`
 }
