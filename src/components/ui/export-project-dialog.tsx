@@ -97,14 +97,21 @@ const DeployProjectDialog: React.FC<DeployProjectDialogProps> = ({
       })
       const data = await response.json()
       if (data.ip) {
-        setDomainStatus('valid')
-        setDomainIp(data.ip)
-        addLog(`✅ Domain ${options.domain} đã được trỏ về IP: ${data.ip}`)
-        
-        // Auto-update shell script if deploy script exists
-        if (deployProgress.deployScriptPath && deployProgress.filesystemPath) {
-          addLog(`🔄 Đang cập nhật shell script với domain ${options.domain}...`)
-          await updateDeployScript()
+        // Kiểm tra xem IP có phải là 69.62.83.168 không
+        if (data.ip === '69.62.83.168') {
+          setDomainStatus('valid')
+          setDomainIp(data.ip)
+          addLog(`✅ Domain ${options.domain} đã được trỏ về đúng IP VPS: ${data.ip}`)
+          
+          // Auto-update shell script if deploy script exists
+          if (deployProgress.deployScriptPath && deployProgress.filesystemPath) {
+            addLog(`🔄 Đang cập nhật shell script với domain ${options.domain}...`)
+            await updateDeployScript()
+          }
+        } else {
+          setDomainStatus('invalid')
+          setDomainIp(data.ip)
+          addLog(`❌ Domain ${options.domain} trỏ về IP sai: ${data.ip}. Cần trỏ về IP: 69.62.83.168`)
         }
       } else {
         setDomainStatus('invalid')
@@ -148,6 +155,13 @@ const DeployProjectDialog: React.FC<DeployProjectDialogProps> = ({
       return
     }
 
+    // Kiểm tra domain nếu có nhập
+    if (options.domain && domainStatus !== 'valid') {
+      addLog('❌ Lỗi: Domain chưa được xác thực hoặc trỏ về IP sai. Vui lòng kiểm tra domain trước.')
+      setStep('error')
+      return
+    }
+
     setStep('deploying')
     setDeployProgress({ logs: [] })
     
@@ -186,6 +200,40 @@ const DeployProjectDialog: React.FC<DeployProjectDialogProps> = ({
       
       if (options.generateDeployScript && deployResult.deployScriptPath) {
         addLog(`📜 Deploy script được tạo: ${deployResult.deployScriptPath}`)
+        
+        // Tự động chạy shell script
+        addLog('🚀 Đang chạy deploy script trên VPS...')
+        try {
+          const executeResponse = await fetch('/api/execute-deploy-script', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              scriptPath: deployResult.deployScriptPath,
+              projectName: options.projectName,
+              serverType: options.serverType,
+              domain: options.domain
+            })
+          })
+          
+
+          if (executeResponse.ok) {
+            const executeResult = await executeResponse.json()
+            addLog('✅ Deploy script chạy thành công!')
+            if (executeResult.stdout) {
+              addLog(`📋 Output: ${executeResult.stdout}`)
+            }
+            if (executeResult.stderr) {
+              addLog(`⚠️ Warnings: ${executeResult.stderr}`)
+            }
+          } else {
+            const errorData = await executeResponse.json()
+            addLog(`❌ Lỗi khi chạy deploy script: ${errorData.error}`)
+          }
+        } catch (error) {
+          addLog(`❌ Lỗi khi chạy deploy script: ${error instanceof Error ? error.message : 'Unknown error'}`)
+        }
       }
       
       setDeployProgress(prev => ({
@@ -227,7 +275,7 @@ const DeployProjectDialog: React.FC<DeployProjectDialogProps> = ({
                 Deploy Project Web
               </DialogTitle>
               <DialogDescription>
-                Deploy project thành website Static HTML hoàn chỉnh với script deploy tự động
+                Deploy project thành website Static HTML hoàn chỉnh và tự động chạy script deploy trên VPS
               </DialogDescription>
             </DialogHeader>
 
@@ -312,7 +360,7 @@ const DeployProjectDialog: React.FC<DeployProjectDialogProps> = ({
                         onChange={(e) => updateOption('generateDeployScript', e.target.checked)}
                         className="mr-2"
                       />
-                      Tạo script deploy tự động
+                      Tạo và chạy script deploy tự động
                     </label>
                   </div>
 
@@ -354,10 +402,15 @@ const DeployProjectDialog: React.FC<DeployProjectDialogProps> = ({
                         </div>
                         {domainStatus === 'valid' && domainIp && (
                           <p className="text-sm text-green-600 mt-2">
-                            ✅ Domain đã trỏ về IP: {domainIp}
+                            ✅ Domain đã trỏ về đúng IP VPS: {domainIp}
                           </p>
                         )}
-                        {domainStatus === 'invalid' && (
+                        {domainStatus === 'invalid' && domainIp && (
+                          <p className="text-sm text-red-600 mt-2">
+                            ❌ Domain trỏ về IP sai: {domainIp}. Cần trỏ về IP: 69.62.83.168
+                          </p>
+                        )}
+                        {domainStatus === 'invalid' && !domainIp && (
                           <p className="text-sm text-red-600 mt-2">
                             ❌ Không thể xác thực domain. Vui lòng kiểm tra lại.
                           </p>
@@ -457,13 +510,13 @@ const DeployProjectDialog: React.FC<DeployProjectDialogProps> = ({
                   )}
 
                   {deployProgress.deployScriptPath && (
-                    <div className="flex items-center justify-between p-3 bg-orange-50 rounded-lg">
+                    <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
                       <div>
                         <p className="font-medium">Deploy Script</p>
-                        <p className="text-sm text-gray-600">Script deploy tự động cho {options.serverType}</p>
+                        <p className="text-sm text-gray-600">Script deploy tự động cho {options.serverType} - Đã chạy thành công!</p>
                       </div>
-                      <div className="text-orange-600">
-                        <Terminal className="h-5 w-5" />
+                      <div className="text-green-600">
+                        <CheckCircle className="h-5 w-5" />
                       </div>
                     </div>
                   )}

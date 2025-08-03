@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
       }
       return NextResponse.json({ error: 'Domain not found' }, { status: 404 })
     } catch (error) {
+      console.log(error)
       return NextResponse.json({ error: 'Could not resolve domain' }, { status: 500 })
     }
   } catch (error) {

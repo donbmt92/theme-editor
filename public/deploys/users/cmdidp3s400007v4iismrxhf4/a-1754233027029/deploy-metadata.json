@@ -1,0 +1,15 @@
+{
+  "projectId": "cmdpi0ljq0001y7zq7luk79yt",
+  "userId": "cmdidp3s400007v4iismrxhf4",
+  "projectName": "a",
+  "deployTime": "2025-08-03T14:57:07.035Z",
+  "fileCount": 11,
+  "userFolderPath": "users/cmdidp3s400007v4iismrxhf4/a-1754233027029/",
+  "deployScriptPath": "deploy-nginx.sh",
+  "serverType": "nginx",
+  "domain": "onghoangdohieu.com",
+  "includeAssets": true,
+  "version": "2.0-vps-optimized",
+  "vpsSpecs": "4vCPU-16GB-200GB-NVMe",
+  "optimized": true
+}

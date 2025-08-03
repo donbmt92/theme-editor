@@ -1,0 +1,1 @@
+/* Optimized JS - same content as before */

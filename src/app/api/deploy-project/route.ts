@@ -1085,17 +1085,17 @@ function generateStaticTestimonialsSection(content: any, colors: any): string {
             <div style="display: flex; margin-bottom: 1rem;">
               ${[...Array(testimonial.rating || 5)].map(() => '⭐').join('')}
             </div>
-            <p style="margin-bottom: 1rem; color: #2D3748; font-style: italic;">"${testimonial.content}"</p>
+            <p style="margin-bottom: 1rem; color: #2D3748; font-style: italic;">"${testimonial.content || 'Great service and quality products!'}"</p>
             <div style="display: flex; align-items: center; gap: 1rem;">
               <div style="width: 40px; height: 40px; background: ${colors.accent || '#CD853F'}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; overflow: hidden;">
                                                 ${testimonial.avatarImage ?
-                                  `<img src="${testimonial.avatarImage}" alt="${testimonial.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">` :
+                                  `<img src="${testimonial.avatarImage}" alt="${testimonial.name || 'Customer'}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">` :
                                   testimonial.avatar
                                 }
               </div>
               <div>
-                <p style="font-weight: bold; color: ${colors.primary || '#8B4513'}; margin: 0;">${testimonial.name}</p>
-                <p style="font-size: 0.875rem; color: #666; margin: 0;">${testimonial.position} - ${testimonial.company}</p>
+                <p style="font-weight: bold; color: ${colors.primary || '#8B4513'}; margin: 0;">${testimonial.name || 'Customer'}</p>
+                <p style="font-size: 0.875rem; color: #666; margin: 0;">${testimonial.position || 'Customer'} - ${testimonial.company || 'Company'}</p>
               </div>
             </div>
           </div>
@@ -1112,13 +1112,13 @@ function generateStaticTestimonialsSection(content: any, colors: any): string {
              <div style="text-align: center;">
                <div style="width: 64px; height: 64px; background: #F0F4F8; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.5rem; overflow: hidden;">
                                                  ${partner.logo ?
-                                  `<img src="${partner.logo}" alt="${partner.name}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">` :
+                                  `<img src="${partner.logo}" alt="${partner.name || 'Partner'}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" decoding="async">` :
                                   `<span style="color: ${colors.primary || '#8B4513'}; font-weight: bold; font-size: 0.75rem;">
-                                    ${partner.name.split(' ').map((word: string) => word[0]).join('')}
+                                    ${partner.name ? partner.name.split(' ').map((word: string) => word[0]).join('') : 'P'}
                                   </span>`
                                 }
                </div>
-               <p style="font-size: 0.875rem; color: #666;">${partner.name}</p>
+               <p style="font-size: 0.875rem; color: #666;">${partner.name || 'Partner'}</p>
              </div>
            `).join('')}
          </div>
