@@ -571,7 +571,7 @@ function generateStaticHtml(projectName: string, description: string, themeParam
 // Helper functions for domain and project name processing
 function sanitizeDomain(domain?: string): string {
   if (!domain || domain === 'null') {
-    return 'your-domain.com'
+    return 'test.dreaktech.xyz'
   }
   
   // Remove protocols and www
@@ -582,8 +582,8 @@ function sanitizeDomain(domain?: string): string {
   
   // Basic domain validation
   if (!/^[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]?\.[a-zA-Z]{2,}$/.test(cleanDomain)) {
-    console.warn(`Invalid domain format: ${domain}, using default`)
-    return 'your-domain.com'
+    console.warn(`Invalid domain format: ${domain}, using test.dreaktech.xyz`)
+    return 'test.dreaktech.xyz'
   }
   
   return cleanDomain
@@ -664,7 +664,7 @@ chown -R www-data:www-data \$NGINX_ROOT
 chmod -R 755 \$NGINX_ROOT
 
 echo "⚙️ Tạo cấu hình Nginx..."
-cat > \$NGINX_CONFIG << 'EOF'
+cat > \$NGINX_CONFIG << EOF
 server {
     listen 80;
     server_name \$DOMAIN www.\$DOMAIN;
