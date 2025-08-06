@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
     const fullScriptPath = path.join(process.cwd(), 'public', scriptPath)
     
     try {
+      console.log('fullScriptPath', fullScriptPath);
       await fs.access(fullScriptPath)
     } catch (error) {
       return NextResponse.json(

@@ -115,18 +115,12 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
 
   // Convert overlayOpacity to overlayColor if needed
   const getOverlayColor = () => {
-    console.log('🔍 getOverlayColor - Debug values:', {
-      contentOverlayColor: content.overlayColor,
-      contentOverlayOpacity: content.overlayOpacity,
-      themeColorsPrimary: theme.colors.primary,
-      themeSectionsHeroOverlayColor: theme.sections?.hero?.overlayColor
-    });
+    
 
     // Luôn sử dụng theme.colors.primary làm màu overlay mặc định
     const baseColor = content.overlayColor || theme.colors.primary;
     const opacity = content.overlayOpacity !== undefined ? content.overlayOpacity : 0.7;
     
-    console.log('✅ Using base color:', baseColor, 'with opacity:', opacity);
     
     // Convert hex to rgba
     if (baseColor.startsWith('#')) {
@@ -135,7 +129,6 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
       const g = parseInt(hex.substr(2, 2), 16);
       const b = parseInt(hex.substr(4, 2), 16);
       const result = `rgba(${r}, ${g}, ${b}, ${opacity})`;
-      console.log('🎨 Generated rgba from hex:', result);
       return result;
     }
     
@@ -278,12 +271,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           {/* Always show overlay when there's a background image */}
           {(() => {
             const shouldShowOverlay = true; // Luôn hiển thị overlay khi có background image
-            console.log('🔍 Overlay rendering condition:', {
-              contentOverlayColor: content.overlayColor,
-              contentOverlayOpacity: content.overlayOpacity,
-              themeColorsPrimary: theme.colors.primary,
-              shouldShowOverlay: shouldShowOverlay
-            });
+            
             return shouldShowOverlay;
           })() && (
             <div 

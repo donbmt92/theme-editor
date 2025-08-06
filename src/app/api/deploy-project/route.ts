@@ -627,6 +627,7 @@ function getDeployScriptName(serverType: string): string {
 // [Keeping them the same for brevity]
 
 function generateNginxDeployScript(projectName: string, domain: string): string {
+  console.log('generateNginxDeployScript', projectName, domain)
   return `#!/bin/bash
 # Optimized deploy script cho ${projectName} trên Nginx (Static HTML)
 # Tạo bởi Theme Editor v2.0
