@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { scriptPath, projectName, serverType, domain } = await request.json()
+    const { scriptPath, projectName, serverType, domain, filesystemPath } = await request.json()
 
     if (!scriptPath) {
       return NextResponse.json(
@@ -29,30 +29,107 @@ export async function POST(request: NextRequest) {
     }
 
     // Kiểm tra file script có tồn tại không
-    const fullScriptPath = path.join(process.cwd(), 'public', scriptPath)
+    let fullScriptPath: string
     
-    try {
-      console.log('fullScriptPath', fullScriptPath);
-      await fs.access(fullScriptPath)
-    } catch (error) {
-      return NextResponse.json(
-        { success: false, error: 'Script file not found' },
-        { status: 404 }
-      )
+    // Nếu scriptPath chỉ là tên file (không có đường dẫn), tìm trong thư mục project
+    if (!scriptPath.includes('/') && !scriptPath.includes('\\')) {
+      // Ưu tiên tìm trong filesystemPath nếu có
+      if (filesystemPath) {
+        fullScriptPath = path.join(filesystemPath, scriptPath)
+        try {
+          await fs.access(fullScriptPath)
+        } catch (error) {
+          // Thử tìm trong thư mục hiện tại
+          const currentDir = process.cwd()
+          fullScriptPath = path.join(currentDir, scriptPath)
+          
+          try {
+            await fs.access(fullScriptPath)
+          } catch (currentError) {
+            // Thử tìm trong thư mục public/deploys
+            const publicPath = path.join(process.cwd(), 'public', 'deploys', scriptPath)
+            try {
+              await fs.access(publicPath)
+              fullScriptPath = publicPath
+            } catch (publicError) {
+              return NextResponse.json(
+                { success: false, error: `Script file not found: ${scriptPath}. Searched in: ${filesystemPath}, ${currentDir}, public/deploys` },
+                { status: 404 }
+              )
+            }
+          }
+        }
+      } else {
+        // Tìm file script trong thư mục hiện tại
+        const currentDir = process.cwd()
+        fullScriptPath = path.join(currentDir, scriptPath)
+        
+        try {
+          await fs.access(fullScriptPath)
+        } catch (error) {
+          // Thử tìm trong thư mục public/deploys
+          const publicPath = path.join(process.cwd(), 'public', 'deploys', scriptPath)
+          try {
+            await fs.access(publicPath)
+            fullScriptPath = publicPath
+          } catch (publicError) {
+            return NextResponse.json(
+              { success: false, error: `Script file not found: ${scriptPath}` },
+              { status: 404 }
+            )
+          }
+        }
+      }
+    } else {
+      // Nếu scriptPath có đường dẫn đầy đủ
+      fullScriptPath = path.join(process.cwd(), 'public', scriptPath)
+      
+      try {
+        await fs.access(fullScriptPath)
+      } catch (error) {
+        return NextResponse.json(
+          { success: false, error: `Script file not found: ${scriptPath}` },
+          { status: 404 }
+        )
+      }
     }
+    
+    console.log('Script execution details:', {
+      scriptPath,
+      filesystemPath,
+      fullScriptPath,
+      projectName,
+      serverType,
+      domain
+    });
 
     // Cấp quyền thực thi cho script
     await execAsync(`chmod +x "${fullScriptPath}"`)
 
     // Chạy script với sudo (vì script deploy cần quyền admin)
+    const scriptDir = path.dirname(fullScriptPath)
+    const scriptName = path.basename(fullScriptPath)
+    
+    console.log(`Executing script: ${scriptName} in directory: ${scriptDir}`)
+    
+    // Kiểm tra xem có file index.html trong thư mục không
+    try {
+      const indexPath = path.join(scriptDir, 'index.html')
+      await fs.access(indexPath)
+      console.log('✅ Found index.html in script directory')
+    } catch (error) {
+      console.log('⚠️ index.html not found in script directory')
+    }
+    
     const { stdout, stderr } = await execAsync(`sudo "${fullScriptPath}"`, {
-      cwd: path.dirname(fullScriptPath),
+      cwd: scriptDir,
       timeout: 60000, // 60 giây timeout
       env: {
         ...process.env,
         PROJECT_NAME: projectName || 'my-project',
         DOMAIN: domain || '',
-        SERVER_TYPE: serverType || 'nginx'
+        SERVER_TYPE: serverType || 'nginx',
+        PWD: scriptDir
       }
     })
 

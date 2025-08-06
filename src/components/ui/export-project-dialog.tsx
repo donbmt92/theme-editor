@@ -210,10 +210,11 @@ const DeployProjectDialog: React.FC<DeployProjectDialogProps> = ({
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              scriptPath: deployResult.deployScriptPath,
+              scriptPath: deployResult.deployScriptPath, // Chỉ là tên file, không phải đường dẫn đầy đủ
               projectName: options.projectName,
               serverType: options.serverType,
-              domain: options.domain
+              domain: options.domain,
+              filesystemPath: deployResult.filesystemPath // Đường dẫn thư mục project
             })
           })
           
