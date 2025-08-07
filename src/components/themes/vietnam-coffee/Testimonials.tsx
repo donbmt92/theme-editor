@@ -4,16 +4,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from "lucide-react";
 import { ThemeParams } from "@/types";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface Testimonial {
   id?: string;
   name: string;
-  position: string;
+  title: string;
   company: string;
   content: string;
   rating?: number;
-  avatar?: string; // This can be either image URL or initials
-  avatarImage?: string; // New field for image URL
+  image?: string;
 }
 
 interface TestimonialsContent {
@@ -22,7 +22,7 @@ interface TestimonialsContent {
   backgroundColor?: string;
   textColor?: string;
   testimonials?: Testimonial[];
-  stats?: Array<{ number: string; label: string }>;
+  stats?: Array<{ number: string; label: string; sublabel?: string }>;
 }
 
 interface TestimonialsProps {
@@ -36,42 +36,42 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
     {
       id: "1",
       name: "Sarah Johnson",
-      position: "Coffee Buyer",
+      title: "Coffee Buyer",
       company: "Starbucks Reserve",
       content:
         "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
       rating: 5,
-      avatar: "SJ",
+      image: "https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face"
     },
     {
       id: "2",
       name: "Michael Chen",
-      position: "Quality Manager",
+      title: "Quality Manager",
       company: "Blue Bottle Coffee",
       content:
         "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
       rating: 5,
-      avatar: "MC",
+      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
     },
     {
       id: "3",
       name: "David Rodriguez",
-      position: "Import Director",
+      title: "Import Director",
       company: "Intelligentsia",
       content:
         "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
       rating: 5,
-      avatar: "DR",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face"
     },
   ];
 
 
 
   const defaultStats = [
-    { number: "500+", label: "Lô hàng xuất khẩu" },
-    { number: "200+", label: "Khách hàng tin tưởng" },
-    { number: "15+", label: "Năm kinh nghiệm" },
-    { number: "98%", label: "Tỷ lệ hài lòng" },
+    { number: "500+", label: "Lô hàng xuất khẩu", sublabel: "Cà phê chất lượng cao" },
+    { number: "200+", label: "Khách hàng tin tưởng", sublabel: "Từ 25 tiểu bang Mỹ" },
+    { number: "15+", label: "Năm kinh nghiệm", sublabel: "Thị trường quốc tế" },
+    { number: "98%", label: "Tỷ lệ hài lòng", sublabel: "Khách hàng đánh giá" },
   ];
 
   // Handle testimonials data - convert string values to objects if needed
@@ -82,12 +82,11 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
         return {
           id: Math.random().toString(),
           name: testimonial,
-          position: '',
+          title: '',
           company: '',
           content: '',
           rating: 5,
-          avatar: '',
-          avatarImage: ''
+          image: ''
         };
       }
       return testimonial;
@@ -101,7 +100,7 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
   if (stats && Array.isArray(stats)) {
     stats = stats.map(stat => {
       if (typeof stat === 'string') {
-        return { number: stat, label: '' };
+        return { number: stat, label: '', sublabel: '' };
       }
       return stat;
     });
@@ -134,12 +133,22 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
     }
   };
 
+  // Client logos data
+  const clientLogos = [
+    { name: "Starbucks Reserve", logo: "SR" },
+    { name: "Blue Bottle Coffee", logo: "BB" },
+    { name: "Intelligentsia", logo: "IN" },
+    { name: "Peet's Coffee", logo: "PC" },
+    { name: "Caribou Coffee", logo: "CC" },
+    { name: "Dunkin' Donuts", logo: "DD" }
+  ];
+
   return (
     <section
       className="py-20"
       style={{
         backgroundColor:
-          content.backgroundColor || theme.colors?.background || "#F5F5DC",
+          content.backgroundColor || theme.colors?.background || "#F8F9FA",
         color: content.textColor || theme.colors?.text || "#2D3748",
         ...getTypographyStyles(),
       }}
@@ -152,113 +161,86 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
       >
         <div className="text-center mb-16">
           <h2
-            className="text-3xl md:text-4xl font-bold mb-4"
+            className={cn("text-4xl font-bold mb-4")}
             style={{
-              color: theme.colors?.primary || "#8B4513",
-              fontSize:
-                theme.typography?.headingSize === "2xl"
-                  ? "2.5rem"
-                  : theme.typography?.headingSize === "xl"
-                  ? "2rem"
-                  : "1.875rem",
+              color: content.textColor || theme.colors?.text || "#2D3748",
               fontWeight: theme.typography?.fontWeight || "700",
             }}
           >
-            {content.title || "Khách Hàng Nói Gì Về Chúng Tôi"}
+            {content.title || "Được Tin Tưởng Bởi Các Nhà Nhập Khẩu Hàng Đầu"}
           </h2>
           <p
-            className="text-lg max-w-2xl mx-auto opacity-80"
+            className={cn("text-xl max-w-3xl mx-auto")}
             style={{
-              color: content.textColor || theme.colors?.text || "#2D3748",
-              fontSize:
-                theme.typography?.bodySize === "lg" ? "1.125rem" : "1rem",
+              color: content.textColor || theme.colors?.muted || "#718096",
             }}
           >
             {content.subtitle ||
-              "Lời chứng thực từ các đối tác và khách hàng quốc tế"}
+              "Xem những gì khách hàng nói về trải nghiệm nhập khẩu cà phê Việt Nam cao cấp thông qua dịch vụ của chúng tôi."}
           </p>
         </div>
 
-        {/* Testimonials */}
-        <div className="grid md:grid-cols-3 gap-8 mb-16">
+        {/* Testimonials Grid */}
+        <div className="grid md:grid-cols-3 gap-8 mb-20">
           {testimonials.map((testimonial, index) => (
             <Card
               key={index}
-              className={`hover:shadow-lg transition-all duration-300 ${getBorderRadiusClass()}`}
+              className={cn("shadow-card hover:shadow-elegant transition-all duration-300 border-border/50", getBorderRadiusClass())}
               style={{
-                borderColor: theme.colors?.border || theme.colors?.primary,
-                backgroundColor: theme.colors?.secondary || "#FFFFFF",
+                fontFamily: theme.typography?.fontFamily || 'Inter',
+                fontSize: theme.typography?.fontSize || '16px'
               }}
             >
-              <CardContent className="p-6">
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating || 5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-5 h-5 fill-current"
-                      style={{ color: theme.colors?.accent || "#CD853F" }}
-                    />
-                  ))}
-                </div>
-                <div className="relative mb-4">
-                  <Quote
-                    className="w-8 h-8 absolute -top-2 -left-2 opacity-30"
-                    style={{ color: theme.colors?.secondary || "#D2691E" }}
+              <CardContent className="p-8">
+                <div className="mb-6">
+                  <Quote 
+                    className="h-8 w-8 mb-4" 
+                    style={{ color: theme.colors?.primary || "#8B4513" }}
                   />
+                  <div className="flex mb-4">
+                    {[...Array(testimonial.rating || 5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-5 w-5 fill-current"
+                        style={{ color: theme.colors?.accent || "#CD853F" }}
+                      />
+                    ))}
+                  </div>
                   <p
-                    className="relative z-10 pl-4"
+                    className="leading-relaxed italic"
                     style={{
-                      color:
-                        content.textColor || theme.colors?.text || "#2D3748",
-                      fontSize: theme.typography?.fontSize || "16px",
+                      color: content.textColor || theme.colors?.text || "#2D3748",
                     }}
                   >
-                    {testimonial.content || ''}
+                    "{testimonial.content || ''}"
                   </p>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center overflow-hidden relative`}
-                    style={{
-                      backgroundColor: theme.colors?.accent || "#CD853F",
-                    }}
-                  >
-                    {testimonial.avatarImage ? (
-                      <Image
-                        src={testimonial.avatarImage}
-                        alt={testimonial.name}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <span
-                        className="font-semibold text-sm"
-                        style={{ color: theme.colors?.text || "#FFFFFF" }}
-                      >
-                        {testimonial.name ? testimonial.name.split(' ').map((word: string) => word[0]).join('').toUpperCase() : 'N/A'}
-                      </span>
-                    )}
-                  </div>
+                
+                <div className="flex items-center">
+                  <img
+                    src={testimonial.image || `https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face`}
+                    alt={testimonial.name}
+                    className="w-12 h-12 rounded-full mr-4 object-cover"
+                  />
                   <div>
-                    <p
+                    <div 
                       className="font-semibold"
-                      style={{ color: theme.colors?.primary || "#8B4513" }}
+                      style={{ color: content.textColor || theme.colors?.text || "#2D3748" }}
                     >
                       {testimonial.name || 'Unknown'}
-                    </p>
-                    <p
-                      className="text-sm opacity-80"
-                      style={{
-                        color:
-                          content.textColor || theme.colors?.text || "#2D3748",
-                        fontSize:
-                          theme.typography?.bodySize === "sm"
-                            ? "0.875rem"
-                            : "0.75rem",
-                      }}
+                    </div>
+                    <div 
+                      className="text-sm"
+                      style={{ color: content.textColor || theme.colors?.muted || "#718096" }}
                     >
-                      {(testimonial.position || '')} - {(testimonial.company || '')}
-                    </p>
+                      {testimonial.title || ''}
+                    </div>
+                    <div 
+                      className="text-sm font-medium"
+                      style={{ color: theme.colors?.primary || "#8B4513" }}
+                    >
+                      {testimonial.company || ''}
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -268,28 +250,76 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
 
 
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center">
+        {/* Client Logos */}
+        {/* <div className="mb-20">
+          <h3 
+            className={cn("text-2xl font-bold text-center mb-8")}
+            style={{ color: content.textColor || theme.colors?.text || "#2D3748" }}
+          >
+            Được Tin Tưởng Bởi Các Thương Hiệu Hàng Đầu
+          </h3>
+          <div className="flex flex-wrap justify-center items-center gap-8">
+            {clientLogos.map((client, index) => (
               <div
-                className="text-3xl md:text-4xl font-bold mb-2"
-                style={{ color: theme.colors?.secondary || "#D2691E" }}
-              >
-                {stat.number || ''}
-              </div>
-              <div
-                className="opacity-80"
-                style={{
-                  color: content.textColor || theme.colors?.text || "#2D3748",
-                  fontSize: theme.typography?.fontSize || "16px",
+                key={index}
+                className={cn("flex items-center justify-center w-20 h-20 rounded-lg shadow-sm hover:shadow-md transition-shadow", getBorderRadiusClass())}
+                style={{ 
+                  backgroundColor: theme.colors?.background || "#FFFFFF",
+                  border: `1px solid ${theme.colors?.border || "#E2E8F0"}`
                 }}
               >
-                {stat.label || ''}
+                <span 
+                  className="text-lg font-bold"
+                  style={{ color: theme.colors?.primary || "#8B4513" }}
+                >
+                  {client.logo}
+                </span>
               </div>
+            ))}
+          </div>
+        </div> */}
+
+        {/* Key Metrics */}
+        <Card 
+          className={cn("border-0 shadow-elegant", getBorderRadiusClass())}
+          style={{ 
+            background: `linear-gradient(135deg, ${theme.colors?.primary || "#8B4513"}, ${theme.colors?.accent || "#CD853F"})`,
+            color: "#FFFFFF"
+          }}
+        >
+          <CardContent className="p-12">
+            <h3 
+              className={cn("text-3xl font-bold text-center mb-12")}
+              style={{ color: "#FFFFFF" }}
+            >
+              Những Con Số Nói Lên Tất Cả
+            </h3>
+            <div className="grid md:grid-cols-4 gap-8">
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div 
+                    className={cn("text-4xl font-bold mb-2")}
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    {stat.number || ''}
+                  </div>
+                  <div 
+                    className={cn("text-xl font-semibold mb-1 opacity-90")}
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    {stat.label || ''}
+                  </div>
+                  <div 
+                    className={cn("text-sm opacity-75")}
+                    style={{ color: "#FFFFFF" }}
+                  >
+                    {stat.sublabel || ''}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </section>
   );

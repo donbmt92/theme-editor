@@ -84,21 +84,44 @@ const createDefaultThemeParams = (): ThemeParams => ({
     header: {
       title: "Cà Phê Việt Plus",
       subtitle: "Premium Export Coffee",
-      logo: ""
+      backgroundColor: "#8B4513",
+      textColor: "#FFFFFF",
+      logo: "/assets/logo.png",
+      navigation: [
+        { name: "Trang chủ", href: "#home" },
+        { name: "Sản phẩm", href: "#products" },
+        { name: "Dịch vụ", href: "#services" },
+        { name: "Về chúng tôi", href: "#about" },
+        { name: "Liên hệ", href: "#contact" }
+      ]
     },
     hero: {
       title: "Cà Phê Việt Nam - Chất Lượng Quốc Tế",
       subtitle: "Xuất khẩu cà phê chất lượng cao",
       description: "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
       ctaText: "Tìm hiểu thêm",
-      backgroundImage: "/assets/hero-coffee.jpg",
-      overlayOpacity: 0.7,
-      overlayColor: "#8B4513"
+      ctaSecondaryText: "Liên hệ để được tư vấn",
+      image: "/assets/hero-coffee.jpg",
+      benefits: [
+        { icon: "CheckCircle", text: "Chất lượng quốc tế" },
+        { icon: "Shield", text: "Đảm bảo xuất khẩu" },
+        { icon: "Truck", text: "Giao hàng toàn cầu" }
+      ],
+      stats: [
+        { number: "100+", label: "Khách hàng" },
+        { number: "5+", label: "Năm kinh nghiệm" },
+        { number: "24/7", label: "Hỗ trợ" }
+      ]
     },
     about: {
       title: "Về Chúng Tôi",
       description: "Với hơn 20 năm kinh nghiệm trong ngành cà phê, chúng tôi tự hào là đối tác tin cậy của các nhà nhập khẩu quốc tế.",
-      image: ""
+      image: "/assets/about-image.jpg",
+      features: [
+        { icon: "Award", title: "Chứng nhận", description: "ISO 22000, HACCP, FDA" },
+        { icon: "Globe", title: "Thị trường", description: "Xuất khẩu 25+ quốc gia" },
+        { icon: "Users", title: "Đội ngũ", description: "50+ chuyên gia" }
+      ]
     },
     problems: {
       title: "Thách Thức Hiện Tại",
@@ -107,16 +130,19 @@ const createDefaultThemeParams = (): ThemeParams => ({
       textColor: "#2D3748",
       items: [
         {
+          id: "1",
           title: "Thiếu kết nối thị trường",
           description: "Doanh nghiệp Việt gặp khó khăn trong việc tiếp cận khách hàng quốc tế",
           icon: "AlertCircle"
         },
         {
+          id: "2",
           title: "Quy trình phức tạp",
           description: "Thủ tục xuất khẩu phức tạp, tốn thời gian và chi phí",
           icon: "Clock"
         },
         {
+          id: "3",
           title: "Giá cả không ổn định",
           description: "Biến động giá cả khiến khó lập kế hoạch kinh doanh dài hạn",
           icon: "TrendingDown"
@@ -130,18 +156,21 @@ const createDefaultThemeParams = (): ThemeParams => ({
       textColor: "#2D3748",
       items: [
         {
+          id: "1",
           title: "Kết nối trực tiếp",
           description: "Mạng lưới đối tác nhập khẩu rộng khắp tại Mỹ, loại bỏ trung gian",
           benefit: "Tăng lợi nhuận 30-40%",
           icon: "Globe"
         },
         {
+          id: "2",
           title: "Hỗ trợ toàn diện",
           description: "Từ chứng nhận chất lượng đến logistics và thủ tục hải quan",
           benefit: "Tiết kiệm 80% thời gian",
           icon: "Shield"
         },
         {
+          id: "3",
           title: "Quy trình tối ưu",
           description: "Hệ thống quản lý hiện đại, theo dõi đơn hàng realtime",
           benefit: "Minh bạch 100%",
@@ -153,8 +182,10 @@ const createDefaultThemeParams = (): ThemeParams => ({
       title: "Sẵn sàng bắt đầu hành trình xuất khẩu?",
       description: "Tư vấn miễn phí về quy trình xuất khẩu cà phê sang Mỹ",
       buttonText: "Đăng ký tư vấn miễn phí",
+      buttonSecondaryText: "Tải tài liệu mẫu",
       backgroundColor: "#8B4513",
-      textColor: "#FFFFFF"
+      textColor: "#FFFFFF",
+      image: "/assets/cta-image.jpg"
     },
     products: {
       title: "Sản Phẩm Của Chúng Tôi",
@@ -163,26 +194,40 @@ const createDefaultThemeParams = (): ThemeParams => ({
       textColor: "#2D3748",
       items: [
         {
+          id: "1",
           name: "Cà Phê Robusta",
           description: "Cà phê Robusta Việt Nam với hương vị đậm đà, hàm lượng caffeine cao",
           price: "2.50 USD/kg",
           category: "Robusta",
-          image: ""
+          image: "/assets/product-1.jpg",
+          features: ["Hàm lượng caffeine cao", "Hương vị đậm đà", "Giá cả cạnh tranh"]
         },
         {
+          id: "2",
           name: "Cà Phê Arabica",
           description: "Cà phê Arabica Tây Nguyên với hương vị tinh tế, chua nhẹ",
           price: "4.20 USD/kg",
           category: "Arabica",
-          image: ""
+          image: "/assets/product-2.jpg",
+          features: ["Hương vị tinh tế", "Chua nhẹ", "Chất lượng cao"]
         },
         {
+          id: "3",
           name: "Cà Phê Chồn",
           description: "Cà phê chồn cao cấp với hương vị độc đáo",
           price: "150 USD/kg",
           category: "Premium",
-          image: ""
+          image: "/assets/product-3.jpg",
+          features: ["Hương vị độc đáo", "Chất lượng cao cấp", "Sản lượng giới hạn"]
         }
+      ],
+      services: [
+        { id: "1", name: "Tư vấn xuất khẩu", description: "Hỗ trợ toàn diện quy trình xuất khẩu", icon: "Package", cta: "Tìm hiểu thêm" },
+        { id: "2", name: "Logistics", description: "Dịch vụ vận chuyển quốc tế", icon: "Truck", cta: "Tìm hiểu thêm" },
+        { id: "3", name: "Chứng nhận", description: "Hỗ trợ chứng nhận chất lượng", icon: "FileText", cta: "Tìm hiểu thêm" },
+        { id: "4", name: "Tư vấn thị trường", description: "Phân tích thị trường và xu hướng", icon: "Users", cta: "Tìm hiểu thêm" },
+        { id: "5", name: "Bảo hiểm", description: "Bảo hiểm hàng hóa toàn diện", icon: "Shield", cta: "Tìm hiểu thêm" },
+        { id: "6", name: "Theo dõi đơn hàng", description: "Hệ thống theo dõi realtime", icon: "TrendingUp", cta: "Tìm hiểu thêm" }
       ]
     },
     footer: {
@@ -193,8 +238,35 @@ const createDefaultThemeParams = (): ThemeParams => ({
       contact: {
         phone: "+84 123 456 789",
         email: "info@capheviet.com",
-        address: "123 Đường ABC, Quận 1, TP.HCM"
-      }
+        address: "123 Đường ABC, Quận 1, TP.HCM",
+        businessHours: "Thứ 2-Thứ 6: 8AM-6PM (EST)"
+      },
+      quickLinks: [
+        { name: "Về Chúng Tôi", href: "#about" },
+        { name: "Sản Phẩm", href: "#products" },
+        { name: "Dịch Vụ", href: "#services" },
+        { name: "Chất Lượng", href: "#quality" },
+        { name: "Liên Hệ", href: "#contact" }
+      ],
+      resources: [
+        { name: "Hướng Dẫn", href: "#guide" },
+        { name: "Báo Cáo", href: "#reports" },
+        { name: "Tài Liệu", href: "#docs" },
+        { name: "FAQ", href: "#faq" },
+        { name: "Blog", href: "#blog" }
+      ],
+      legal: [
+        { name: "Chính Sách Bảo Mật", href: "#privacy" },
+        { name: "Điều Khoản Dịch Vụ", href: "#terms" },
+        { name: "Chính Sách Cookie", href: "#cookies" },
+        { name: "Tuân Thủ", href: "#compliance" }
+      ],
+      socialLinks: [
+        { icon: "Facebook", href: "#", label: "Facebook" },
+        { icon: "Twitter", href: "#", label: "Twitter" },
+        { icon: "Linkedin", href: "#", label: "LinkedIn" },
+        { icon: "Youtube", href: "#", label: "YouTube" }
+      ]
     },
     testimonials: {
       title: "Khách Hàng Nói Gì Về Chúng Tôi",
@@ -204,36 +276,142 @@ const createDefaultThemeParams = (): ThemeParams => ({
       testimonials: [
         {
           name: "Sarah Johnson",
-          position: "Coffee Buyer",
+          title: "Coffee Buyer",
           company: "Starbucks Reserve",
           content: "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
           rating: 5,
-          avatar: "SJ"
+          image: "https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face"
         },
         {
           name: "Michael Chen",
-          position: "Quality Manager",
+          title: "Quality Manager",
           company: "Blue Bottle Coffee",
           content: "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
           rating: 5,
-          avatar: "MC"
+          image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
         },
         {
           name: "David Rodriguez",
-          position: "Import Director",
+          title: "Import Director",
           company: "Intelligentsia",
           content: "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
           rating: 5,
-          avatar: "DR"
+          image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face"
         }
       ],
-
+      partners: [
+        "Starbucks Reserve", "Blue Bottle Coffee", "Intelligentsia", "Peet's Coffee", "Dunkin'", "Tim Hortons"
+      ],
       stats: [
-        { number: "500+", label: "Lô hàng xuất khẩu" },
-        { number: "200+", label: "Khách hàng tin tưởng" },
-        { number: "15+", label: "Năm kinh nghiệm" },
-        { number: "98%", label: "Tỷ lệ hài lòng" }
+        { number: "500+", label: "Lô hàng xuất khẩu", sublabel: "Chất lượng cao" },
+        { number: "200+", label: "Khách hàng tin tưởng", sublabel: "Toàn cầu" },
+        { number: "15+", label: "Năm kinh nghiệm", sublabel: "Thị trường" },
+        { number: "98%", label: "Tỷ lệ hài lòng", sublabel: "Khách hàng" }
       ]
+    },
+    leadMagnet: {
+      title: "Tải xuống báo cáo thị trường cà phê 2024",
+      description: "Phân tích chi tiết xu hướng thị trường, cơ hội kinh doanh và dự báo tương lai của ngành cà phê.",
+      backgroundColor: "#F8F9FA",
+      textColor: "#2D3748",
+      guideTitle: "Báo cáo thị trường cà phê 2024",
+      guideSubtitle: "Dữ liệu cập nhật, phân tích chuyên sâu",
+      formTitle: "Nhận báo cáo miễn phí",
+      formDescription: "Điền thông tin của bạn để tải xuống báo cáo ngay bây giờ!",
+      buttonText: "Tải xuống ngay",
+      features: [
+        { icon: "FileText", title: "Tài liệu đầy đủ", description: "Mọi biểu mẫu và tài liệu cần thiết" },
+        { icon: "TrendingUp", title: "Phân tích thị trường", description: "Dữ liệu thị trường hiện tại" },
+        { icon: "Shield", title: "Tiêu chuẩn chất lượng", description: "Yêu cầu chi tiết cho tiêu chuẩn" },
+        { icon: "CheckCircle", title: "Quy trình từng bước", description: "Lịch trình rõ ràng từ đầu đến cuối" }
+      ],
+      trustIndicators: [
+        { number: "5,000+", label: "Lượt tải" },
+        { number: "92%", label: "Tỷ lệ thành công" },
+        { number: "4.9/5", label: "Đánh giá người dùng" }
+      ]
+    },
+    whyChooseUs: {
+      title: "Tại sao chọn Cà Phê Việt?",
+      subtitle: "Chất lượng, uy tín và sự tận tâm là những giá trị cốt lõi của chúng tôi.",
+      backgroundColor: "#FFFFFF",
+      textColor: "#2D3748",
+      strengths: [
+        { icon: "Award", title: "Chứng nhận quốc tế", description: "FDA, USDA, ISO" },
+        { icon: "Globe", title: "Thị trường toàn cầu", description: "Xuất khẩu đến 25+ quốc gia" },
+        { icon: "Users", title: "Đội ngũ chuyên gia", description: "20+ năm kinh nghiệm" },
+        { icon: "Shield", title: "Chất lượng đảm bảo", description: "Hệ thống kiểm soát nghiêm ngặt" },
+        { icon: "Clock", title: "Giao hàng đúng hạn", description: "Cam kết thời gian" },
+        { icon: "TrendingUp", title: "Tăng trưởng bền vững", description: "Phát triển cùng đối tác" }
+      ],
+      mission: {
+        title: "Sứ mệnh",
+        description: "Mang giá trị cà phê Việt Nam đến thế giới, tạo giá trị bền vững cho đối tác."
+      },
+      vision: {
+        title: "Tầm nhìn",
+        description: "Trở thành đối tác hàng đầu trong lĩnh vực xuất khẩu cà phê, được tin tưởng bởi thị trường quốc tế."
+      },
+      cta: {
+        title: "Bắt đầu hợp tác ngay hôm nay",
+        description: "Liên hệ với chúng tôi để được tư vấn miễn phí.",
+        buttonText: "Liên hệ ngay"
+      }
+    },
+    blog: {
+      title: "Thông Tin Ngành Mới Nhất",
+      subtitle: "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về cà phê",
+      backgroundColor: "#F8F9FA",
+      textColor: "#2D3748",
+      categories: [
+        { name: "Thị trường", count: 15 },
+        { name: "Kỹ thuật", count: 12 },
+        { name: "Xuất khẩu", count: 8 },
+        { name: "Chất lượng", count: 10 }
+      ],
+      featuredPost: {
+        title: "Xu hướng thị trường cà phê 2024",
+        excerpt: "Phân tích chi tiết về xu hướng tiêu dùng và cơ hội cho ngành cà phê.",
+        author: "Chuyên gia",
+        date: "2024-01-15",
+        image: "/assets/blog-featured.jpg",
+        category: "Thị trường"
+      },
+      posts: [
+        {
+          id: "1",
+          title: "Hướng dẫn xuất khẩu cà phê",
+          excerpt: "Quy trình chi tiết từ chuẩn bị hồ sơ đến giao hàng thành công.",
+          author: "Chuyên gia",
+          date: "2024-01-10",
+          image: "/assets/blog-1.jpg",
+          category: "Xuất khẩu"
+        },
+        {
+          id: "2",
+          title: "Tiêu chuẩn chất lượng cho cà phê",
+          excerpt: "Những yêu cầu cần thiết để đạt tiêu chuẩn quốc tế.",
+          author: "Chuyên gia",
+          date: "2024-01-08",
+          image: "/assets/blog-2.jpg",
+          category: "Chất lượng"
+        },
+        {
+          id: "3",
+          title: "Kỹ thuật hiện đại cho cà phê",
+          excerpt: "Phương pháp hiện đại giúp tăng năng suất và chất lượng.",
+          author: "Chuyên gia",
+          date: "2024-01-05",
+          image: "/assets/blog-3.jpg",
+          category: "Kỹ thuật"
+        }
+      ],
+      newsletter: {
+        title: "Đăng ký nhận tin tức",
+        description: "Nhận thông tin mới nhất về thị trường và cơ hội.",
+        placeholder: "Email của bạn",
+        buttonText: "Đăng ký"
+      }
     }
   }
 })
@@ -243,7 +421,7 @@ const ProjectEditor = () => {
   const projectId = params.projectId as string
   const [project, setProject] = useState<ProjectData | null>(null)
   const [themeParams, setThemeParams] = useState<ThemeParams | null>(null)
-  type TabType = 'colors' | 'typography' | 'layout' | 'content' | 'problems' | 'solutions' | 'products' | 'footer' | 'meta'
+  type TabType = 'colors' | 'typography' | 'layout' | 'content' | 'problems' | 'solutions' | 'products' | 'leadMagnet' | 'whyChooseUs' | 'testimonials' | 'blog' | 'footer' | 'meta'
   const [activeTab, setActiveTab] = useState<TabType>('colors')
   const [isPreviewMode, setIsPreviewMode] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -705,6 +883,50 @@ const ProjectEditor = () => {
                 >
                   <FileText size={16} className="mr-2" />
                   Sản phẩm
+                </button>
+                <button
+                  onClick={() => setActiveTab('leadMagnet')}
+                  className={`flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === 'leadMagnet' 
+                      ? 'bg-white text-gray-900 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <FileText size={16} className="mr-2" />
+                  Lead Magnet
+                </button>
+                <button
+                  onClick={() => setActiveTab('whyChooseUs')}
+                  className={`flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === 'whyChooseUs' 
+                      ? 'bg-white text-gray-900 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <FileText size={16} className="mr-2" />
+                  Lý do chọn
+                </button>
+                <button
+                  onClick={() => setActiveTab('testimonials')}
+                  className={`flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === 'testimonials' 
+                      ? 'bg-white text-gray-900 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <FileText size={16} className="mr-2" />
+                  Đánh giá
+                </button>
+                <button
+                  onClick={() => setActiveTab('blog')}
+                  className={`flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === 'blog' 
+                      ? 'bg-white text-gray-900 shadow-sm' 
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <FileText size={16} className="mr-2" />
+                  Blog
                 </button>
                 <button
                   onClick={() => setActiveTab('footer')}
@@ -1314,8 +1536,8 @@ const ProjectEditor = () => {
                             <div>
                               <label className="block text-sm font-medium mb-1">Chức vụ</label>
                               <Input
-                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.position || ''}
-                                onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'position'], e.target.value)}
+                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.title || ''}
+                                onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'title'], e.target.value)}
                                 placeholder="Coffee Buyer"
                               />
                             </div>
@@ -1342,8 +1564,8 @@ const ProjectEditor = () => {
                                 <p className="text-xs text-gray-500">Gợi ý: 100x100px hoặc 200x200px (tỷ lệ 1:1)</p>
                               </div>
                               <ImageUpload
-                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.avatarImage || ''}
-                                onChange={(url) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'avatarImage'], url)}
+                                value={themeParams?.content?.testimonials?.testimonials?.[index]?.image || ''}
+                                onChange={(url) => updateThemeParam(['content', 'testimonials', 'testimonials', index.toString(), 'image'], url)}
                                 placeholder="Upload hình ảnh đại diện"
                                 recommendedSize="100x100px hoặc 200x200px"
                                 aspectRatio="1:1"
@@ -1875,6 +2097,166 @@ const ProjectEditor = () => {
                           value={themeParams?.content?.footer?.contact?.address || ''}
                           onChange={(e) => updateThemeParam(['content', 'footer', 'contact', 'address'], e.target.value)}
                           placeholder="123 Đường ABC, Quận 1, TP.HCM"
+                          rows={2}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              )}
+
+              {/* Lead Magnet Tab */}
+              {activeTab === 'leadMagnet' && (
+                <div className="space-y-6">
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Lead Magnet</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề</label>
+                        <Input
+                          value={themeParams?.content?.leadMagnet?.title || ''}
+                          onChange={(e) => updateThemeParam(['content', 'leadMagnet', 'title'], e.target.value)}
+                          placeholder="Mở khóa thành công"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Mô tả</label>
+                        <Textarea
+                          value={themeParams?.content?.leadMagnet?.description || ''}
+                          onChange={(e) => updateThemeParam(['content', 'leadMagnet', 'description'], e.target.value)}
+                          placeholder="Mô tả lead magnet"
+                          rows={3}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề hướng dẫn</label>
+                        <Input
+                          value={themeParams?.content?.leadMagnet?.guideTitle || ''}
+                          onChange={(e) => updateThemeParam(['content', 'leadMagnet', 'guideTitle'], e.target.value)}
+                          placeholder="Hướng dẫn đầy đủ"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Phụ đề hướng dẫn</label>
+                        <Input
+                          value={themeParams?.content?.leadMagnet?.guideSubtitle || ''}
+                          onChange={(e) => updateThemeParam(['content', 'leadMagnet', 'guideSubtitle'], e.target.value)}
+                          placeholder="Phiên bản 2024 - 45 trang"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề form</label>
+                        <Input
+                          value={themeParams?.content?.leadMagnet?.formTitle || ''}
+                          onChange={(e) => updateThemeParam(['content', 'leadMagnet', 'formTitle'], e.target.value)}
+                          placeholder="Tải về hướng dẫn miễn phí"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Mô tả form</label>
+                        <Textarea
+                          value={themeParams?.content?.leadMagnet?.formDescription || ''}
+                          onChange={(e) => updateThemeParam(['content', 'leadMagnet', 'formDescription'], e.target.value)}
+                          placeholder="Mô tả form"
+                          rows={2}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Nút tải về</label>
+                        <Input
+                          value={themeParams?.content?.leadMagnet?.buttonText || ''}
+                          onChange={(e) => updateThemeParam(['content', 'leadMagnet', 'buttonText'], e.target.value)}
+                          placeholder="Tải về hướng dẫn miễn phí ngay"
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              )}
+
+              {/* Why Choose Us Tab */}
+              {activeTab === 'whyChooseUs' && (
+                <div className="space-y-6">
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Lý do chọn chúng tôi</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề</label>
+                        <Input
+                          value={themeParams?.content?.whyChooseUs?.title || ''}
+                          onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'title'], e.target.value)}
+                          placeholder="Tại Sao Chọn Chúng Tôi?"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Phụ đề</label>
+                        <Textarea
+                          value={themeParams?.content?.whyChooseUs?.subtitle || ''}
+                          onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'subtitle'], e.target.value)}
+                          placeholder="Phụ đề mô tả"
+                          rows={2}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Sứ mệnh</label>
+                        <Textarea
+                          value={themeParams?.content?.whyChooseUs?.mission?.description || ''}
+                          onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'mission', 'description'], e.target.value)}
+                          placeholder="Mô tả sứ mệnh"
+                          rows={2}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tầm nhìn</label>
+                        <Textarea
+                          value={themeParams?.content?.whyChooseUs?.vision?.description || ''}
+                          onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'vision', 'description'], e.target.value)}
+                          placeholder="Mô tả tầm nhìn"
+                          rows={2}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              )}
+
+              {/* Blog Tab */}
+              {activeTab === 'blog' && (
+                <div className="space-y-6">
+                  <Card className="p-4">
+                    <h3 className="text-lg font-semibold mb-4">Blog & Tin tức</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề</label>
+                        <Input
+                          value={themeParams?.content?.blog?.title || ''}
+                          onChange={(e) => updateThemeParam(['content', 'blog', 'title'], e.target.value)}
+                          placeholder="Thông Tin Ngành Mới Nhất"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Phụ đề</label>
+                        <Textarea
+                          value={themeParams?.content?.blog?.subtitle || ''}
+                          onChange={(e) => updateThemeParam(['content', 'blog', 'subtitle'], e.target.value)}
+                          placeholder="Mô tả blog"
+                          rows={2}
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Tiêu đề newsletter</label>
+                        <Input
+                          value={themeParams?.content?.blog?.newsletter?.title || ''}
+                          onChange={(e) => updateThemeParam(['content', 'blog', 'newsletter', 'title'], e.target.value)}
+                          placeholder="Đăng ký nhận tin tức"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium mb-2">Mô tả newsletter</label>
+                        <Textarea
+                          value={themeParams?.content?.blog?.newsletter?.description || ''}
+                          onChange={(e) => updateThemeParam(['content', 'blog', 'newsletter', 'description'], e.target.value)}
+                          placeholder="Mô tả newsletter"
                           rows={2}
                         />
                       </div>

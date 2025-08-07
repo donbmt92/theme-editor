@@ -422,6 +422,74 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
 
               <Card>
                 <CardHeader>
+                  <CardTitle className="text-lg">Lead Magnet & Tài liệu</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <p className="font-medium">Tiêu đề Lead Magnet:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.leadMagnet?.title}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Mô tả:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.leadMagnet?.description}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Tính năng chính:</p>
+                    {generatedContent.content?.leadMagnet?.features?.map((feature, index) => (
+                      <div key={index} className="ml-4 mb-2">
+                        <p className="text-sm font-medium">• {feature.title}</p>
+                        <p className="text-xs text-gray-600 ml-2">{feature.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Lý do chọn chúng tôi</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <p className="font-medium">Tiêu đề:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.whyChooseUs?.title}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Điểm mạnh:</p>
+                    {generatedContent.content?.whyChooseUs?.strengths?.map((strength, index) => (
+                      <div key={index} className="ml-4 mb-2">
+                        <p className="text-sm font-medium">• {strength.title}</p>
+                        <p className="text-xs text-gray-600 ml-2">{strength.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Đánh giá khách hàng</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <p className="font-medium">Tiêu đề:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.testimonials?.title}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Testimonials:</p>
+                    {generatedContent.content?.testimonials?.testimonials?.map((testimonial, index) => (
+                      <div key={index} className="ml-4 mb-2 border-l-2 border-gray-200 pl-3">
+                        <p className="text-sm font-medium">{testimonial.name} - {testimonial.title}</p>
+                        <p className="text-xs text-gray-600">{testimonial.company}</p>
+                        <p className="text-xs text-gray-500 italic">&quot;{testimonial.content}&quot;</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
                   <CardTitle className="text-lg">Sản phẩm/Dịch vụ</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">

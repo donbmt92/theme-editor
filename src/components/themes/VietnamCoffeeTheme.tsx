@@ -5,6 +5,9 @@ import { ThemeParams } from '@/types'
 import Header from './vietnam-coffee/Header'
 import HeroSection from './vietnam-coffee/HeroSection'
 import ProblemSolution from './vietnam-coffee/ProblemSolution'
+import LeadMagnetSection from './vietnam-coffee/LeadMagnetSection'
+import WhyChooseUsSection from './vietnam-coffee/WhyChooseUsSection'
+import BlogSection from './vietnam-coffee/BlogSection'
 import ProductsServices from './vietnam-coffee/ProductsServices'
 import Testimonials from './vietnam-coffee/Testimonials'
 import Footer from './vietnam-coffee/Footer'
@@ -98,6 +101,44 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
       backgroundColor: "#8B4513",
       textColor: "#FFFFFF"
     },
+    leadMagnet: {
+      title: "Mở khóa thành công xuất nhập khẩu",
+      description: "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2024' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ.",
+      backgroundColor: "#F8F9FA",
+      textColor: "#2D3748",
+      guideTitle: "Hướng dẫn xuất khẩu đầy đủ",
+      guideSubtitle: "Phiên bản 2024 - 45 trang",
+      formTitle: "Tải về hướng dẫn miễn phí",
+      formDescription: "Nhập thông tin bên dưới để có quyền truy cập ngay lập tức vào tài nguyên quý giá này.",
+      buttonText: "Tải về hướng dẫn miễn phí ngay",
+      features: [
+        {
+          icon: "FileText",
+          title: "Danh sách tài liệu đầy đủ",
+          description: "Mọi biểu mẫu, chứng nhận và tài liệu cần thiết cho tuân thủ FDA"
+        },
+        {
+          icon: "TrendingUp",
+          title: "Phân tích thị trường & Xu hướng giá",
+          description: "Dữ liệu thị trường cà phê Mỹ hiện tại và thông tin giá cả 2024"
+        },
+        {
+          icon: "Shield",
+          title: "Tiêu chuẩn chất lượng & Kiểm tra",
+          description: "Yêu cầu chi tiết cho tiêu chuẩn chất lượng nhập khẩu Mỹ"
+        },
+        {
+          icon: "CheckCircle",
+          title: "Quy trình nhập khẩu từng bước",
+          description: "Lịch trình rõ ràng từ đặt hàng đến giao hàng tại kho"
+        }
+      ],
+      trustIndicators: [
+        { number: "5,000+", label: "Lượt tải" },
+        { number: "92%", label: "Tỷ lệ thành công" },
+        { number: "4.9/5", label: "Đánh giá người dùng" }
+      ]
+    },
     products: {
       title: "Sản Phẩm Của Chúng Tôi",
       description: "Khám phá các loại cà phê đặc trưng của Việt Nam với hương vị độc đáo",
@@ -127,6 +168,12 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
         }
       ]
     },
+    whyChooseUs: {
+      title: "Tại Sao Chọn VietCoffee Export?",
+      subtitle: "Chúng tôi kết hợp di sản nông nghiệp Việt Nam với chuyên môn xuất khẩu hiện đại để mang lại giá trị vượt trội cho đối tác Mỹ.",
+      backgroundColor: "#FFFFFF",
+      textColor: "#2D3748"
+    },
     testimonials: {
       title: "Khách Hàng Nói Gì Về Chúng Tôi",
       subtitle: "Lời chứng thực từ các đối tác và khách hàng quốc tế",
@@ -136,29 +183,29 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
         {
           id: "1",
           name: "Sarah Johnson",
-          position: "Coffee Buyer",
+          title: "Coffee Buyer",
           company: "Starbucks Reserve",
           content: "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
           rating: 5,
-          avatar: "SJ"
+          image: "https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face"
         },
         {
           id: "2",
           name: "Michael Chen",
-          position: "Quality Manager",
+          title: "Quality Manager",
           company: "Blue Bottle Coffee",
           content: "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
           rating: 5,
-          avatar: "MC"
+          image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
         },
         {
           id: "3",
           name: "David Rodriguez",
-          position: "Import Director",
+          title: "Import Director",
           company: "Intelligentsia",
           content: "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
           rating: 5,
-          avatar: "DR"
+          image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face"
         }
       ],
       partners: [
@@ -170,11 +217,17 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
         "La Colombe"
       ],
       stats: [
-        { number: "500+", label: "Lô hàng xuất khẩu" },
-        { number: "200+", label: "Khách hàng tin tưởng" },
-        { number: "15+", label: "Năm kinh nghiệm" },
-        { number: "98%", label: "Tỷ lệ hài lòng" }
+        { number: "500+", label: "Lô hàng xuất khẩu", sublabel: "Cà phê chất lượng cao" },
+        { number: "200+", label: "Khách hàng tin tưởng", sublabel: "Từ 25 tiểu bang Mỹ" },
+        { number: "15+", label: "Năm kinh nghiệm", sublabel: "Thị trường quốc tế" },
+        { number: "98%", label: "Tỷ lệ hài lòng", sublabel: "Khách hàng đánh giá" }
       ]
+    },
+    blog: {
+      title: "Thông Tin Ngành Mới Nhất",
+      subtitle: "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về xuất khẩu cà phê Việt Nam và thị trường nhập khẩu Mỹ.",
+      backgroundColor: "#F8F9FA",
+      textColor: "#2D3748"
     },
     footer: {
       companyName: "Cà Phê Việt",
@@ -286,7 +339,10 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
           cta: finalContent.cta
         }} 
       />
+      <LeadMagnetSection theme={theme} content={finalContent.leadMagnet} />
       <ProductsServices theme={theme} content={finalContent.products} />
+      <WhyChooseUsSection theme={theme} content={finalContent.whyChooseUs} />
+      <BlogSection theme={theme} content={finalContent.blog} />
       <Testimonials theme={theme} content={finalContent.testimonials} />
       <Footer theme={theme} content={finalContent.footer} />
     </div>

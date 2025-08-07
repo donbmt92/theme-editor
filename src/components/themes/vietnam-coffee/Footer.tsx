@@ -2,9 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Facebook, Linkedin, Twitter, Mail, Phone, MapPin, Coffee } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Youtube } from "lucide-react";
 import { ThemeParams } from "@/types";
-import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface FooterContent {
   companyName?: string;
@@ -15,8 +16,12 @@ interface FooterContent {
     phone?: string;
     email?: string;
     address?: string;
+    businessHours?: string;
   };
-  logo?: string;
+  quickLinks?: Array<{ name: string; href: string }>;
+  resources?: Array<{ name: string; href: string }>;
+  legal?: Array<{ name: string; href: string }>;
+  socialLinks?: Array<{ icon: string; href: string; label: string }>;
 }
 
 interface FooterProps {
@@ -25,17 +30,48 @@ interface FooterProps {
 }
 
 const Footer = ({ theme, content }: FooterProps) => {
-  // Get typography styles - same as Header
+  // Default data
+  const defaultQuickLinks = [
+    { name: "Về Chúng Tôi", href: "#about" },
+    { name: "Sản Phẩm", href: "#products" },
+    { name: "Dịch Vụ Xuất Khẩu", href: "#services" },
+    { name: "Đảm Bảo Chất Lượng", href: "#quality" },
+    { name: "Liên Hệ", href: "#contact" }
+  ];
+
+  const defaultResources = [
+    { name: "Hướng Dẫn Xuất/Nhập Khẩu", href: "#guide" },
+    { name: "Báo Cáo Thị Trường", href: "#reports" },
+    { name: "Tài Liệu", href: "#docs" },
+    { name: "FAQ", href: "#faq" },
+    { name: "Blog", href: "#blog" }
+  ];
+
+  const defaultLegal = [
+    { name: "Chính Sách Bảo Mật", href: "#privacy" },
+    { name: "Điều Khoản Dịch Vụ", href: "#terms" },
+    { name: "Chính Sách Cookie", href: "#cookies" },
+    { name: "Tuân Thủ", href: "#compliance" }
+  ];
+
+  const defaultSocialLinks = [
+    { icon: "Facebook", href: "#", label: "Facebook" },
+    { icon: "Twitter", href: "#", label: "Twitter" },
+    { icon: "Linkedin", href: "#", label: "LinkedIn" },
+    { icon: "Youtube", href: "#", label: "YouTube" }
+  ];
+
+  // Get typography styles
   const getTypographyStyles = () => {
     return {
-      fontFamily: theme.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+      fontFamily: theme.typography?.fontFamily || 'Inter',
       fontSize: theme.typography?.fontSize || '16px',
       lineHeight: theme.typography?.lineHeight || '1.6',
       fontWeight: theme.typography?.fontWeight || '400',
     }
   }
 
-  // Get border radius class - same as Header
+  // Get border radius class
   const getBorderRadiusClass = () => {
     switch (theme.layout?.borderRadius) {
       case 'none':
@@ -50,10 +86,10 @@ const Footer = ({ theme, content }: FooterProps) => {
     }
   }
 
-  // Get button styles based on component settings - same as Header
-  const getButtonStyles = (variant: 'outline' | 'premium' = 'outline') => {
+  // Get button styles
+  const getButtonStyles = (variant: 'outline' | 'primary' = 'primary') => {
     const baseStyles = {
-      fontFamily: theme.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+      fontFamily: theme.typography?.fontFamily || 'Inter',
       fontSize: theme.typography?.fontSize || '16px',
       fontWeight: theme.typography?.fontWeight || '400',
     }
@@ -61,428 +97,337 @@ const Footer = ({ theme, content }: FooterProps) => {
     if (variant === 'outline') {
       return {
         ...baseStyles,
-        borderColor: theme.colors?.border || theme.colors?.primary,
-        color: content.textColor || theme.colors?.text,
+        borderColor: theme.colors.primary,
+        color: theme.colors.primary,
         borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
       }
     }
 
     return {
       ...baseStyles,
-      backgroundColor: theme.colors?.accent,
-      color: theme.colors?.text,
+      backgroundColor: theme.colors.primary,
+      color: '#FFFFFF',
       borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
     }
   }
 
-  // Get heading size based on typography settings
-  const getHeadingSize = () => {
-    switch (theme.typography?.headingSize) {
-      case 'sm':
-        return 'text-base'
-      case 'base':
-        return 'text-lg'
-      case 'lg':
-        return 'text-xl'
-      case 'xl':
-        return 'text-2xl'
-      case '3xl':
-        return 'text-3xl'
-      case '2xl':
+  // Get social icon component
+  const getSocialIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'Facebook':
+        return Facebook;
+      case 'Twitter':
+        return Twitter;
+      case 'Linkedin':
+        return Linkedin;
+      case 'Youtube':
+        return Youtube;
       default:
-        return 'text-xl'
+        return Facebook;
     }
   }
 
-  // Get body text size based on typography settings
-  const getBodySize = () => {
-    switch (theme.typography?.bodySize) {
-      case 'xs':
-        return 'text-xs'
-      case 'sm':
-        return 'text-sm'
-      case 'lg':
-        return 'text-base'
-      case 'xl':
-        return 'text-lg'
-      case 'base':
-      default:
-        return 'text-sm'
-    }
-  }
+  // Use content or defaults
+  const quickLinks = content.quickLinks || defaultQuickLinks;
+  const resources = content.resources || defaultResources;
+  const legal = content.legal || defaultLegal;
+  const socialLinks = content.socialLinks || defaultSocialLinks;
 
   return (
     <footer 
       id="contact"
-      className={`backdrop-blur-sm border-t z-50 shadow-lg ${getBorderRadiusClass()}`}
+      className="bg-secondary text-secondary-foreground"
       style={{ 
-        backgroundColor: content.backgroundColor || theme.sections?.header?.backgroundColor || theme.colors.secondary,
-        color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-        borderColor: theme.colors?.border || theme.colors?.primary,
+        backgroundColor: content.backgroundColor || theme.colors.secondary || '#1F2937',
+        color: content.textColor || theme.colors.text || '#F9FAFB',
         ...getTypographyStyles()
       }}
     >
       <div 
-        className="px-4 py-4"
+        className="container mx-auto px-4"
         style={{
           maxWidth: theme.layout?.containerWidth || '1200px',
           margin: '0 auto'
         }}
       >
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2 mb-4">
-              {content.logo ? (
-                <div className="relative w-10 h-10">
-                  <Image 
-                    src={content.logo} 
-                    alt="Footer Logo"
-                    fill
-                    sizes="40px"
-                    className={`object-contain ${getBorderRadiusClass()}`}
-                    quality={90}
-                  />
-                </div>
-              ) : (
+        {/* Main Footer Content */}
+        <div className="py-16">
+          <div className="grid lg:grid-cols-4 gap-12">
+            {/* Company Info */}
+            <div className="lg:col-span-1">
+              <div className="flex items-center space-x-2 mb-6">
                 <div 
-                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${getBorderRadiusClass()}`}
-                  style={{ backgroundColor: theme.colors.accent }}
-                >
-                  <Coffee className="text-white" size={24} />
-                </div>
-              )}
-              <div>
-                <h3 
-                  className={`font-bold ${getHeadingSize()}`}
+                  className={cn("h-8 w-8 rounded-full", getBorderRadiusClass())}
                   style={{ 
-                    color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
+                    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
+                  }}
+                ></div>
+                <span 
+                  className="text-xl font-bold"
+                  style={{ 
+                    color: content.textColor || theme.colors.text || '#F9FAFB',
                     fontWeight: theme.typography?.fontWeight || '700'
                   }}
                 >
-                  {content.companyName}
-                </h3>
-                <p 
-                  className={getBodySize()}
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.bodySize === 'sm' ? '0.875rem' : '0.75rem'
-                  }}
-                >
-                  Premium Export Coffee
-                </p>
-              </div>
-            </div>
-            <p 
-              className={`leading-relaxed ${getBodySize()}`}
-              style={{ 
-                color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                lineHeight: theme.typography?.lineHeight || '1.6'
-              }}
-            >
-              {content.description}
-            </p>
-            <div className="flex space-x-3">
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="hover:bg-opacity-20"
-                style={getButtonStyles('outline')}
-              >
-                <Facebook size={20} />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="hover:bg-opacity-20"
-                style={getButtonStyles('outline')}
-              >
-                <Linkedin size={20} />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="icon" 
-                className="hover:bg-opacity-20"
-                style={getButtonStyles('outline')}
-              >
-                <Twitter size={20} />
-              </Button>
-            </div>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 
-              className={`font-semibold mb-4 ${getHeadingSize()}`}
-              style={{ 
-                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                fontWeight: theme.typography?.fontWeight || '600'
-              }}
-            >
-              Liên Kết Nhanh
-            </h4>
-            <ul className={`space-y-3 ${getBodySize()}`}>
-              <li>
-                <a 
-                  href="#about" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Về chúng tôi
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#products" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Sản phẩm & Dịch vụ
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#resources" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Tài nguyên
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#blog" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Blog
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#contact" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Liên hệ
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Services */}
-          <div>
-            <h4 
-              className={`font-semibold mb-4 ${getHeadingSize()}`}
-              style={{ 
-                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                fontWeight: theme.typography?.fontWeight || '600'
-              }}
-            >
-              Dịch Vụ
-            </h4>
-            <ul className={`space-y-3 ${getBodySize()}`}>
-              <li>
-                <a 
-                  href="#" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Xuất khẩu cà phê
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Logistics & Vận chuyển
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Tư vấn thủ tục
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Đào tạo & Phát triển
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  className="hover:opacity-80 transition-colors"
-                  style={{ 
-                    color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                    fontSize: theme.typography?.fontSize || '16px'
-                  }}
-                >
-                  Kiểm soát chất lượng
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact & Newsletter */}
-          <div>
-            <h4 
-              className={`font-semibold mb-4 ${getHeadingSize()}`}
-              style={{ 
-                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                fontWeight: theme.typography?.fontWeight || '600'
-              }}
-            >
-              Liên Hệ
-            </h4>
-            <div className={`space-y-3 mb-6 ${getBodySize()}`}>
-              <div className="flex items-center space-x-3">
-                <MapPin size={16} style={{ color: theme.colors.accent }} />
-                <span style={{ 
-                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}>
-                  {content.contact?.address}
+                  {content.companyName || "VietCoffee Export"}
                 </span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Phone size={16} style={{ color: theme.colors.accent }} />
-                <span style={{ 
-                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}>
-                  {content.contact?.phone}
-                </span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Mail size={16} style={{ color: theme.colors.accent }} />
-                <span style={{ 
-                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}>
-                  {content.contact?.email}
-                </span>
-              </div>
-            </div>
-
-            <div>
-              <h5 
-                className={`font-semibold mb-3 ${getHeadingSize()}`}
+              <p 
+                className="mb-6 leading-relaxed"
                 style={{ 
-                  color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                  fontWeight: theme.typography?.fontWeight || '600'
+                  color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                  fontSize: theme.typography?.fontSize || '16px',
+                  lineHeight: theme.typography?.lineHeight || '1.6'
                 }}
               >
-                Nhận tin tức mới nhất
-              </h5>
-              <div className="flex space-x-2">
+                {content.description || "Đối tác tin cậy của bạn cho xuất khẩu cà phê Việt Nam cao cấp đến thị trường Mỹ. Chất lượng, độ tin cậy và dịch vụ xuất sắc từ năm 2009."}
+              </p>
+              
+              {/* Contact Info */}
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <MapPin 
+                    className="h-5 w-5 mt-0.5" 
+                    style={{ color: theme.colors.primary }}
+                  />
+                  <div>
+                    <div 
+                      className="font-medium"
+                      style={{ 
+                        color: content.textColor || theme.colors.text || '#F9FAFB',
+                        fontWeight: theme.typography?.fontWeight || '500'
+                      }}
+                    >
+                      Văn Phòng Việt Nam
+                    </div>
+                    <div 
+                      className="text-sm"
+                      style={{ 
+                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                        fontSize: theme.typography?.fontSize || '16px'
+                      }}
+                    >
+                      {content.contact?.address || "123 Đường Xuất Khẩu, Tỉnh Bình Phước, Việt Nam"}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Phone 
+                    className="h-5 w-5" 
+                    style={{ color: theme.colors.primary }}
+                  />
+                  <div>
+                    <div 
+                      className="font-medium"
+                      style={{ 
+                        color: content.textColor || theme.colors.text || '#F9FAFB',
+                        fontWeight: theme.typography?.fontWeight || '500'
+                      }}
+                    >
+                      {content.contact?.phone || "+1 (555) 123-4567"}
+                    </div>
+                    <div 
+                      className="text-sm"
+                      style={{ 
+                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                        fontSize: theme.typography?.fontSize || '16px'
+                      }}
+                    >
+                      Giờ Làm Việc Mỹ
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail 
+                    className="h-5 w-5" 
+                    style={{ color: theme.colors.primary }}
+                  />
+                  <div>
+                    <div 
+                      className="font-medium"
+                      style={{ 
+                        color: content.textColor || theme.colors.text || '#F9FAFB',
+                        fontWeight: theme.typography?.fontWeight || '500'
+                      }}
+                    >
+                      {content.contact?.email || "info@vietcoffeeexport.com"}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Clock 
+                    className="h-5 w-5" 
+                    style={{ color: theme.colors.primary }}
+                  />
+                  <div 
+                    className="text-sm"
+                    style={{ 
+                      color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                      fontSize: theme.typography?.fontSize || '16px'
+                    }}
+                  >
+                    {content.contact?.businessHours || "Thứ 2-Thứ 6: 8AM-6PM (EST)"}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h3 
+                className="text-lg font-bold mb-6"
+                style={{ 
+                  color: content.textColor || theme.colors.text || '#F9FAFB',
+                  fontWeight: theme.typography?.fontWeight || '700'
+                }}
+              >
+                Liên Kết Nhanh
+              </h3>
+              <ul className="space-y-3">
+                {quickLinks.map((link, index) => (
+                  <li key={index}>
+                    <a
+                      href={link.href}
+                      className="hover:text-primary transition-colors"
+                      style={{ 
+                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                        fontSize: theme.typography?.fontSize || '16px'
+                      }}
+                    >
+                      {link.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3 
+                className="text-lg font-bold mb-6"
+                style={{ 
+                  color: content.textColor || theme.colors.text || '#F9FAFB',
+                  fontWeight: theme.typography?.fontWeight || '700'
+                }}
+              >
+                Tài Nguyên
+              </h3>
+              <ul className="space-y-3">
+                {resources.map((resource, index) => (
+                  <li key={index}>
+                    <a
+                      href={resource.href}
+                      className="hover:text-primary transition-colors"
+                      style={{ 
+                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                        fontSize: theme.typography?.fontSize || '16px'
+                      }}
+                    >
+                      {resource.name}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Newsletter Signup */}
+            <div>
+              <h3 
+                className="text-lg font-bold mb-6"
+                style={{ 
+                  color: content.textColor || theme.colors.text || '#F9FAFB',
+                  fontWeight: theme.typography?.fontWeight || '700'
+                }}
+              >
+                Kết Nối
+              </h3>
+              <p 
+                className="mb-4"
+                style={{ 
+                  color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                  fontSize: theme.typography?.fontSize || '16px'
+                }}
+              >
+                Nhận cập nhật thị trường hàng tuần và mẹo nhập khẩu gửi đến hộp thư của bạn.
+              </p>
+              <div className="space-y-3">
                 <Input
                   type="email"
-                  placeholder="Email của bạn"
-                  className="placeholder:opacity-60"
+                  placeholder="Nhập email của bạn"
+                  className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground placeholder:text-secondary-foreground/50"
                   style={{ 
-                    backgroundColor: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}1A`,
-                    borderColor: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}33`,
-                    color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
+                    backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
+                    borderColor: `${content.textColor || theme.colors.text || '#F9FAFB'}20`,
+                    color: content.textColor || theme.colors.text || '#F9FAFB',
                     borderRadius: getBorderRadiusClass().replace('rounded-', ''),
                     fontFamily: theme.typography?.fontFamily || 'Inter',
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 />
                 <Button 
-                  variant="premium" 
-                  size="sm"
-                  style={getButtonStyles('premium')}
+                  className="w-full"
+                  style={getButtonStyles('primary')}
                 >
-                  Đăng ký
+                  Đăng Ký
                 </Button>
+              </div>
+              
+              {/* Social Links */}
+              <div className="flex space-x-4 mt-6">
+                {socialLinks.map((social, index) => {
+                  const IconComponent = getSocialIcon(social.icon);
+                  return (
+                    <a
+                      key={index}
+                      href={social.href}
+                      aria-label={social.label}
+                      className={cn("w-10 h-10 rounded-lg flex items-center justify-center transition-colors", getBorderRadiusClass())}
+                      style={{ 
+                        backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
+                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`
+                      }}
+                    >
+                      <IconComponent className="h-5 w-5" />
+                    </a>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div 
-          className="border-t mt-12 pt-8"
-          style={{ borderColor: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}33` }}
-        >
+        <Separator 
+          className="bg-secondary-foreground/20"
+          style={{ backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}20` }}
+        />
+
+        {/* Bottom Footer */}
+        <div className="py-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div 
-              className={getBodySize()}
+              className="text-sm"
               style={{ 
-                color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
+                color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
                 fontSize: theme.typography?.fontSize || '16px'
               }}
             >
-              © 2024 {content.companyName}. Tất cả quyền được bảo lưu.
+              © 2024 {content.companyName || "VietCoffee Export"}. Tất cả quyền được bảo lưu.
             </div>
-            <div className={`flex space-x-6 ${getBodySize()}`}>
-              <a 
-                href="#" 
-                className="hover:opacity-80 transition-colors"
-                style={{ 
-                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                Chính sách bảo mật
-              </a>
-              <a 
-                href="#" 
-                className="hover:opacity-80 transition-colors"
-                style={{ 
-                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                Điều khoản sử dụng
-              </a>
-              <a 
-                href="#" 
-                className="hover:opacity-80 transition-colors"
-                style={{ 
-                  color: `${content.textColor || theme.sections?.header?.textColor || theme.colors.text}CC`,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                Sitemap
-              </a>
+            
+            <div className="flex flex-wrap gap-6">
+              {legal.map((item, index) => (
+                <a
+                  key={index}
+                  href={item.href}
+                  className="text-sm hover:text-primary transition-colors"
+                  style={{ 
+                    color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                    fontSize: theme.typography?.fontSize || '16px'
+                  }}
+                >
+                  {item.name}
+                </a>
+              ))}
             </div>
           </div>
         </div>

@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 45 20% 98%;
+    --foreground: 30 15% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 30 15% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 30 15% 15%;
+
+    --primary: 25 80% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 120 25% 25%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 45 15% 94%;
+    --muted-foreground: 30 10% 50%;
+
+    --accent: 25 60% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 45 15% 88%;
+    --input: 45 15% 92%;
+    --ring: 25 80% 45%;
+
+    /* Custom design tokens for cashew export business */
+    --cashew-gold: 35 85% 60%;
+    --cashew-brown: 25 40% 35%;
+    --trust-blue: 210 80% 45%;
+    --success-green: 120 60% 40%;
+    --warm-cream: 45 30% 95%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--cashew-gold)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--trust-blue)));
+    --gradient-warm: linear-gradient(180deg, hsl(var(--warm-cream)), hsl(var(--background)));
+    
+    /* Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.2);
+    --shadow-card: 0 4px 20px -8px hsl(var(--foreground) / 0.1);
+    --shadow-glow: 0 0 30px hsl(var(--cashew-gold) / 0.3);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 30 20% 8%;
+    --foreground: 45 15% 92%;
+
+    --card: 30 15% 12%;
+    --card-foreground: 45 15% 92%;
+
+    --popover: 30 15% 12%;
+    --popover-foreground: 45 15% 92%;
+
+    --primary: 35 85% 60%;
+    --primary-foreground: 30 20% 8%;
+
+    --secondary: 120 25% 20%;
+    --secondary-foreground: 45 15% 92%;
+
+    --muted: 30 10% 18%;
+    --muted-foreground: 45 10% 65%;
+
+    --accent: 25 60% 55%;
+    --accent-foreground: 30 20% 8%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 30 10% 20%;
+    --input: 30 10% 18%;
+    --ring: 35 85% 60%;
+
+    /* Dark mode adjustments */
+    --cashew-gold: 35 75% 55%;
+    --cashew-brown: 25 30% 45%;
+    --trust-blue: 210 70% 55%;
+    --success-green: 120 50% 50%;
+    --warm-cream: 30 15% 12%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}

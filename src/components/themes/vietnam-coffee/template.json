@@ -1,0 +1,707 @@
+{
+    "theme": {
+      "name": "Vietnam Coffee Export Theme",
+      "description": "Theme chuyên nghiệp cho xuất khẩu cà phê Việt Nam",
+      "version": "1.0.0"
+    },
+    "content": {
+      "header": {
+        "title": "Cà Phê Việt + Plus",
+        "subtitle": "Premium Export Coffee",
+        "backgroundColor": "#D2691E",
+        "textColor": "#2D3748",
+        "logo": "/assets/logo.png",
+        "navigation": [
+          {
+            "name": "Trang chủ",
+            "href": "#home"
+          },
+          {
+            "name": "Sản phẩm",
+            "href": "#products"
+          },
+          {
+            "name": "Dịch vụ",
+            "href": "#services"
+          },
+          {
+            "name": "Về chúng tôi",
+            "href": "#about"
+          },
+          {
+            "name": "Liên hệ",
+            "href": "#contact"
+          }
+        ]
+      },
+      "hero": {
+        "title": "Cà Phê Việt Nam - Chất Lượng Quốc Tế",
+        "subtitle": "Xuất khẩu cà phê chất lượng cao",
+        "description": "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
+        "ctaText": "Tìm hiểu thêm",
+        "ctaSecondaryText": "Liên hệ ngay",
+        "image": "/assets/hero-coffee.jpg",
+        "benefits": [
+          {
+            "icon": "CheckCircle",
+            "text": "Chứng nhận quốc tế"
+          },
+          {
+            "icon": "Shield",
+            "text": "Chất lượng đảm bảo"
+          },
+          {
+            "icon": "Truck",
+            "text": "Giao hàng toàn cầu"
+          }
+        ],
+        "stats": [
+          {
+            "number": "500+",
+            "label": "Lô hàng xuất khẩu"
+          },
+          {
+            "number": "200+",
+            "label": "Khách hàng tin tưởng"
+          },
+          {
+            "number": "15+",
+            "label": "Năm kinh nghiệm"
+          }
+        ]
+      },
+      "about": {
+        "title": "Về Chúng Tôi",
+        "description": "Với hơn 20 năm kinh nghiệm trong ngành cà phê, chúng tôi tự hào là đối tác tin cậy của các nhà nhập khẩu quốc tế. Chúng tôi cam kết mang đến những hạt cà phê chất lượng nhất từ vùng đất Tây Nguyên.",
+        "image": "/assets/about-coffee.jpg",
+        "features": [
+          {
+            "icon": "Award",
+            "title": "Chứng nhận quốc tế",
+            "description": "Đạt tiêu chuẩn FDA, USDA, Organic"
+          },
+          {
+            "icon": "Globe",
+            "title": "Thị trường toàn cầu",
+            "description": "Xuất khẩu đến 25+ quốc gia"
+          },
+          {
+            "icon": "Users",
+            "title": "Đội ngũ chuyên gia",
+            "description": "20+ năm kinh nghiệm xuất khẩu"
+          }
+        ]
+      },
+      "problems": {
+        "title": "Thách Thức Hiện Tại",
+        "description": "Những khó khăn mà doanh nghiệp Việt Nam gặp phải khi xuất khẩu cà phê",
+        "backgroundColor": "#FFF8DC",
+        "textColor": "#2D3748",
+        "items": [
+          {
+            "id": "1",
+            "title": "Khó tiếp cận thị trường Mỹ",
+            "description": "Thiếu kết nối trực tiếp với nhà nhập khẩu và phân phối, rào cản thương mại phức tạp",
+            "icon": "AlertTriangle"
+          },
+          {
+            "id": "2",
+            "title": "Thủ tục phức tạp",
+            "description": "Quy trình xuất khẩu, chứng nhận chất lượng và kiểm dịch thực vật phức tạp",
+            "icon": "Clock"
+          },
+          {
+            "id": "3",
+            "title": "Giá cả không cạnh tranh",
+            "description": "Nhiều khâu trung gian làm tăng chi phí, giảm lợi nhuận của nông dân",
+            "icon": "DollarSign"
+          },
+          {
+            "id": "4",
+            "title": "Logistics phức tạp",
+            "description": "Vận chuyển, bảo quản và giao hàng quốc tế gặp nhiều thách thức",
+            "icon": "Truck"
+          }
+        ]
+      },
+      "solutions": {
+        "title": "Giải Pháp Của Chúng Tôi",
+        "description": "Những giải pháp toàn diện để vượt qua thách thức và phát triển bền vững",
+        "backgroundColor": "#F0F8FF",
+        "textColor": "#2D3748",
+        "items": [
+          {
+            "id": "1",
+            "title": "Kết nối trực tiếp",
+            "description": "Mạng lưới đối tác nhập khẩu rộng khắp tại Mỹ, loại bỏ trung gian, tối ưu hóa chuỗi cung ứng",
+            "benefit": "Tăng lợi nhuận 30-40%",
+            "icon": "Globe"
+          },
+          {
+            "id": "2",
+            "title": "Hỗ trợ toàn diện",
+            "description": "Từ chứng nhận chất lượng, kiểm dịch thực vật đến logistics và thủ tục hải quan",
+            "benefit": "Tiết kiệm 80% thời gian",
+            "icon": "Shield"
+          },
+          {
+            "id": "3",
+            "title": "Quy trình tối ưu",
+            "description": "Hệ thống quản lý hiện đại, theo dõi đơn hàng realtime, đảm bảo minh bạch",
+            "benefit": "Minh bạch 100%",
+            "icon": "Zap"
+          },
+          {
+            "id": "4",
+            "title": "Logistics chuyên nghiệp",
+            "description": "Đối tác vận chuyển uy tín, bảo quản chuyên nghiệp, giao hàng đúng hạn",
+            "benefit": "Đảm bảo chất lượng 99%",
+            "icon": "Package"
+          }
+        ]
+      },
+      "cta": {
+        "title": "Sẵn sàng bắt đầu hành trình xuất khẩu?",
+        "description": "Tư vấn miễn phí về quy trình xuất khẩu cà phê sang Mỹ, đánh giá tiềm năng sản phẩm và lập kế hoạch phát triển thị trường.",
+        "buttonText": "Đăng ký tư vấn miễn phí",
+        "buttonSecondaryText": "Tải tài liệu mẫu",
+        "backgroundColor": "#8B4513",
+        "textColor": "#FFFFFF",
+        "image": "/assets/cta-coffee.jpg"
+      },
+      "leadMagnet": {
+        "title": "Mở khóa thành công xuất nhập khẩu",
+        "description": "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2024' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ.",
+        "backgroundColor": "#F8F9FA",
+        "textColor": "#2D3748",
+        "guideTitle": "Hướng dẫn xuất khẩu đầy đủ",
+        "guideSubtitle": "Phiên bản 2024 - 45 trang",
+        "formTitle": "Tải về hướng dẫn miễn phí",
+        "formDescription": "Nhập thông tin bên dưới để có quyền truy cập ngay lập tức vào tài nguyên quý giá này.",
+        "buttonText": "Tải về hướng dẫn miễn phí ngay",
+        "features": [
+          {
+            "icon": "FileText",
+            "title": "Danh sách tài liệu đầy đủ",
+            "description": "Mọi biểu mẫu, chứng nhận và tài liệu cần thiết cho tuân thủ FDA"
+          },
+          {
+            "icon": "TrendingUp",
+            "title": "Phân tích thị trường & Xu hướng giá",
+            "description": "Dữ liệu thị trường cà phê Mỹ hiện tại và thông tin giá cả 2024"
+          },
+          {
+            "icon": "Shield",
+            "title": "Tiêu chuẩn chất lượng & Kiểm tra",
+            "description": "Yêu cầu chi tiết cho tiêu chuẩn chất lượng nhập khẩu Mỹ"
+          },
+          {
+            "icon": "CheckCircle",
+            "title": "Quy trình nhập khẩu từng bước",
+            "description": "Lịch trình rõ ràng từ đặt hàng đến giao hàng tại kho"
+          }
+        ],
+        "trustIndicators": [
+          {
+            "number": "5,000+",
+            "label": "Lượt tải"
+          },
+          {
+            "number": "92%",
+            "label": "Tỷ lệ thành công"
+          },
+          {
+            "number": "4.9/5",
+            "label": "Đánh giá người dùng"
+          }
+        ]
+      },
+      "products": {
+        "title": "Sản Phẩm Của Chúng Tôi",
+        "description": "Khám phá các loại cà phê đặc trưng của Việt Nam với hương vị độc đáo",
+        "backgroundColor": "#F0F4F8",
+        "textColor": "#2D3748",
+        "items": [
+          {
+            "id": "1",
+            "name": "Cà Phê Robusta",
+            "description": "Cà phê Robusta Việt Nam với hương vị đậm đà, hàm lượng caffeine cao, phù hợp cho espresso",
+            "price": "2.50 USD/kg",
+            "category": "Robusta",
+            "image": "/assets/robusta-coffee.jpg",
+            "features": [
+              "Hàm lượng caffeine cao",
+              "Hương vị đậm đà",
+              "Phù hợp espresso"
+            ]
+          },
+          {
+            "id": "2",
+            "name": "Cà Phê Arabica",
+            "description": "Cà phê Arabica Tây Nguyên với hương vị tinh tế, chua nhẹ, hương hoa quả đặc trưng",
+            "price": "4.20 USD/kg",
+            "category": "Arabica",
+            "image": "/assets/arabica-coffee.jpg",
+            "features": [
+              "Hương vị tinh tế",
+              "Chua nhẹ tự nhiên",
+              "Hương hoa quả"
+            ]
+          },
+          {
+            "id": "3",
+            "name": "Cà Phê Chồn",
+            "description": "Cà phê chồn cao cấp với hương vị độc đáo, được chế biến tự nhiên qua hệ tiêu hóa của chồn",
+            "price": "150 USD/kg",
+            "category": "Premium",
+            "image": "/assets/weasel-coffee.jpg",
+            "features": [
+              "Hương vị độc đáo",
+              "Chế biến tự nhiên",
+              "Sản lượng giới hạn"
+            ]
+          }
+        ],
+        "services": [
+          {
+            "id": "1",
+            "name": "Xuất khẩu cà phê",
+            "description": "Dịch vụ xuất khẩu cà phê chuyên nghiệp với đầy đủ chứng nhận quốc tế",
+            "icon": "Package",
+            "cta": "Tìm hiểu thêm"
+          },
+          {
+            "id": "2",
+            "name": "Logistics & Vận chuyển",
+            "description": "Giải pháp logistics toàn diện từ kho bãi đến giao hàng tận nơi",
+            "icon": "Truck",
+            "cta": "Tìm hiểu thêm"
+          },
+          {
+            "id": "3",
+            "name": "Tư vấn thủ tục",
+            "description": "Hỗ trợ hoàn thiện thủ tục xuất khẩu và chứng nhận chất lượng",
+            "icon": "FileText",
+            "cta": "Tìm hiểu thêm"
+          },
+          {
+            "id": "4",
+            "name": "Đào tạo & Phát triển",
+            "description": "Chương trình đào tạo nông dân về kỹ thuật trồng và chế biến cà phê",
+            "icon": "Users",
+            "cta": "Tìm hiểu thêm"
+          },
+          {
+            "id": "5",
+            "name": "Kiểm soát chất lượng",
+            "description": "Hệ thống kiểm soát chất lượng nghiêm ngặt theo tiêu chuẩn quốc tế",
+            "icon": "Shield",
+            "cta": "Tìm hiểu thêm"
+          },
+          {
+            "id": "6",
+            "name": "Phân tích thị trường",
+            "description": "Báo cáo phân tích thị trường và xu hướng tiêu dùng cà phê",
+            "icon": "TrendingUp",
+            "cta": "Tìm hiểu thêm"
+          }
+        ]
+      },
+      "whyChooseUs": {
+        "title": "Tại Sao Chọn VietCoffee Export?",
+        "subtitle": "Chúng tôi kết hợp di sản nông nghiệp Việt Nam với chuyên môn xuất khẩu hiện đại để mang lại giá trị vượt trội cho đối tác Mỹ.",
+        "backgroundColor": "#FFFFFF",
+        "textColor": "#2D3748",
+        "strengths": [
+          {
+            "icon": "Award",
+            "title": "Chứng nhận quốc tế",
+            "description": "FDA, USDA, Organic, Fair Trade"
+          },
+          {
+            "icon": "Globe",
+            "title": "Thị trường toàn cầu",
+            "description": "Xuất khẩu đến 25+ quốc gia"
+          },
+          {
+            "icon": "Users",
+            "title": "Đội ngũ chuyên gia",
+            "description": "20+ năm kinh nghiệm xuất khẩu"
+          },
+          {
+            "icon": "Shield",
+            "title": "Chất lượng đảm bảo",
+            "description": "Hệ thống kiểm soát chất lượng nghiêm ngặt"
+          },
+          {
+            "icon": "Clock",
+            "title": "Giao hàng đúng hạn",
+            "description": "Cam kết giao hàng đúng thời gian"
+          },
+          {
+            "icon": "TrendingUp",
+            "title": "Tăng trưởng bền vững",
+            "description": "Phát triển bền vững cùng nông dân"
+          }
+        ],
+        "mission": {
+          "title": "Sứ mệnh",
+          "description": "Mang hương vị cà phê Việt Nam đến thế giới, tạo giá trị bền vững cho nông dân và đối tác quốc tế."
+        },
+        "vision": {
+          "title": "Tầm nhìn",
+          "description": "Trở thành đối tác xuất khẩu cà phê hàng đầu Việt Nam, được tin tưởng bởi thị trường quốc tế."
+        },
+        "cta": {
+          "title": "Bắt đầu hợp tác ngay hôm nay",
+          "description": "Liên hệ với chúng tôi để được tư vấn miễn phí về cơ hội xuất khẩu cà phê.",
+          "buttonText": "Liên hệ ngay"
+        }
+      },
+      "testimonials": {
+        "title": "Khách Hàng Nói Gì Về Chúng Tôi",
+        "subtitle": "Lời chứng thực từ các đối tác và khách hàng quốc tế",
+        "backgroundColor": "#F5F5DC",
+        "textColor": "#2D3748",
+        "testimonials": [
+          {
+            "id": "1",
+            "name": "Sarah Johnson",
+            "title": "Coffee Buyer",
+            "company": "Starbucks Reserve",
+            "content": "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
+            "rating": 5,
+            "image": "https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face"
+          },
+          {
+            "id": "2",
+            "name": "Michael Chen",
+            "title": "Quality Manager",
+            "company": "Blue Bottle Coffee",
+            "content": "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
+            "rating": 5,
+            "image": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
+          },
+          {
+            "id": "3",
+            "name": "David Rodriguez",
+            "title": "Import Director",
+            "company": "Intelligentsia",
+            "content": "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
+            "rating": 5,
+            "image": "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face"
+          }
+        ],
+        "partners": [
+          "Starbucks Reserve",
+          "Blue Bottle Coffee",
+          "Intelligentsia",
+          "Counter Culture",
+          "Stumptown Coffee",
+          "La Colombe"
+        ],
+        "stats": [
+          {
+            "number": "500+",
+            "label": "Lô hàng xuất khẩu",
+            "sublabel": "Cà phê chất lượng cao"
+          },
+          {
+            "number": "200+",
+            "label": "Khách hàng tin tưởng",
+            "sublabel": "Từ 25 tiểu bang Mỹ"
+          },
+          {
+            "number": "15+",
+            "label": "Năm kinh nghiệm",
+            "sublabel": "Thị trường quốc tế"
+          },
+          {
+            "number": "98%",
+            "label": "Tỷ lệ hài lòng",
+            "sublabel": "Khách hàng đánh giá"
+          }
+        ]
+      },
+      "blog": {
+        "title": "Thông Tin Ngành Mới Nhất",
+        "subtitle": "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về xuất khẩu cà phê Việt Nam và thị trường nhập khẩu Mỹ.",
+        "backgroundColor": "#F8F9FA",
+        "textColor": "#2D3748",
+        "categories": [
+          {
+            "name": "Thị trường",
+            "count": 15
+          },
+          {
+            "name": "Kỹ thuật",
+            "count": 12
+          },
+          {
+            "name": "Xuất khẩu",
+            "count": 8
+          },
+          {
+            "name": "Chất lượng",
+            "count": 10
+          }
+        ],
+        "featuredPost": {
+          "title": "Xu hướng thị trường cà phê Mỹ 2024",
+          "excerpt": "Phân tích chi tiết về xu hướng tiêu dùng cà phê tại Mỹ và cơ hội cho cà phê Việt Nam.",
+          "author": "Nguyễn Văn A",
+          "date": "2024-01-15",
+          "image": "/assets/blog-featured.jpg",
+          "category": "Thị trường"
+        },
+        "posts": [
+          {
+            "id": "1",
+            "title": "Hướng dẫn xuất khẩu cà phê sang Mỹ",
+            "excerpt": "Quy trình chi tiết từ chuẩn bị hồ sơ đến giao hàng thành công.",
+            "author": "Trần Thị B",
+            "date": "2024-01-10",
+            "image": "/assets/blog-1.jpg",
+            "category": "Xuất khẩu"
+          },
+          {
+            "id": "2",
+            "title": "Tiêu chuẩn chất lượng FDA cho cà phê",
+            "excerpt": "Những yêu cầu cần thiết để đạt tiêu chuẩn FDA khi xuất khẩu cà phê.",
+            "author": "Lê Văn C",
+            "date": "2024-01-08",
+            "image": "/assets/blog-2.jpg",
+            "category": "Chất lượng"
+          },
+          {
+            "id": "3",
+            "title": "Kỹ thuật trồng cà phê bền vững",
+            "excerpt": "Phương pháp canh tác hiện đại giúp tăng năng suất và chất lượng.",
+            "author": "Phạm Thị D",
+            "date": "2024-01-05",
+            "image": "/assets/blog-3.jpg",
+            "category": "Kỹ thuật"
+          }
+        ],
+        "newsletter": {
+          "title": "Đăng ký nhận tin tức",
+          "description": "Nhận thông tin mới nhất về thị trường cà phê và cơ hội xuất khẩu.",
+          "placeholder": "Email của bạn",
+          "buttonText": "Đăng ký"
+        }
+      },
+      "footer": {
+        "companyName": "Cà Phê Việt",
+        "description": "Chuyên cung cấp cà phê chất lượng cao cho thị trường quốc tế với cam kết về chất lượng và bền vững",
+        "backgroundColor": "#D2691E",
+        "textColor": "#F9FAFB",
+        "contact": {
+          "phone": "+84 123 456 789",
+          "email": "info@capheviet.com",
+          "address": "123 Đường ABC, Quận 1, TP.HCM",
+          "businessHours": "Thứ 2-Thứ 6: 8AM-6PM (EST)"
+        },
+        "quickLinks": [
+          {
+            "name": "Về Chúng Tôi",
+            "href": "#about"
+          },
+          {
+            "name": "Sản Phẩm",
+            "href": "#products"
+          },
+          {
+            "name": "Dịch Vụ Xuất Khẩu",
+            "href": "#services"
+          },
+          {
+            "name": "Đảm Bảo Chất Lượng",
+            "href": "#quality"
+          },
+          {
+            "name": "Liên Hệ",
+            "href": "#contact"
+          }
+        ],
+        "resources": [
+          {
+            "name": "Hướng Dẫn Xuất/Nhập Khẩu",
+            "href": "#guide"
+          },
+          {
+            "name": "Báo Cáo Thị Trường",
+            "href": "#reports"
+          },
+          {
+            "name": "Tài Liệu",
+            "href": "#docs"
+          },
+          {
+            "name": "FAQ",
+            "href": "#faq"
+          },
+          {
+            "name": "Blog",
+            "href": "#blog"
+          }
+        ],
+        "legal": [
+          {
+            "name": "Chính Sách Bảo Mật",
+            "href": "#privacy"
+          },
+          {
+            "name": "Điều Khoản Dịch Vụ",
+            "href": "#terms"
+          },
+          {
+            "name": "Chính Sách Cookie",
+            "href": "#cookies"
+          },
+          {
+            "name": "Tuân Thủ",
+            "href": "#compliance"
+          }
+        ],
+        "socialLinks": [
+          {
+            "icon": "Facebook",
+            "href": "#",
+            "label": "Facebook"
+          },
+          {
+            "icon": "Twitter",
+            "href": "#",
+            "label": "Twitter"
+          },
+          {
+            "icon": "Linkedin",
+            "href": "#",
+            "label": "LinkedIn"
+          },
+          {
+            "icon": "Youtube",
+            "href": "#",
+            "label": "YouTube"
+          }
+        ]
+      }
+    },
+    "themeSettings": {
+      "colors": {
+        "primary": "#D2691E",
+        "secondary": "#8B4513",
+        "accent": "#FFA500",
+        "text": "#2D3748",
+        "background": "#FFFFFF",
+        "border": "#E2E8F0"
+      },
+      "typography": {
+        "fontFamily": "Inter",
+        "fontSize": "16px",
+        "lineHeight": "1.6",
+        "fontWeight": "400",
+        "headingSize": "xl",
+        "bodySize": "base"
+      },
+      "layout": {
+        "containerWidth": "1200px",
+        "spacing": "comfortable",
+        "borderRadius": "medium"
+      },
+      "components": {
+        "button": {
+          "rounded": false
+        }
+      }
+    },
+    "editableSections": [
+      {
+        "name": "header",
+        "description": "Thông tin header và navigation",
+        "editableFields": ["title", "subtitle", "backgroundColor", "textColor", "logo", "navigation"]
+      },
+      {
+        "name": "hero",
+        "description": "Phần hero chính của trang",
+        "editableFields": ["title", "subtitle", "description", "ctaText", "image", "benefits", "stats"]
+      },
+      {
+        "name": "about",
+        "description": "Thông tin về công ty",
+        "editableFields": ["title", "description", "image", "features"]
+      },
+      {
+        "name": "problems",
+        "description": "Các vấn đề/thách thức",
+        "editableFields": ["title", "description", "backgroundColor", "textColor", "items"]
+      },
+      {
+        "name": "solutions",
+        "description": "Các giải pháp",
+        "editableFields": ["title", "description", "backgroundColor", "textColor", "items"]
+      },
+      {
+        "name": "leadMagnet",
+        "description": "Lead magnet và form đăng ký",
+        "editableFields": ["title", "description", "guideTitle", "formTitle", "features", "trustIndicators"]
+      },
+      {
+        "name": "products",
+        "description": "Sản phẩm và dịch vụ",
+        "editableFields": ["title", "description", "items", "services"]
+      },
+      {
+        "name": "whyChooseUs",
+        "description": "Lý do chọn công ty",
+        "editableFields": ["title", "subtitle", "strengths", "mission", "vision", "cta"]
+      },
+      {
+        "name": "testimonials",
+        "description": "Đánh giá khách hàng",
+        "editableFields": ["title", "subtitle", "testimonials", "partners", "stats"]
+      },
+      {
+        "name": "blog",
+        "description": "Blog và tin tức",
+        "editableFields": ["title", "subtitle", "categories", "featuredPost", "posts", "newsletter"]
+      },
+      {
+        "name": "footer",
+        "description": "Footer và thông tin liên hệ",
+        "editableFields": ["companyName", "description", "contact", "quickLinks", "resources", "legal", "socialLinks"]
+      }
+    ],
+    "imageAssets": [
+      "/assets/hero-coffee.jpg",
+      "/assets/about-coffee.jpg",
+      "/assets/robusta-coffee.jpg",
+      "/assets/arabica-coffee.jpg",
+      "/assets/weasel-coffee.jpg",
+      "/assets/cta-coffee.jpg",
+      "/assets/blog-featured.jpg",
+      "/assets/blog-1.jpg",
+      "/assets/blog-2.jpg",
+      "/assets/blog-3.jpg",
+      "/assets/logo.png"
+    ],
+    "icons": [
+      "CheckCircle",
+      "Shield",
+      "Truck",
+      "AlertTriangle",
+      "Clock",
+      "DollarSign",
+      "Globe",
+      "Zap",
+      "Package",
+      "FileText",
+      "Users",
+      "TrendingUp",
+      "Award",
+      "Facebook",
+      "Twitter",
+      "Linkedin",
+      "Youtube"
+    ]
+  }

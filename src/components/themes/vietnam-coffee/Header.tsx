@@ -1,10 +1,13 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { Menu, Phone, Download, Globe, Coffee } from "lucide-react";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu, Phone, Download, Globe, Coffee, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { ThemeParams } from "@/types";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface HeaderContent {
   title?: string;
@@ -20,7 +23,7 @@ interface HeaderProps {
 }
 
 const Header = ({ theme, content }: HeaderProps) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   // Get typography styles
   const getTypographyStyles = () => {
@@ -72,9 +75,37 @@ const Header = ({ theme, content }: HeaderProps) => {
     }
   }
 
+  const navigation = [
+    { name: "Trang chủ", href: "#home" },
+    { name: "Về chúng tôi", href: "#about" },
+    { 
+      name: "Sản phẩm", 
+      href: "#products",
+      dropdown: [
+        { name: "Cà phê Robusta", href: "#robusta" },
+        { name: "Cà phê Arabica", href: "#arabica" },
+        { name: "Cà phê Chồn", href: "#weasel" },
+        { name: "Cà phê Đặc biệt", href: "#specialty" }
+      ]
+    },
+    {
+      name: "Tài nguyên",
+      href: "#resources",
+      dropdown: [
+        { name: "Cẩm nang XNK 2024", href: "#guide" },
+        { name: "Thị trường", href: "#market" },
+        { name: "Tài liệu", href: "#documentation" }
+      ]
+    },
+    { name: "Liên hệ", href: "#contact" }
+  ];
+
   return (
     <header 
-      className={`backdrop-blur-sm border-b sticky top-0 z-50 shadow-lg ${getBorderRadiusClass()}`}
+      className={cn(
+        "backdrop-blur-sm border-b sticky top-0 z-50 shadow-lg",
+        getBorderRadiusClass()
+      )}
       style={{ 
         backgroundColor: content.backgroundColor || theme.sections?.header?.backgroundColor || theme.colors.secondary,
         color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
@@ -137,61 +168,51 @@ const Header = ({ theme, content }: HeaderProps) => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a 
-              href="#" 
-              className="hover:opacity-80 transition-colors"
-              style={{ 
-                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                fontSize: theme.typography?.fontSize || '16px'
-              }}
-            >
-              Trang chủ
-            </a>
-            <a 
-              href="#about" 
-              className="hover:opacity-80 transition-colors"
-              style={{ 
-                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                fontSize: theme.typography?.fontSize || '16px'
-              }}
-            >
-              Về chúng tôi
-            </a>
-            <div className="relative group">
-              <a 
-                href="#products" 
-                className="hover:opacity-80 transition-colors"
-                style={{ 
-                  color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                Sản phẩm
-              </a>
-            </div>
-            <a 
-              href="#resources" 
-              className="hover:opacity-80 transition-colors"
-              style={{ 
-                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                fontSize: theme.typography?.fontSize || '16px'
-              }}
-            >
-              Tài nguyên
-            </a>
-            <a 
-              href="#contact" 
-              className="hover:opacity-80 transition-colors"
-              style={{ 
-                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                fontSize: theme.typography?.fontSize || '16px'
-              }}
-            >
-              Liên hệ
-            </a>
-          
-          </nav>
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList className="space-x-6">
+              {navigation.map((item) => (
+                <NavigationMenuItem key={item.name}>
+                  {item.dropdown ? (
+                    <>
+                      <NavigationMenuTrigger 
+                        className="text-foreground hover:text-primary transition-colors"
+                        style={{ 
+                          color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {item.name}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <div className="w-48 p-2">
+                          {item.dropdown.map((subItem) => (
+                            <NavigationMenuLink
+                              key={subItem.name}
+                              href={subItem.href}
+                              className="block px-3 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
+                            >
+                              {subItem.name}
+                            </NavigationMenuLink>
+                          ))}
+                        </div>
+                      </NavigationMenuContent>
+                    </>
+                  ) : (
+                    <NavigationMenuLink
+                      href={item.href}
+                      className="text-foreground hover:text-primary transition-colors font-medium"
+                      style={{ 
+                        color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
+                        fontSize: theme.typography?.fontSize || '16px'
+                      }}
+                    >
+                      {item.name}
+                    </NavigationMenuLink>
+                  )}
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
 
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center space-x-3">
@@ -206,114 +227,95 @@ const Header = ({ theme, content }: HeaderProps) => {
             <Button 
               size="sm"
               style={{ backgroundColor: theme.colors.primary }}
-              className={`hover:${theme.colors.secondary} transition-colors`}
+              className="hover:opacity-90 transition-colors"
             >
               <Phone size={16} />
               Tư vấn miễn phí
             </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            style={{ 
-              color: content.textColor || theme.colors.text,
-              ...getTypographyStyles()
-            }}
-          >
-            <Menu size={20} />
-          </Button>
-        </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div 
-            className="md:hidden mt-4 pb-4 space-y-4 border-t pt-4 animate-fade-in"
-            style={{ 
-              borderColor: theme.colors?.border || theme.colors?.primary,
-              ...getTypographyStyles()
-            }}
-          >
-            <nav className="flex flex-col space-y-3">
-              <a 
-                href="#" 
-                className="hover:opacity-80 transition-colors"
+          {/* Mobile Menu */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button 
+                variant="ghost" 
+                size="icon"
                 style={{ 
                   color: content.textColor || theme.colors.text,
-                  fontSize: theme.typography?.fontSize || '16px'
+                  ...getTypographyStyles()
                 }}
               >
-                Trang chủ
-              </a>
-              <a 
-                href="#about" 
-                className="hover:opacity-80 transition-colors"
-                style={{ 
-                  color: content.textColor || theme.colors.text,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                Về chúng tôi
-              </a>
-              <a 
-                href="#products" 
-                className="hover:opacity-80 transition-colors"
-                style={{ 
-                  color: content.textColor || theme.colors.text,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                Sản phẩm
-              </a>
-              <a 
-                href="#resources" 
-                className="hover:opacity-80 transition-colors"
-                style={{ 
-                  color: content.textColor || theme.colors.text,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                Tài nguyên
-              </a>
-              <a 
-                href="#contact" 
-                className="hover:opacity-80 transition-colors"
-                style={{ 
-                  color: content.textColor || theme.colors.text,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                Liên hệ
-              </a>
-            </nav>
-            <div 
-              className="flex flex-col space-y-2 pt-3 border-t"
-              style={{ borderColor: theme.colors?.border || theme.colors?.primary }}
+                <Menu size={20} />
+              </Button>
+            </SheetTrigger>
+            <SheetContent 
+              side="right" 
+              className="w-80"
+              style={{ 
+                backgroundColor: content.backgroundColor || theme.sections?.header?.backgroundColor || theme.colors.secondary,
+                color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
+                borderColor: theme.colors?.border || theme.colors?.primary,
+                ...getTypographyStyles()
+              }}
             >
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="w-full"
-                style={getButtonStyles('outline')}
-              >
-                <Download size={16} />
-                Cẩm nang XNK 2024
-              </Button>
-              <Button 
-                variant="default" 
-                size="sm" 
-                className="w-full"
-                style={{...getButtonStyles('premium'), backgroundColor: theme.colors.primary}}
-              >
-                <Phone size={16} />
-                Tư vấn miễn phí
-              </Button>
-            </div>
-          </div>
-        )}
+              <div className="flex flex-col space-y-4 mt-8">
+                {navigation.map((item) => (
+                  <div key={item.name}>
+                    <a
+                      href={item.href}
+                      className="block py-2 text-lg font-medium text-foreground hover:text-primary transition-colors"
+                      style={{ 
+                        color: content.textColor || theme.colors.text,
+                        fontSize: theme.typography?.fontSize || '16px'
+                      }}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.name}
+                    </a>
+                    {item.dropdown && (
+                      <div className="ml-4 mt-2 space-y-2">
+                        {item.dropdown.map((subItem) => (
+                          <a
+                            key={subItem.name}
+                            href={subItem.href}
+                            className="block py-1 text-sm text-muted-foreground hover:text-primary transition-colors"
+                            style={{ 
+                              color: content.textColor || theme.colors.text,
+                              fontSize: theme.typography?.fontSize || '16px'
+                            }}
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {subItem.name}
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                <div 
+                  className="border-t pt-4 space-y-3"
+                  style={{ borderColor: theme.colors?.border || theme.colors?.primary }}
+                >
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    style={getButtonStyles('outline')}
+                  >
+                    <Download size={16} />
+                    Cẩm nang XNK 2024
+                  </Button>
+                  <Button 
+                    className="w-full"
+                    style={{...getButtonStyles('premium'), backgroundColor: theme.colors.primary}}
+                  >
+                    <Phone size={16} />
+                    Tư vấn miễn phí
+                  </Button>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

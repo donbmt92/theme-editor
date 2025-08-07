@@ -191,8 +191,10 @@ export interface ThemeContent {
     logo?: string
     title?: string
     subtitle?: string
-    menuItems?: Array<{
-      label: string
+    backgroundColor?: string
+    textColor?: string
+    navigation?: Array<{
+      name: string
       href: string
     }>
     contactInfo?: {
@@ -212,7 +214,7 @@ export interface ThemeContent {
     subtitle?: string
     description?: string
     ctaText?: string
-    secondaryCtaText?: string
+    ctaSecondaryText?: string
     image?: string
     backgroundImage?: string
     unsplashImageUrl?: string // Add Unsplash URL field
@@ -220,6 +222,14 @@ export interface ThemeContent {
     overlayColor?: string
     backgroundColor?: string
     textColor?: string
+    benefits?: Array<{
+      icon: string
+      text: string
+    }>
+    stats?: Array<{
+      number: string
+      label: string
+    }>
     trustIndicators?: Array<{
       number: string
       label: string
@@ -233,6 +243,11 @@ export interface ThemeContent {
     image?: string
     backgroundColor?: string
     textColor?: string
+    features?: Array<{
+      icon: string
+      title: string
+      description: string
+    }>
   }
   
   // Problems
@@ -242,10 +257,10 @@ export interface ThemeContent {
     backgroundColor?: string
     textColor?: string
     items?: Array<{
-      id?: string
+      id: string
       title: string
       description: string
-      icon?: string
+      icon: string
     }>
   }
   
@@ -256,11 +271,11 @@ export interface ThemeContent {
     backgroundColor?: string
     textColor?: string
     items?: Array<{
-      id?: string
+      id: string
       title: string
       description: string
       benefit: string
-      icon?: string
+      icon: string
     }>
   }
   
@@ -269,8 +284,10 @@ export interface ThemeContent {
     title?: string
     description?: string
     buttonText?: string
+    buttonSecondaryText?: string
     backgroundColor?: string
     textColor?: string
+    image?: string
   }
   
   // Products
@@ -286,6 +303,14 @@ export interface ThemeContent {
       price?: string
       category?: string
       image?: string
+      features?: Array<string>
+    }>
+    services?: Array<{
+      id: string
+      name: string
+      description: string
+      icon: string
+      cta: string
     }>
   }
   
@@ -298,17 +323,17 @@ export interface ThemeContent {
     testimonials?: Array<{
       id?: string
       name: string
-      position: string
+      title: string
       company: string
       content: string
-      avatar?: string
-      avatarImage?: string
+      image?: string
       rating?: number
     }>
-    partners?: Array<{ name: string; logo?: string }>
+    partners?: Array<string>
     stats?: Array<{
       number: string
       label: string
+      sublabel?: string
     }>
   }
   
@@ -320,34 +345,110 @@ export interface ThemeContent {
     backgroundColor?: string
     textColor?: string
     quickLinks?: Array<{
-      label: string
+      name: string
       href: string
     }>
-    services?: Array<{
-      label: string
+    resources?: Array<{
+      name: string
       href: string
     }>
     contact?: {
       phone?: string
       email?: string
       address?: string
+      businessHours?: string
     }
     socialLinks?: Array<{
-      platform: string
-      url: string
-      icon?: string
+      icon: string
+      href: string
+      label: string
+    }>
+    legal?: Array<{
+      name: string
+      href: string
+    }>
+  }
+
+  // Lead Magnet
+  leadMagnet?: {
+    title?: string
+    description?: string
+    backgroundColor?: string
+    textColor?: string
+    guideTitle?: string
+    guideSubtitle?: string
+    formTitle?: string
+    formDescription?: string
+    buttonText?: string
+    features?: Array<{
+      icon: string
+      title: string
+      description: string
+    }>
+    trustIndicators?: Array<{
+      number: string
+      label: string
+    }>
+  }
+
+  // Why Choose Us
+  whyChooseUs?: {
+    title?: string
+    subtitle?: string
+    backgroundColor?: string
+    textColor?: string
+    strengths?: Array<{
+      icon: string
+      title: string
+      description: string
+    }>
+    mission?: {
+      title: string
+      description: string
+    }
+    vision?: {
+      title: string
+      description: string
+    }
+    cta?: {
+      title: string
+      description: string
+      buttonText: string
+    }
+  }
+
+  // Blog
+  blog?: {
+    title?: string
+    subtitle?: string
+    backgroundColor?: string
+    textColor?: string
+    categories?: Array<{
+      name: string
+      count: number
+    }>
+    featuredPost?: {
+      title: string
+      excerpt: string
+      author: string
+      date: string
+      image: string
+      category: string
+    }
+    posts?: Array<{
+      id: string
+      title: string
+      excerpt: string
+      author: string
+      date: string
+      image: string
+      category: string
     }>
     newsletter?: {
-      title?: string
-      description?: string
-      placeholder?: string
-      buttonText?: string
-    }
-    legal?: {
-      copyright?: string
-      privacyUrl?: string
-      termsUrl?: string
-      sitemapUrl?: string
+      title: string
+      description: string
+      placeholder: string
+      buttonText: string
     }
   }
 }
