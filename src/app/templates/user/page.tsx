@@ -10,7 +10,8 @@ import { Plus, Eye } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import AIContentGenerator from '@/components/ui/ai-content-generator'
-import { Toast, ToastContainer, useToast } from '@/components/ui/toast'
+import { ToastProvider, ToastViewport, Toast, ToastTitle, ToastDescription, ToastClose } from '@/components/ui/toast'
+import { useToast } from '@/hooks/use-toast'
 import { PageLoader } from '@/components/ui/loading-spinner'
 import { ErrorMessage } from '@/components/ui/error-message'
 import { useErrorHandler } from '@/components/ui/error-boundary'
@@ -460,19 +461,20 @@ const UserTemplatesPageContent = () => {
         forceOpen={true}
       />
 
-      {/* Toast Container */}
-      <ToastContainer>
-        {toasts.map((toastItem) => (
-          <Toast
-            key={toastItem.id}
-            title={toastItem.title}
-            description={toastItem.description}
-            variant={toastItem.variant}
-            duration={toastItem.duration}
-            onClose={() => dismiss(toastItem.id)}
-          />
+      {/* Toasts */}
+      <ToastProvider>
+        {toasts.map(({ id, title, description, action, ...props }) => (
+          <Toast key={id} {...props}>
+            <div className="grid gap-1">
+              {title && <ToastTitle>{title}</ToastTitle>}
+              {description && <ToastDescription>{description}</ToastDescription>}
+            </div>
+            {action}
+            <ToastClose />
+          </Toast>
         ))}
-      </ToastContainer>
+        <ToastViewport />
+      </ToastProvider>
     </div>
   )
 }

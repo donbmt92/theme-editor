@@ -212,13 +212,15 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
                       color: content.textColor || theme.colors?.text || "#2D3748",
                     }}
                   >
-                    "{testimonial.content || ''}"
+                    &ldquo;{testimonial.content || ''}&rdquo;
                   </p>
                 </div>
                 
                 <div className="flex items-center">
                   <img
-                    src={testimonial.image || `https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face`}
+                    src={testimonial.image && testimonial.image.startsWith('/uploads/') 
+                      ? testimonial.image 
+                      : testimonial.image || `https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face`}
                     alt={testimonial.name}
                     className="w-12 h-12 rounded-full mr-4 object-cover"
                   />

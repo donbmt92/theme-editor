@@ -8,6 +8,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'inter': ['var(--font-inter)', 'Inter', 'sans-serif'],
+        'poppins': ['var(--font-poppins)', 'Poppins', 'sans-serif'],
+        'roboto': ['var(--font-roboto)', 'Roboto', 'sans-serif'],
+        'open-sans': ['var(--font-open-sans)', 'Open Sans', 'sans-serif'],
+        'montserrat': ['var(--font-montserrat)', 'Montserrat', 'sans-serif'],
+        'lato': ['var(--font-lato)', 'Lato', 'sans-serif'],
+        'nunito': ['var(--font-nunito)', 'Nunito', 'sans-serif'],
+        'raleway': ['var(--font-raleway)', 'Raleway', 'sans-serif'],
+        'playfair-display': ['var(--font-playfair-display)', 'Playfair Display', 'serif'],
+        'merriweather': ['var(--font-merriweather)', 'Merriweather', 'serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

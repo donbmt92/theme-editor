@@ -3,7 +3,8 @@
 
 import { useState, useRef } from 'react'
 import { Button } from './button'
-import { Upload, X, Image as ImageIcon } from 'lucide-react'
+import { Upload, X, Image as ImageIcon, Download as DownloadIcon, ExternalLink } from 'lucide-react'
+import { useUpload } from '@/hooks/use-upload'
 
 interface ImageUploadProps {
   value: string
@@ -20,48 +21,22 @@ const ImageUpload = ({
   recommendedSize,
   aspectRatio 
 }: ImageUploadProps) => {
-  const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  
+  const { isUploading, error, upload } = useUpload({
+    onSuccess: (url) => {
+      onChange(url)
+    },
+    onError: (errorMessage) => {
+      alert(`Upload failed: ${errorMessage}`)
+    }
+  })
 
   const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (!file) return
-    console.log('file', file)
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      alert('Please select an image file')
-      return
-    }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('Image size should be less than 5MB')
-      return
-    }
-
-    setIsUploading(true)
-
-    try {
-      // Create a preview URL for immediate display
-      const previewUrl = URL.createObjectURL(file)
-      onChange(previewUrl)
-
-      // Here you would typically upload to your server
-      // For now, we'll just use the preview URL
-      // In a real app, you'd upload to your server and get back a URL
-      
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // For demo purposes, keep the preview URL
-      // In production, replace with actual uploaded URL
-      onChange(previewUrl)
-    } catch (error) {
-      console.error('Upload failed:', error)
-      alert('Upload failed. Please try again.')
-    } finally {
-      setIsUploading(false)
-    }
+    await upload(file)
   }
 
   const handleRemove = () => {
@@ -82,6 +57,13 @@ const ImageUpload = ({
         <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded-md">
           <strong>Kích thước khuyến nghị:</strong> {recommendedSize}
           {aspectRatio && <span className="ml-2">• Tỷ lệ: {aspectRatio}</span>}
+        </div>
+      )}
+
+      {/* Error Display */}
+      {error && (
+        <div className="text-xs text-red-500 bg-red-50 p-2 rounded-md">
+          {error}
         </div>
       )}
 
@@ -107,6 +89,27 @@ const ImageUpload = ({
                 </Button>
               </div>
             </div>
+
+            {/* Actions: Download / Open */}
+            <div className="mt-2 flex items-center gap-2">
+              <a
+                href={value}
+                download
+                className="inline-flex items-center px-2.5 py-1.5 text-xs rounded-md border border-gray-300 hover:bg-gray-50"
+              >
+                <DownloadIcon size={14} className="mr-1" />
+                Tải xuống
+              </a>
+              <a
+                href={value}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-2.5 py-1.5 text-xs rounded-md border border-gray-300 hover:bg-gray-50"
+              >
+                <ExternalLink size={14} className="mr-1" />
+                Mở ảnh
+              </a>
+            </div>
           </div>
         ) : (
           <div
@@ -118,7 +121,7 @@ const ImageUpload = ({
               <div>
                 <p className="text-sm font-medium text-gray-900">{placeholder}</p>
                 <p className="text-xs text-gray-500">
-                  Click to upload • PNG, JPG, GIF up to 5MB
+                  Click to upload • PNG, JPG, GIF, WebP up to 5MB
                 </p>
               </div>
             </div>

@@ -15,6 +15,8 @@ interface HeaderContent {
   logo?: string;
   backgroundColor?: string;
   textColor?: string;
+  primaryColor?: string;
+  colorMode?: 'theme' | 'custom';
 }
 
 interface HeaderProps {
@@ -24,6 +26,16 @@ interface HeaderProps {
 
 const Header = ({ theme, content }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const scrollToGuide = (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    const el = document.getElementById('guide');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.location.hash = '#guide';
+    }
+  };
 
   // Get typography styles
   const getTypographyStyles = () => {
@@ -102,14 +114,15 @@ const Header = ({ theme, content }: HeaderProps) => {
 
   return (
     <header 
-      className={cn(
-        "backdrop-blur-sm border-b sticky top-0 z-50 shadow-lg",
-        getBorderRadiusClass()
-      )}
+      className="sticky top-0 z-50 w-full border-b transition-all duration-300"
       style={{ 
-        backgroundColor: content.backgroundColor || theme.sections?.header?.backgroundColor || theme.colors.secondary,
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
+          ? content.backgroundColor 
+          : theme.sections?.header?.backgroundColor || theme.colors.secondary || '#FFFFFF',
+        borderColor: content.colorMode === 'custom' && content.primaryColor 
+          ? content.primaryColor 
+          : theme.colors?.border || theme.colors?.primary,
         color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-        borderColor: theme.colors?.border || theme.colors?.primary,
         ...getTypographyStyles()
       }}
     >
@@ -190,6 +203,11 @@ const Header = ({ theme, content }: HeaderProps) => {
                               key={subItem.name}
                               href={subItem.href}
                               className="block px-3 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
+                              onClick={(e) => {
+                                if (subItem.href === '#guide') {
+                                  scrollToGuide(e as unknown as React.MouseEvent);
+                                }
+                              }}
                             >
                               {subItem.name}
                             </NavigationMenuLink>
@@ -220,13 +238,18 @@ const Header = ({ theme, content }: HeaderProps) => {
               variant="outline" 
               size="sm"
               style={getButtonStyles('outline')}
+              onClick={scrollToGuide}
             >
               <Download size={16} />
               Cẩm nang XNK 2024
             </Button>
             <Button 
               size="sm"
-              style={{ backgroundColor: theme.colors.primary }}
+              style={{ 
+                backgroundColor: content.colorMode === 'custom' && content.primaryColor 
+                  ? content.primaryColor 
+                  : theme.colors.primary 
+              }}
               className="hover:opacity-90 transition-colors"
             >
               <Phone size={16} />
@@ -252,9 +275,13 @@ const Header = ({ theme, content }: HeaderProps) => {
               side="right" 
               className="w-80"
               style={{ 
-                backgroundColor: content.backgroundColor || theme.sections?.header?.backgroundColor || theme.colors.secondary,
+                backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
+                  ? content.backgroundColor 
+                  : theme.sections?.header?.backgroundColor || theme.colors.secondary,
                 color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                borderColor: theme.colors?.border || theme.colors?.primary,
+                borderColor: content.colorMode === 'custom' && content.primaryColor 
+                  ? content.primaryColor 
+                  : theme.colors?.border || theme.colors?.primary,
                 ...getTypographyStyles()
               }}
             >
@@ -283,7 +310,15 @@ const Header = ({ theme, content }: HeaderProps) => {
                               color: content.textColor || theme.colors.text,
                               fontSize: theme.typography?.fontSize || '16px'
                             }}
-                            onClick={() => setIsOpen(false)}
+                            onClick={(e) => {
+                              setIsOpen(false)
+                              if (subItem.href === '#guide') {
+                                e.preventDefault();
+                                const el = document.getElementById('guide');
+                                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                else window.location.hash = '#guide';
+                              }
+                            }}
                           >
                             {subItem.name}
                           </a>

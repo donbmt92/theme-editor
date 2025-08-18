@@ -2119,7 +2119,26 @@ function generateStaticProductsSection(content: any, colors: any, themeParams: a
     }
   }
 
-  const getButtonStyles = (variant: 'outline' | 'premium' = 'outline') => {
+  type OutlineButtonStyles = {
+    fontFamily: string
+    fontSize: string
+    fontWeight: string
+    borderColor: string
+    color: string
+    borderRadius: string
+  }
+  type PremiumButtonStyles = {
+    fontFamily: string
+    fontSize: string
+    fontWeight: string
+    backgroundColor: string
+    color: string
+    borderRadius: string
+  }
+
+  function getButtonStyles(variant: 'outline'): OutlineButtonStyles
+  function getButtonStyles(variant: 'premium'): PremiumButtonStyles
+  function getButtonStyles(variant: 'outline' | 'premium' = 'outline') {
     const baseStyles = {
       fontFamily: themeParams?.typography?.fontFamily || 'Inter',
       fontSize: themeParams?.typography?.fontSize || '16px',
@@ -2129,23 +2148,14 @@ function generateStaticProductsSection(content: any, colors: any, themeParams: a
     if (variant === 'outline') {
       return {
         ...baseStyles,
-        borderColor: themeParams?.colors?.primary,
-        color: themeParams?.colors?.primary,
+        borderColor: themeParams?.colors?.primary as string,
+        color: (themeParams?.colors?.primary as string) || '#000000',
         borderRadius: themeParams?.components?.button?.rounded ? '9999px' : getBorderRadiusClass(),
       }
     }
-    if (variant === 'premium') {
-      return {
-        ...baseStyles,
-        backgroundColor: themeParams?.colors?.primary,
-        color: '#FFFFFF',
-        borderRadius: themeParams?.components?.button?.rounded ? '9999px' : getBorderRadiusClass(),
-      }
-    }
-
     return {
       ...baseStyles,
-      backgroundColor: themeParams?.colors?.primary,
+      backgroundColor: themeParams?.colors?.primary as string,
       color: '#FFFFFF',
       borderRadius: themeParams?.components?.button?.rounded ? '9999px' : getBorderRadiusClass(),
     }

@@ -222,6 +222,27 @@ export interface ThemeContent {
     overlayColor?: string
     backgroundColor?: string
     textColor?: string
+    // Text size customization options
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    subtitleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    benefitsSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    ctaSize?: 'sm' | 'base' | 'lg' | 'xl'
+    statsSize?: 'sm' | 'base' | 'lg' | 'xl'
+    // Font weight customization options
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    subtitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    benefitsWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    ctaWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    statsWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    // Font family customization options
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    subtitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    benefitsFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    ctaFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    statsFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     benefits?: Array<{
       icon: string
       text: string
@@ -256,6 +277,18 @@ export interface ThemeContent {
     description?: string
     backgroundColor?: string
     textColor?: string
+    // Typography customization
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    // Item typography
+    itemTitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    itemTitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    itemDescriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    itemDescriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     items?: Array<{
       id: string
       title: string
@@ -270,6 +303,20 @@ export interface ThemeContent {
     description?: string
     backgroundColor?: string
     textColor?: string
+    // Typography customization
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    // Item typography
+    itemTitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    itemTitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    itemDescriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    itemDescriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    itemBenefitWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    itemBenefitFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     items?: Array<{
       id: string
       title: string

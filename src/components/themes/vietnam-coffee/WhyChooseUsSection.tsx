@@ -2,12 +2,13 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Users, Award, Globe, TrendingUp, Shield, Clock } from "lucide-react";
+import { ArrowRight, Users, Award, Globe, TrendingUp, Shield, Clock, ArrowUpRight, CheckCircle, AlertCircle, Truck, Package, Zap, Lightbulb, Coffee, FileText } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { ThemeParams } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface Strength {
-  icon: any;
+  icon: string | LucideIcon;
   title: string;
   description: string;
   highlight: string;
@@ -34,7 +35,9 @@ interface WhyChooseUsContent {
   cta?: {
     title: string;
     description: string;
-    buttonText: string;
+    buttonText?: string;
+    primaryButton?: string;
+    secondaryButton?: string;
   };
 }
 
@@ -44,6 +47,31 @@ interface WhyChooseUsSectionProps {
 }
 
 const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
+  // Map tên icon (string) sang component thực tế để render an toàn
+  const ICONS: Record<string, LucideIcon> = {
+    Users,
+    Award,
+    Globe,
+    TrendingUp,
+    Shield,
+    Clock,
+    ArrowUpRight,
+    CheckCircle,
+    AlertCircle,
+    Truck,
+    Package,
+    Zap,
+    Lightbulb,
+    Coffee,
+    FileText,
+  };
+
+  const normalizeIconName = (name: string) => {
+    if (!name) return name;
+    // Hỗ trợ cả dạng có hậu tố "Icon" (vd: ArrowUpRightIcon)
+    return name.endsWith("Icon") ? name.slice(0, -4) : name;
+  };
+
   // Default strengths data
   const defaultStrengths: Strength[] = [
     {
@@ -109,8 +137,7 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
   const defaultCta = {
     title: "Sẵn Sàng Bắt Đầu Hành Trình Nhập Khẩu Cà Phê?",
     description: "Tham gia cùng 50+ nhà nhập khẩu Mỹ thành công tin tưởng chúng tôi cho nhu cầu cà phê Việt Nam. Bắt đầu với tư vấn miễn phí ngay hôm nay.",
-    primaryButton: "Đặt Lịch Tư Vấn Miễn Phí",
-    secondaryButton: "Tải Hồ Sơ Công Ty"
+    buttonText: "Đặt Lịch Tư Vấn Miễn Phí",
   };
 
   // Get typography styles
@@ -179,6 +206,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
   const mission = content.mission || defaultMission;
   const vision = content.vision || defaultVision;
   const cta = content.cta || defaultCta;
+  const ctaData: { title: string; description: string; buttonText?: string; primaryButton?: string } = cta as unknown as {
+    title: string; description: string; buttonText?: string; primaryButton?: string
+  };
 
   return (
     <section 
@@ -234,7 +264,14 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                       background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
                     }}
                   >
-                    <strength.icon className="h-7 w-7 text-white" />
+                    {(() => {
+                      const iconValue = strength.icon as unknown;
+                      const IconComp: LucideIcon =
+                        typeof iconValue === "string"
+                          ? ICONS[normalizeIconName(iconValue)] || Award
+                          : (iconValue as LucideIcon) || Award;
+                      return <IconComp className="h-7 w-7 text-white" />;
+                    })()}
                   </div>
                   <h3 
                     className={cn("text-xl font-bold mb-3")}
@@ -402,13 +439,13 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                 fontWeight: theme.typography?.fontWeight || '700'
               }}
             >
-              {cta.title}
+              {ctaData.title}
             </h3>
             <p 
               className={cn("text-xl mb-8 opacity-90 max-w-2xl mx-auto")}
               style={{ color: '#FFFFFF' }}
             >
-              {cta.description}
+              {ctaData.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
@@ -417,7 +454,7 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                 className="bg-white text-primary hover:bg-white/90"
                 style={getButtonStyles('secondary')}
               >
-                {(cta as any)?.buttonText || 'Liên hệ ngay'}
+                {ctaData.buttonText || ctaData.primaryButton || 'Liên hệ ngay'}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>

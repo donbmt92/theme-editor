@@ -33,14 +33,40 @@ interface ProblemSolutionContent {
     description?: string;
     backgroundColor?: string;
     textColor?: string;
+    primaryColor?: string;
+    colorMode?: 'theme' | 'custom';
     items?: ProblemItem[];
+    titleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    itemTitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    itemTitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    itemDescriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    itemDescriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
   };
   solutions?: {
     title?: string;
     description?: string;
     backgroundColor?: string;
     textColor?: string;
+    primaryColor?: string;
+    colorMode?: 'theme' | 'custom';
     items?: SolutionItem[];
+    titleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    itemTitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    itemTitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    itemDescriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    itemDescriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    itemBenefitWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    itemBenefitFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
   };
   cta?: {
     title?: string;
@@ -162,6 +188,64 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
     }
   }
 
+  // Helpers for size mapping
+  const sizeToClasses = (size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl', fallback: string = 'text-base') => {
+    switch (size) {
+      case 'xs': return 'text-xs md:text-sm'
+      case 'sm': return 'text-sm md:text-base'
+      case 'base': return 'text-base md:text-lg'
+      case 'lg': return 'text-lg md:text-xl'
+      case 'xl': return 'text-xl md:text-2xl'
+      case '2xl': return 'text-2xl md:text-3xl'
+      case '3xl': return 'text-3xl md:text-4xl'
+      default: return fallback
+    }
+  }
+
+  // Helpers for weight mapping
+  const weightToClasses = (weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black', fallback: string = 'font-normal') => {
+    switch (weight) {
+      case 'light': return 'font-light'
+      case 'normal': return 'font-normal'
+      case 'medium': return 'font-medium'
+      case 'semibold': return 'font-semibold'
+      case 'bold': return 'font-bold'
+      case 'extrabold': return 'font-extrabold'
+      case 'black': return 'font-black'
+      default: return fallback
+    }
+  }
+
+  // Helpers for font mapping
+  const fontToClasses = (font?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather', fallback: string = 'font-inter') => {
+    switch (font) {
+      case 'inter': return 'font-inter'
+      case 'poppins': return 'font-poppins'
+      case 'roboto': return 'font-roboto'
+      case 'open-sans': return 'font-open-sans'
+      case 'montserrat': return 'font-montserrat'
+      case 'lato': return 'font-lato'
+      case 'nunito': return 'font-nunito'
+      case 'raleway': return 'font-raleway'
+      case 'playfair-display': return 'font-playfair-display'
+      case 'merriweather': return 'font-merriweather'
+      default: return fallback
+    }
+  }
+
+  // Derived classes for Problems
+  const problemsTitleClasses = cn(sizeToClasses(content.problems?.titleSize, getHeadingSize('medium')), weightToClasses(content.problems?.titleWeight, 'font-bold'), fontToClasses(content.problems?.titleFont))
+  const problemsDescClasses = cn(sizeToClasses(content.problems?.descriptionSize, getBodySize()), weightToClasses(content.problems?.descriptionWeight, 'font-normal'), fontToClasses(content.problems?.descriptionFont))
+  const problemsItemTitleClasses = cn(weightToClasses(content.problems?.itemTitleWeight, 'font-semibold'), fontToClasses(content.problems?.itemTitleFont))
+  const problemsItemDescClasses = cn(sizeToClasses(content.problems?.itemDescriptionSize, 'text-base md:text-lg'), fontToClasses(content.problems?.itemDescriptionFont))
+
+  // Derived classes for Solutions
+  const solutionsTitleClasses = cn(sizeToClasses(content.solutions?.titleSize, getHeadingSize('medium')), weightToClasses(content.solutions?.titleWeight, 'font-bold'), fontToClasses(content.solutions?.titleFont))
+  const solutionsDescClasses = cn(sizeToClasses(content.solutions?.descriptionSize, getBodySize()), weightToClasses(content.solutions?.descriptionWeight, 'font-normal'), fontToClasses(content.solutions?.descriptionFont))
+  const solutionsItemTitleClasses = cn(weightToClasses(content.solutions?.itemTitleWeight, 'font-semibold'), fontToClasses(content.solutions?.itemTitleFont))
+  const solutionsItemDescClasses = cn(sizeToClasses(content.solutions?.itemDescriptionSize, 'text-base md:text-lg'), fontToClasses(content.solutions?.itemDescriptionFont))
+  const solutionsBenefitClasses = cn(weightToClasses(content.solutions?.itemBenefitWeight, 'font-medium'), fontToClasses(content.solutions?.itemBenefitFont))
+
   // Default problems and solutions if not provided
   const defaultProblems = [
     {
@@ -251,7 +335,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
             {content.about?.title || "Giải Quyết Thách Thức Xuất Nhập Khẩu Thực Tế"}
           </h2>
           <p 
-            className={cn("max-w-3xl mx-auto", getBodySize())}
+            className={cn("max-w-3xl mx-auto", problemsDescClasses)}
             style={{ 
               color: content.about?.textColor || content.problems?.textColor || theme.sections?.problems?.textColor || theme.colors.muted || '#718096',
               lineHeight: theme.typography?.lineHeight || '1.6'
@@ -270,7 +354,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                 style={{ color: theme.colors.destructive || '#E53E3E' }}
               />
               <h3 
-                className={cn("font-bold", getHeadingSize('medium'))}
+                className={problemsTitleClasses}
                 style={{ 
                   color: content.problems?.textColor || theme.colors.text,
                   fontWeight: theme.typography?.fontWeight || '700'
@@ -300,7 +384,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                         />
                         <div>
                           <h4 
-                            className="font-semibold mb-2"
+                            className={cn("mb-2", problemsItemTitleClasses)}
                             style={{ 
                               color: content.problems?.textColor || theme.colors.text,
                               fontWeight: theme.typography?.fontWeight || '600'
@@ -309,6 +393,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                             {problem.title}
                           </h4>
                           <p 
+                            className={problemsItemDescClasses}
                             style={{ 
                               color: content.problems?.textColor || theme.colors.muted || '#718096',
                               fontSize: theme.typography?.fontSize || '16px',
@@ -334,7 +419,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                 style={{ color: theme.colors.accent || '#28A745' }}
               />
               <h3 
-                className={cn("font-bold", getHeadingSize('medium'))}
+                className={solutionsTitleClasses}
                 style={{ 
                   color: content.solutions?.textColor || theme.colors.text,
                   fontWeight: theme.typography?.fontWeight || '700'
@@ -364,7 +449,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                         />
                         <div className="flex-1">
                           <h4 
-                            className="font-semibold mb-2"
+                            className={cn("mb-2", solutionsItemTitleClasses)}
                             style={{ 
                               color: content.solutions?.textColor || theme.colors.text,
                               fontWeight: theme.typography?.fontWeight || '600'
@@ -373,7 +458,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                             {solution.title}
                           </h4>
                           <p 
-                            className="mb-3"
+                            className={cn("mb-3", solutionsDescClasses)}
                             style={{ 
                               color: content.solutions?.textColor || theme.colors.muted || '#718096',
                               fontSize: theme.typography?.fontSize || '16px',
@@ -383,7 +468,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                             {solution.description}
                           </p>
                           <div 
-                            className={cn("inline-flex items-center px-3 py-1 font-medium", getBorderRadiusClass())}
+                            className={cn("inline-flex items-center px-3 py-1", getBorderRadiusClass(), solutionsBenefitClasses)}
                             style={{ 
                               backgroundColor: `${theme.colors.accent || '#28A745'}10`,
                               color: theme.colors.primary || '#28A745',

@@ -15,17 +15,31 @@ interface LeadMagnetContent {
   description?: string;
   backgroundColor?: string;
   textColor?: string;
+  primaryColor?: string;
+  colorMode?: 'theme' | 'custom';
   guideTitle?: string;
   guideSubtitle?: string;
   formTitle?: string;
   formDescription?: string;
   buttonText?: string;
-  features?: Array<{
+  downloadUrl?: string;
+  badgeText?: string;
+  titleSize?: string;
+  titleWeight?: string;
+  descriptionSize?: string;
+  descriptionWeight?: string;
+  privacyText?: string;
+  secureText?: string;
+  noSpamText?: string;
+  instantText?: string;
+  guideFeatures?: Array<{
+    id?: string;
     icon?: string;
     title: string;
     description: string;
   }>;
   trustIndicators?: Array<{
+    id?: string;
     number: string;
     label: string;
   }>;
@@ -153,6 +167,15 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     e.preventDefault();
     // Here you would typically send the data to your backend
     console.log('Form submitted:', formData);
+    // Auto-download guide if available
+    if (content.downloadUrl) {
+      const link = document.createElement('a');
+      link.href = content.downloadUrl;
+      link.setAttribute('download', 'guide.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
     setFormData({ name: "", email: "", company: "" });
   };
 
@@ -186,7 +209,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     { number: "4.9/5", label: "Đánh giá người dùng" }
   ];
 
-  const features = content.features || defaultFeatures;
+  const features = content.guideFeatures || defaultFeatures;
   const trustIndicators = content.trustIndicators || defaultTrustIndicators;
 
   return (
@@ -194,7 +217,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
       id="guide" 
       className="py-20"
       style={{ 
-        backgroundColor: content.backgroundColor || theme.sections?.leadMagnet?.backgroundColor || '#F8F9FA',
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
+          ? content.backgroundColor 
+          : theme.colors?.background || '#F8F9FA',
         ...getTypographyStyles()
       }}
     >
@@ -210,18 +235,27 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
             <div 
               className={cn("inline-flex items-center px-4 py-2 rounded-full mb-4", getBorderRadiusClass())}
               style={{ 
-                backgroundColor: `${theme.colors.primary}10`,
-                color: theme.colors.primary
+                backgroundColor: content.colorMode === 'custom' && content.primaryColor 
+                  ? `${content.primaryColor}10` 
+                  : `${theme.colors.primary}10`,
+                color: content.colorMode === 'custom' && content.primaryColor 
+                  ? content.primaryColor 
+                  : theme.colors.primary
               }}
             >
               <Download className="h-4 w-4 mr-2" />
-              <span className="font-medium">Tài nguyên miễn phí</span>
+              <span className="font-medium">{content.badgeText || "Tài nguyên miễn phí"}</span>
             </div>
             <h2 
               className={cn("font-bold mb-4", getHeadingSize('large'))}
               style={{ 
-                color: content.textColor || theme.sections?.leadMagnet?.textColor || theme.colors.text,
-                fontWeight: theme.typography?.fontWeight || '700'
+                color: content.textColor || theme.colors.text,
+                fontWeight: content.titleWeight || theme.typography?.fontWeight || '700',
+                fontSize: content.titleSize === '2xl' ? 'text-2xl' :
+                         content.titleSize === '3xl' ? 'text-3xl' :
+                         content.titleSize === '4xl' ? 'text-4xl' :
+                         content.titleSize === '5xl' ? 'text-5xl' :
+                         content.titleSize === '6xl' ? 'text-6xl' : undefined
               }}
             >
               {content.title || "Mở khóa thành công xuất nhập khẩu"}
@@ -229,8 +263,13 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
             <p 
               className={cn("max-w-3xl mx-auto", getBodySize())}
               style={{ 
-                color: content.textColor || theme.sections?.leadMagnet?.textColor || theme.colors.muted || '#718096',
-                lineHeight: theme.typography?.lineHeight || '1.6'
+                color: content.textColor || theme.colors.muted || '#718096',
+                lineHeight: theme.typography?.lineHeight || '1.6',
+                fontWeight: content.descriptionWeight || theme.typography?.fontWeight || '400',
+                fontSize: content.descriptionSize === 'lg' ? 'text-lg' :
+                         content.descriptionSize === 'xl' ? 'text-xl' :
+                         content.descriptionSize === '2xl' ? 'text-2xl' :
+                         content.descriptionSize === '3xl' ? 'text-3xl' : undefined
               }}
             >
               {content.description || "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2024' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ."}
@@ -253,7 +292,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                     <div 
                       className={cn("h-16 w-16 rounded-xl flex items-center justify-center mr-4", getBorderRadiusClass())}
                       style={{ 
-                        background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
+                        background: content.colorMode === 'custom' && content.primaryColor
+                          ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
+                          : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
                       }}
                     >
                       <BookOpen className="h-8 w-8 text-white" />
@@ -286,7 +327,11 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         <div key={index} className="flex items-start space-x-4">
                           <IconComponent 
                             className="h-6 w-6 mt-1 flex-shrink-0" 
-                            style={{ color: theme.colors.primary }}
+                            style={{ 
+                              color: content.colorMode === 'custom' && content.primaryColor 
+                                ? content.primaryColor 
+                                : theme.colors.primary 
+                            }}
                           />
                           <div>
                             <h4 
@@ -315,14 +360,20 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                   </div>
 
                   {/* Trust Indicators */}
-                  <div className="mt-8 pt-6 border-t" style={{ borderColor: theme.colors.border || theme.colors.primary }}>
+                  <div className="mt-8 pt-6 border-t" style={{ 
+                    borderColor: content.colorMode === 'custom' && content.primaryColor 
+                      ? content.primaryColor 
+                      : theme.colors.border || theme.colors.primary 
+                  }}>
                     <div className="grid grid-cols-3 gap-4 text-center">
                       {trustIndicators.map((indicator, index) => (
                         <div key={index}>
                           <div 
                             className="text-2xl font-bold"
                             style={{ 
-                              color: theme.colors.primary,
+                              color: content.colorMode === 'custom' && content.primaryColor 
+                                ? content.primaryColor 
+                                : theme.colors.primary,
                               fontWeight: theme.typography?.fontWeight || '700'
                             }}
                           >
@@ -471,12 +522,16 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         fontSize: theme.typography?.fontSize || '16px'
                       }}
                     >
-                      Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu cà phê. Hủy đăng ký bất cứ lúc nào.
+                      {content.privacyText || "Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu cà phê. Hủy đăng ký bất cứ lúc nào."}
                     </p>
                   </form>
 
                   {/* Additional Trust Elements */}
-                  <div className="mt-8 pt-6 border-t" style={{ borderColor: theme.colors.border || theme.colors.primary }}>
+                  <div className="mt-8 pt-6 border-t" style={{ 
+                    borderColor: content.colorMode === 'custom' && content.primaryColor 
+                      ? content.primaryColor 
+                      : theme.colors.border || theme.colors.primary 
+                  }}>
                     <div className="flex items-center justify-center space-x-6 text-sm">
                       <div 
                         className="flex items-center"
@@ -486,7 +541,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         }}
                       >
                         <Shield className="h-4 w-4 mr-1" />
-                        <span>100% An toàn</span>
+                        <span>{content.secureText || "100% An toàn"}</span>
                       </div>
                       <div 
                         className="flex items-center"
@@ -496,7 +551,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         }}
                       >
                         <CheckCircle className="h-4 w-4 mr-1" />
-                        <span>Không spam</span>
+                        <span>{content.noSpamText || "Không spam"}</span>
                       </div>
                       <div 
                         className="flex items-center"
@@ -506,7 +561,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         }}
                       >
                         <Download className="h-4 w-4 mr-1" />
-                        <span>Tải về ngay</span>
+                        <span>{content.instantText || "Tải về ngay"}</span>
                       </div>
                     </div>
                   </div>

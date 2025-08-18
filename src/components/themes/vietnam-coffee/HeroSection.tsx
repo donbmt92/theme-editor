@@ -20,9 +20,32 @@ interface HeroContent {
   backgroundImage?: string;
   backgroundColor?: string;
   textColor?: string;
+  primaryColor?: string;
+  colorMode?: 'theme' | 'custom';
   overlayColor?: string;
   overlayOpacity?: number;
   unsplashImageUrl?: string;
+  // Text size customization options
+  titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+  subtitleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+  descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+  benefitsSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+  ctaSize?: 'sm' | 'base' | 'lg' | 'xl';
+  statsSize?: 'sm' | 'base' | 'lg' | 'xl';
+  // Font weight customization options
+  titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  subtitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  benefitsWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  ctaWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  statsWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  // Font family customization options
+  titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+  subtitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+  descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+  benefitsFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+  ctaFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+  statsFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
 }
 
 interface HeroSectionProps {
@@ -35,20 +58,21 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
   const params = useParams();
   const projectId = params?.projectId as string;
 
-  // Use Unsplash for hero background image
+  // Use Unsplash for hero background image - ưu tiên hình ảnh upload trước
   const {
     imageUrl: unsplashImageUrl,
     isLoading: imageLoading,
     error: imageError,
-  } = useHeroImage();
+  } = useHeroImage(content.backgroundImage, 'coffee shop');
 
-  // Save Unsplash URL to project when it's fetched
+  // Save Unsplash URL to project when it's fetched (chỉ khi không có hình ảnh upload)
   useEffect(() => {
     if (
       unsplashImageUrl &&
       unsplashImageUrl !== content.unsplashImageUrl &&
       projectId &&
-      onContentUpdate
+      onContentUpdate &&
+      !content.backgroundImage?.startsWith('/uploads/') // Chỉ lưu Unsplash khi không có hình ảnh upload
     ) {
       const updatedContent = {
         ...content,
@@ -79,8 +103,9 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
       const { project } = await response.json();
 
       let themeParams = theme;
+      let latestVersion = null;
       if (project.versions && project.versions.length > 0) {
-        const latestVersion = project.versions[project.versions.length - 1];
+        latestVersion = project.versions[project.versions.length - 1];
         themeParams = latestVersion.snapshot;
       }
 
@@ -102,18 +127,32 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          themeParams: updatedThemeParams,
+          ...project,
+          versions: latestVersion ? [
+            ...project.versions,
+            {
+              ...latestVersion,
+              snapshot: updatedThemeParams,
+            },
+          ] : project.versions,
         }),
       });
-
-      console.log("Unsplash URL saved to project:", imageUrl);
     } catch (error) {
-      console.error("Failed to save Unsplash URL:", error);
+      console.error("Error saving Unsplash URL:", error);
     }
   };
 
-  // Determine which image to use
+  // Determine which image to use - ưu tiên hình ảnh upload
   const getBackgroundImageUrl = () => {
+    // Ưu tiên hình ảnh upload trước
+    if (content.backgroundImage && content.backgroundImage.startsWith('/uploads/')) {
+      return content.backgroundImage;
+    }
+    if (content.image && content.image.startsWith('/uploads/')) {
+      return content.image;
+    }
+    
+    // Sau đó mới đến Unsplash
     if (content.unsplashImageUrl) return content.unsplashImageUrl;
     if (unsplashImageUrl) return unsplashImageUrl;
     if (content.backgroundImage) return content.backgroundImage;
@@ -156,10 +195,16 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
       fontWeight: theme.typography?.fontWeight || "400",
     };
 
+    const primaryColor = content.colorMode === 'custom' && content.primaryColor 
+      ? content.primaryColor 
+      : theme.colors.primary;
+
     if (variant === "primary") {
       return {
         ...baseStyles,
-        background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
+        background: content.colorMode === 'custom' && content.primaryColor
+          ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
+          : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
         color: "#FFFFFF",
         borderRadius: theme.components?.button?.rounded
           ? "9999px"
@@ -172,8 +217,8 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
 
     return {
       ...baseStyles,
-      borderColor: theme.colors.primary,
-      color: theme.colors.primary,
+      borderColor: primaryColor,
+      color: primaryColor,
       backgroundColor: "transparent",
       borderRadius: theme.components?.button?.rounded
         ? "9999px"
@@ -215,6 +260,428 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
     }
   };
 
+  // Get title size
+  const getTitleSize = () => {
+    const size = content.titleSize || theme.typography?.headingSize || '2xl';
+    switch (size) {
+      case "sm":
+        return "text-2xl md:text-4xl";
+      case "base":
+        return "text-3xl md:text-5xl";
+      case "lg":
+        return "text-4xl md:text-6xl";
+      case "xl":
+        return "text-5xl md:text-7xl";
+      case "2xl":
+        return "text-6xl md:text-8xl";
+      case "3xl":
+        return "text-7xl md:text-9xl";
+      default:
+        return "text-4xl md:text-6xl";
+    }
+  };
+
+  // Get subtitle size
+  const getSubtitleSize = () => {
+    const size = content.subtitleSize || theme.typography?.headingSize || '2xl';
+    switch (size) {
+      case "sm":
+        return "text-xl md:text-3xl";
+      case "base":
+        return "text-2xl md:text-4xl";
+      case "lg":
+        return "text-3xl md:text-5xl";
+      case "xl":
+        return "text-4xl md:text-6xl";
+      case "2xl":
+        return "text-5xl md:text-7xl";
+      case "3xl":
+        return "text-6xl md:text-8xl";
+      default:
+        return "text-2xl md:text-4xl";
+    }
+  };
+
+  // Get description size
+  const getDescriptionSize = () => {
+    const size = content.descriptionSize || theme.typography?.bodySize || 'base';
+    switch (size) {
+      case "xs":
+        return "text-base";
+      case "sm":
+        return "text-lg";
+      case "lg":
+        return "text-xl";
+      case "xl":
+        return "text-2xl";
+      case "base":
+      default:
+        return "text-xl";
+    }
+  };
+
+  // Get benefits size
+  const getBenefitsSize = () => {
+    const size = content.benefitsSize || theme.typography?.bodySize || 'base';
+    switch (size) {
+      case "xs":
+        return "text-sm";
+      case "sm":
+        return "text-base";
+      case "lg":
+        return "text-lg";
+      case "xl":
+        return "text-xl";
+      case "base":
+      default:
+        return "text-base";
+    }
+  };
+
+  // Get CTA size
+  const getCTASize = () => {
+    const size = content.ctaSize || 'base';
+    switch (size) {
+      case "sm":
+        return "text-sm";
+      case "lg":
+        return "text-lg";
+      case "xl":
+        return "text-xl";
+      case "base":
+      default:
+        return "text-base";
+    }
+  };
+
+  // Get stats size
+  const getStatsSize = () => {
+    const size = content.statsSize || 'base';
+    switch (size) {
+      case "sm":
+        return "text-2xl";
+      case "lg":
+        return "text-4xl";
+      case "xl":
+        return "text-5xl";
+      case "base":
+      default:
+        return "text-3xl";
+    }
+  };
+
+  // Get title weight
+  const getTitleWeight = () => {
+    const weight = content.titleWeight || theme.typography?.fontWeight || 'bold';
+    switch (weight) {
+      case "light":
+        return "font-light";
+      case "normal":
+        return "font-normal";
+      case "medium":
+        return "font-medium";
+      case "semibold":
+        return "font-semibold";
+      case "bold":
+        return "font-bold";
+      case "extrabold":
+        return "font-extrabold";
+      case "black":
+        return "font-black";
+      default:
+        return "font-bold";
+    }
+  };
+
+  // Get subtitle weight
+  const getSubtitleWeight = () => {
+    const weight = content.subtitleWeight || theme.typography?.fontWeight || 'bold';
+    switch (weight) {
+      case "light":
+        return "font-light";
+      case "normal":
+        return "font-normal";
+      case "medium":
+        return "font-medium";
+      case "semibold":
+        return "font-semibold";
+      case "bold":
+        return "font-bold";
+      case "extrabold":
+        return "font-extrabold";
+      case "black":
+        return "font-black";
+      default:
+        return "font-bold";
+    }
+  };
+
+  // Get description weight
+  const getDescriptionWeight = () => {
+    const weight = content.descriptionWeight || theme.typography?.fontWeight || 'normal';
+    switch (weight) {
+      case "light":
+        return "font-light";
+      case "normal":
+        return "font-normal";
+      case "medium":
+        return "font-medium";
+      case "semibold":
+        return "font-semibold";
+      case "bold":
+        return "font-bold";
+      case "extrabold":
+        return "font-extrabold";
+      case "black":
+        return "font-black";
+      default:
+        return "font-normal";
+    }
+  };
+
+  // Get benefits weight
+  const getBenefitsWeight = () => {
+    const weight = content.benefitsWeight || theme.typography?.fontWeight || 'medium';
+    switch (weight) {
+      case "light":
+        return "font-light";
+      case "normal":
+        return "font-normal";
+      case "medium":
+        return "font-medium";
+      case "semibold":
+        return "font-semibold";
+      case "bold":
+        return "font-bold";
+      case "extrabold":
+        return "font-extrabold";
+      case "black":
+        return "font-black";
+      default:
+        return "font-medium";
+    }
+  };
+
+  // Get CTA weight
+  const getCTAWeight = () => {
+    const weight = content.ctaWeight || theme.typography?.fontWeight || 'medium';
+    switch (weight) {
+      case "light":
+        return "font-light";
+      case "normal":
+        return "font-normal";
+      case "medium":
+        return "font-medium";
+      case "semibold":
+        return "font-semibold";
+      case "bold":
+        return "font-bold";
+      case "extrabold":
+        return "font-extrabold";
+      case "black":
+        return "font-black";
+      default:
+        return "font-medium";
+    }
+  };
+
+  // Get stats weight
+  const getStatsWeight = () => {
+    const weight = content.statsWeight || theme.typography?.fontWeight || 'bold';
+    switch (weight) {
+      case "light":
+        return "font-light";
+      case "normal":
+        return "font-normal";
+      case "medium":
+        return "font-medium";
+      case "semibold":
+        return "font-semibold";
+      case "bold":
+        return "font-bold";
+      case "extrabold":
+        return "font-extrabold";
+      case "black":
+        return "font-black";
+      default:
+        return "font-bold";
+    }
+  };
+
+  // Get title font
+  const getTitleFont = () => {
+    const font = content.titleFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case "inter":
+        return "font-inter";
+      case "poppins":
+        return "font-poppins";
+      case "roboto":
+        return "font-roboto";
+      case "open-sans":
+        return "font-open-sans";
+      case "montserrat":
+        return "font-montserrat";
+      case "lato":
+        return "font-lato";
+      case "nunito":
+        return "font-nunito";
+      case "raleway":
+        return "font-raleway";
+      case "playfair-display":
+        return "font-playfair-display";
+      case "merriweather":
+        return "font-merriweather";
+      default:
+        return "font-inter";
+    }
+  };
+
+  // Get subtitle font
+  const getSubtitleFont = () => {
+    const font = content.subtitleFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case "inter":
+        return "font-inter";
+      case "poppins":
+        return "font-poppins";
+      case "roboto":
+        return "font-roboto";
+      case "open-sans":
+        return "font-open-sans";
+      case "montserrat":
+        return "font-montserrat";
+      case "lato":
+        return "font-lato";
+      case "nunito":
+        return "font-nunito";
+      case "raleway":
+        return "font-raleway";
+      case "playfair-display":
+        return "font-playfair-display";
+      case "merriweather":
+        return "font-merriweather";
+      default:
+        return "font-inter";
+    }
+  };
+
+  // Get description font
+  const getDescriptionFont = () => {
+    const font = content.descriptionFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case "inter":
+        return "font-inter";
+      case "poppins":
+        return "font-poppins";
+      case "roboto":
+        return "font-roboto";
+      case "open-sans":
+        return "font-open-sans";
+      case "montserrat":
+        return "font-montserrat";
+      case "lato":
+        return "font-lato";
+      case "nunito":
+        return "font-nunito";
+      case "raleway":
+        return "font-raleway";
+      case "playfair-display":
+        return "font-playfair-display";
+      case "merriweather":
+        return "font-merriweather";
+      default:
+        return "font-inter";
+    }
+  };
+
+  // Get benefits font
+  const getBenefitsFont = () => {
+    const font = content.benefitsFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case "inter":
+        return "font-inter";
+      case "poppins":
+        return "font-poppins";
+      case "roboto":
+        return "font-roboto";
+      case "open-sans":
+        return "font-open-sans";
+      case "montserrat":
+        return "font-montserrat";
+      case "lato":
+        return "font-lato";
+      case "nunito":
+        return "font-nunito";
+      case "raleway":
+        return "font-raleway";
+      case "playfair-display":
+        return "font-playfair-display";
+      case "merriweather":
+        return "font-merriweather";
+      default:
+        return "font-inter";
+    }
+  };
+
+  // Get CTA font
+  const getCTAFont = () => {
+    const font = content.ctaFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case "inter":
+        return "font-inter";
+      case "poppins":
+        return "font-poppins";
+      case "roboto":
+        return "font-roboto";
+      case "open-sans":
+        return "font-open-sans";
+      case "montserrat":
+        return "font-montserrat";
+      case "lato":
+        return "font-lato";
+      case "nunito":
+        return "font-nunito";
+      case "raleway":
+        return "font-raleway";
+      case "playfair-display":
+        return "font-playfair-display";
+      case "merriweather":
+        return "font-merriweather";
+      default:
+        return "font-inter";
+    }
+  };
+
+  // Get stats font
+  const getStatsFont = () => {
+    const font = content.statsFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case "inter":
+        return "font-inter";
+      case "poppins":
+        return "font-poppins";
+      case "roboto":
+        return "font-roboto";
+      case "open-sans":
+        return "font-open-sans";
+      case "montserrat":
+        return "font-montserrat";
+      case "lato":
+        return "font-lato";
+      case "nunito":
+        return "font-nunito";
+      case "raleway":
+        return "font-raleway";
+      case "playfair-display":
+        return "font-playfair-display";
+      case "merriweather":
+        return "font-merriweather";
+      default:
+        return "font-inter";
+    }
+  };
+
   const benefits = [
     "Chất lượng cao",
     "Giá cạnh tranh",
@@ -226,10 +693,12 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
     <section
       id="home"
       className="relative min-h-screen flex items-center"
-      // style={{
-      //   backgroundColor: content.backgroundColor || theme.sections?.hero?.backgroundColor || theme.colors.background,
-      //   ...getTypographyStyles()
-      // }}
+      style={{
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
+          ? content.backgroundColor 
+          : theme.sections?.hero?.backgroundColor || theme.colors.background,
+        ...getTypographyStyles()
+      }}
     >
       {/* Content */}
       <div className="container mx-auto px-4 py-20 relative z-20">
@@ -238,20 +707,21 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1
-                  // className={cn("font-bold leading-tight", getHeadingSize())}
-                  // style={{
-                  //   color: content.textColor || theme.sections?.hero?.textColor || theme.colors.text || '#FFFFFF',
-                  //   fontWeight: theme.typography?.fontWeight || '700',
-                  //   lineHeight: theme.typography?.lineHeight || '1.2'
-                  // }}
-                className="font-bold text-4xl md:text-6xl"
-                
+                className={cn("leading-tight", getTitleSize(), getTitleWeight(), getTitleFont())}
+                style={{
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? content.textColor 
+                    : theme.sections?.hero?.textColor || theme.colors.text || '#FFFFFF',
+                  lineHeight: theme.typography?.lineHeight || '1.2'
+                }}
               >
                 {content.title || "Cà Phê Việt Nam"}
                 <span
-                  className="block text-transparent bg-clip-text"
+                  className={cn("block text-transparent bg-clip-text", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
                   style={{
-                    backgroundImage: `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.primary})`,
+                    backgroundImage: content.colorMode === 'custom' && content.primaryColor
+                      ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
+                      : `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.primary})`,
                   }}
                 >
                   {content.subtitle || "Chất Lượng Quốc Tế"}
@@ -259,9 +729,11 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
               </h1>
 
               <p
-                className={cn("leading-relaxed", getBodySize())}
+                className={cn("leading-relaxed", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
                 style={{
-                  // color: `${content.textColor || '#000000'}E6`,
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}E6` 
+                    : `${theme.colors.text || '#000000'}E6`,
                   lineHeight: theme.typography?.lineHeight || "1.6",
                 }}
               >
@@ -276,13 +748,18 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                 <div key={benefit} className="flex items-center space-x-2">
                   <CheckCircle
                     className="h-5 w-5"
-                    style={{ color: theme.colors.accent }}
+                    style={{ 
+                      color: content.colorMode === 'custom' && content.primaryColor 
+                        ? content.primaryColor 
+                        : theme.colors.accent 
+                    }}
                   />
                   <span
-                    className="font-medium"
+                    className={cn(getBenefitsSize(), getBenefitsWeight(), getBenefitsFont())}
                     style={{
-                      color:
-                        content.textColor || theme.colors.text || "#FFFFFF",
+                      color: content.colorMode === 'custom' && content.textColor 
+                        ? content.textColor 
+                        : theme.colors.text || "#FFFFFF",
                     }}
                   >
                     {benefit}
@@ -295,7 +772,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
-                className="group hover:scale-105 hover:shadow-xl transition-all duration-300"
+                className={cn("group hover:scale-105 hover:shadow-xl transition-all duration-300", getCTASize(), getCTAWeight(), getCTAFont())}
                 style={getButtonStyles("primary")}
               >
                 {content.ctaText || "Tìm hiểu thêm"}
@@ -307,8 +784,14 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
               <Button
                 size="lg"
                 variant="outline"
-                className="hover:bg-white hover:text-gray-900 transition-all duration-300"
+                className={cn("hover:bg-white hover:text-gray-900 transition-all duration-300", getCTASize(), getCTAWeight(), getCTAFont())}
                 style={getButtonStyles("outline")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById('guide');
+                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  else window.location.hash = '#guide';
+                }}
               >
                 <Download size={20} className="mr-2" />
                 Hướng dẫn XNK từ A-Z
@@ -319,42 +802,54 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
             <div className="flex items-center space-x-8 pt-8">
               <div className="text-center">
                 <div
-                  className="text-3xl font-bold mb-1"
-                  style={{ color: theme.colors.accent }}
+                  className={cn("mb-1", getStatsSize(), getStatsWeight(), getStatsFont())}
+                  style={{ color: content.colorMode === 'custom' && content.primaryColor 
+                    ? content.primaryColor 
+                    : theme.colors.accent }}
                 >
                   500+
                 </div>
                 <div
                   className="text-sm"
-                  style={{ color: `${content.textColor || "#000000"}CC` }}
+                  style={{ color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}CC` 
+                    : `${theme.colors.text || "#000000"}CC` }}
                 >
                   Đơn hàng thành công
                 </div>
               </div>
               <div className="text-center">
                 <div
-                  className="text-3xl font-bold mb-1"
-                  style={{ color: theme.colors.accent }}
+                  className={cn("mb-1", getStatsSize(), getStatsWeight(), getStatsFont())}
+                  style={{ color: content.colorMode === 'custom' && content.primaryColor 
+                    ? content.primaryColor 
+                    : theme.colors.accent }}
                 >
                   15
                 </div>
                 <div
                   className="text-sm"
-                  style={{ color: `${content.textColor || "#000000"}CC` }}
+                  style={{ color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}CC` 
+                    : `${theme.colors.text || "#000000"}CC` }}
                 >
                   Năm kinh nghiệm
                 </div>
               </div>
               <div className="text-center">
                 <div
-                  className="text-3xl font-bold mb-1"
-                  style={{ color: theme.colors.accent }}
+                  className={cn("mb-1", getStatsSize(), getStatsWeight(), getStatsFont())}
+                  style={{ color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}CC` 
+                    : `${theme.colors.text || "#000000"}CC` }}
                 >
                   100+
                 </div>
                 <div
                   className="text-sm"
-                  style={{ color: `${content.textColor || "#000000"}CC` }}
+                  style={{ color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}CC` 
+                    : `${theme.colors.text || "#000000"}CC` }}
                 >
                   Đối tác Mỹ
                 </div>
@@ -403,10 +898,12 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                 getBorderRadiusClass()
               )}
               style={{
-                backgroundColor: `${
-                  content.backgroundColor || theme.colors.background
-                }E6`,
-                borderColor: theme.colors.border || theme.colors.primary,
+                backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
+                  ? `${content.backgroundColor}E6` 
+                  : `${theme.colors.background}E6`,
+                borderColor: content.colorMode === 'custom' && content.primaryColor 
+                  ? content.primaryColor 
+                  : theme.colors.border || theme.colors.primary,
               }}
             >
               <div className="flex items-center space-x-4">
@@ -424,14 +921,18 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                 <div>
                   <div
                     className="font-bold"
-                    style={{ color: content.textColor || theme.colors.text }}
+                    style={{ color: content.colorMode === 'custom' && content.textColor 
+                      ? content.textColor 
+                      : theme.colors.text }}
                   >
                     100% Chất lượng
                   </div>
                   <div
                     className="text-sm"
                     style={{
-                      color: `${content.textColor || theme.colors.text}CC`,
+                      color: content.colorMode === 'custom' && content.textColor 
+                        ? `${content.textColor}CC` 
+                        : `${theme.colors.text}CC`,
                     }}
                   >
                     FDA & HACCP Certified

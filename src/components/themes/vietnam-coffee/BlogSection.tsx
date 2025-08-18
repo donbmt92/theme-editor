@@ -29,6 +29,8 @@ interface BlogSectionContent {
   backgroundColor?: string;
   textColor?: string;
   blogPosts?: BlogPost[];
+  featuredPost?: Partial<BlogPost>;
+  posts?: Array<Partial<BlogPost>>;
   categories?: Category[];
   newsletter?: {
     title: string;
@@ -162,8 +164,27 @@ const BlogSection = ({ theme, content }: BlogSectionProps) => {
     }
   }
 
-  // Use content or defaults
-  const blogPosts = content.blogPosts || defaultBlogPosts;
+  // Build blog posts from featuredPost + posts if provided; otherwise fallback
+  const toBlogPost = (p: Partial<BlogPost>): BlogPost => ({
+    title: p.title || '',
+    excerpt: p.excerpt || '',
+    category: p.category || '',
+    author: p.author || '',
+    date: p.date || '',
+    readTime: p.readTime || '',
+    image: p.image || '',
+    featured: p.featured,
+  });
+
+  const composed: BlogPost[] = [];
+  if (content.featuredPost && (content.featuredPost.title || content.featuredPost.image)) {
+    composed.push({ ...toBlogPost(content.featuredPost), featured: true });
+  }
+  if (Array.isArray(content.posts)) {
+    composed.push(...content.posts.map((p) => toBlogPost(p)));
+  }
+
+  const blogPosts = composed.length > 0 ? composed : (content.blogPosts || defaultBlogPosts);
   const categories = content.categories || defaultCategories;
   const newsletter = content.newsletter || defaultNewsletter;
 
@@ -202,26 +223,7 @@ const BlogSection = ({ theme, content }: BlogSectionProps) => {
           </p>
         </div>
 
-        {/* Categories */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category, index) => (
-            <div 
-              key={index} 
-              className={cn("px-4 py-2 text-sm rounded-full flex items-center", getBorderRadiusClass())}
-              style={{ 
-                backgroundColor: `${theme.colors.primary}10`,
-                color: theme.colors.primary,
-                border: `1px solid ${theme.colors.primary}20`
-              }}
-            >
-              <div 
-                className={cn("w-2 h-2 rounded-full mr-2", getBorderRadiusClass())}
-                style={{ backgroundColor: category.color }}
-              ></div>
-              {category.name} ({category.count})
-            </div>
-          ))}
-        </div>
+     
 
         {/* Featured Post */}
         <Card 
@@ -235,7 +237,9 @@ const BlogSection = ({ theme, content }: BlogSectionProps) => {
           <div className="grid lg:grid-cols-2">
             <div className="relative">
               <img
-                src={blogPosts[0].image}
+                src={blogPosts[0].image && blogPosts[0].image.startsWith('/uploads/') 
+                  ? blogPosts[0].image 
+                  : blogPosts[0].image}
                 alt={blogPosts[0].title}
                 className="w-full h-80 lg:h-full object-cover"
               />
@@ -311,7 +315,9 @@ const BlogSection = ({ theme, content }: BlogSectionProps) => {
             >
               <div className="relative">
                 <img
-                  src={post.image}
+                  src={post.image && post.image.startsWith('/uploads/') 
+                    ? post.image 
+                    : post.image}
                   alt={post.title}
                   className="w-full h-48 object-cover"
                 />

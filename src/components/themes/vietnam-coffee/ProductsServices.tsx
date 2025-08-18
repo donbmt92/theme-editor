@@ -33,6 +33,12 @@ interface ProductsServicesContent {
   description?: string;
   backgroundColor?: string;
   textColor?: string;
+  primaryColor?: string;
+  colorMode?: 'theme' | 'custom';
+  titleSize?: '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
+  titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  descriptionSize?: 'lg' | 'xl' | '2xl' | '3xl';
+  descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
   items?: ProductItem[];
   services?: ServiceItem[];
 }
