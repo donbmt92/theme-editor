@@ -21,6 +21,14 @@ interface TestimonialsContent {
   subtitle?: string;
   backgroundColor?: string;
   textColor?: string;
+  colorMode?: 'theme' | 'custom';
+  primaryColor?: string;
+  titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+  titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+  subtitleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+  subtitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  subtitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
   testimonials?: Testimonial[];
   stats?: Array<{ number: string; label: string; sublabel?: string }>;
 }
@@ -133,6 +141,149 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
     }
   };
 
+  // Get title size from content
+  const getTitleSize = () => {
+    const size = content.titleSize || theme.typography?.headingSize || '2xl';
+    switch (size) {
+      case 'sm':
+        return 'text-2xl md:text-3xl';
+      case 'base':
+        return 'text-3xl md:text-4xl';
+      case 'lg':
+        return 'text-4xl md:text-5xl';
+      case 'xl':
+        return 'text-5xl md:text-6xl';
+      case '2xl':
+        return 'text-6xl md:text-7xl';
+      case '3xl':
+        return 'text-7xl md:text-8xl';
+      default:
+        return 'text-4xl md:text-5xl';
+    }
+  };
+
+  // Get title weight from content
+  const getTitleWeight = () => {
+    const weight = content.titleWeight || theme.typography?.fontWeight || 'bold';
+    switch (weight) {
+      case 'light':
+        return 'font-light';
+      case 'normal':
+        return 'font-normal';
+      case 'medium':
+        return 'font-medium';
+      case 'semibold':
+        return 'font-semibold';
+      case 'bold':
+        return 'font-bold';
+      case 'extrabold':
+        return 'font-extrabold';
+      case 'black':
+        return 'font-black';
+      default:
+        return 'font-bold';
+    }
+  };
+
+  // Get title font from content
+  const getTitleFont = () => {
+    const font = content.titleFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case 'inter':
+        return 'font-inter';
+      case 'poppins':
+        return 'font-poppins';
+      case 'roboto':
+        return 'font-roboto';
+      case 'open-sans':
+        return 'font-open-sans';
+      case 'montserrat':
+        return 'font-montserrat';
+      case 'lato':
+        return 'font-lato';
+      case 'nunito':
+        return 'font-nunito';
+      case 'raleway':
+        return 'font-raleway';
+      case 'playfair-display':
+        return 'font-playfair-display';
+      case 'merriweather':
+        return 'font-merriweather';
+      default:
+        return 'font-inter';
+    }
+  };
+
+  // Get subtitle size from content
+  const getSubtitleSize = () => {
+    const size = content.subtitleSize || theme.typography?.bodySize || 'base';
+    switch (size) {
+      case 'xs':
+        return 'text-base';
+      case 'sm':
+        return 'text-lg';
+      case 'lg':
+        return 'text-xl';
+      case 'xl':
+        return 'text-2xl';
+      case 'base':
+      default:
+        return 'text-xl';
+    }
+  };
+
+  // Get subtitle weight from content
+  const getSubtitleWeight = () => {
+    const weight = content.subtitleWeight || theme.typography?.fontWeight || 'normal';
+    switch (weight) {
+      case 'light':
+        return 'font-light';
+      case 'normal':
+        return 'font-normal';
+      case 'medium':
+        return 'font-medium';
+      case 'semibold':
+        return 'font-semibold';
+      case 'bold':
+        return 'font-bold';
+      case 'extrabold':
+        return 'font-extrabold';
+      case 'black':
+        return 'font-black';
+      default:
+        return 'font-normal';
+    }
+  };
+
+  // Get subtitle font from content
+  const getSubtitleFont = () => {
+    const font = content.subtitleFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case 'inter':
+        return 'font-inter';
+      case 'poppins':
+        return 'font-poppins';
+      case 'roboto':
+        return 'font-roboto';
+      case 'open-sans':
+        return 'font-open-sans';
+      case 'montserrat':
+        return 'font-montserrat';
+      case 'lato':
+        return 'font-lato';
+      case 'nunito':
+        return 'font-nunito';
+      case 'raleway':
+        return 'font-raleway';
+      case 'playfair-display':
+        return 'font-playfair-display';
+      case 'merriweather':
+        return 'font-merriweather';
+      default:
+        return 'font-inter';
+    }
+  };
+
   // Client logos data
   const clientLogos = [
     { name: "Starbucks Reserve", logo: "SR" },
@@ -147,9 +298,12 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
     <section
       className="py-20"
       style={{
-        backgroundColor:
-          content.backgroundColor || theme.colors?.background || "#F8F9FA",
-        color: content.textColor || theme.colors?.text || "#2D3748",
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
+          ? content.backgroundColor 
+          : theme.sections?.testimonials?.backgroundColor || theme.colors.background || "#F8F9FA",
+        color: content.colorMode === 'custom' && content.textColor 
+          ? content.textColor 
+          : theme.sections?.testimonials?.textColor || theme.colors.text || "#2D3748",
         ...getTypographyStyles(),
       }}
     >
@@ -161,18 +315,21 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
       >
         <div className="text-center mb-16">
           <h2
-            className={cn("text-4xl font-bold mb-4")}
+            className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
             style={{
-              color: content.textColor || theme.colors?.text || "#2D3748",
-              fontWeight: theme.typography?.fontWeight || "700",
+              color: content.colorMode === 'custom' && content.textColor 
+                ? content.textColor 
+                : theme.colors?.text || "#2D3748",
             }}
           >
             {content.title || "Được Tin Tưởng Bởi Các Nhà Nhập Khẩu Hàng Đầu"}
           </h2>
           <p
-            className={cn("text-xl max-w-3xl mx-auto")}
+            className={cn("max-w-3xl mx-auto", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
             style={{
-              color: content.textColor || theme.colors?.muted || "#718096",
+              color: content.colorMode === 'custom' && content.textColor 
+                ? `${content.textColor}E6` 
+                : theme.colors?.muted || "#718096",
             }}
           >
             {content.subtitle ||

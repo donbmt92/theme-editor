@@ -21,6 +21,15 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
   const header = themeParams.content?.header || {}
   const navigation = header.navigation || []
   const socialLinks = header.socialLinks || []
+  
+  // Đảm bảo các thuộc tính cần thiết tồn tại
+  const headerWithDefaults = {
+    colorMode: (header as any).colorMode || 'custom',
+    backgroundColor: header.backgroundColor || '#FFFFFF',
+    textColor: header.textColor || '#000000',
+    primaryColor: (header as any).primaryColor || '#3B82F6',
+    ...header
+  }
 
   const addNavigationItem = () => {
     if (newNavItem.name && newNavItem.href) {
@@ -60,9 +69,27 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               value={header.logo || ''}
               onChange={(url) => updateThemeParam(['content', 'header', 'logo'], url)}
               placeholder="Upload logo công ty"
-              recommendedSize="200x80px"
-              aspectRatio="2.5:1"
+              recommendedSize="256x256px"
+              aspectRatio="1:1"
             />
+          </div>
+          
+          <div>
+            <Label htmlFor="logoSize">Kích thước logo</Label>
+            <Select
+              value={header.logoSize || 'medium'}
+              onValueChange={(value) => updateThemeParam(['content', 'header', 'logoSize'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="small">Nhỏ (32x32px)</SelectItem>
+                <SelectItem value="medium">Vừa (64x64px)</SelectItem>
+                <SelectItem value="large">Lớn (80x80px)</SelectItem>
+                <SelectItem value="xlarge">Rất lớn (96x96px)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           
           <div>
@@ -94,7 +121,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={header.colorMode || 'custom'}
+              value={headerWithDefaults.colorMode}
               onValueChange={(value) => updateThemeParam(['content', 'header', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -107,7 +134,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
             </Select>
           </div>
           
-          {header.colorMode === 'custom' && (
+          {headerWithDefaults.colorMode === 'custom' && (
             <>
               <div>
                 <Label htmlFor="backgroundColor">Màu nền</Label>
@@ -148,12 +175,12 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
                 <div className="flex items-center space-x-3">
                   <input
                     type="color"
-                    value={header.primaryColor || '#3B82F6'}
+                    value={headerWithDefaults.primaryColor}
                     onChange={(e) => updateThemeParam(['content', 'header', 'primaryColor'], e.target.value)}
                     className="w-12 h-10 rounded border border-gray-300"
                   />
                   <Input
-                    value={header.primaryColor || '#3B82F6'}
+                    value={headerWithDefaults.primaryColor}
                     onChange={(e) => updateThemeParam(['content', 'header', 'primaryColor'], e.target.value)}
                     className="flex-1"
                   />
@@ -162,7 +189,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
             </>
           )}
           
-          {header.colorMode === 'theme' && (
+          {headerWithDefaults.colorMode === 'theme' && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
                 Sử dụng màu từ chủ đề chính: <strong>{themeParams.colors?.primary || '#8B4513'}</strong>, <strong>{themeParams.colors?.accent || '#F4A460'}</strong>

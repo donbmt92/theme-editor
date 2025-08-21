@@ -19,7 +19,7 @@ import {
 } from '@/components/project-editor'
 
 // Danh sách icon tiêu biểu để chọn (nhẹ, tránh lag) + dùng cho preview
-const ICON_MAP: Record<string, any> = {
+const ICON_MAP: Record<string, string> = {
   Award: 'Award',
   Globe: 'Globe',
   Users: 'Users',
@@ -109,6 +109,9 @@ const createDefaultThemeParams = (): ThemeParams => ({
       backgroundColor: "#8B4513",
       textColor: "#FFFFFF",
       logo: "/assets/logo.png",
+      logoSize: "medium",
+      colorMode: "custom",
+      primaryColor: "#8B4513",
       navigation: [
         { name: "Trang chủ", href: "#home" },
         { name: "Sản phẩm", href: "#products" },
@@ -124,8 +127,8 @@ const createDefaultThemeParams = (): ThemeParams => ({
       ctaText: "Tìm hiểu thêm",
       ctaSecondaryText: "Liên hệ để được tư vấn",
       image: "/assets/hero-coffee.jpg",
-      titleSize: "2xl",
-      subtitleSize: "2xl",
+      titleSize: "xl",
+      subtitleSize: "xl",
       descriptionSize: "base",
       benefitsSize: "base",
       ctaSize: "base",
@@ -168,6 +171,8 @@ const createDefaultThemeParams = (): ThemeParams => ({
       description: "Những khó khăn mà doanh nghiệp Việt Nam gặp phải",
       backgroundColor: "#FFF8DC",
       textColor: "#2D3748",
+      colorMode: "custom",
+      primaryColor: "#8B4513",
       titleSize: "2xl",
       descriptionSize: "base",
       titleWeight: "bold",
@@ -189,6 +194,8 @@ const createDefaultThemeParams = (): ThemeParams => ({
       description: "Những giải pháp toàn diện để vượt qua thách thức",
       backgroundColor: "#F0F8FF",
       textColor: "#2D3748",
+      colorMode: "custom",
+      primaryColor: "#8B4513",
       titleSize: "2xl",
       descriptionSize: "base",
       titleWeight: "bold",
@@ -221,6 +228,14 @@ const createDefaultThemeParams = (): ThemeParams => ({
       description: "Khám phá các loại cà phê đặc trưng của Việt Nam",
       backgroundColor: "#F0F4F8",
       textColor: "#2D3748",
+      colorMode: "custom",
+      primaryColor: "#8B4513",
+      titleSize: "2xl",
+      titleWeight: "bold",
+      titleFont: "inter",
+      descriptionSize: "base",
+      descriptionWeight: "normal",
+      descriptionFont: "inter",
       items: [
         {
           id: "1",
@@ -302,6 +317,14 @@ const createDefaultThemeParams = (): ThemeParams => ({
       subtitle: "Lời chứng thực từ các đối tác và khách hàng quốc tế",
       backgroundColor: "#F5F5DC",
       textColor: "#2D3748",
+      colorMode: "custom",
+      primaryColor: "#8B4513",
+      titleSize: "2xl",
+      titleWeight: "bold",
+      titleFont: "inter",
+      subtitleSize: "lg",
+      subtitleWeight: "normal",
+      subtitleFont: "inter",
       testimonials: [
         {
           name: "Sarah Johnson",
@@ -343,6 +366,14 @@ const createDefaultThemeParams = (): ThemeParams => ({
       description: "Phân tích chi tiết xu hướng thị trường, cơ hội kinh doanh và dự báo tương lai của ngành cà phê.",
       backgroundColor: "#F8F9FA",
       textColor: "#2D3748",
+      colorMode: "custom",
+      primaryColor: "#8B4513",
+      titleSize: "2xl",
+      titleWeight: "bold",
+      titleFont: "inter",
+      descriptionSize: "base",
+      descriptionWeight: "normal",
+      descriptionFont: "inter",
       guideTitle: "Báo cáo thị trường cà phê 2024",
       guideSubtitle: "Dữ liệu cập nhật, phân tích chuyên sâu",
       formTitle: "Nhận báo cáo miễn phí",
@@ -365,6 +396,14 @@ const createDefaultThemeParams = (): ThemeParams => ({
       subtitle: "Chất lượng, uy tín và sự tận tâm là những giá trị cốt lõi của chúng tôi.",
       backgroundColor: "#FFFFFF",
       textColor: "#2D3748",
+      colorMode: "custom",
+      primaryColor: "#8B4513",
+      titleSize: "2xl",
+      titleWeight: "bold",
+      titleFont: "inter",
+      subtitleSize: "lg",
+      subtitleWeight: "normal",
+      subtitleFont: "inter",
       strengths: [
         { icon: "Award", title: "Chứng nhận quốc tế", description: "FDA, USDA, ISO" },
         { icon: "Globe", title: "Thị trường toàn cầu", description: "Xuất khẩu đến 25+ quốc gia" },
@@ -392,6 +431,14 @@ const createDefaultThemeParams = (): ThemeParams => ({
       subtitle: "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về cà phê",
       backgroundColor: "#F8F9FA",
       textColor: "#2D3748",
+      colorMode: "custom",
+      primaryColor: "#8B4513",
+      titleSize: "2xl",
+      titleWeight: "bold",
+      titleFont: "inter",
+      subtitleSize: "lg",
+      subtitleWeight: "normal",
+      subtitleFont: "inter",
       categories: [
         { name: "Thị trường", count: 15 },
         { name: "Kỹ thuật", count: 12 },
@@ -630,7 +677,7 @@ const ProjectEditor = () => {
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [themeParams])
 
-  const updateThemeParam = (path: string[], value: string | number) => {
+  const updateThemeParam = (path: string[], value: string | number | unknown) => {
     if (!themeParams) return
 
     const newParams = { ...themeParams }

@@ -46,6 +46,11 @@ interface HeroContent {
   benefitsFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
   ctaFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
   statsFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+  // Benefits array
+  benefits?: Array<{
+    icon: string;
+    text: string;
+  }>;
 }
 
 interface HeroSectionProps {
@@ -682,11 +687,12 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
     }
   };
 
-  const benefits = [
-    "Chất lượng cao",
-    "Giá cạnh tranh",
-    "Giao hàng đúng hạn",
-    "Hỗ trợ 24/7",
+  // Get benefits from content or use default
+  const benefits = content.benefits || [
+    { icon: "✅", text: "Chất lượng cao" },
+    { icon: "💰", text: "Giá cạnh tranh" },
+    { icon: "🚚", text: "Giao hàng đúng hạn" },
+    { icon: "📞", text: "Hỗ trợ 24/7" },
   ];
 
   return (
@@ -744,16 +750,22 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
 
             {/* Key Benefits */}
             <div className="flex flex-wrap gap-4">
-              {benefits.map((benefit) => (
-                <div key={benefit} className="flex items-center space-x-2">
-                  <CheckCircle
-                    className="h-5 w-5"
-                    style={{ 
-                      color: content.colorMode === 'custom' && content.primaryColor 
-                        ? content.primaryColor 
-                        : theme.colors.accent 
-                    }}
-                  />
+              {benefits.map((benefit, index) => (
+                <div key={benefit.text || index} className="flex items-center space-x-2">
+                  {benefit.icon && benefit.icon.length <= 2 ? (
+                    // Emoji icons
+                    <span className="text-xl">{benefit.icon}</span>
+                  ) : (
+                    // Lucide icons or fallback
+                    <CheckCircle
+                      className="h-5 w-5"
+                      style={{ 
+                        color: content.colorMode === 'custom' && content.primaryColor 
+                          ? content.primaryColor 
+                          : theme.colors.accent 
+                      }}
+                    />
+                  )}
                   <span
                     className={cn(getBenefitsSize(), getBenefitsWeight(), getBenefitsFont())}
                     style={{
@@ -762,7 +774,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                         : theme.colors.text || "#FFFFFF",
                     }}
                   >
-                    {benefit}
+                    {typeof benefit === 'string' ? benefit : benefit.text}
                   </span>
                 </div>
               ))}

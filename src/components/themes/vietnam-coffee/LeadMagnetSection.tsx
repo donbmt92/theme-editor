@@ -17,6 +17,12 @@ interface LeadMagnetContent {
   textColor?: string;
   primaryColor?: string;
   colorMode?: 'theme' | 'custom';
+  titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+  titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+  descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+  descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+  descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
   guideTitle?: string;
   guideSubtitle?: string;
   formTitle?: string;
@@ -24,10 +30,6 @@ interface LeadMagnetContent {
   buttonText?: string;
   downloadUrl?: string;
   badgeText?: string;
-  titleSize?: string;
-  titleWeight?: string;
-  descriptionSize?: string;
-  descriptionWeight?: string;
   privacyText?: string;
   secureText?: string;
   noSpamText?: string;
@@ -95,13 +97,158 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     }
   }
 
+  // Get title size from content
+  const getTitleSize = () => {
+    const size = content.titleSize || theme.typography?.headingSize || '2xl';
+    switch (size) {
+      case 'sm':
+        return 'text-2xl md:text-3xl';
+      case 'base':
+        return 'text-3xl md:text-4xl';
+      case 'lg':
+        return 'text-4xl md:text-5xl';
+      case 'xl':
+        return 'text-5xl md:text-6xl';
+      case '2xl':
+        return 'text-6xl md:text-7xl';
+      case '3xl':
+        return 'text-7xl md:text-8xl';
+      default:
+        return 'text-4xl md:text-5xl';
+    }
+  };
+
+  // Get title weight from content
+  const getTitleWeight = () => {
+    const weight = content.titleWeight || theme.typography?.fontWeight || 'bold';
+    switch (weight) {
+      case 'light':
+        return 'font-light';
+      case 'normal':
+        return 'font-normal';
+      case 'medium':
+        return 'font-medium';
+      case 'semibold':
+        return 'font-semibold';
+      case 'bold':
+        return 'font-bold';
+      case 'extrabold':
+        return 'font-extrabold';
+      case 'black':
+        return 'font-black';
+      default:
+        return 'font-bold';
+    }
+  };
+
+  // Get title font from content
+  const getTitleFont = () => {
+    const font = content.titleFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case 'inter':
+        return 'font-inter';
+      case 'poppins':
+        return 'font-poppins';
+      case 'roboto':
+        return 'font-roboto';
+      case 'open-sans':
+        return 'font-open-sans';
+      case 'montserrat':
+        return 'font-montserrat';
+      case 'lato':
+        return 'font-lato';
+      case 'nunito':
+        return 'font-nunito';
+      case 'raleway':
+        return 'font-raleway';
+      case 'playfair-display':
+        return 'font-playfair-display';
+      case 'merriweather':
+        return 'font-merriweather';
+      default:
+        return 'font-inter';
+    }
+  };
+
+  // Get description size from content
+  const getDescriptionSize = () => {
+    const size = content.descriptionSize || theme.typography?.bodySize || 'base';
+    switch (size) {
+      case 'xs':
+        return 'text-base';
+      case 'sm':
+        return 'text-lg';
+      case 'lg':
+        return 'text-xl';
+      case 'xl':
+        return 'text-2xl';
+      case 'base':
+      default:
+        return 'text-xl';
+    }
+  };
+
+  // Get description weight from content
+  const getDescriptionWeight = () => {
+    const weight = content.descriptionWeight || theme.typography?.fontWeight || 'normal';
+    switch (weight) {
+      case 'light':
+        return 'font-light';
+      case 'normal':
+        return 'font-normal';
+      case 'medium':
+        return 'font-medium';
+      case 'semibold':
+        return 'font-semibold';
+      case 'bold':
+        return 'font-bold';
+      case 'extrabold':
+        return 'font-extrabold';
+      case 'black':
+        return 'font-black';
+      default:
+        return 'font-normal';
+    }
+  };
+
+  // Get description font from content
+  const getDescriptionFont = () => {
+    const font = content.descriptionFont || theme.typography?.fontFamily || 'inter';
+    switch (font) {
+      case 'inter':
+        return 'font-inter';
+      case 'poppins':
+        return 'font-poppins';
+      case 'roboto':
+        return 'font-roboto';
+      case 'open-sans':
+        return 'font-open-sans';
+      case 'montserrat':
+        return 'font-montserrat';
+      case 'lato':
+        return 'font-lato';
+      case 'nunito':
+        return 'font-nunito';
+      case 'raleway':
+        return 'font-raleway';
+      case 'playfair-display':
+        return 'font-playfair-display';
+      case 'merriweather':
+        return 'font-merriweather';
+      default:
+        return 'font-inter';
+    }
+  };
+
   // Get button styles
   const getButtonStyles = () => {
     return {
       fontFamily: theme.typography?.fontFamily || 'Inter',
       fontSize: theme.typography?.fontSize || '16px',
       fontWeight: theme.typography?.fontWeight || '400',
-      background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
+      background: content.colorMode === 'custom' && content.primaryColor
+        ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
+        : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
       color: '#FFFFFF',
       borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
       boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
@@ -247,29 +394,22 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
               <span className="font-medium">{content.badgeText || "Tài nguyên miễn phí"}</span>
             </div>
             <h2 
-              className={cn("font-bold mb-4", getHeadingSize('large'))}
+              className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
               style={{ 
-                color: content.textColor || theme.colors.text,
-                fontWeight: content.titleWeight || theme.typography?.fontWeight || '700',
-                fontSize: content.titleSize === '2xl' ? 'text-2xl' :
-                         content.titleSize === '3xl' ? 'text-3xl' :
-                         content.titleSize === '4xl' ? 'text-4xl' :
-                         content.titleSize === '5xl' ? 'text-5xl' :
-                         content.titleSize === '6xl' ? 'text-6xl' : undefined
+                color: content.colorMode === 'custom' && content.textColor 
+                  ? content.textColor 
+                  : theme.colors.text,
               }}
             >
               {content.title || "Mở khóa thành công xuất nhập khẩu"}
             </h2>
             <p 
-              className={cn("max-w-3xl mx-auto", getBodySize())}
+              className={cn("max-w-3xl mx-auto", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
               style={{ 
-                color: content.textColor || theme.colors.muted || '#718096',
+                color: content.colorMode === 'custom' && content.textColor 
+                  ? `${content.textColor}E6` 
+                  : theme.colors.muted || '#718096',
                 lineHeight: theme.typography?.lineHeight || '1.6',
-                fontWeight: content.descriptionWeight || theme.typography?.fontWeight || '400',
-                fontSize: content.descriptionSize === 'lg' ? 'text-lg' :
-                         content.descriptionSize === 'xl' ? 'text-xl' :
-                         content.descriptionSize === '2xl' ? 'text-2xl' :
-                         content.descriptionSize === '3xl' ? 'text-3xl' : undefined
               }}
             >
               {content.description || "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2024' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ."}

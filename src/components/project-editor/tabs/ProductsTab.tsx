@@ -21,9 +21,9 @@ interface ProductsContent {
   textColor?: string;
   primaryColor?: string;
   colorMode?: 'theme' | 'custom';
-  titleSize?: '2xl' | '3xl' | '4xl' | '5xl' | '6xl';
+  titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
   titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
-  descriptionSize?: 'lg' | 'xl' | '2xl' | '3xl';
+  descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
   descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
   items?: ProductItem[];
   services?: ServiceItem[];

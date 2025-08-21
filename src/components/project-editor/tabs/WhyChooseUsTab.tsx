@@ -13,6 +13,8 @@ interface WhyChooseUsContent {
   subtitle?: string
   backgroundColor?: string
   textColor?: string
+  colorMode?: 'theme' | 'custom'
+  primaryColor?: string
   titleSize?: string
   titleWeight?: string
   subtitleSize?: string
@@ -157,38 +159,86 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
         <h3 className="text-lg font-semibold mb-4">Màu sắc</h3>
         <div className="space-y-4">
           <div>
-            <Label htmlFor="backgroundColor">Màu nền section</Label>
-            <div className="flex items-center space-x-3">
-              <input
-                type="color"
-                value={whyChooseUs.backgroundColor || '#FFFFFF'}
-                onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'backgroundColor'], e.target.value)}
-                className="w-12 h-10 rounded border border-gray-300"
-              />
-              <Input
-                value={whyChooseUs.backgroundColor || '#FFFFFF'}
-                onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'backgroundColor'], e.target.value)}
-                className="flex-1"
-              />
-            </div>
+            <Label htmlFor="colorMode">Chế độ màu</Label>
+            <Select
+              value={whyChooseUs.colorMode || 'custom'}
+              onValueChange={(value) => updateThemeParam(['content', 'whyChooseUs', 'colorMode'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="theme">Sử dụng màu chủ đề</SelectItem>
+                <SelectItem value="custom">Màu tùy chỉnh</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
           
-          <div>
-            <Label htmlFor="textColor">Màu chữ</Label>
-            <div className="flex items-center space-x-3">
-              <input
-                type="color"
-                value={whyChooseUs.textColor || '#2D3748'}
-                onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'textColor'], e.target.value)}
-                className="w-12 h-10 rounded border border-gray-300"
-              />
-              <Input
-                value={whyChooseUs.textColor || '#2D3748'}
-                onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'textColor'], e.target.value)}
-                className="flex-1"
-              />
+          {(whyChooseUs.colorMode || 'custom') === 'custom' && (
+            <>
+              <div>
+                <Label htmlFor="backgroundColor">Màu nền section</Label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="color"
+                    value={whyChooseUs.backgroundColor || '#FFFFFF'}
+                    onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'backgroundColor'], e.target.value)}
+                    className="w-12 h-10 rounded border border-gray-300"
+                  />
+                  <Input
+                    value={whyChooseUs.backgroundColor || '#FFFFFF'}
+                    onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'backgroundColor'], e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="textColor">Màu chữ</Label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="color"
+                    value={whyChooseUs.textColor || '#2D3748'}
+                    onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'textColor'], e.target.value)}
+                    className="w-12 h-10 rounded border border-gray-300"
+                  />
+                  <Input
+                    value={whyChooseUs.textColor || '#2D3748'}
+                    onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'textColor'], e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <Label htmlFor="primaryColor">Màu chính</Label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="color"
+                    value={whyChooseUs.primaryColor || '#8B4513'}
+                    onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'primaryColor'], e.target.value)}
+                    className="w-12 h-10 rounded border border-gray-300"
+                  />
+                  <Input
+                    value={whyChooseUs.primaryColor || '#8B4513'}
+                    onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'primaryColor'], e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+            </>
+          )}
+          
+          {(whyChooseUs.colorMode || 'custom') === 'theme' && (
+            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-sm text-blue-800">
+                Sử dụng màu từ chủ đề chính: <strong>{themeParams.colors?.primary || '#8B4513'}</strong>, <strong>{themeParams.colors?.accent || '#F4A460'}</strong>
+              </p>
+              <p className="text-xs text-blue-600 mt-1">
+                Màu sẽ được áp dụng tự động từ ColorsTab
+              </p>
             </div>
-          </div>
+          )}
         </div>
       </Card>
 

@@ -6,7 +6,7 @@ interface EditorPanelProps {
   activeTab: TabType
   themeParams: ThemeParams
   onTabChange: (tab: TabType) => void
-  updateThemeParam: (path: string[], value: string | number) => void
+  updateThemeParam: (path: string[], value: string | number | unknown) => void
 }
 
 const EditorPanel = ({ 

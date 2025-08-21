@@ -702,8 +702,8 @@ const ThemeEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Nút phụ</label>
                         <Input
-                          value={themeParams?.content?.hero?.secondaryCtaText || ''}
-                          onChange={(e) => updateThemeParam(['content', 'hero', 'secondaryCtaText'], e.target.value)}
+                          value={themeParams?.content?.hero?.ctaSecondaryText || ''}
+                          onChange={(e) => updateThemeParam(['content', 'hero', 'ctaSecondaryText'], e.target.value)}
                           placeholder="Hướng dẫn XNK từ A-Z"
                         />
                       </div>
@@ -1031,8 +1031,8 @@ const ThemeEditor = () => {
                             placeholder="Tên khách hàng"
                           />
                           <Input
-                            value={themeParams?.content?.testimonials?.testimonials?.[0]?.position || ''}
-                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '0', 'position'], e.target.value)}
+                            value={themeParams?.content?.testimonials?.testimonials?.[0]?.title || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '0', 'title'], e.target.value)}
                             placeholder="Chức vụ"
                           />
                           <Input
@@ -1059,8 +1059,8 @@ const ThemeEditor = () => {
                             placeholder="Tên khách hàng"
                           />
                           <Input
-                            value={themeParams?.content?.testimonials?.testimonials?.[1]?.position || ''}
-                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '1', 'position'], e.target.value)}
+                            value={themeParams?.content?.testimonials?.testimonials?.[1]?.title || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '1', 'title'], e.target.value)}
                             placeholder="Chức vụ"
                           />
                           <Input
@@ -1087,8 +1087,8 @@ const ThemeEditor = () => {
                             placeholder="Tên khách hàng"
                           />
                           <Input
-                            value={themeParams?.content?.testimonials?.testimonials?.[2]?.position || ''}
-                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '2', 'position'], e.target.value)}
+                            value={themeParams?.content?.testimonials?.testimonials?.[2]?.title || ''}
+                            onChange={(e) => updateThemeParam(['content', 'testimonials', 'testimonials', '2', 'title'], e.target.value)}
                             placeholder="Chức vụ"
                           />
                           <Input
@@ -1251,8 +1251,8 @@ const ThemeEditor = () => {
                       <div>
                         <label className="block text-sm font-medium mb-2">Copyright Text</label>
                         <Input
-                          value={themeParams?.content?.footer?.legal?.copyright || ''}
-                          onChange={(e) => updateThemeParam(['content', 'footer', 'legal', 'copyright'], e.target.value)}
+                          value={themeParams?.content?.footer?.copyright || ''}
+                          onChange={(e) => updateThemeParam(['content', 'footer', 'copyright'], e.target.value)}
                           placeholder="© 2024 Cà Phê Việt. Tất cả quyền được bảo lưu."
                         />
                       </div>

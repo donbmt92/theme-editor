@@ -193,7 +193,7 @@ const UserTemplatesPageContent = () => {
         toast({
           title: "Thành công!",
           description: "Project đã được tạo thành công. AI Content Generator sẽ mở để bạn tạo nội dung.",
-          variant: "success"
+          variant: "default"
         })
       } else {
         toast({
@@ -238,7 +238,7 @@ const UserTemplatesPageContent = () => {
         toast({
           title: "Thành công!",
           description: "Nội dung AI đã được cập nhật. Chuyển đến editor...",
-          variant: "success",
+          variant: "default",
           duration: 2000
         })
         

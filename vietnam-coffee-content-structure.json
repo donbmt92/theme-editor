@@ -605,7 +605,7 @@
       "bodySize": "base"
     },
     "layout": {
-      "containerWidth": "1200px",
+      "containerWidth": "1400px",
       "spacing": "comfortable",
       "borderRadius": "medium"
     },

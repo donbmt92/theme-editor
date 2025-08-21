@@ -163,6 +163,19 @@ export interface ThemeSections {
   testimonials?: {
     backgroundColor?: string
     textColor?: string
+    trustIndicators?: Array<{
+      id?: string
+      number: string
+      label: string
+    }>
+  }
+  blog?: {
+    backgroundColor?: string
+    textColor?: string
+  }
+  whyChooseUs?: {
+    backgroundColor?: string
+    textColor?: string
   }
   cta?: {
     backgroundColor?: string
@@ -193,6 +206,9 @@ export interface ThemeContent {
     subtitle?: string
     backgroundColor?: string
     textColor?: string
+    logoSize?: 'small' | 'medium' | 'large' | 'xlarge'
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
     navigation?: Array<{
       name: string
       href: string
@@ -222,6 +238,8 @@ export interface ThemeContent {
     overlayColor?: string
     backgroundColor?: string
     textColor?: string
+    primaryColor?: string
+    colorMode?: 'theme' | 'custom'
     // Text size customization options
     titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
     subtitleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
@@ -277,6 +295,8 @@ export interface ThemeContent {
     description?: string
     backgroundColor?: string
     textColor?: string
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
     // Typography customization
     titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
     descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
@@ -295,6 +315,13 @@ export interface ThemeContent {
       description: string
       icon: string
     }>
+    cta?: {
+      title: string
+      description: string
+      buttonText: string
+      backgroundColor?: string
+      textColor?: string
+    }
   }
   
   // Solutions
@@ -303,6 +330,8 @@ export interface ThemeContent {
     description?: string
     backgroundColor?: string
     textColor?: string
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
     // Typography customization
     titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
     descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
@@ -324,6 +353,13 @@ export interface ThemeContent {
       benefit: string
       icon: string
     }>
+    cta?: {
+      title: string
+      description: string
+      buttonText: string
+      backgroundColor?: string
+      textColor?: string
+    }
   }
   
   // CTA
@@ -343,6 +379,14 @@ export interface ThemeContent {
     description?: string
     backgroundColor?: string
     textColor?: string
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     items?: Array<{
       id?: string
       name: string
@@ -367,6 +411,14 @@ export interface ThemeContent {
     subtitle?: string
     backgroundColor?: string
     textColor?: string
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    subtitleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    subtitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    subtitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     testimonials?: Array<{
       id?: string
       name: string
@@ -391,6 +443,9 @@ export interface ThemeContent {
     description?: string
     backgroundColor?: string
     textColor?: string
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
+    copyright?: string
     quickLinks?: Array<{
       name: string
       href: string
@@ -414,6 +469,12 @@ export interface ThemeContent {
       name: string
       href: string
     }>
+    newsletter?: {
+      title?: string
+      placeholder?: string
+      buttonText?: string
+      description?: string
+    }
   }
 
   // Lead Magnet
@@ -422,17 +483,39 @@ export interface ThemeContent {
     description?: string
     backgroundColor?: string
     textColor?: string
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     guideTitle?: string
     guideSubtitle?: string
     formTitle?: string
     formDescription?: string
     buttonText?: string
+    badgeText?: string
+    downloadUrl?: string
+    privacyText?: string
+    secureText?: string
+    noSpamText?: string
+    instantText?: string
     features?: Array<{
+      id?: string
+      icon: string
+      title: string
+      description: string
+    }>
+    guideFeatures?: Array<{
+      id?: string
       icon: string
       title: string
       description: string
     }>
     trustIndicators?: Array<{
+      id?: string
       number: string
       label: string
     }>
@@ -444,6 +527,14 @@ export interface ThemeContent {
     subtitle?: string
     backgroundColor?: string
     textColor?: string
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    subtitleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    subtitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    subtitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     strengths?: Array<{
       icon: string
       title: string
@@ -470,9 +561,18 @@ export interface ThemeContent {
     subtitle?: string
     backgroundColor?: string
     textColor?: string
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    subtitleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    subtitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    subtitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     categories?: Array<{
       name: string
       count: number
+      color?: string
     }>
     featuredPost?: {
       title: string
@@ -481,6 +581,7 @@ export interface ThemeContent {
       date: string
       image: string
       category: string
+      readTime?: string
     }
     posts?: Array<{
       id: string
@@ -490,12 +591,15 @@ export interface ThemeContent {
       date: string
       image: string
       category: string
+      readTime?: string
+      featured?: boolean
     }>
     newsletter?: {
       title: string
       description: string
       placeholder: string
       buttonText: string
+      footerText?: string
     }
   }
 }

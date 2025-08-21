@@ -1,18 +1,19 @@
 'use client'
 
 import { Button } from "@/components/ui/button";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuList, NavigationMenuTrigger, NavigationMenuLink } from "@/components/ui/navigation-menu";
+import { NavigationMenu, NavigationMenuItem, NavigationMenuList, NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Phone, Download, Globe, Coffee, ChevronDown } from "lucide-react";
+import { Menu, Phone, Download, Coffee } from "lucide-react";
 import { useState } from "react";
 import { ThemeParams } from "@/types";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+
 
 interface HeaderContent {
   title?: string;
   subtitle?: string;
   logo?: string;
+  logoSize?: 'small' | 'medium' | 'large' | 'xlarge';
   backgroundColor?: string;
   textColor?: string;
   primaryColor?: string;
@@ -62,6 +63,36 @@ const Header = ({ theme, content }: HeaderProps) => {
     }
   }
 
+  // Get logo size classes
+  const getLogoSizeClasses = () => {
+    switch (content.logoSize) {
+      case 'small':
+        return 'w-8 h-8'
+      case 'large':
+        return 'w-20 h-20'
+      case 'xlarge':
+        return 'w-24 h-24'
+      case 'medium':
+      default:
+        return 'w-16 h-16'
+    }
+  }
+
+  // Get logo icon size
+  const getLogoIconSize = () => {
+    switch (content.logoSize) {
+      case 'small':
+        return 20
+      case 'large':
+        return 40
+      case 'xlarge':
+        return 48
+      case 'medium':
+      default:
+        return 32
+    }
+  }
+
   // Get button styles based on component settings
   const getButtonStyles = (variant: 'outline' | 'premium' = 'outline') => {
     const baseStyles = {
@@ -90,25 +121,8 @@ const Header = ({ theme, content }: HeaderProps) => {
   const navigation = [
     { name: "Trang chủ", href: "#home" },
     { name: "Về chúng tôi", href: "#about" },
-    { 
-      name: "Sản phẩm", 
-      href: "#products",
-      dropdown: [
-        { name: "Cà phê Robusta", href: "#robusta" },
-        { name: "Cà phê Arabica", href: "#arabica" },
-        { name: "Cà phê Chồn", href: "#weasel" },
-        { name: "Cà phê Đặc biệt", href: "#specialty" }
-      ]
-    },
-    {
-      name: "Tài nguyên",
-      href: "#resources",
-      dropdown: [
-        { name: "Cẩm nang XNK 2024", href: "#guide" },
-        { name: "Thị trường", href: "#market" },
-        { name: "Tài liệu", href: "#documentation" }
-      ]
-    },
+    { name: "Sản phẩm", href: "#products" },
+    { name: "Tài nguyên", href: "#resources" },
     { name: "Liên hệ", href: "#contact" }
   ];
 
@@ -135,14 +149,16 @@ const Header = ({ theme, content }: HeaderProps) => {
       >
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             {content.logo ? (
-              <div className="relative w-10 h-10">
+              <div className={`relative ${getLogoSizeClasses()}`}>
                 <Image 
                   src={content.logo} 
                   alt="Logo"
                   fill
-                  sizes="40px"
+                  sizes={content.logoSize === 'small' ? '32px' : 
+                         content.logoSize === 'large' ? '80px' : 
+                         content.logoSize === 'xlarge' ? '96px' : '64px'}
                   className={`object-contain ${getBorderRadiusClass()}`}
                   priority
                   quality={90}
@@ -150,10 +166,10 @@ const Header = ({ theme, content }: HeaderProps) => {
               </div>
             ) : (
               <div 
-                className={`w-10 h-10 flex items-center justify-center ${getBorderRadiusClass()}`}
+                className={`${getLogoSizeClasses()} flex items-center justify-center ${getBorderRadiusClass()}`}
                 style={{ backgroundColor: theme.colors.accent }}
               >
-                <Coffee className="text-white" size={24} />
+                <Coffee className="text-white" size={getLogoIconSize()} />
               </div>
             )}
             <div>
@@ -185,48 +201,16 @@ const Header = ({ theme, content }: HeaderProps) => {
             <NavigationMenuList className="space-x-6">
               {navigation.map((item) => (
                 <NavigationMenuItem key={item.name}>
-                  {item.dropdown ? (
-                    <>
-                      <NavigationMenuTrigger 
-                        className="text-foreground hover:text-primary transition-colors"
-                        style={{ 
-                          color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                          fontSize: theme.typography?.fontSize || '16px'
-                        }}
-                      >
-                        {item.name}
-                      </NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <div className="w-48 p-2">
-                          {item.dropdown.map((subItem) => (
-                            <NavigationMenuLink
-                              key={subItem.name}
-                              href={subItem.href}
-                              className="block px-3 py-2 text-sm text-foreground hover:bg-muted rounded-md transition-colors"
-                              onClick={(e) => {
-                                if (subItem.href === '#guide') {
-                                  scrollToGuide(e as unknown as React.MouseEvent);
-                                }
-                              }}
-                            >
-                              {subItem.name}
-                            </NavigationMenuLink>
-                          ))}
-                        </div>
-                      </NavigationMenuContent>
-                    </>
-                  ) : (
-                    <NavigationMenuLink
-                      href={item.href}
-                      className="text-foreground hover:text-primary transition-colors font-medium"
-                      style={{ 
-                        color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                        fontSize: theme.typography?.fontSize || '16px'
-                      }}
-                    >
-                      {item.name}
-                    </NavigationMenuLink>
-                  )}
+                  <NavigationMenuLink
+                    href={item.href}
+                    className="text-foreground hover:text-primary transition-colors font-medium"
+                    style={{ 
+                      color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
+                      fontSize: theme.typography?.fontSize || '16px'
+                    }}
+                  >
+                    {item.name}
+                  </NavigationMenuLink>
                 </NavigationMenuItem>
               ))}
             </NavigationMenuList>
@@ -287,45 +271,18 @@ const Header = ({ theme, content }: HeaderProps) => {
             >
               <div className="flex flex-col space-y-4 mt-8">
                 {navigation.map((item) => (
-                  <div key={item.name}>
-                    <a
-                      href={item.href}
-                      className="block py-2 text-lg font-medium text-foreground hover:text-primary transition-colors"
-                      style={{ 
-                        color: content.textColor || theme.colors.text,
-                        fontSize: theme.typography?.fontSize || '16px'
-                      }}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {item.name}
-                    </a>
-                    {item.dropdown && (
-                      <div className="ml-4 mt-2 space-y-2">
-                        {item.dropdown.map((subItem) => (
-                          <a
-                            key={subItem.name}
-                            href={subItem.href}
-                            className="block py-1 text-sm text-muted-foreground hover:text-primary transition-colors"
-                            style={{ 
-                              color: content.textColor || theme.colors.text,
-                              fontSize: theme.typography?.fontSize || '16px'
-                            }}
-                            onClick={(e) => {
-                              setIsOpen(false)
-                              if (subItem.href === '#guide') {
-                                e.preventDefault();
-                                const el = document.getElementById('guide');
-                                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                else window.location.hash = '#guide';
-                              }
-                            }}
-                          >
-                            {subItem.name}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="block py-2 text-lg font-medium text-foreground hover:text-primary transition-colors"
+                    style={{ 
+                      color: content.textColor || theme.colors.text,
+                      fontSize: theme.typography?.fontSize || '16px'
+                    }}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </a>
                 ))}
                 <div 
                   className="border-t pt-4 space-y-3"

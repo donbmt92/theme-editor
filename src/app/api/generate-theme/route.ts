@@ -45,6 +45,8 @@ YÊU CẦU:
 2. Viết nội dung đầy đủ cho tất cả các section theo cấu trúc template
 3. Nội dung phải phù hợp với tông giọng và ngôn ngữ được chỉ định
 4. Đảm bảo nội dung chuyên nghiệp, hấp dẫn và phù hợp với đối tượng khách hàng
+5. Sử dụng kích thước tiêu đề phù hợp: titleSize="xl" (lớn), subtitleSize="lg" (lớn), descriptionSize="base" (vừa)
+6. Sử dụng độ đậm font phù hợp: titleWeight="semibold", subtitleWeight="medium", descriptionWeight="normal"
 
 Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format khác):
 
@@ -72,13 +74,24 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
         {"name": "Liên hệ", "href": "#contact"}
       ]
     },
-    "hero": {
-      "title": "Tiêu đề chính hấp dẫn cho ${businessInfo.industry}",
-      "subtitle": "Phụ đề bổ sung",
-      "description": "Mô tả chi tiết về giá trị cốt lõi và lợi ích chính",
-      "ctaText": "Call to action chính",
-      "ctaSecondaryText": "Call to action phụ",
-      "image": "/assets/hero-image.jpg",
+         "hero": {
+       "title": "Tiêu đề chính hấp dẫn cho ${businessInfo.industry}",
+       "subtitle": "Phụ đề bổ sung",
+       "description": "Mô tả chi tiết về giá trị cốt lõi và lợi ích chính",
+       "ctaText": "Call to action chính",
+       "ctaSecondaryText": "Call to action phụ",
+       "image": "/assets/hero-image.jpg",
+       "titleSize": "xl",
+       "subtitleSize": "lg",
+       "descriptionSize": "base",
+       "titleWeight": "semibold",
+       "subtitleWeight": "medium",
+       "ctaSize": "lg",
+       "ctaWeight": "semibold",
+       "benefitsSize": "base",
+       "benefitsWeight": "medium",
+       "statsSize": "lg",
+       "statsWeight": "bold",
       "benefits": [
         {"icon": "CheckCircle", "text": "Lợi ích 1"},
         {"icon": "Shield", "text": "Lợi ích 2"},

@@ -2,6 +2,8 @@ import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { ThemeParams } from '@/types'
 import { Plus, Trash2 } from 'lucide-react'
 
@@ -82,40 +84,87 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
               rows={2}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Màu nền</label>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={themeParams?.content?.testimonials?.backgroundColor || '#F5F5DC'}
-                  onChange={(e) => updateThemeParam(['content', 'testimonials', 'backgroundColor'], e.target.value)}
-                  className="w-12 h-10 rounded border border-gray-300"
-                />
-                <Input
-                  value={themeParams?.content?.testimonials?.backgroundColor || '#F5F5DC'}
-                  onChange={(e) => updateThemeParam(['content', 'testimonials', 'backgroundColor'], e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-2">Màu chữ</label>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={themeParams?.content?.testimonials?.textColor || '#2D3748'}
-                  onChange={(e) => updateThemeParam(['content', 'testimonials', 'textColor'], e.target.value)}
-                  className="w-12 h-10 rounded border border-gray-300"
-                />
-                <Input
-                  value={themeParams?.content?.testimonials?.textColor || '#2D3748'}
-                  onChange={(e) => updateThemeParam(['content', 'testimonials', 'textColor'], e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
+          <div>
+            <Label htmlFor="colorMode">Chế độ màu</Label>
+            <Select
+              value={themeParams?.content?.testimonials?.colorMode || 'custom'}
+              onValueChange={(value) => updateThemeParam(['content', 'testimonials', 'colorMode'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="theme">Sử dụng màu chủ đề</SelectItem>
+                <SelectItem value="custom">Màu tùy chỉnh</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
+          
+          {(themeParams?.content?.testimonials?.colorMode || 'custom') === 'custom' && (
+            <>
+              <div>
+                <label className="block text-sm font-medium mb-2">Màu nền</label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="color"
+                    value={themeParams?.content?.testimonials?.backgroundColor || '#F5F5DC'}
+                    onChange={(e) => updateThemeParam(['content', 'testimonials', 'backgroundColor'], e.target.value)}
+                    className="w-12 h-10 rounded border border-gray-300"
+                  />
+                  <Input
+                    value={themeParams?.content?.testimonials?.backgroundColor || '#F5F5DC'}
+                    onChange={(e) => updateThemeParam(['content', 'testimonials', 'backgroundColor'], e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Màu chữ</label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="color"
+                    value={themeParams?.content?.testimonials?.textColor || '#2D3748'}
+                    onChange={(e) => updateThemeParam(['content', 'testimonials', 'textColor'], e.target.value)}
+                    className="w-12 h-10 rounded border border-gray-300"
+                  />
+                  <Input
+                    value={themeParams?.content?.testimonials?.textColor || '#2D3748'}
+                    onChange={(e) => updateThemeParam(['content', 'testimonials', 'textColor'], e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium mb-2">Màu chính</label>
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="color"
+                    value={themeParams?.content?.testimonials?.primaryColor || '#8B4513'}
+                    onChange={(e) => updateThemeParam(['content', 'testimonials', 'primaryColor'], e.target.value)}
+                    className="w-12 h-10 rounded border border-gray-300"
+                  />
+                  <Input
+                    value={themeParams?.content?.testimonials?.primaryColor || '#8B4513'}
+                    onChange={(e) => updateThemeParam(['content', 'testimonials', 'primaryColor'], e.target.value)}
+                    className="flex-1"
+                  />
+                </div>
+              </div>
+            </>
+          )}
+          
+          {(themeParams?.content?.testimonials?.colorMode || 'custom') === 'theme' && (
+            <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-sm text-blue-800">
+                Sử dụng màu từ chủ đề chính: <strong>{themeParams.colors?.primary || '#8B4513'}</strong>, <strong>{themeParams.colors?.accent || '#F4A460'}</strong>
+              </p>
+              <p className="text-xs text-blue-600 mt-1">
+                Màu sẽ được áp dụng tự động từ ColorsTab
+              </p>
+            </div>
+          )}
         </div>
       </Card>
 

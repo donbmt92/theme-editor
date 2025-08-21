@@ -12,6 +12,8 @@ interface FooterContent {
   description?: string;
   backgroundColor?: string;
   textColor?: string;
+  colorMode?: 'theme' | 'custom';
+  primaryColor?: string;
   contact?: {
     phone?: string;
     email?: string;
@@ -138,8 +140,12 @@ const Footer = ({ theme, content }: FooterProps) => {
       id="contact"
       className="bg-secondary text-secondary-foreground"
       style={{ 
-        backgroundColor: content.backgroundColor || theme.colors.secondary || '#1F2937',
-        color: content.textColor || theme.colors.text || '#F9FAFB',
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
+          ? content.backgroundColor 
+          : theme.sections?.footer?.backgroundColor || theme.colors.secondary || '#1F2937',
+        color: content.colorMode === 'custom' && content.textColor 
+          ? content.textColor 
+          : theme.sections?.footer?.textColor || theme.colors.text || '#F9FAFB',
         ...getTypographyStyles()
       }}
     >

@@ -383,10 +383,25 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                   <div>
                     <p className="font-medium">Tiêu đề Hero:</p>
                     <p className="text-sm text-gray-600">{generatedContent.content?.hero?.title}</p>
+                    <p className="text-xs text-blue-600">
+                      Kích thước: <strong>{generatedContent.content?.hero?.titleSize || 'xl'}</strong> 
+                      | Độ đậm: <strong>{generatedContent.content?.hero?.titleWeight || 'semibold'}</strong>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Tiêu đề phụ Hero:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.hero?.subtitle}</p>
+                    <p className="text-xs text-blue-600">
+                      Kích thước: <strong>{generatedContent.content?.hero?.subtitleSize || 'lg'}</strong> 
+                      | Độ đậm: <strong>{generatedContent.content?.hero?.subtitleWeight || 'medium'}</strong>
+                    </p>
                   </div>
                   <div>
                     <p className="font-medium">Mô tả Hero:</p>
                     <p className="text-sm text-gray-600">{generatedContent.content?.hero?.description}</p>
+                    <p className="text-xs text-blue-600">
+                      Kích thước: <strong>{generatedContent.content?.hero?.descriptionSize || 'base'}</strong>
+                    </p>
                   </div>
                 </CardContent>
               </Card>

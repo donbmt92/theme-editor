@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import ImageUpload from '@/components/ui/image-upload'
 import { ThemeParams } from '@/types'
-import { Plus, Trash2, X } from 'lucide-react'
+import { Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 
 interface HeroTabProps {
@@ -21,6 +21,24 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
   const hero = themeParams.content?.hero || {}
   const benefits = hero.benefits || []
   const stats = hero.stats || []
+  
+  // Type-safe access to hero properties with proper typing
+  const heroContent = hero as typeof hero & {
+    colorMode?: 'theme' | 'custom'
+    primaryColor?: string
+    titleFont?: string
+    subtitleFont?: string
+    descriptionFont?: string
+    benefitsFont?: string
+    ctaFont?: string
+    statsFont?: string
+    benefitsSize?: string
+    benefitsWeight?: string
+    ctaSize?: string
+    ctaWeight?: string
+    statsSize?: string
+    statsWeight?: string
+  }
 
   const addBenefit = () => {
     if (newBenefit.icon && newBenefit.text) {
@@ -90,6 +108,73 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
       {/* CTA Buttons */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Nút Call-to-Action</h3>
+        
+        {/* CTA Typography Settings */}
+        <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+          <div>
+            <Label htmlFor="ctaSize">Kích thước CTA</Label>
+            <Select
+              value={heroContent.ctaSize || 'base'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'ctaSize'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="sm">Nhỏ</SelectItem>
+                <SelectItem value="base">Vừa</SelectItem>
+                <SelectItem value="lg">Lớn</SelectItem>
+                <SelectItem value="xl">Rất lớn</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="ctaWeight">Độ đậm CTA</Label>
+            <Select
+              value={heroContent.ctaWeight || 'medium'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'ctaWeight'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Mỏng</SelectItem>
+                <SelectItem value="normal">Bình thường</SelectItem>
+                <SelectItem value="medium">Trung bình</SelectItem>
+                <SelectItem value="semibold">Bán đậm</SelectItem>
+                <SelectItem value="bold">Đậm</SelectItem>
+                <SelectItem value="extrabold">Rất đậm</SelectItem>
+                <SelectItem value="black">Đen</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="ctaFont">Font CTA</Label>
+            <Select
+              value={heroContent.ctaFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'ctaFont'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        
         <div className="space-y-4">
           <div>
             <Label htmlFor="ctaText">Nút chính</Label>
@@ -148,7 +233,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={hero.colorMode || 'custom'}
+              value={heroContent.colorMode || 'custom'}
               onValueChange={(value) => updateThemeParam(['content', 'hero', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -161,7 +246,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
             </Select>
           </div>
           
-          {hero.colorMode === 'custom' && (
+          {heroContent.colorMode === 'custom' && (
             <>
               <div>
                 <Label htmlFor="backgroundColor">Màu nền</Label>
@@ -202,12 +287,12 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
                 <div className="flex items-center space-x-3">
                   <input
                     type="color"
-                    value={hero.primaryColor || '#3B82F6'}
+                    value={heroContent.primaryColor || '#3B82F6'}
                     onChange={(e) => updateThemeParam(['content', 'hero', 'primaryColor'], e.target.value)}
                     className="w-12 h-10 rounded border border-gray-300"
                   />
                   <Input
-                    value={hero.primaryColor || '#3B82F6'}
+                    value={heroContent.primaryColor || '#3B82F6'}
                     onChange={(e) => updateThemeParam(['content', 'hero', 'primaryColor'], e.target.value)}
                     className="flex-1"
                   />
@@ -248,7 +333,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
             </>
           )}
           
-          {hero.colorMode === 'theme' && (
+          {heroContent.colorMode === 'theme' && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
                 Sử dụng màu từ chủ đề chính: <strong>{themeParams.colors?.primary || '#8B4513'}</strong>, <strong>{themeParams.colors?.accent || '#F4A460'}</strong>
@@ -268,28 +353,251 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
           <div>
             <Label htmlFor="titleSize">Kích thước tiêu đề</Label>
             <Select
-              value={hero.titleSize || '2xl'}
+              value={hero.titleSize || 'xl'}
               onValueChange={(value) => updateThemeParam(['content', 'hero', 'titleSize'], value)}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="sm">Nhỏ</SelectItem>
-                <SelectItem value="base">Vừa</SelectItem>
-                <SelectItem value="lg">Lớn</SelectItem>
-                <SelectItem value="xl">Rất lớn</SelectItem>
-                <SelectItem value="2xl">Cực lớn</SelectItem>
-                <SelectItem value="3xl">Khổng lồ</SelectItem>
+                <SelectItem value="sm">Nhỏ (0.875rem)</SelectItem>
+                <SelectItem value="base">Vừa (1rem)</SelectItem>
+                <SelectItem value="lg">Lớn (1.125rem)</SelectItem>
+                <SelectItem value="xl">Rất lớn (1.25rem) - Mặc định</SelectItem>
+                <SelectItem value="2xl">Cực lớn (1.5rem)</SelectItem>
+                <SelectItem value="3xl">Khổng lồ (1.875rem)</SelectItem>
               </SelectContent>
             </Select>
+            <p className="text-xs text-gray-500 mt-1">
+              Kích thước hiện tại: <strong>{hero.titleSize || 'xl'}</strong> 
+              {hero.titleSize === 'xl' && ' (Khuyến nghị cho tiêu đề chính)'}
+            </p>
           </div>
           
           <div>
             <Label htmlFor="titleWeight">Độ đậm tiêu đề</Label>
             <Select
-              value={hero.titleWeight || 'bold'}
+              value={hero.titleWeight || 'semibold'}
               onValueChange={(value) => updateThemeParam(['content', 'hero', 'titleWeight'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Mỏng (300)</SelectItem>
+                <SelectItem value="normal">Bình thường (400)</SelectItem>
+                <SelectItem value="medium">Trung bình (500)</SelectItem>
+                <SelectItem value="semibold">Bán đậm (600) - Mặc định</SelectItem>
+                <SelectItem value="bold">Đậm (700)</SelectItem>
+                <SelectItem value="extrabold">Rất đậm (800)</SelectItem>
+                <SelectItem value="black">Đen (900)</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-gray-500 mt-1">
+              Độ đậm hiện tại: <strong>{hero.titleWeight || 'semibold'}</strong>
+            </p>
+          </div>
+          
+          <div>
+            <Label htmlFor="subtitleSize">Kích thước tiêu đề phụ</Label>
+            <Select
+              value={hero.subtitleSize || 'lg'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'subtitleSize'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="sm">Nhỏ (0.875rem)</SelectItem>
+                <SelectItem value="base">Vừa (1rem)</SelectItem>
+                <SelectItem value="lg">Lớn (1.125rem) - Mặc định</SelectItem>
+                <SelectItem value="xl">Rất lớn (1.25rem)</SelectItem>
+                <SelectItem value="2xl">Cực lớn (1.5rem)</SelectItem>
+                <SelectItem value="3xl">Khổng lồ (1.875rem)</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-gray-500 mt-1">
+              Kích thước hiện tại: <strong>{hero.subtitleSize || 'lg'}</strong>
+            </p>
+          </div>
+          
+          <div>
+            <Label htmlFor="descriptionSize">Kích thước mô tả</Label>
+            <Select
+              value={hero.descriptionSize || 'base'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'descriptionSize'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="xs">Rất nhỏ (0.75rem)</SelectItem>
+                <SelectItem value="sm">Nhỏ (0.875rem)</SelectItem>
+                <SelectItem value="base">Vừa (1rem) - Mặc định</SelectItem>
+                <SelectItem value="lg">Lớn (1.125rem)</SelectItem>
+                <SelectItem value="xl">Rất lớn (1.25rem)</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-gray-500 mt-1">
+              Kích thước hiện tại: <strong>{hero.descriptionSize || 'base'}</strong>
+            </p>
+          </div>
+          
+          <div>
+            <Label htmlFor="subtitleWeight">Độ đậm tiêu đề phụ</Label>
+            <Select
+              value={hero.subtitleWeight || 'medium'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'subtitleWeight'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Mỏng (300)</SelectItem>
+                <SelectItem value="normal">Bình thường (400)</SelectItem>
+                <SelectItem value="medium">Trung bình (500) - Mặc định</SelectItem>
+                <SelectItem value="semibold">Bán đậm (600)</SelectItem>
+                <SelectItem value="bold">Đậm (700)</SelectItem>
+                <SelectItem value="extrabold">Rất đậm (800)</SelectItem>
+                <SelectItem value="black">Đen (900)</SelectItem>
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-gray-500 mt-1">
+              Độ đậm hiện tại: <strong>{hero.subtitleWeight || 'medium'}</strong>
+            </p>
+          </div>
+        </div>
+
+        {/* Font Family Section */}
+        <div className="grid grid-cols-2 gap-4 mt-6 pt-6 border-t">
+          <div>
+            <Label htmlFor="titleFont">Font tiêu đề</Label>
+            <Select
+              value={heroContent.titleFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'titleFont'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="subtitleFont">Font tiêu đề phụ</Label>
+            <Select
+              value={heroContent.subtitleFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'subtitleFont'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="descriptionFont">Font mô tả</Label>
+            <Select
+              value={heroContent.descriptionFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'descriptionFont'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="ctaFont">Font CTA</Label>
+            <Select
+              value={heroContent.ctaFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'ctaFont'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </Card>
+
+      {/* Lợi ích */}
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold mb-4">Lợi ích</h3>
+        
+        {/* Benefits Typography Settings */}
+        <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+          <div>
+            <Label htmlFor="benefitsSize">Kích thước lợi ích</Label>
+            <Select
+              value={heroContent.benefitsSize || 'base'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'benefitsSize'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="xs">Rất nhỏ</SelectItem>
+                <SelectItem value="sm">Nhỏ</SelectItem>
+                <SelectItem value="base">Vừa</SelectItem>
+                <SelectItem value="lg">Lớn</SelectItem>
+                <SelectItem value="xl">Rất lớn</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="benefitsWeight">Độ đậm lợi ích</Label>
+            <Select
+              value={heroContent.benefitsWeight || 'medium'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'benefitsWeight'], value)}
             >
               <SelectTrigger>
                 <SelectValue />
@@ -307,64 +615,67 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
           </div>
           
           <div>
-            <Label htmlFor="subtitleSize">Kích thước tiêu đề phụ</Label>
+            <Label htmlFor="benefitsFont">Font lợi ích</Label>
             <Select
-              value={hero.subtitleSize || 'lg'}
-              onValueChange={(value) => updateThemeParam(['content', 'hero', 'subtitleSize'], value)}
+              value={heroContent.benefitsFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'benefitsFont'], value)}
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="sm">Nhỏ</SelectItem>
-                <SelectItem value="base">Vừa</SelectItem>
-                <SelectItem value="lg">Lớn</SelectItem>
-                <SelectItem value="xl">Rất lớn</SelectItem>
-                <SelectItem value="2xl">Cực lớn</SelectItem>
-                <SelectItem value="3xl">Khổng lồ</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          
-          <div>
-            <Label htmlFor="descriptionSize">Kích thước mô tả</Label>
-            <Select
-              value={hero.descriptionSize || 'base'}
-              onValueChange={(value) => updateThemeParam(['content', 'hero', 'descriptionSize'], value)}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="xs">Rất nhỏ</SelectItem>
-                <SelectItem value="sm">Nhỏ</SelectItem>
-                <SelectItem value="base">Vừa</SelectItem>
-                <SelectItem value="lg">Lớn</SelectItem>
-                <SelectItem value="xl">Rất lớn</SelectItem>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
-      </Card>
-
-      {/* Lợi ích */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Lợi ích</h3>
         <div className="space-y-4">
           {benefits.map((benefit, index) => (
             <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg">
               <div className="flex-1">
-                <Input
+                <Label className="text-sm text-gray-600 mb-1 block">Icon</Label>
+                <Select
                   value={benefit.icon}
-                  onChange={(e) => {
+                  onValueChange={(value) => {
                     const updatedBenefits = [...benefits]
-                    updatedBenefits[index] = { ...benefit, icon: e.target.value }
+                    updatedBenefits[index] = { ...benefit, icon: value }
                     updateThemeParam(['content', 'hero', 'benefits'], updatedBenefits)
                   }}
-                  placeholder="Icon (emoji hoặc text)"
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Chọn icon" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="✅">✅ Check</SelectItem>
+                    <SelectItem value="🌍">🌍 Globe</SelectItem>
+                    <SelectItem value="⭐">⭐ Star</SelectItem>
+                    <SelectItem value="🏆">🏆 Trophy</SelectItem>
+                    <SelectItem value="💎">💎 Diamond</SelectItem>
+                    <SelectItem value="⚡">⚡ Lightning</SelectItem>
+                    <SelectItem value="🛡️">🛡️ Shield</SelectItem>
+                    <SelectItem value="🚀">🚀 Rocket</SelectItem>
+                    <SelectItem value="CheckCircle">CheckCircle (Lucide)</SelectItem>
+                    <SelectItem value="Award">Award (Lucide)</SelectItem>
+                    <SelectItem value="Globe">Globe (Lucide)</SelectItem>
+                    <SelectItem value="Shield">Shield (Lucide)</SelectItem>
+                    <SelectItem value="Users">Users (Lucide)</SelectItem>
+                    <SelectItem value="TrendingUp">TrendingUp (Lucide)</SelectItem>
+                    <SelectItem value="Clock">Clock (Lucide)</SelectItem>
+                    <SelectItem value="Zap">Zap (Lucide)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div className="flex-1">
+                <Label className="text-sm text-gray-600 mb-1 block">Nội dung</Label>
                 <Input
                   value={benefit.text}
                   onChange={(e) => {
@@ -375,32 +686,63 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
                   placeholder="Mô tả lợi ích"
                 />
               </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => removeBenefit(index)}
-                className="text-red-600 hover:text-red-700"
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              <div className="pt-6">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => removeBenefit(index)}
+                  className="text-red-600 hover:text-red-700"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           ))}
           
-          <div className="flex items-center space-x-3">
-            <Input
-              value={newBenefit.icon}
-              onChange={(e) => setNewBenefit({ ...newBenefit, icon: e.target.value })}
-              placeholder="Icon"
-            />
-            <Input
-              value={newBenefit.text}
-              onChange={(e) => setNewBenefit({ ...newBenefit, text: e.target.value })}
-              placeholder="Mô tả lợi ích"
-            />
-            <Button onClick={addBenefit} size="sm">
-              <Plus className="w-4 h-4 mr-1" />
-              Thêm
-            </Button>
+          <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+            <div className="flex-1">
+              <Label className="text-sm text-gray-600 mb-1 block">Icon mới</Label>
+              <Select
+                value={newBenefit.icon}
+                onValueChange={(value) => setNewBenefit({ ...newBenefit, icon: value })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Chọn icon" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="✅">✅ Check</SelectItem>
+                  <SelectItem value="🌍">🌍 Globe</SelectItem>
+                  <SelectItem value="⭐">⭐ Star</SelectItem>
+                  <SelectItem value="🏆">🏆 Trophy</SelectItem>
+                  <SelectItem value="💎">💎 Diamond</SelectItem>
+                  <SelectItem value="⚡">⚡ Lightning</SelectItem>
+                  <SelectItem value="🛡️">🛡️ Shield</SelectItem>
+                  <SelectItem value="🚀">🚀 Rocket</SelectItem>
+                  <SelectItem value="CheckCircle">CheckCircle (Lucide)</SelectItem>
+                  <SelectItem value="Award">Award (Lucide)</SelectItem>
+                  <SelectItem value="Globe">Globe (Lucide)</SelectItem>
+                  <SelectItem value="Shield">Shield (Lucide)</SelectItem>
+                  <SelectItem value="Users">Users (Lucide)</SelectItem>
+                  <SelectItem value="TrendingUp">TrendingUp (Lucide)</SelectItem>
+                  <SelectItem value="Clock">Clock (Lucide)</SelectItem>
+                  <SelectItem value="Zap">Zap (Lucide)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex-1">
+              <Label className="text-sm text-gray-600 mb-1 block">Nội dung mới</Label>
+              <Input
+                value={newBenefit.text}
+                onChange={(e) => setNewBenefit({ ...newBenefit, text: e.target.value })}
+                placeholder="Mô tả lợi ích"
+              />
+            </div>
+            <div className="pt-6">
+              <Button onClick={addBenefit} size="sm">
+                <Plus className="w-4 h-4 mr-1" />
+                Thêm
+              </Button>
+            </div>
           </div>
         </div>
       </Card>
@@ -408,6 +750,72 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
       {/* Thống kê */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Thống kê</h3>
+        
+        {/* Stats Typography Settings */}
+        <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+          <div>
+            <Label htmlFor="statsSize">Kích thước thống kê</Label>
+            <Select
+              value={heroContent.statsSize || 'base'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'statsSize'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="sm">Nhỏ</SelectItem>
+                <SelectItem value="base">Vừa</SelectItem>
+                <SelectItem value="lg">Lớn</SelectItem>
+                <SelectItem value="xl">Rất lớn</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="statsWeight">Độ đậm thống kê</Label>
+            <Select
+              value={heroContent.statsWeight || 'bold'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'statsWeight'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Mỏng</SelectItem>
+                <SelectItem value="normal">Bình thường</SelectItem>
+                <SelectItem value="medium">Trung bình</SelectItem>
+                <SelectItem value="semibold">Bán đậm</SelectItem>
+                <SelectItem value="bold">Đậm</SelectItem>
+                <SelectItem value="extrabold">Rất đậm</SelectItem>
+                <SelectItem value="black">Đen</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="statsFont">Font thống kê</Label>
+            <Select
+              value={heroContent.statsFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'hero', 'statsFont'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
         <div className="space-y-4">
           {stats.map((stat, index) => (
             <div key={index} className="flex items-center space-x-3 p-3 border rounded-lg">
