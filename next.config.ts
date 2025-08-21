@@ -12,9 +12,7 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  experimental: {
-    serverComponentsExternalPackages: ['fs', 'path']
-  },
+  serverExternalPackages: ['fs', 'path'],
   // Ensure API routes work in production
   async headers() {
     return [
