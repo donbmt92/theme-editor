@@ -6,10 +6,27 @@ const nextConfig: NextConfig = {
     PORT: '3080'
   },
   images: {
-    domains: ['images.unsplash.com']
+    domains: ['images.unsplash.com'],
+    unoptimized: true
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['fs', 'path']
+  },
+  // Ensure API routes work in production
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET, POST, PUT, DELETE, OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: 'Content-Type' },
+        ],
+      },
+    ];
   },
 };
 

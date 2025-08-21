@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { uploadFile } from '@/lib/upload'
 
 export async function POST(request: NextRequest) {
+  console.log('Upload API called')
+  
   try {
     // Kiểm tra method
     if (request.method !== 'POST') {
+      console.log('Method not allowed:', request.method)
       return NextResponse.json(
         { success: false, error: 'Method not allowed' },
         { status: 405 }
@@ -12,20 +15,30 @@ export async function POST(request: NextRequest) {
     }
 
     // Parse form data
+    console.log('Parsing form data...')
     const formData = await request.formData()
     const file = formData.get('file') as File
 
     if (!file) {
+      console.log('No file provided')
       return NextResponse.json(
         { success: false, error: 'No file provided' },
         { status: 400 }
       )
     }
 
+    console.log('File received:', {
+      name: file.name,
+      size: file.size,
+      type: file.type
+    })
+
     // Upload file using utility function
+    console.log('Starting file upload...')
     const result = await uploadFile(file)
 
     if (result.success) {
+      console.log('Upload successful:', result.url)
       return NextResponse.json({
         success: true,
         url: result.url,
@@ -34,6 +47,7 @@ export async function POST(request: NextRequest) {
         type: result.type
       })
     } else {
+      console.log('Upload failed:', result.error)
       return NextResponse.json(
         { success: false, error: result.error },
         { status: 400 }
