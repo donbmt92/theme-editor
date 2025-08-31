@@ -4,7 +4,7 @@ import { existsSync } from 'fs'
 
 // Cấu hình upload
 export const UPLOAD_CONFIG = {
-  UPLOAD_DIR: join(process.cwd(), 'public', 'uploads'),
+  UPLOAD_DIR: process.env.UPLOAD_DIR || '/var/www/uploads',
   MAX_FILE_SIZE: 20 * 1024 * 1024, // 20MB
   ALLOWED_TYPES: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'],
   MAX_FILES_PER_REQUEST: 1
@@ -24,14 +24,19 @@ export interface UploadResult {
  */
 async function checkUploadDirectory(): Promise<{ exists: boolean; writable: boolean; error?: string }> {
   try {
+    console.log('Checking upload directory:', UPLOAD_CONFIG.UPLOAD_DIR)
     const exists = existsSync(UPLOAD_CONFIG.UPLOAD_DIR)
+    console.log('Directory exists:', exists)
+    
     if (!exists) {
       return { exists: false, writable: false, error: 'Upload directory does not exist' }
     }
     
     await access(UPLOAD_CONFIG.UPLOAD_DIR, constants.W_OK)
+    console.log('Directory is writable')
     return { exists: true, writable: true }
   } catch (error) {
+    console.error('Directory access error:', error)
     return { 
       exists: true, 
       writable: false, 
@@ -45,17 +50,29 @@ async function checkUploadDirectory(): Promise<{ exists: boolean; writable: bool
  */
 export function validateFile(file: File): { isValid: boolean; error?: string } {
   console.log('Validating file:', {
+    name: file.name,
     type: file.type,
     size: file.size,
     allowedTypes: UPLOAD_CONFIG.ALLOWED_TYPES
   })
 
-  // Check file type
-  if (!UPLOAD_CONFIG.ALLOWED_TYPES.includes(file.type)) {
-    console.log('Invalid file type:', file.type)
-    return {
-      isValid: false,
-      error: 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed'
+  // Check file type by MIME type first
+  if (UPLOAD_CONFIG.ALLOWED_TYPES.includes(file.type)) {
+    console.log('File type validated by MIME type')
+  } else {
+    // If MIME type doesn't match, check by file extension
+    const fileName = file.name.toLowerCase()
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+    const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext))
+    
+    if (hasValidExtension) {
+      console.log('File type validated by extension')
+    } else {
+      console.log('Invalid file type:', file.type, 'or extension')
+      return {
+        isValid: false,
+        error: 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed'
+      }
     }
   }
 
@@ -89,11 +106,15 @@ export function generateFileName(originalName: string): string {
  */
 export async function uploadFile(file: File): Promise<UploadResult> {
   console.log('Starting upload process...')
+  console.log('Current working directory:', process.cwd())
+  console.log('Upload directory path:', UPLOAD_CONFIG.UPLOAD_DIR)
   
   try {
     // Check upload directory
     console.log('Checking upload directory...')
     const dirCheck = await checkUploadDirectory()
+    console.log('Directory check result:', dirCheck)
+    
     if (!dirCheck.exists || !dirCheck.writable) {
       console.log('Directory check failed:', dirCheck.error)
       return {
@@ -117,8 +138,16 @@ export async function uploadFile(file: File): Promise<UploadResult> {
     console.log('Checking upload directory:', UPLOAD_CONFIG.UPLOAD_DIR)
     if (!existsSync(UPLOAD_CONFIG.UPLOAD_DIR)) {
       console.log('Creating upload directory...')
-      await mkdir(UPLOAD_CONFIG.UPLOAD_DIR, { recursive: true })
-      console.log('Upload directory created')
+      try {
+        await mkdir(UPLOAD_CONFIG.UPLOAD_DIR, { recursive: true })
+        console.log('Upload directory created successfully')
+      } catch (mkdirError) {
+        console.error('Failed to create upload directory:', mkdirError)
+        return {
+          success: false,
+          error: `Failed to create upload directory: ${mkdirError}`
+        }
+      }
     } else {
       console.log('Upload directory exists')
     }
@@ -136,8 +165,25 @@ export async function uploadFile(file: File): Promise<UploadResult> {
 
     // Save file
     console.log('Writing file to disk...')
-    await writeFile(filePath, buffer)
-    console.log('File written successfully')
+    try {
+      await writeFile(filePath, buffer)
+      console.log('File written successfully')
+    } catch (writeError) {
+      console.error('Failed to write file:', writeError)
+      return {
+        success: false,
+        error: `Failed to write file: ${writeError}`
+      }
+    }
+
+    // Verify file was created
+    if (!existsSync(filePath)) {
+      console.error('File was not created after write operation')
+      return {
+        success: false,
+        error: 'File was not created after write operation'
+      }
+    }
 
     // Return success result
     const result = {

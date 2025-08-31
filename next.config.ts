@@ -12,7 +12,9 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  serverExternalPackages: ['fs', 'path'],
+  // Remove serverExternalPackages as it can cause issues with file system operations
+  // serverExternalPackages: ['fs', 'path'],
+  
   // Ensure API routes work in production
   async headers() {
     return [
@@ -25,6 +27,11 @@ const nextConfig: NextConfig = {
         ],
       },
     ];
+  },
+  
+  // Add experimental features for better file handling
+  experimental: {
+    serverComponentsExternalPackages: [],
   },
 };
 

@@ -3,6 +3,8 @@ import { uploadFile } from '@/lib/upload'
 
 export async function POST(request: NextRequest) {
   console.log('Upload API called')
+  console.log('Request method:', request.method)
+  console.log('Request headers:', Object.fromEntries(request.headers.entries()))
   
   try {
     // Kiểm tra method
@@ -16,8 +18,24 @@ export async function POST(request: NextRequest) {
 
     // Parse form data
     console.log('Parsing form data...')
-    const formData = await request.formData()
+    let formData: FormData
+    try {
+      formData = await request.formData()
+      console.log('Form data parsed successfully')
+    } catch (parseError) {
+      console.error('Failed to parse form data:', parseError)
+      return NextResponse.json(
+        { success: false, error: 'Failed to parse form data' },
+        { status: 400 }
+      )
+    }
+
     const file = formData.get('file') as File
+    console.log('File from form data:', file ? {
+      name: file.name,
+      size: file.size,
+      type: file.type
+    } : 'No file found')
 
     if (!file) {
       console.log('No file provided')
@@ -68,4 +86,15 @@ export async function GET() {
     { success: false, error: 'Method not allowed' },
     { status: 405 }
   )
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  })
 } 

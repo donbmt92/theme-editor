@@ -266,7 +266,11 @@ export class DeployProcessor {
     
     // Check if it's an upload file
     if (imageUrl.startsWith('/uploads/')) {
-      const sourcePath = path.join(process.cwd(), 'public', imageUrl)
+      // Sử dụng UPLOAD_DIR từ environment thay vì hardcode
+      const uploadDir = process.env.UPLOAD_DIR || '/var/www/uploads'
+      const fileName = imageUrl.replace('/uploads/', '')
+      const sourcePath = path.join(uploadDir, fileName)
+      
       try {
         await fs.access(sourcePath)
         manifest.push({
@@ -274,8 +278,9 @@ export class DeployProcessor {
           type: 'copy',
           sourcePath: sourcePath
         })
+        console.log(`✅ [DEPLOY] Image added to manifest: ${fileName} -> ${targetPath}`)
       } catch (error) {
-        console.warn(`Upload file not found: ${sourcePath}`)
+        console.warn(`⚠️ [DEPLOY] Upload file not found: ${sourcePath}`)
       }
     }
     // Check if it's an external URL (Unsplash, etc.)
@@ -285,6 +290,7 @@ export class DeployProcessor {
         type: 'download',
         sourceUrl: imageUrl
       })
+      console.log(`✅ [DEPLOY] External image added to manifest: ${imageUrl} -> ${targetPath}`)
     }
   }
 
