@@ -126,12 +126,6 @@ export interface BlogParams {
   themeParams: ThemeParams
 }
 
-export interface WhyChooseUsParams {
-  content: any
-  colors: any
-  themeParams: ThemeParams
-}
-
 export interface DeployScriptParams {
   projectName: string
   serverType: string

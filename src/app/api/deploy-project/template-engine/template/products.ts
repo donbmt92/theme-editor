@@ -220,7 +220,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
               margin-bottom: 1rem;
               text-align: center;
-            ">${service.name || service.title}</h3>
+            ">${service.name}</h3>
             
             <!-- Service Description -->
             <p style="

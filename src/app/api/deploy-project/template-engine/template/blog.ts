@@ -19,7 +19,7 @@ interface Category {
 }
 
 interface BlogContentExtended {
-  [key: string]: string | number | boolean | undefined | Array<BlogPost> | Array<Category>;
+  [key: string]: string | number | boolean | undefined | Array<BlogPost> | Array<Category> | Partial<BlogPost> | Array<Partial<BlogPost>>;
   title?: string;
   subtitle?: string;
   backgroundColor?: string;
