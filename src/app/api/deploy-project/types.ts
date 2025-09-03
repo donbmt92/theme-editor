@@ -90,6 +90,18 @@ export interface HeroParams {
   themeParams: ThemeParams
 }
 
+export interface LeadMagnetParams {
+  content: any
+  colors?: any
+  themeParams: ThemeParams
+}
+
+export interface WhyChooseUsParams {
+  content: any
+  colors?: any
+  themeParams: ThemeParams
+}
+
 export interface ProblemsParams {
   content: any
   colors: any
@@ -103,6 +115,18 @@ export interface ProductsParams {
 }
 
 export interface TestimonialsParams {
+  content: any
+  colors: any
+  themeParams: ThemeParams
+}
+
+export interface BlogParams {
+  content: any
+  colors?: any
+  themeParams: ThemeParams
+}
+
+export interface WhyChooseUsParams {
   content: any
   colors: any
   themeParams: ThemeParams

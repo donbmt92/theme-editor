@@ -2,6 +2,39 @@ import { ProductsParams } from '../../types'
 import { DEFAULT_CONTENT, DEFAULT_SERVICES } from '../../constants'
 import { renderLucideIcon } from '../icons'
 
+interface ProductsContent {
+  [key: string]: any
+  title?: string
+  description?: string
+  backgroundColor?: string
+  textColor?: string
+  primaryColor?: string
+  colorMode?: 'theme' | 'custom'
+  titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+  titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+  titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+  descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+  descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+  descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+  items?: Array<{
+    id?: string
+    name: string
+    description: string
+    price?: string
+    category?: string
+    image?: string
+    features?: string[]
+  }>
+  services?: Array<{
+    id?: string
+    name: string
+    description: string
+    icon?: string
+    cta?: string
+    features?: string[]
+  }>
+}
+
 /**
  * Generate static products/services section HTML
  */
@@ -29,17 +62,88 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
     }
   }
 
+  // Typography helper functions
+  const getFontFamily = (fontType: string) => {
+    const productsContent = content as ProductsContent;
+    const fontName = productsContent?.[fontType] || 'inter';
+    
+    switch (fontName) {
+      case 'inter': return '"Inter", ui-sans-serif, system-ui, sans-serif';
+      case 'poppins': return '"Poppins", ui-sans-serif, system-ui, sans-serif';
+      case 'roboto': return '"Roboto", ui-sans-serif, system-ui, sans-serif';
+      case 'open-sans': return '"Open Sans", ui-sans-serif, system-ui, sans-serif';
+      case 'montserrat': return '"Montserrat", ui-sans-serif, system-ui, sans-serif';
+      case 'lato': return '"Lato", ui-sans-serif, system-ui, sans-serif';
+      case 'nunito': return '"Nunito", ui-sans-serif, system-ui, sans-serif';
+      case 'raleway': return '"Raleway", ui-sans-serif, system-ui, sans-serif';
+      case 'playfair-display': return '"Playfair Display", ui-serif, Georgia, serif';
+      case 'merriweather': return '"Merriweather", ui-serif, Georgia, serif';
+      default: return '"Inter", ui-sans-serif, system-ui, sans-serif';
+    }
+  }
+
+  const getFontSize = (sizeType: string, defaultSize: string) => {
+    const productsContent = content as ProductsContent;
+    const size = productsContent?.[sizeType];
+    
+    switch (size) {
+      case 'xs': return '0.75rem';
+      case 'sm': return '0.875rem';
+      case 'base': return '1rem';
+      case 'lg': return '1.125rem';
+      case 'xl': return '1.25rem';
+      case '2xl': return '1.5rem';
+      case '3xl': return '1.875rem';
+      default: return defaultSize;
+    }
+  }
+
+  const getFontWeight = (weightType: string, defaultWeight: string) => {
+    const productsContent = content as ProductsContent;
+    const weight = productsContent?.[weightType];
+    
+    switch (weight) {
+      case 'light': return '300';
+      case 'normal': return '400';
+      case 'medium': return '500';
+      case 'semibold': return '600';
+      case 'bold': return '700';
+      case 'extrabold': return '800';
+      case 'black': return '900';
+      default: return defaultWeight;
+    }
+  }
+
   const typographyStyles = getTypographyStyles()
   const borderRadius = getBorderRadiusClass()
 
+  // Get content data with proper typing
+  const productsContent = content as ProductsContent;
+  const isCustom = productsContent?.colorMode === 'custom'
+
+  // Get colors based on colorMode
+  const bgColor = isCustom
+    ? (productsContent?.backgroundColor || '#F8F9FA')
+    : (themeParams?.sections?.products?.backgroundColor || themeParams?.colors?.background || '#F8F9FA')
+
+  const textColor = isCustom
+    ? (productsContent?.textColor || '#2D3748')
+    : (themeParams?.sections?.products?.textColor || themeParams?.colors?.text || '#2D3748')
+
+  const primaryColor = isCustom
+    ? (productsContent?.primaryColor || '#8B4513')
+    : (themeParams?.colors?.primary || '#8B4513')
+
+  const accentColor = themeParams?.colors?.accent || '#CD853F'
+
   // Use provided services or default ones
-  const services = content?.services || DEFAULT_SERVICES
-  const products = content?.items || []
+  const services = productsContent?.services || DEFAULT_SERVICES
+  const products = productsContent?.items || []
 
   return `<section id="products" style="
-    background-color: ${content?.backgroundColor || themeParams?.sections?.products?.backgroundColor || '#F8F9FA'};
-    color: ${content?.textColor || themeParams?.sections?.products?.textColor || themeParams?.colors?.text || '#2D3748'};
-    padding: 4rem 0;
+    background-color: ${bgColor};
+    color: ${textColor};
+    padding: 5rem 0;
     font-family: ${typographyStyles.fontFamily};
     font-size: ${typographyStyles.fontSize};
     line-height: ${typographyStyles.lineHeight};
@@ -53,25 +157,28 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
       <!-- Section Header -->
       <div style="text-align: center; margin-bottom: 4rem;">
         <h2 style="
-          color: ${content?.titleColor || themeParams?.sections?.products?.titleColor || themeParams?.colors?.primary || '#8B4513'};
-          font-size: ${themeParams?.typography?.headingSize === '2xl' ? '2.5rem' : 
+          color: ${primaryColor};
+          font-family: ${getFontFamily('titleFont')};
+          font-size: ${getFontSize('titleSize', themeParams?.typography?.headingSize === '2xl' ? '2.5rem' : 
                      themeParams?.typography?.headingSize === 'xl' ? '2.25rem' : 
-                     themeParams?.typography?.headingSize === 'lg' ? '2rem' : '2.25rem'};
-          font-weight: ${themeParams?.typography?.fontWeight || '700'};
+                     themeParams?.typography?.headingSize === 'lg' ? '2rem' : '2.25rem')};
+          font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
           margin-bottom: 1rem;
         ">
-          ${content?.title || "Giải Pháp Xuất Nhập Khẩu Toàn Diện"}
+          ${productsContent?.title || "Giải Pháp Xuất Nhập Khẩu Toàn Diện"}
         </h2>
         <p style="
-          color: ${content?.subtitleColor || themeParams?.sections?.products?.subtitleColor || themeParams?.colors?.muted || '#718096'};
-          font-size: ${themeParams?.typography?.bodySize === 'sm' ? '1rem' : 
+          color: ${textColor}CC;
+          font-family: ${getFontFamily('descriptionFont')};
+          font-size: ${getFontSize('descriptionSize', themeParams?.typography?.bodySize === 'sm' ? '1rem' : 
                      themeParams?.typography?.bodySize === 'lg' ? '1.25rem' : 
-                     themeParams?.typography?.bodySize === 'xl' ? '1.5rem' : '1.125rem'};
+                     themeParams?.typography?.bodySize === 'xl' ? '1.5rem' : '1.125rem')};
+          font-weight: ${getFontWeight('descriptionWeight', '400')};
           max-width: 700px;
           margin: 0 auto;
           opacity: 0.8;
         ">
-          ${content?.description || "Từ việc tìm nguồn cà phê cao cấp tại Việt Nam đến giao hàng tại kho Mỹ, chúng tôi xử lý mọi bước của quy trình xuất khẩu."}
+          ${productsContent?.description || "Từ việc tìm nguồn cà phê cao cấp tại Việt Nam đến giao hàng tại kho Mỹ, chúng tôi xử lý mọi bước của quy trình xuất khẩu."}
         </p>
       </div>
 
@@ -98,25 +205,27 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
             <div style="
               margin-bottom: 1.5rem;
               text-align: center;
-              color: ${themeParams?.colors?.primary || '#8B4513'};
+              color: ${primaryColor};
             ">
-              ${renderLucideIcon(service.icon, 48, themeParams?.colors?.primary) || `<span style="font-size: 3rem;">${service.icon || '✓'}</span>`}
+              ${renderLucideIcon(service.icon, 48, primaryColor) || `<span style="font-size: 3rem;">${service.icon || '✓'}</span>`}
             </div>
             
             <!-- Service Title -->
             <h3 style="
-              color: ${content?.titleColor || themeParams?.sections?.products?.titleColor || themeParams?.colors?.primary || '#8B4513'};
-              font-size: ${themeParams?.typography?.headingSize === '2xl' ? '1.5rem' : 
+              color: ${primaryColor};
+              font-family: ${getFontFamily('titleFont')};
+              font-size: ${getFontSize('titleSize', themeParams?.typography?.headingSize === '2xl' ? '1.5rem' : 
                          themeParams?.typography?.headingSize === 'xl' ? '1.375rem' : 
-                         themeParams?.typography?.headingSize === 'lg' ? '1.25rem' : '1.375rem'};
-              font-weight: ${themeParams?.typography?.fontWeight || '600'};
+                         themeParams?.typography?.headingSize === 'lg' ? '1.25rem' : '1.375rem')};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
               margin-bottom: 1rem;
               text-align: center;
             ">${service.name || service.title}</h3>
             
             <!-- Service Description -->
             <p style="
-              color: ${content?.descriptionColor || themeParams?.sections?.products?.descriptionColor || themeParams?.colors?.text || '#2D3748'};
+              color: ${textColor};
+              font-family: ${getFontFamily('descriptionFont')};
               font-size: ${typographyStyles.fontSize};
               line-height: 1.6;
               margin-bottom: 1.5rem;
@@ -142,9 +251,9 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
                     font-size: 1.25rem;
                   ">✓</span>
                   <span style="
-                    color: ${content?.textColor || themeParams?.colors?.text || '#2D3748'};
+                    color: ${textColor};
                     font-size: 0.875rem;
-                    font-weight: ${themeParams?.typography?.fontWeight || '500'};
+                    font-weight: ${getFontWeight('descriptionWeight', themeParams?.typography?.fontWeight || '500')};
                   ">${feature}</span>
                 </div>
               `).join('') : ''}
@@ -152,14 +261,14 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
             
             <!-- Service CTA -->
             <button style="
-              background: linear-gradient(135deg, ${themeParams?.colors?.primary || '#8B4513'} 0%, ${themeParams?.colors?.secondary || '#D2691E'} 100%);
+              background: linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%);
               color: white;
               border: none;
               padding: 0.75rem 1.5rem;
               border-radius: ${themeParams?.components?.button?.rounded ? '9999px' : borderRadius};
               font-family: ${typographyStyles.fontFamily};
               font-size: ${typographyStyles.fontSize};
-              font-weight: ${themeParams?.typography?.fontWeight || '600'};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
               cursor: pointer;
               width: 100%;
               transition: all 0.3s ease;
@@ -177,7 +286,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               height: 0;
               border-style: solid;
               border-width: 0 60px 60px 0;
-              border-color: transparent ${themeParams?.colors?.accent || '#CD853F'} transparent transparent;
+              border-color: transparent ${accentColor} transparent transparent;
               opacity: 0.1;
             "></div>
           </div>
@@ -203,7 +312,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               <div style="
                 width: 100%;
                 height: 320px;
-                background: linear-gradient(135deg, ${themeParams?.colors?.primary || '#8B4513'}10, ${themeParams?.colors?.accent || '#CD853F'}10);
+                background: linear-gradient(135deg, ${primaryColor}10, ${accentColor}10);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -211,11 +320,11 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               ">
                 <span style="
                   font-size: 4rem;
-                  color: ${themeParams?.colors?.primary || '#8B4513'};
+                  color: ${primaryColor};
                   margin-bottom: 1rem;
                 ">☕</span>
                 <p style="
-                  color: ${themeParams?.colors?.text || '#2D3748'};
+                  color: ${textColor};
                   font-size: 1.125rem;
                 ">${products[0]?.name || "Hạt điều Việt Nam"}</p>
               </div>
@@ -223,17 +332,19 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           </div>
           <div style="space-y: 1.5rem;">
             <h3 style="
-              color: ${content?.titleColor || themeParams?.colors?.primary || '#8B4513'};
-              font-size: ${themeParams?.typography?.headingSize === '2xl' ? '2rem' : 
+              color: ${primaryColor};
+              font-family: ${getFontFamily('titleFont')};
+              font-size: ${getFontSize('titleSize', themeParams?.typography?.headingSize === '2xl' ? '2rem' : 
                          themeParams?.typography?.headingSize === 'xl' ? '1.75rem' : 
-                         themeParams?.typography?.headingSize === 'lg' ? '1.5rem' : '1.75rem'};
-              font-weight: ${themeParams?.typography?.fontWeight || '700'};
+                         themeParams?.typography?.headingSize === 'lg' ? '1.5rem' : '1.75rem')};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 1rem;
             ">
               ${products[0]?.name || "Hạt Điều Việt Nam Cao Cấp"}
             </h3>
             <p style="
-              color: ${content?.textColor || themeParams?.colors?.text || '#2D3748'};
+              color: ${textColor};
+              font-family: ${getFontFamily('descriptionFont')};
               font-size: ${typographyStyles.fontSize};
               line-height: 1.6;
               margin-bottom: 1.5rem;
@@ -249,46 +360,46 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
                 text-align: center;
                 padding: 1rem;
                 border-radius: ${borderRadius};
-                background: ${themeParams?.colors?.primary || '#8B4513'}10;
+                background: ${primaryColor}10;
               ">
                 <div style="
                   font-size: 1.5rem;
-                  font-weight: ${themeParams?.typography?.fontWeight || '700'};
-                  color: ${themeParams?.colors?.primary || '#8B4513'};
+                  font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
+                  color: ${primaryColor};
                   margin-bottom: 0.5rem;
-                ">WW320</div>
+                ">${products[0]?.category || "WW320"}</div>
                 <div style="
                   font-size: 0.875rem;
-                  color: ${content?.textColor || themeParams?.colors?.muted || '#718096'};
-                ">Loại cao cấp</div>
+                  color: ${textColor}CC;
+                ">${products[0]?.price || "Loại cao cấp"}</div>
               </div>
               <div style="
                 text-align: center;
                 padding: 1rem;
                 border-radius: ${borderRadius};
-                background: ${themeParams?.colors?.primary || '#8B4513'}10;
+                background: ${primaryColor}10;
               ">
                 <div style="
                   font-size: 1.5rem;
-                  font-weight: ${themeParams?.typography?.fontWeight || '700'};
-                  color: ${themeParams?.colors?.primary || '#8B4513'};
+                  font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
+                  color: ${primaryColor};
                   margin-bottom: 0.5rem;
                 ">WW240</div>
                 <div style="
                   font-size: 0.875rem;
-                  color: ${content?.textColor || themeParams?.colors?.muted || '#718096'};
+                  color: ${textColor}CC;
                 ">Loại tiêu chuẩn</div>
               </div>
             </div>
             <button style="
-              background: linear-gradient(135deg, ${themeParams?.colors?.primary || '#8B4513'} 0%, ${themeParams?.colors?.secondary || '#D2691E'} 100%);
+              background: linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%);
               color: white;
               border: none;
               padding: 1rem 2rem;
               border-radius: ${themeParams?.components?.button?.rounded ? '9999px' : borderRadius};
               font-family: ${typographyStyles.fontFamily};
               font-size: ${typographyStyles.fontSize};
-              font-weight: ${themeParams?.typography?.fontWeight || '600'};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
               cursor: pointer;
               transition: all 0.3s ease;
               box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
@@ -318,7 +429,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               <div style="
                 width: 100%;
                 height: 320px;
-                background: linear-gradient(135deg, ${themeParams?.colors?.primary || '#8B4513'}10, ${themeParams?.colors?.accent || '#CD853F'}10);
+                background: linear-gradient(135deg, ${primaryColor}10, ${accentColor}10);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -326,11 +437,11 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               ">
                 <span style="
                   font-size: 4rem;
-                  color: ${themeParams?.colors?.primary || '#8B4513'};
+                  color: ${primaryColor};
                   margin-bottom: 1rem;
                 ">🚛</span>
                 <p style="
-                  color: ${themeParams?.colors?.text || '#2D3748'};
+                  color: ${textColor};
                   font-size: 1.125rem;
                 ">${products[1]?.name || "Vận chuyển quốc tế"}</p>
               </div>
@@ -338,17 +449,19 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           </div>
           <div style="order: 1; space-y: 1.5rem;">
             <h3 style="
-              color: ${content?.titleColor || themeParams?.colors?.primary || '#8B4513'};
-              font-size: ${themeParams?.typography?.headingSize === '2xl' ? '2rem' : 
+              color: ${primaryColor};
+              font-family: ${getFontFamily('titleFont')};
+              font-size: ${getFontSize('titleSize', themeParams?.typography?.headingSize === '2xl' ? '2rem' : 
                          themeParams?.typography?.headingSize === 'xl' ? '1.75rem' : 
-                         themeParams?.typography?.headingSize === 'lg' ? '1.5rem' : '1.75rem'};
-              font-weight: ${themeParams?.typography?.fontWeight || '700'};
+                         themeParams?.typography?.headingSize === 'lg' ? '1.5rem' : '1.75rem')};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 1rem;
             ">
               ${products[1]?.name || "Logistics & Giao Hàng Liền Mạch"}
             </h3>
             <p style="
-              color: ${content?.textColor || themeParams?.colors?.text || '#2D3748'};
+              color: ${textColor};
+              font-family: ${getFontFamily('descriptionFont')};
               font-size: ${typographyStyles.fontSize};
               line-height: 1.6;
               margin-bottom: 1.5rem;
@@ -367,24 +480,24 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
                     width: 8px;
                     height: 8px;
                     border-radius: 50%;
-                    background-color: ${themeParams?.colors?.accent || '#28A745'};
+                    background-color: ${accentColor};
                     margin-right: 0.75rem;
                   "></div>
-                  <span style="color: ${content?.textColor || themeParams?.colors?.text || '#2D3748'};">
+                  <span style="color: ${textColor};">
                     ${feature}
                   </span>
                 </div>
               `).join('')}
             </div>
             <button style="
-              background: linear-gradient(135deg, ${themeParams?.colors?.primary || '#8B4513'} 0%, ${themeParams?.colors?.secondary || '#D2691E'} 100%);
+              background: linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%);
               color: white;
               border: none;
               padding: 1rem 2rem;
               border-radius: ${themeParams?.components?.button?.rounded ? '9999px' : borderRadius};
               font-family: ${typographyStyles.fontFamily};
               font-size: ${typographyStyles.fontSize};
-              font-weight: ${themeParams?.typography?.fontWeight || '600'};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
               cursor: pointer;
               transition: all 0.3s ease;
               box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
@@ -397,7 +510,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
 
       <!-- Stats Section -->
       <div style="
-        background: linear-gradient(135deg, ${themeParams?.colors?.primary || '#8B4513'} 0%, ${themeParams?.colors?.secondary || '#D2691E'} 100%);
+        background: linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%);
         color: white;
         padding: 3rem 2rem;
         border-radius: ${borderRadius};
@@ -406,10 +519,11 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
         box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
       ">
         <h3 style="
-          font-size: ${themeParams?.typography?.headingSize === '2xl' ? '2rem' : 
+          font-family: ${getFontFamily('titleFont')};
+          font-size: ${getFontSize('titleSize', themeParams?.typography?.headingSize === '2xl' ? '2rem' : 
                      themeParams?.typography?.headingSize === 'xl' ? '1.75rem' : 
-                     themeParams?.typography?.headingSize === 'lg' ? '1.5rem' : '1.75rem'};
-          font-weight: ${themeParams?.typography?.fontWeight || '600'};
+                     themeParams?.typography?.headingSize === 'lg' ? '1.5rem' : '1.75rem')};
+          font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
           margin-bottom: 2rem;
         ">
           📊 Thành tích nổi bật
@@ -423,7 +537,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           <div>
             <div style="
               font-size: 3rem;
-              font-weight: ${themeParams?.typography?.fontWeight || '700'};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 0.5rem;
             ">500+</div>
             <div style="
@@ -434,7 +548,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           <div>
             <div style="
               font-size: 3rem;
-              font-weight: ${themeParams?.typography?.fontWeight || '700'};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 0.5rem;
             ">200+</div>
             <div style="
@@ -445,7 +559,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           <div>
             <div style="
               font-size: 3rem;
-              font-weight: ${themeParams?.typography?.fontWeight || '700'};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 0.5rem;
             ">15+</div>
             <div style="
@@ -456,7 +570,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           <div>
             <div style="
               font-size: 3rem;
-              font-weight: ${themeParams?.typography?.fontWeight || '700'};
+              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 0.5rem;
             ">98%</div>
             <div style="
@@ -470,17 +584,19 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
       <!-- Final CTA -->
       <div style="text-align: center;">
         <h3 style="
-          color: ${content?.titleColor || themeParams?.sections?.products?.titleColor || themeParams?.colors?.primary || '#8B4513'};
-          font-size: ${themeParams?.typography?.headingSize === '2xl' ? '2rem' : 
+          color: ${primaryColor};
+          font-family: ${getFontFamily('titleFont')};
+          font-size: ${getFontSize('titleSize', themeParams?.typography?.headingSize === '2xl' ? '2rem' : 
                      themeParams?.typography?.headingSize === 'xl' ? '1.75rem' : 
-                     themeParams?.typography?.headingSize === 'lg' ? '1.5rem' : '1.75rem'};
-          font-weight: ${themeParams?.typography?.fontWeight || '600'};
+                     themeParams?.typography?.headingSize === 'lg' ? '1.5rem' : '1.75rem')};
+          font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
           margin-bottom: 1rem;
         ">
           🎯 Sẵn sàng chinh phục thị trường quốc tế?
         </h3>
         <p style="
-          color: ${content?.subtitleColor || themeParams?.sections?.products?.subtitleColor || themeParams?.colors?.muted || '#718096'};
+          color: ${textColor}CC;
+          font-family: ${getFontFamily('descriptionFont')};
           font-size: ${typographyStyles.fontSize};
           margin-bottom: 2rem;
           opacity: 0.8;
@@ -488,14 +604,14 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           Hãy để chúng tôi đồng hành cùng bạn trên hành trình xuất khẩu thành công
         </p>
         <button style="
-          background: linear-gradient(135deg, ${themeParams?.colors?.primary || '#8B4513'} 0%, ${themeParams?.colors?.secondary || '#D2691E'} 100%);
+          background: linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%);
           color: white;
           border: none;
           padding: 1.25rem 3rem;
           border-radius: ${themeParams?.components?.button?.rounded ? '9999px' : borderRadius};
           font-family: ${typographyStyles.fontFamily};
           font-size: ${typographyStyles.fontSize};
-          font-weight: ${themeParams?.typography?.fontWeight || '600'};
+          font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
           cursor: pointer;
           transition: all 0.3s ease;
           box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);

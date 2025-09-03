@@ -305,19 +305,19 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
   }
 
   // Get border radius class
-  const getBorderRadiusClass = () => {
-    switch (theme.layout?.borderRadius) {
-      case 'none':
-        return 'rounded-none'
-      case 'small':
-        return 'rounded-sm'
-      case 'large':
-        return 'rounded-lg'
-      case 'medium':
-      default:
-        return 'rounded-md'
-    }
-  }
+  // const getBorderRadiusClass = () => {
+  //   switch (theme.layout?.borderRadius) {
+  //     case 'none':
+  //       return 'rounded-none'
+  //     case 'small':
+  //       return 'rounded-sm'
+  //     case 'large':
+  //       return 'rounded-lg'
+  //     case 'medium':
+  //     default:
+  //       return 'rounded-md'
+  //   }
+  // }
 
   return (
     <div 

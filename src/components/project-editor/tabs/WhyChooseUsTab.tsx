@@ -17,13 +17,16 @@ interface WhyChooseUsContent {
   primaryColor?: string
   titleSize?: string
   titleWeight?: string
+  titleFont?: string
   subtitleSize?: string
   subtitleWeight?: string
+  subtitleFont?: string
   strengths?: Array<{
     id?: string
     icon: string
     title: string
     description: string
+    highlight?: string
   }>
   mission?: {
     title?: string
@@ -39,6 +42,7 @@ interface WhyChooseUsContent {
     title?: string
     description?: string
     buttonText?: string
+    secondaryButtonText?: string
   }
 }
 
@@ -48,7 +52,7 @@ interface WhyChooseUsTabProps {
 }
 
 const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) => {
-  const [newStrength, setNewStrength] = useState({ title: '', description: '', icon: 'Users' })
+  const [newStrength, setNewStrength] = useState({ title: '', description: '', icon: 'Users', highlight: '' })
   const [newMissionValue, setNewMissionValue] = useState('')
   const [newVisionGoal, setNewVisionGoal] = useState('')
 
@@ -65,7 +69,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
         ...newStrength 
       }]
       updateThemeParam(['content', 'whyChooseUs', 'strengths'], updatedStrengths)
-      setNewStrength({ title: '', description: '', icon: 'Users' })
+      setNewStrength({ title: '', description: '', icon: 'Users', highlight: '' })
     }
   }
 
@@ -287,6 +291,30 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
           </div>
           
           <div>
+            <Label htmlFor="titleFont">Font tiêu đề</Label>
+            <Select
+              value={whyChooseUs.titleFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'whyChooseUs', 'titleFont'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
             <Label htmlFor="subtitleSize">Kích thước phụ đề</Label>
             <Select
               value={whyChooseUs.subtitleSize || 'xl'}
@@ -321,6 +349,30 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                 <SelectItem value="bold">Đậm</SelectItem>
                 <SelectItem value="extrabold">Rất đậm</SelectItem>
                 <SelectItem value="black">Đen</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="subtitleFont">Font phụ đề</Label>
+            <Select
+              value={whyChooseUs.subtitleFont || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'whyChooseUs', 'subtitleFont'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -398,7 +450,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                 </div>
               </div>
               
-              <div>
+              <div className="mb-3">
                 <Label htmlFor={`strength-description-${index}`}>Mô tả</Label>
                 <Textarea
                   id={`strength-description-${index}`}
@@ -410,6 +462,20 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                   }}
                   placeholder="Mô tả chi tiết về điểm mạnh"
                   rows={2}
+                />
+              </div>
+              
+              <div>
+                <Label htmlFor={`strength-highlight-${index}`}>Highlight</Label>
+                <Input
+                  id={`strength-highlight-${index}`}
+                  value={strength.highlight || ''}
+                  onChange={(e) => {
+                    const updatedStrengths = [...strengths]
+                    updatedStrengths[index] = { ...strength, highlight: e.target.value }
+                    updateThemeParam(['content', 'whyChooseUs', 'strengths'], updatedStrengths)
+                  }}
+                  placeholder="Điểm nổi bật (hiển thị trong badge)"
                 />
               </div>
             </div>
@@ -466,6 +532,16 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                 onChange={(e) => setNewStrength({ ...newStrength, description: e.target.value })}
                 placeholder="Mô tả chi tiết về điểm mạnh mới"
                 rows={2}
+              />
+            </div>
+            
+            <div className="mb-3">
+              <Label htmlFor="new-strength-highlight">Highlight</Label>
+              <Input
+                id="new-strength-highlight"
+                value={newStrength.highlight}
+                onChange={(e) => setNewStrength({ ...newStrength, highlight: e.target.value })}
+                placeholder="Điểm nổi bật (hiển thị trong badge)"
               />
             </div>
             
@@ -635,12 +711,22 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
           </div>
           
           <div>
-            <Label htmlFor="ctaButtonText">Nút CTA</Label>
+            <Label htmlFor="ctaButtonText">Nút CTA chính</Label>
             <Input
               id="ctaButtonText"
               value={cta.buttonText || ''}
               onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'cta', 'buttonText'], e.target.value)}
               placeholder="Đặt Lịch Tư Vấn Miễn Phí"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="ctaSecondaryButtonText">Nút CTA phụ</Label>
+            <Input
+              id="ctaSecondaryButtonText"
+              value={cta.secondaryButtonText || ''}
+              onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'cta', 'secondaryButtonText'], e.target.value)}
+              placeholder="Tải Hồ Sơ Công Ty"
             />
           </div>
         </div>

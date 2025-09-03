@@ -96,24 +96,71 @@ export function generateStaticHeroSection({
   const getFontSize = (sizeType: string, defaultSize: string) => {
     const heroContent = content as HeroContentExtended;
     const size = heroContent?.[sizeType];
+    
 
     switch (size) {
       case "xs":
-        return "0.75rem";
+        return "0.75rem";    // text-xs
       case "sm":
-        return "0.875rem";
+        return "0.875rem";   // text-sm
       case "base":
-        return "1rem";
+        return "1rem";       // text-base
       case "lg":
-        return "1.125rem";
+        return "1.125rem";   // text-lg
       case "xl":
-        return "1.25rem";
+        return "1.25rem";    // text-xl
       case "2xl":
-        return "1.5rem";
+        return "1.5rem";     // text-2xl
       case "3xl":
-        return "1.875rem";
+        return "1.875rem";   // text-3xl
       default:
         return defaultSize;
+    }
+  };
+
+  // Get title size - matches HeroSection.tsx getTitleSize function (desktop sizes)
+  const getTitleSize = () => {
+    const heroContent = content as HeroContentExtended;
+    const size = heroContent?.titleSize || themeParams?.typography?.headingSize || '2xl';
+    
+    switch (size) {
+      case "sm":
+        return "2.25rem";    // text-4xl - matches Tailwind exactly
+      case "base":
+        return "3rem";       // text-5xl - matches Tailwind exactly
+      case "lg":
+        return "3.75rem";    // text-6xl - matches Tailwind exactly
+      case "xl":
+        return "4.5rem";     // text-7xl - matches Tailwind exactly
+      case "2xl":
+        return "6rem";       // text-8xl - matches Tailwind exactly
+      case "3xl":
+        return "8rem";       // text-9xl - matches Tailwind exactly
+      default:
+        return "3.75rem";    // default text-6xl - matches Tailwind exactly
+    }
+  };
+
+    // Get subtitle size - matches HeroSection.tsx getSubtitleSize function (desktop sizes)
+  const getSubtitleSize = () => {
+    const heroContent = content as HeroContentExtended;
+    const size = heroContent?.subtitleSize || themeParams?.typography?.headingSize || '2xl';
+    
+    switch (size) {
+      case "sm":
+        return "1.875rem";   // text-3xl - matches Tailwind exactly
+      case "base":
+        return "2.25rem";    // text-4xl - matches Tailwind exactly
+      case "lg":
+        return "3rem";       // text-5xl - matches Tailwind exactly
+      case "xl":
+        return "3.75rem";    // text-6xl - matches Tailwind exactly
+      case "2xl":
+        return "4.5rem";     // text-7xl - matches Tailwind exactly
+      case "3xl":
+        return "6rem";       // text-8xl - matches Tailwind exactly
+      default:
+        return "2.25rem";    // default text-4xl - matches Tailwind exactly
     }
   };
 
@@ -257,14 +304,14 @@ export function generateStaticHeroSection({
         grid-template-columns: 1fr 1fr;
         gap: 3rem;
         align-items: center;
-      ">
+      " class="hero-grid">
         <!-- Left Content -->
         <div style="display: flex; flex-direction: column; gap: 2rem;">
           <div style="display: flex; flex-direction: column; gap: 1rem;">
             <h1 style="
               color: ${content?.textColor || themeParams?.sections?.hero?.textColor || themeParams?.colors?.text || "#2D3748"};
               font-family: ${getFontFamily("titleFont").replace(/"/g, "'")};
-              font-size: ${getFontSize("titleSize", themeParams?.typography?.headingSize === "2xl" ? "4rem" : themeParams?.typography?.headingSize === "xl" ? "3.5rem" : themeParams?.typography?.headingSize === "lg" ? "3rem" : "3.5rem")};
+              font-size: ${getTitleSize()};
               font-weight: ${getFontWeight("titleWeight", themeParams?.typography?.fontWeight || "700")};
               line-height: 1.2;
               margin: 0;
@@ -277,7 +324,7 @@ export function generateStaticHeroSection({
                 background-clip: text;
                 color: transparent;
                 font-family: ${getFontFamily("subtitleFont").replace(/"/g, "'")};
-                font-size: ${getFontSize("subtitleSize", themeParams?.typography?.headingSize === "2xl" ? "2.5rem" : themeParams?.typography?.headingSize === "xl" ? "2rem" : themeParams?.typography?.headingSize === "lg" ? "1.75rem" : "2rem")};
+                font-size: ${getSubtitleSize()};
                 font-weight: ${getFontWeight("subtitleWeight", themeParams?.typography?.fontWeight || "600")};
               ">
                 ${content?.subtitle || "Chất Lượng Quốc Tế"}
@@ -558,43 +605,76 @@ export function generateStaticHeroSection({
         50% { transform: translateY(-20px); }
       }
       
-      /* Tablet breakpoint - match HeroSection.tsx lg breakpoint */
-      @media (max-width: 1024px) {
-        #hero > div > div {
-          grid-template-columns: 1fr;
+      /* Large screens - Desktop layout (lg:grid-cols-2 equivalent) */
+      @media (min-width: 1024px) {
+        #hero .hero-grid {
+          grid-template-columns: 1fr 1fr !important;
+          gap: 3rem;
+        }
+      }
+      
+      /* Tablet and Mobile - Single column layout (below lg) */
+      @media (max-width: 1023px) {
+        #hero .hero-grid {
+          grid-template-columns: 1fr !important;
           text-align: center;
-          gap: 2rem;
+          gap: 3rem;
         }
         
-        #hero > div > div > div:first-child {
+        #hero .hero-grid > div:first-child {
           order: 2;
         }
         
-        #hero > div > div > div:last-child {
+        #hero .hero-grid > div:last-child {
           order: 1;
           margin-bottom: 2rem;
         }
       }
       
-      /* Mobile breakpoint */
+      /* Medium screens - CTA row layout (sm:flex-row equivalent) */
+      @media (min-width: 640px) and (max-width: 1023px) {
+        #hero .cta-container {
+          flex-direction: row !important;
+          justify-content: center;
+        }
+      }
+      
+      /* Small screens - CTA column layout (below sm) */
+      @media (max-width: 639px) {
+        #hero .cta-container {
+          flex-direction: column !important;
+          width: 100%;
+        }
+        
+        #hero .cta-container button {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+      
+      /* Mobile breakpoint - Base mobile styles */
       @media (max-width: 768px) {
         #hero {
           padding: 2rem 0;
         }
         
-        /* Responsive font sizes based on titleSize setting */
+        #hero > div {
+          padding: 2rem 1rem;
+        }
+        
+        /* Responsive font sizes - Base mobile (text-4xl equivalent) */
         #hero h1 {
           font-size: ${(() => {
             const heroContent = content as HeroContentExtended;
             const size = heroContent?.titleSize || '2xl';
             switch (size) {
-              case 'sm': return '1.5rem';    // text-2xl mobile
-              case 'base': return '1.875rem'; // text-3xl mobile  
-              case 'lg': return '2.25rem';    // text-4xl mobile
-              case 'xl': return '3rem';       // text-5xl mobile
-              case '2xl': return '3.75rem';   // text-6xl mobile
-              case '3xl': return '4.5rem';    // text-7xl mobile
-              default: return '2.25rem';      // default text-4xl mobile
+              case 'sm': return '2.25rem';    // text-4xl - base mobile size
+              case 'base': return '2.25rem';  // text-4xl - base mobile size
+              case 'lg': return '2.25rem';    // text-4xl - base mobile size
+              case 'xl': return '2.25rem';    // text-4xl - base mobile size
+              case '2xl': return '2.25rem';   // text-4xl - base mobile size
+              case '3xl': return '2.25rem';   // text-4xl - base mobile size
+              default: return '2.25rem';      // text-4xl - base mobile size
             }
           })()} !important;
         }
@@ -604,13 +684,13 @@ export function generateStaticHeroSection({
             const heroContent = content as HeroContentExtended;
             const size = heroContent?.subtitleSize || '2xl';
             switch (size) {
-              case 'sm': return '1.25rem';    // text-xl mobile
-              case 'base': return '1.5rem';   // text-2xl mobile
-              case 'lg': return '1.875rem';   // text-3xl mobile  
-              case 'xl': return '2.25rem';    // text-4xl mobile
-              case '2xl': return '3rem';      // text-5xl mobile
-              case '3xl': return '3.75rem';   // text-6xl mobile
-              default: return '1.5rem';       // default text-2xl mobile
+              case 'sm': return '1.875rem';   // text-3xl - base mobile size
+              case 'base': return '1.875rem'; // text-3xl - base mobile size
+              case 'lg': return '1.875rem';   // text-3xl - base mobile size
+              case 'xl': return '1.875rem';   // text-3xl - base mobile size
+              case '2xl': return '1.875rem';  // text-3xl - base mobile size
+              case '3xl': return '1.875rem';  // text-3xl - base mobile size
+              default: return '1.875rem';     // text-3xl - base mobile size
             }
           })()} !important;
         }
@@ -620,17 +700,6 @@ export function generateStaticHeroSection({
           flex-direction: column;
           align-items: center;
           gap: 0.75rem;
-        }
-        
-        /* Responsive CTA buttons */
-        #hero .cta-container {
-          flex-direction: column;
-          width: 100%;
-        }
-        
-        #hero .cta-container button {
-          width: 100%;
-          justify-content: center;
         }
         
         /* Responsive trust indicators */
@@ -650,6 +719,41 @@ export function generateStaticHeroSection({
         }
       }
       
+      /* Medium mobile - Enhanced font sizes (md:text-6xl equivalent) */
+      @media (min-width: 768px) and (max-width: 1023px) {
+        #hero h1 {
+          font-size: ${(() => {
+            const heroContent = content as HeroContentExtended;
+            const size = heroContent?.titleSize || '2xl';
+            switch (size) {
+              case 'sm': return '3rem';       // text-5xl - medium mobile
+              case 'base': return '3.75rem';  // text-6xl - medium mobile
+              case 'lg': return '3.75rem';    // text-6xl - medium mobile
+              case 'xl': return '3.75rem';    // text-6xl - medium mobile
+              case '2xl': return '3.75rem';   // text-6xl - medium mobile
+              case '3xl': return '3.75rem';   // text-6xl - medium mobile
+              default: return '3.75rem';      // text-6xl - medium mobile
+            }
+          })()} !important;
+        }
+        
+        #hero h1 span {
+          font-size: ${(() => {
+            const heroContent = content as HeroContentExtended;
+            const size = heroContent?.subtitleSize || '2xl';
+            switch (size) {
+              case 'sm': return '2.25rem';    // text-4xl - medium mobile
+              case 'base': return '2.25rem';  // text-4xl - medium mobile
+              case 'lg': return '2.25rem';    // text-4xl - medium mobile
+              case 'xl': return '2.25rem';    // text-4xl - medium mobile
+              case '2xl': return '2.25rem';   // text-4xl - medium mobile
+              case '3xl': return '2.25rem';   // text-4xl - medium mobile
+              default: return '2.25rem';      // text-4xl - medium mobile
+            }
+          })()} !important;
+        }
+      }
+      
       /* Small mobile breakpoint */
       @media (max-width: 480px) {
         #hero {
@@ -657,23 +761,15 @@ export function generateStaticHeroSection({
         }
         
         #hero > div {
-          padding: 2rem 0.5rem;
+          padding: 1.5rem 0.5rem;
         }
         
         #hero h1 {
-          font-size: ${(() => {
-            const heroContent = content as HeroContentExtended;
-            const size = heroContent?.titleSize || '2xl';
-            switch (size) {
-              case 'sm': return '1.25rem';    // Even smaller for tiny screens
-              case 'base': return '1.5rem';
-              case 'lg': return '1.875rem';
-              case 'xl': return '2.25rem';
-              case '2xl': return '2.5rem';
-              case '3xl': return '3rem';
-              default: return '1.875rem';
-            }
-          })()} !important;
+          font-size: 1.875rem !important;  // text-3xl - small mobile
+        }
+        
+        #hero h1 span {
+          font-size: 1.5rem !important;    // text-2xl - small mobile
         }
       }
     </style>

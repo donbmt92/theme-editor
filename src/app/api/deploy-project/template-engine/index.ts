@@ -22,9 +22,12 @@ export class TemplateEngine {
     const { 
       generateStaticHeader, 
       generateStaticHeroSection, 
+      generateStaticLeadMagnetSection,
       generateStaticProblemsSection, 
       generateStaticProductsSection, 
-      generateStaticTestimonialsSection, 
+      generateStaticTestimonialsSection,
+      generateStaticWhyChooseUsSection,
+      generateStaticBlogSection,
       generateStaticFooter 
     } = await import('./html-templates')
 
@@ -76,9 +79,12 @@ export class TemplateEngine {
     // Generate all sections
     const headerSection = await this.generateHeaderSection(content, themeParams)
     const heroSection = await this.generateHeroSection(content, themeParams)
+    const leadMagnetSection = await this.generateLeadMagnetSection(content, themeParams)
     const problemsSection = await this.generateProblemsSection(content, themeParams)
     const productsSection = await this.generateProductsSection(content, themeParams)
+    const whyChooseUsSection = await this.generateWhyChooseUsSection(content, themeParams)
     const testimonialsSection = await this.generateTestimonialsSection(content, themeParams)
+    const blogSection = await this.generateBlogSection(content, themeParams)
     const footerSection = await this.generateFooterSection(themeParams)
     
     return `<!DOCTYPE html>
@@ -157,14 +163,23 @@ export class TemplateEngine {
         <!-- Hero Section -->
         ${heroSection}
         
+        <!-- Lead Magnet Section -->
+        ${leadMagnetSection}
+        
         <!-- Problems Section -->
         ${problemsSection}
         
         <!-- Products Section -->
         ${productsSection}
         
+        <!-- Why Choose Us Section -->
+        ${whyChooseUsSection}
+        
         <!-- Testimonials Section -->
         ${testimonialsSection}
+        
+        <!-- Blog Section -->
+        ${blogSection}
     </main>
     
     <!-- Footer -->
@@ -189,19 +204,36 @@ export class TemplateEngine {
     return generateStaticHeroSection({ content: content?.hero, colors: themeParams?.colors, themeParams })
   }
 
+
   private static async generateProblemsSection(content: any, themeParams: any): Promise<string> {
     const { generateStaticProblemsSection } = await import('./html-templates')
     return generateStaticProblemsSection({ content: content?.problems, colors: themeParams?.colors, themeParams })
   }
+
+  private static async generateLeadMagnetSection(content: any, themeParams: any): Promise<string> {
+    const { generateStaticLeadMagnetSection } = await import('./html-templates')
+    return generateStaticLeadMagnetSection({ content: content?.leadMagnet, colors: themeParams?.colors, themeParams })
+  }
+
 
   private static async generateProductsSection(content: any, themeParams: any): Promise<string> {
     const { generateStaticProductsSection } = await import('./html-templates')
     return generateStaticProductsSection({ content: content?.products, colors: themeParams?.colors, themeParams })
   }
 
+  private static async generateWhyChooseUsSection(content: any, themeParams: any): Promise<string> {
+    const { generateStaticWhyChooseUsSection } = await import('./html-templates')
+    return generateStaticWhyChooseUsSection({ content: content?.whyChooseUs, colors: themeParams?.colors, themeParams })
+  }
+
   private static async generateTestimonialsSection(content: any, themeParams: any): Promise<string> {
     const { generateStaticTestimonialsSection } = await import('./html-templates')
     return generateStaticTestimonialsSection({ content: content?.testimonials, colors: themeParams?.colors, themeParams })
+  }
+
+  private static async generateBlogSection(content: any, themeParams: any): Promise<string> {
+    const { generateStaticBlogSection } = await import('./html-templates')
+    return generateStaticBlogSection({ content: content?.blog, colors: themeParams?.colors, themeParams })
   }
 
   private static async generateFooterSection(themeParams: any): Promise<string> {

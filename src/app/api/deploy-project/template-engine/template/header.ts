@@ -4,7 +4,7 @@ import { DEFAULT_CONTENT } from '../../constants'
 /**
  * Generate static header HTML
  */
-export function generateStaticHeader({ content, colors, themeParams }: HeaderParams): string {
+export function generateStaticHeader({ content, themeParams }: HeaderParams): string {
 	const getTypographyStyles = () => {
 		return {
 			fontFamily: themeParams?.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -41,7 +41,7 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 				borderColor: themeParams?.colors?.border || themeParams?.colors?.primary,
 				color: content?.textColor || themeParams?.colors?.text,
 				borderRadius: themeParams?.components?.button?.rounded ? '9999px' : getBorderRadiusClass(),
-			} as any
+			} as React.CSSProperties
 		}
 
 		return {
@@ -49,7 +49,7 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 			backgroundColor: themeParams?.colors?.accent,
 			color: themeParams?.colors?.text,
 			borderRadius: themeParams?.components?.button?.rounded ? '9999px' : getBorderRadiusClass(),
-		} as any
+		} as React.CSSProperties
 	}
 
 	// Get logo size
@@ -73,10 +73,26 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 	const premiumButtonStyles = getButtonStyles('premium')
 	const logoSize = getLogoSize()
 
+	// Xử lý navigation từ content
+	const navigation: Array<{ name: string; href: string }> = content?.navigation || [
+		{ name: 'Trang chủ', href: '#home' },
+		{ name: 'Về chúng tôi', href: '#about' },
+		{ name: 'Sản phẩm', href: '#products' },
+		{ name: 'Tài nguyên', href: '#resources' },
+		{ name: 'Liên hệ', href: '#contact' }
+	]
+
+	// Xử lý social links từ content (để sử dụng trong tương lai)
+	// const socialLinks: Array<{ platform: string; url: string; icon?: string }> = content?.socialLinks || []
+
 	return `<header style="
-		background-color: ${content?.backgroundColor || themeParams?.sections?.header?.backgroundColor || themeParams?.colors?.secondary || '#D2691E'}; 
+		background-color: ${content?.colorMode === 'custom' && content?.backgroundColor 
+			? content.backgroundColor 
+			: themeParams?.sections?.header?.backgroundColor || themeParams?.colors?.secondary || '#D2691E'}; 
 		color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
-		border-bottom: 1px solid ${themeParams?.colors?.border || themeParams?.colors?.primary || '#8B4513'};
+		border-bottom: 1px solid ${content?.colorMode === 'custom' && content?.primaryColor 
+			? content.primaryColor 
+			: themeParams?.colors?.border || themeParams?.colors?.primary || '#8B4513'};
 		position: sticky;
 		top: 0;
 		z-index: 50;
@@ -146,51 +162,22 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 				</div>
 
 				<!-- Desktop Navigation -->
-				<nav style="display: none; align-items: center; gap: 2rem;">
-					<a href="#" style="
-						color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Trang chủ
-					</a>
-					<a href="#about" style="
-						color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Về chúng tôi
-					</a>
-					<a href="#products" style="
-						color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Sản phẩm
-					</a>
-					<a href="#resources" style="
-						color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Tài nguyên
-					</a>
-					<a href="#contact" style="
-						color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Liên hệ
-					</a>
+				<nav class="desktop-nav" style="display: none; align-items: center; gap: 2rem;">
+					${navigation.map(item => `
+						<a href="${item.href}" style="
+							color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
+							text-decoration: none;
+							font-size: ${typographyStyles.fontSize};
+							transition: opacity 0.2s;
+							font-weight: 500;
+						" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+							${item.name}
+						</a>
+					`).join('')}
 				</nav>
 
 				<!-- Desktop CTAs -->
-				<div style="display: none; align-items: center; gap: 0.75rem;">
+				<div class="desktop-ctas" style="display: none; align-items: center; gap: 0.75rem;">
 					<button style="
 						background: transparent;
 						border: 1px solid ${outlineButtonStyles.borderColor};
@@ -215,8 +202,10 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 						Cẩm nang XNK 2024
 					</button>
 					<button style="
-						background-color: ${themeParams?.colors?.primary || '#8B4513'};
-						color: ${themeParams?.colors?.text || '#ffffff'};
+						background-color: ${content?.colorMode === 'custom' && content?.primaryColor 
+							? content.primaryColor 
+							: themeParams?.colors?.primary || '#8B4513'};
+						color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
 						border: none;
 						padding: 0.5rem 1rem;
 						border-radius: ${premiumButtonStyles.borderRadius};
@@ -228,7 +217,7 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 						align-items: center;
 						gap: 0.5rem;
 						transition: all 0.2s;
-					" onmouseover="this.style.backgroundColor='${themeParams?.colors?.secondary || '#D2691E'}'" onmouseout="this.style.backgroundColor='${themeParams?.colors?.primary || '#8B4513'}'">
+					" onmouseover="this.style.backgroundColor='${themeParams?.colors?.secondary || '#D2691E'}'" onmouseout="this.style.backgroundColor='${content?.colorMode === 'custom' && content?.primaryColor ? content.primaryColor : themeParams?.colors?.primary || '#8B4513'}'">
 						<!-- Lucide: Phone -->
 						<svg style="width: 1rem; height: 1rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
 							<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -238,15 +227,16 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 				</div>
 
 				<!-- Mobile Menu Button -->
-				<button style="
+				<button class="mobile-menu-btn" style="
 					background: transparent;
 					border: none;
-					color: ${content?.textColor || themeParams?.colors?.text || '#ffffff'};
+					color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
 					font-family: ${typographyStyles.fontFamily};
 					font-size: ${typographyStyles.fontSize};
 					font-weight: ${typographyStyles.fontWeight};
 					cursor: pointer;
 					padding: 0.5rem;
+					display: block;
 				" onclick="toggleMobileMenu()">
 					<!-- Lucide: Menu -->
 					<svg style="width: 1.25rem; height: 1.25rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -257,66 +247,81 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 				</button>
 			</div>
 
+			<!-- Mobile Menu Overlay -->
+			<div id="mobileMenuOverlay" style="
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100vw;
+				height: 100vh;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 999;
+			" onclick="toggleMobileMenu()"></div>
+
 			<!-- Mobile Menu -->
 			<div id="mobileMenu" style="
 				display: none;
-				margin-top: 1rem;
-				padding-bottom: 1rem;
-				border-top: 1px solid ${themeParams?.colors?.border || themeParams?.colors?.primary || '#8B4513'};
-				padding-top: 1rem;
+				position: fixed;
+				top: 0;
+				right: 0;
+				width: 320px;
+				height: 100vh;
+				background-color: ${content?.colorMode === 'custom' && content?.backgroundColor 
+					? content.backgroundColor 
+					: themeParams?.sections?.header?.backgroundColor || themeParams?.colors?.secondary || '#D2691E'};
+				border-left: 1px solid ${content?.colorMode === 'custom' && content?.primaryColor 
+					? content.primaryColor 
+					: themeParams?.colors?.border || themeParams?.colors?.primary || '#8B4513'};
+				padding: 2rem 1rem;
+				z-index: 1000;
 				font-family: ${typographyStyles.fontFamily};
 				font-size: ${typographyStyles.fontSize};
 				font-weight: ${typographyStyles.fontWeight};
+				overflow-y: auto;
 			">
-				<nav style="display: flex; flex-direction: column; gap: 0.75rem;">
-					<a href="#" style="
-						color: ${content?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Trang chủ
-					</a>
-					<a href="#about" style="
-						color: ${content?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Về chúng tôi
-					</a>
-					<a href="#products" style="
-						color: ${content?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Sản phẩm
-					</a>
-					<a href="#resources" style="
-						color: ${content?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Tài nguyên
-					</a>
-					<a href="#contact" style="
-						color: ${content?.textColor || themeParams?.colors?.text || '#ffffff'};
-						text-decoration: none;
-						font-size: ${typographyStyles.fontSize};
-						transition: opacity 0.2s;
-					" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
-						Liên hệ
-					</a>
-				</nav>
-				<div style="
-					display: flex;
-					flex-direction: column;
-					gap: 0.5rem;
-					padding-top: 0.75rem;
-					border-top: 1px solid ${themeParams?.colors?.border || themeParams?.colors?.primary || '#8B4513'};
-				">
+				<!-- Close Button -->
+				<button style="
+					position: absolute;
+					top: 1rem;
+					right: 1rem;
+					background: transparent;
+					border: none;
+					color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
+					cursor: pointer;
+					padding: 0.5rem;
+				" onclick="toggleMobileMenu()">
+					<svg style="width: 1.25rem; height: 1.25rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<line x1="18" x2="6" y1="6" y2="18"/>
+						<line x1="6" x2="18" y1="6" y2="18"/>
+					</svg>
+				</button>
+				
+				<div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 2rem;">
+					<nav style="display: flex; flex-direction: column; gap: 1rem;">
+						${navigation.map(item => `
+							<a href="${item.href}" style="
+								color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
+								text-decoration: none;
+								font-size: 1.125rem;
+								font-weight: 500;
+								padding: 0.5rem 0;
+								transition: opacity 0.2s;
+								display: block;
+							" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'" onclick="toggleMobileMenu()">
+								${item.name}
+							</a>
+						`).join('')}
+					</nav>
+					<div style="
+						display: flex;
+						flex-direction: column;
+						gap: 0.75rem;
+						padding-top: 1rem;
+						border-top: 1px solid ${content?.colorMode === 'custom' && content?.primaryColor 
+							? content.primaryColor 
+							: themeParams?.colors?.border || themeParams?.colors?.primary || '#8B4513'};
+					">
 					<button style="
 						background: transparent;
 						border: 1px solid ${outlineButtonStyles.borderColor};
@@ -342,8 +347,10 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 						Cẩm nang XNK 2024
 					</button>
 					<button style="
-						background-color: ${themeParams?.colors?.primary || '#8B4513'};
-						color: ${themeParams?.colors?.text || '#ffffff'};
+						background-color: ${content?.colorMode === 'custom' && content?.primaryColor 
+							? content.primaryColor 
+							: themeParams?.colors?.primary || '#8B4513'};
+						color: ${content?.textColor || themeParams?.sections?.header?.textColor || themeParams?.colors?.text || '#ffffff'};
 						border: none;
 						padding: 0.5rem 1rem;
 						border-radius: ${premiumButtonStyles.borderRadius};
@@ -356,7 +363,7 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 						gap: 0.5rem;
 						transition: all 0.2s;
 						width: 100%;
-					" onmouseover="this.style.backgroundColor='${themeParams?.colors?.secondary || '#D2691E'}'" onmouseout="this.style.backgroundColor='${themeParams?.colors?.primary || '#8B4513'}'">
+					" onmouseover="this.style.backgroundColor='${themeParams?.colors?.secondary || '#D2691E'}'" onmouseout="this.style.backgroundColor='${content?.colorMode === 'custom' && content?.primaryColor ? content.primaryColor : themeParams?.colors?.primary || '#8B4513'}'">
 						<!-- Lucide: Phone -->
 						<svg style="width: 1rem; height: 1rem;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
 							<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -368,21 +375,53 @@ export function generateStaticHeader({ content, colors, themeParams }: HeaderPar
 		</div>
 	</header>
 
+	<style>
+		/* Responsive styles to match Header.tsx */
+		@media (min-width: 768px) {
+			.desktop-nav {
+				display: flex !important;
+			}
+			.desktop-ctas {
+				display: flex !important;
+			}
+			.mobile-menu-btn {
+				display: none !important;
+			}
+		}
+		
+		@media (max-width: 767px) {
+			.desktop-nav {
+				display: none !important;
+			}
+			.desktop-ctas {
+				display: none !important;
+			}
+			.mobile-menu-btn {
+				display: block !important;
+			}
+		}
+	</style>
+
 	<script>
 		function toggleMobileMenu() {
 			const menu = document.getElementById('mobileMenu');
+			const overlay = document.getElementById('mobileMenuOverlay');
 			if (menu.style.display === 'none' || menu.style.display === '') {
 				menu.style.display = 'block';
+				overlay.style.display = 'block';
+				document.body.style.overflow = 'hidden';
 			} else {
 				menu.style.display = 'none';
+				overlay.style.display = 'none';
+				document.body.style.overflow = 'auto';
 			}
 		}
 
 		// Show desktop navigation on larger screens
 		function updateNavigation() {
-			const desktopNav = document.querySelector('nav');
-			const desktopCTAs = document.querySelector('div[style*="display: none; align-items: center"]');
-			const mobileButton = document.querySelector('button[onclick="toggleMobileMenu()"]');
+			const desktopNav = document.querySelector('.desktop-nav');
+			const desktopCTAs = document.querySelector('.desktop-ctas');
+			const mobileButton = document.querySelector('.mobile-menu-btn');
 			
 			// Check screen size using CSS media query approach
 			const isDesktop = window.matchMedia('(min-width: 768px)').matches;

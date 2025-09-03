@@ -4,7 +4,7 @@ import { existsSync } from 'fs'
 
 // Cấu hình upload
 export const UPLOAD_CONFIG = {
-  UPLOAD_DIR: process.env.UPLOAD_DIR || '/var/www/uploads',
+  UPLOAD_DIR: process.env.UPLOAD_DIR || join(process.cwd(), 'public', 'uploads'),
   MAX_FILE_SIZE: 20 * 1024 * 1024, // 20MB
   ALLOWED_TYPES: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'],
   MAX_FILES_PER_REQUEST: 1

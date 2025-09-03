@@ -9,7 +9,10 @@ const PreviewPanel = ({ themeParams }: PreviewPanelProps) => {
   return (
     <div className="flex-1 bg-gray-100">
       <div className="h-full overflow-auto">
-        <VietnamCoffeeTheme theme={themeParams} />
+        {/* Force desktop breakpoint for preview */}
+        <div className="min-w-[768px]">
+          <VietnamCoffeeTheme theme={themeParams} />
+        </div>
       </div>
     </div>
   )
