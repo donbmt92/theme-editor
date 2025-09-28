@@ -459,6 +459,7 @@ const UserTemplatesPageContent = () => {
           }
         })() : undefined}
         forceOpen={true}
+        projectId={createdProject?.id}
       />
 
       {/* Toasts */}

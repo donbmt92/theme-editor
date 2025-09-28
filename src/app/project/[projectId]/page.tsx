@@ -41,6 +41,7 @@ const ICON_CHOICES = Object.keys(ICON_MAP) as string[]
 interface ProjectData {
   id: string
   name: string
+  language?: string
   theme: {
     id: string
     name: string
@@ -791,7 +792,7 @@ const ProjectEditor = () => {
       {isPreviewMode ? (
         /* Preview Mode */
         <div className="h-screen overflow-auto">
-          <PreviewPanel themeParams={themeParams} />
+          <PreviewPanel themeParams={themeParams} projectLanguage={project?.language} />
         </div>
       ) : (
         /* Edit Mode */
@@ -805,7 +806,7 @@ const ProjectEditor = () => {
           />
 
           {/* Right Panel - Preview */}
-          <PreviewPanel themeParams={themeParams} />
+          <PreviewPanel themeParams={themeParams} projectLanguage={project?.language} />
         </div>
       )}
 
@@ -815,6 +816,7 @@ const ProjectEditor = () => {
         onOpenChange={setShowAIDialog}
         onGenerate={handleAIGenerate}
         currentTheme={themeParams}
+        projectId={projectId}
       />
 
       {/* Deploy Project Dialog */}

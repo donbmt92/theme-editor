@@ -612,6 +612,7 @@ export interface ThemeParams {
   sections?: ThemeSections
   content?: ThemeContent
   custom?: Record<string, unknown>
+  projectLanguage?: string
 }
 
 // Editor state types

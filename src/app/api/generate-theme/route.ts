@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
     // Create comprehensive prompt for content and color generation
     const prompt = `
@@ -40,13 +40,17 @@ THÔNG TIN DOANH NGHIỆP:
 - Tông giọng: ${businessInfo.tone}
 - Ngôn ngữ: ${businessInfo.language}
 
-YÊU CẦU:
-1. Tạo bảng màu phù hợp với ngành nghề và thương hiệu (primary, secondary, accent colors)
-2. Viết nội dung đầy đủ cho tất cả các section theo cấu trúc template
-3. Nội dung phải phù hợp với tông giọng và ngôn ngữ được chỉ định
-4. Đảm bảo nội dung chuyên nghiệp, hấp dẫn và phù hợp với đối tượng khách hàng
-5. Sử dụng kích thước tiêu đề phù hợp: titleSize="xl" (lớn), subtitleSize="lg" (lớn), descriptionSize="base" (vừa)
-6. Sử dụng độ đậm font phù hợp: titleWeight="semibold", subtitleWeight="medium", descriptionWeight="normal"
+YÊU CẦU QUAN TRỌNG:
+1. TẤT CẢ nội dung website phải được viết bằng ${businessInfo.language === 'english' ? 'tiếng Anh' : 'tiếng Việt'}
+2. Không được mix ngôn ngữ trong cùng một section
+3. Nếu ngôn ngữ là 'english', tất cả text phải là English
+4. Nếu ngôn ngữ là 'vietnamese', tất cả text phải là tiếng Việt
+5. Tạo bảng màu phù hợp với ngành nghề và thương hiệu (primary, secondary, accent colors)
+6. Viết nội dung đầy đủ cho tất cả các section theo cấu trúc template
+7. Nội dung phải phù hợp với tông giọng và ngôn ngữ được chỉ định
+8. Đảm bảo nội dung chuyên nghiệp, hấp dẫn và phù hợp với đối tượng khách hàng
+9. Sử dụng kích thước tiêu đề phù hợp: titleSize="xl" (lớn), subtitleSize="lg" (lớn), descriptionSize="base" (vừa)
+10. Sử dụng độ đậm font phù hợp: titleWeight="semibold", subtitleWeight="medium", descriptionWeight="normal"
 
 Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format khác):
 
@@ -62,24 +66,24 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
   "content": {
     "header": {
       "title": "${businessInfo.companyName}",
-      "subtitle": "Slogan ngắn gọn phù hợp với ngành nghề",
+      "subtitle": "${businessInfo.language === 'english' ? 'Short slogan suitable for the industry' : 'Slogan ngắn gọn phù hợp với ngành nghề'}",
       "backgroundColor": "#hex_color",
       "textColor": "#hex_color",
       "logo": "/assets/logo.png",
       "navigation": [
-        {"name": "Trang chủ", "href": "#home"},
-        {"name": "Sản phẩm", "href": "#products"},
-        {"name": "Dịch vụ", "href": "#services"},
-        {"name": "Về chúng tôi", "href": "#about"},
-        {"name": "Liên hệ", "href": "#contact"}
+        {"name": "${businessInfo.language === 'english' ? 'Home' : 'Trang chủ'}", "href": "#home"},
+        {"name": "${businessInfo.language === 'english' ? 'Products' : 'Sản phẩm'}", "href": "#products"},
+        {"name": "${businessInfo.language === 'english' ? 'Services' : 'Dịch vụ'}", "href": "#services"},
+        {"name": "${businessInfo.language === 'english' ? 'About Us' : 'Về chúng tôi'}", "href": "#about"},
+        {"name": "${businessInfo.language === 'english' ? 'Contact' : 'Liên hệ'}", "href": "#contact"}
       ]
     },
          "hero": {
-       "title": "Tiêu đề chính hấp dẫn cho ${businessInfo.industry}",
-       "subtitle": "Phụ đề bổ sung",
-       "description": "Mô tả chi tiết về giá trị cốt lõi và lợi ích chính",
-       "ctaText": "Call to action chính",
-       "ctaSecondaryText": "Call to action phụ",
+       "title": "${businessInfo.language === 'english' ? 'Attractive main title for ' + businessInfo.industry : 'Tiêu đề chính hấp dẫn cho ' + businessInfo.industry}",
+       "subtitle": "${businessInfo.language === 'english' ? 'Supporting subtitle' : 'Phụ đề bổ sung'}",
+       "description": "${businessInfo.language === 'english' ? 'Detailed description about core values and main benefits' : 'Mô tả chi tiết về giá trị cốt lõi và lợi ích chính'}",
+       "ctaText": "${businessInfo.language === 'english' ? 'Main call to action' : 'Call to action chính'}",
+       "ctaSecondaryText": "${businessInfo.language === 'english' ? 'Secondary call to action' : 'Call to action phụ'}",
        "image": "/assets/hero-image.jpg",
        "titleSize": "xl",
        "subtitleSize": "lg",
@@ -93,19 +97,19 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
        "statsSize": "lg",
        "statsWeight": "bold",
       "benefits": [
-        {"icon": "CheckCircle", "text": "Lợi ích 1"},
-        {"icon": "Shield", "text": "Lợi ích 2"},
-        {"icon": "Truck", "text": "Lợi ích 3"}
+        {"icon": "CheckCircle", "text": "${businessInfo.language === 'english' ? 'Benefit 1' : 'Lợi ích 1'}"},
+        {"icon": "Shield", "text": "${businessInfo.language === 'english' ? 'Benefit 2' : 'Lợi ích 2'}"},
+        {"icon": "Truck", "text": "${businessInfo.language === 'english' ? 'Benefit 3' : 'Lợi ích 3'}"}
       ],
       "stats": [
-        {"number": "100+", "label": "Khách hàng"},
-        {"number": "5+", "label": "Năm kinh nghiệm"},
-        {"number": "24/7", "label": "Hỗ trợ"}
+        {"number": "100+", "label": "${businessInfo.language === 'english' ? 'Customers' : 'Khách hàng'}"},
+        {"number": "5+", "label": "${businessInfo.language === 'english' ? 'Years Experience' : 'Năm kinh nghiệm'}"},
+        {"number": "24/7", "label": "${businessInfo.language === 'english' ? 'Support' : 'Hỗ trợ'}"}
       ]
     },
     "about": {
-      "title": "Về Chúng Tôi",
-      "description": "Mô tả chi tiết về công ty, lịch sử, tầm nhìn, sứ mệnh",
+      "title": "${businessInfo.language === 'english' ? 'About Us' : 'Về Chúng Tôi'}",
+      "description": "${businessInfo.language === 'english' ? 'Detailed description about the company, history, vision, mission' : 'Mô tả chi tiết về công ty, lịch sử, tầm nhìn, sứ mệnh'}",
       "image": "/assets/about-image.jpg",
       "features": [
         {"icon": "Award", "title": "Chứng nhận", "description": "Mô tả chứng nhận"},
@@ -197,19 +201,19 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
       "textColor": "#2D3748",
       "guideTitle": "Hướng dẫn đầy đủ",
       "guideSubtitle": "Phiên bản 2024 - 45 trang",
-      "formTitle": "Tải về hướng dẫn miễn phí",
-      "formDescription": "Nhập thông tin bên dưới để có quyền truy cập ngay lập tức",
-      "buttonText": "Tải về hướng dẫn miễn phí ngay",
-      "features": [
-        {"icon": "FileText", "title": "Tài liệu đầy đủ", "description": "Mọi biểu mẫu và tài liệu cần thiết"},
-        {"icon": "TrendingUp", "title": "Phân tích thị trường", "description": "Dữ liệu thị trường hiện tại"},
-        {"icon": "Shield", "title": "Tiêu chuẩn chất lượng", "description": "Yêu cầu chi tiết cho tiêu chuẩn"},
-        {"icon": "CheckCircle", "title": "Quy trình từng bước", "description": "Lịch trình rõ ràng từ đầu đến cuối"}
+      "formTitle": "${businessInfo.language === 'english' ? 'Download Your Free Guide' : 'Tải về hướng dẫn miễn phí'}",
+      "formDescription": "${businessInfo.language === 'english' ? 'Enter your details below for instant access to valuable resources' : 'Nhập thông tin bên dưới để có quyền truy cập ngay lập tức'}",
+      "buttonText": "${businessInfo.language === 'english' ? 'Download Free Guide Now' : 'Tải về hướng dẫn miễn phí ngay'}",
+      "guideFeatures": [
+        {"icon": "FileText", "title": "${businessInfo.language === 'english' ? 'Complete Documentation' : 'Tài liệu đầy đủ'}", "description": "${businessInfo.language === 'english' ? 'All necessary forms and documents' : 'Mọi biểu mẫu và tài liệu cần thiết'}"},
+        {"icon": "TrendingUp", "title": "${businessInfo.language === 'english' ? 'Market Analysis' : 'Phân tích thị trường'}", "description": "${businessInfo.language === 'english' ? 'Current market data and trends' : 'Dữ liệu thị trường hiện tại'}"},
+        {"icon": "Shield", "title": "${businessInfo.language === 'english' ? 'Quality Standards' : 'Tiêu chuẩn chất lượng'}", "description": "${businessInfo.language === 'english' ? 'Detailed requirements for standards' : 'Yêu cầu chi tiết cho tiêu chuẩn'}"},
+        {"icon": "CheckCircle", "title": "${businessInfo.language === 'english' ? 'Step-by-Step Process' : 'Quy trình từng bước'}", "description": "${businessInfo.language === 'english' ? 'Clear timeline from start to finish' : 'Lịch trình rõ ràng từ đầu đến cuối'}"}
       ],
       "trustIndicators": [
-        {"number": "5,000+", "label": "Lượt tải"},
-        {"number": "92%", "label": "Tỷ lệ thành công"},
-        {"number": "4.9/5", "label": "Đánh giá người dùng"}
+        {"number": "5,000+", "label": "${businessInfo.language === 'english' ? 'Downloads' : 'Lượt tải'}"},
+        {"number": "92%", "label": "${businessInfo.language === 'english' ? 'Success Rate' : 'Tỷ lệ thành công'}"},
+        {"number": "4.9/5", "label": "${businessInfo.language === 'english' ? 'User Rating' : 'Đánh giá người dùng'}"}
       ]
     },
     "products": {
@@ -453,13 +457,14 @@ Hãy đảm bảo:
           const error = aiError as { status?: number; message?: string }
           
           // If we've exhausted retries, return appropriate error
-          if (error?.status === 503 || error?.message?.includes('overloaded')) {
+          if (error?.status === 503 || error?.message?.includes('overloaded') || error?.message?.includes('Service Unavailable')) {
             return NextResponse.json(
               { 
                 success: false, 
-                error: 'Dịch vụ AI đang quá tải. Vui lòng thử lại sau vài phút.',
-                errorType: 'AI_OVERLOADED',
-                retryAfter: 300 // 5 minutes
+                error: 'Dịch vụ AI của Google đang tạm thời không khả dụng. Vui lòng thử lại sau vài phút.',
+                errorType: 'AI_SERVICE_UNAVAILABLE',
+                retryAfter: 300, // 5 minutes
+                suggestion: 'Hãy thử lại sau 5-10 phút hoặc kiểm tra trạng thái dịch vụ Google AI.'
               },
               { status: 503 }
             )

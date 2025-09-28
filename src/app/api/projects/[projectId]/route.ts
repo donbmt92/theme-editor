@@ -31,7 +31,10 @@ export async function GET(
           id: projectId,
           userId: session.user.id
         },
-        include: {
+        select: {
+          id: true,
+          name: true,
+          language: true,
           theme: {
             select: {
               id: true,
@@ -98,9 +101,9 @@ export async function PUT(
     }
 
     const body = await request.json()
-    const { themeParams, name } = body
+    const { themeParams, name, language } = body
 
-    console.log('Received update request:', { themeParams: !!themeParams, name })
+    console.log('Received update request:', { themeParams: !!themeParams, name, language })
 
     // Check if project exists and user owns it
     const project = await prisma.project.findFirst({
@@ -122,6 +125,7 @@ export async function PUT(
       where: { id: projectId },
       data: {
         name: name || project.name,
+        language: language || project.language,
         updatedAt: new Date()
       },
       include: {
@@ -159,7 +163,7 @@ export async function PUT(
         }
       }
 
-      console.log('Creating new version with params:', parsedThemeParams)
+      // console.log('Creating new version with params:', parsedThemeParams)
 
       await prisma.projectVersion.create({
         data: {

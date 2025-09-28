@@ -3,7 +3,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star, Quote } from "lucide-react";
 import { ThemeParams } from "@/types";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface Testimonial {
@@ -39,6 +38,24 @@ interface TestimonialsProps {
 }
 
 const Testimonials = ({ theme, content }: TestimonialsProps) => {
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        numbersSpeak: "The Numbers Speak for Themselves"
+      };
+    } else {
+      return {
+        numbersSpeak: "Những Con Số Nói Lên Tất Cả"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
+
   // Default testimonials data
   const defaultTestimonials: Testimonial[] = [
     {
@@ -451,7 +468,7 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
               className={cn("text-3xl font-bold text-center mb-12")}
               style={{ color: "#FFFFFF" }}
             >
-              Những Con Số Nói Lên Tất Cả
+              {localizedText.numbersSpeak}
             </h3>
             <div className="grid md:grid-cols-4 gap-8">
               {stats.map((stat, index) => (

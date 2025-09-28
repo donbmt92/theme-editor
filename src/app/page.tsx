@@ -15,9 +15,9 @@ export default function HomePage() {
           </div>
           
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
+            {/* <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
               Tính năng
-            </Link>
+            </Link> */}
             <Link href="/dashboard" className="text-gray-600 hover:text-gray-900 transition-colors">
               Dashboard
             </Link>

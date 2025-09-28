@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Coffee, Truck, FileCheck, Users, Lightbulb, Shield, Package, TrendingUp, FileText } from "lucide-react";
 import { ThemeParams } from "@/types";
-import ProductImage from "./ProductImage";
 import { cn } from "@/lib/utils";
 import { useUnsplashImage } from "@/hooks/use-unsplash-image";
 
@@ -51,8 +50,35 @@ interface ProductsServicesProps {
 }
 
 const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        contact: "Contact",
+        learnMore: "Learn More",
+        viewProductCatalog: "View Product Catalog",
+        learnAboutShipping: "Learn About Shipping",
+        premiumGrade: "Premium Grade",
+        standardGrade: "Standard Grade"
+      };
+    } else {
+      return {
+        contact: "Liên hệ",
+        learnMore: "Tìm hiểu thêm",
+        viewProductCatalog: "Xem danh mục sản phẩm",
+        learnAboutShipping: "Tìm hiểu về vận chuyển",
+        premiumGrade: "Loại cao cấp",
+        standardGrade: "Loại tiêu chuẩn"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
+
   // Use Unsplash for images
-  console.log("content.items", content);
   const { imageUrl: coffeeImageUrl, isLoading: coffeeImageLoading } = useUnsplashImage(
     content.items?.[0]?.image,
     { query: 'cashew nuts premium' }
@@ -64,7 +90,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
   );
 
   // Icon mapping
-  const iconMap: { [key: string]: any } = {
+  const iconMap: { [key: string]: React.ComponentType<{ className?: string }> } = {
     Package,
     Truck,
     FileCheck,
@@ -331,7 +357,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
     title: service.name,
     description: service.description,
     features: service.features || ["Chất lượng cao", "Dịch vụ chuyên nghiệp", "Giao hàng đúng hạn"],
-    cta: service.cta || "Tìm hiểu thêm"
+    cta: service.cta || localizedText.learnMore
   })) || [
     {
       icon: Package,
@@ -345,7 +371,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
       title: "Tài Liệu Xuất Khẩu",
       description: "Xử lý đầy đủ tất cả giấy tờ FDA, USDA và hải quan để thông quan suôn sẻ.",
       features: ["Tuân thủ FDA", "Biểu mẫu hải quan", "Chứng nhận sức khỏe", "Tài liệu xuất xứ"],
-      cta: "Tìm hiểu thêm"
+      cta: localizedText.learnMore
     },
     {
       icon: Shield,
@@ -580,7 +606,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {item.price || "Liên hệ"}
+                    {item.price || localizedText.contact}
                   </div>
                 </div>
               )) || (
@@ -605,7 +631,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                         fontSize: theme.typography?.fontSize || '16px'
                       }}
                     >
-                      Loại cao cấp
+                      {localizedText.premiumGrade}
                     </div>
                   </div>
                   <div 
@@ -628,7 +654,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                         fontSize: theme.typography?.fontSize || '16px'
                       }}
                     >
-                      Loại tiêu chuẩn
+                      {localizedText.standardGrade}
                     </div>
                   </div>
                 </>
@@ -639,7 +665,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
               className="shadow-elegant"
               style={getButtonStyles('primary')}
             >
-              Xem danh mục sản phẩm
+              {localizedText.viewProductCatalog}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
@@ -690,7 +716,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
               className="shadow-elegant"
               style={getButtonStyles('primary')}
             >
-              Tìm hiểu về vận chuyển
+              {localizedText.learnAboutShipping}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>

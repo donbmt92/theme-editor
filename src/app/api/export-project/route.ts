@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import JSZip from 'jszip'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
 import path from 'path'
 import fs from 'fs/promises'
 import { ThemeParams } from '@/types'
@@ -79,6 +80,21 @@ export async function POST(request: NextRequest) {
 
     console.log('✅ [EXPORT] Validation passed')
 
+    // Load project to get language
+    let projectLanguage = 'vietnamese' // default
+    try {
+      const project = await prisma.project.findUnique({
+        where: { id: projectId },
+        select: { language: true }
+      })
+      if (project?.language) {
+        projectLanguage = project.language
+        console.log(`🌐 [EXPORT] Project language: ${projectLanguage}`)
+      }
+    } catch (error) {
+      console.warn('⚠️ [EXPORT] Could not load project language, using default:', error)
+    }
+
     // Step 1: Generate project files
     console.log('📁 [EXPORT] Step 1: Generating project files...')
     
@@ -91,7 +107,8 @@ export async function POST(request: NextRequest) {
         projectName,
         description,
         includeAssets,
-        themeParams
+        themeParams,
+        language: projectLanguage
       })
     } else {
       // Generate React/Next.js files (existing logic)
@@ -105,7 +122,8 @@ export async function POST(request: NextRequest) {
         typescript,
         cssFramework,
         includeAssets,
-        themeParams
+        themeParams,
+        language: projectLanguage
       })
     }
     
@@ -251,7 +269,8 @@ async function generateProjectFiles({
   typescript,
   cssFramework,
   includeAssets,
-  themeParams
+  themeParams,
+  language
 }: {
   projectName: string
   description: string
@@ -260,6 +279,7 @@ async function generateProjectFiles({
   cssFramework: string
   includeAssets: boolean
   themeParams: any
+  language: string
 }) {
   console.log('🔧 [EXPORT] Generating React/Next.js project files...')
 
@@ -272,11 +292,11 @@ async function generateProjectFiles({
   if (framework === 'react-vite') {
     files['src/App.tsx'] = generateReactApp(themeParams, typescript)
     files['src/main.tsx'] = generateReactMain()
-    files['index.html'] = generateViteHtml(projectName)
+    files['index.html'] = generateViteHtml(projectName, language)
     files['vite.config.ts'] = generateViteConfig()
   } else if (framework === 'nextjs') {
     files['src/app/page.tsx'] = generateNextjsPage(themeParams, typescript)
-    files['src/app/layout.tsx'] = generateNextjsLayout(projectName, description)
+    files['src/app/layout.tsx'] = generateNextjsLayout(projectName, description, language)
     files['next.config.js'] = generateNextConfig()
   }
   
@@ -308,12 +328,14 @@ async function generateStaticHtmlFiles({
   projectName,
   description,
   includeAssets,
-  themeParams
+  themeParams,
+  language
 }: {
   projectName: string
   description: string
   includeAssets: boolean
   themeParams: any
+  language: string
 }) {
   console.log('🔧 [EXPORT] Generating static HTML files...')
 
@@ -321,7 +343,7 @@ async function generateStaticHtmlFiles({
   
   // Generate main HTML file
   console.log('📄 [EXPORT] Generating index.html...')
-  files['index.html'] = generateStaticHtml(projectName, description, themeParams)
+  files['index.html'] = generateStaticHtml(projectName, description, themeParams, language)
   
   // Generate separate CSS file
   console.log('🎨 [EXPORT] Generating styles.css...')
@@ -354,7 +376,7 @@ async function generateStaticHtmlFiles({
 }
 
 // Generate main HTML file with embedded CSS
-function generateStaticHtml(projectName: string, description: string, themeParams: any) {
+function generateStaticHtml(projectName: string, description: string, themeParams: any, language: string) {
   const content = themeParams?.content || {}
   const colors = themeParams?.colors || {}
   
@@ -364,7 +386,7 @@ function generateStaticHtml(projectName: string, description: string, themeParam
   const companyName = content?.header?.title || projectName
   
   return `<!DOCTYPE html>
-<html lang="vi">
+<html lang="${language === 'english' ? 'en' : 'vi'}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -2010,9 +2032,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 )`
 }
 
-function generateViteHtml(projectName: string) {
+function generateViteHtml(projectName: string, language: string) {
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="${language === 'english' ? 'en' : 'vi'}">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -2049,7 +2071,7 @@ export default function Home() {
 }`
 }
 
-function generateNextjsLayout(projectName: string, description: string) {
+function generateNextjsLayout(projectName: string, description: string, language: string) {
   return `import './globals.css'
 import type { Metadata } from 'next'
 
@@ -2064,7 +2086,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="${language === 'english' ? 'en' : 'vi'}">
       <body>{children}</body>
     </html>
   )

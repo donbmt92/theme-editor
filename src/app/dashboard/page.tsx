@@ -128,7 +128,7 @@ export default function DashboardPage() {
               </div>
             </div>
           </Link>
-
+{/* 
           <Link
             href="/templates"
             className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
@@ -142,7 +142,7 @@ export default function DashboardPage() {
                 <p className="text-sm text-gray-600">Khám phá thư viện template</p>
               </div>
             </div>
-          </Link>
+          </Link> */}
 
           <Link
             href="/payment"

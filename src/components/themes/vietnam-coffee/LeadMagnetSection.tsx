@@ -58,6 +58,42 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     email: "",
     company: ""
   });
+  
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+  
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        nameLabel: "Full Name *",
+        emailLabel: "Business Email *", 
+        companyLabel: "Company Name (Optional)",
+        namePlaceholder: "Enter your full name",
+        emailPlaceholder: "your.email@company.com",
+        companyPlaceholder: "Your company name",
+        secureText: "100% Secure",
+        noSpamText: "No Spam", 
+        instantText: "Instant Download",
+        privacyText: "By downloading, you agree to receive occasional emails about coffee export opportunities. Unsubscribe anytime."
+      };
+    } else {
+      return {
+        nameLabel: "Họ và tên *",
+        emailLabel: "Email doanh nghiệp *",
+        companyLabel: "Tên công ty (Tùy chọn)", 
+        namePlaceholder: "Nhập họ và tên đầy đủ",
+        emailPlaceholder: "your.email@company.com",
+        companyPlaceholder: "Tên công ty của bạn",
+        secureText: "100% An toàn",
+        noSpamText: "Không spam",
+        instantText: "Tải về ngay",
+        privacyText: "Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu cà phê. Hủy đăng ký bất cứ lúc nào."
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
 
   // Get icon component by name
   const getIcon = (iconName?: string) => {
@@ -577,7 +613,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                           fontWeight: theme.typography?.fontWeight || '500'
                         }}
                       >
-                        Họ và tên *
+                        {localizedText.nameLabel}
                       </Label>
                       <Input
                         id="name"
@@ -586,7 +622,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="mt-2"
-                        placeholder="Nhập họ và tên đầy đủ"
+                        placeholder={localizedText.namePlaceholder}
                         style={{ 
                           fontFamily: theme.typography?.fontFamily || 'Inter',
                           fontSize: theme.typography?.fontSize || '16px'
@@ -603,7 +639,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                           fontWeight: theme.typography?.fontWeight || '500'
                         }}
                       >
-                        Email doanh nghiệp *
+                        {localizedText.emailLabel}
                       </Label>
                       <Input
                         id="email"
@@ -612,7 +648,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="mt-2"
-                        placeholder="your.email@company.com"
+                        placeholder={localizedText.emailPlaceholder}
                         style={{ 
                           fontFamily: theme.typography?.fontFamily || 'Inter',
                           fontSize: theme.typography?.fontSize || '16px'
@@ -629,7 +665,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                           fontWeight: theme.typography?.fontWeight || '500'
                         }}
                       >
-                        Tên công ty (Tùy chọn)
+                        {localizedText.companyLabel}
                       </Label>
                       <Input
                         id="company"
@@ -637,7 +673,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         value={formData.company}
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                         className="mt-2"
-                        placeholder="Tên công ty của bạn"
+                        placeholder={localizedText.companyPlaceholder}
                         style={{ 
                           fontFamily: theme.typography?.fontFamily || 'Inter',
                           fontSize: theme.typography?.fontSize || '16px'
@@ -662,7 +698,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         fontSize: theme.typography?.fontSize || '16px'
                       }}
                     >
-                      {content.privacyText || "Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu cà phê. Hủy đăng ký bất cứ lúc nào."}
+                      {content.privacyText || localizedText.privacyText}
                     </p>
                   </form>
 
@@ -681,7 +717,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         }}
                       >
                         <Shield className="h-4 w-4 mr-1" />
-                        <span>{content.secureText || "100% An toàn"}</span>
+                        <span>{localizedText.secureText}</span>
                       </div>
                       <div 
                         className="flex items-center"
@@ -691,7 +727,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         }}
                       >
                         <CheckCircle className="h-4 w-4 mr-1" />
-                        <span>{content.noSpamText || "Không spam"}</span>
+                        <span>{localizedText.noSpamText}</span>
                       </div>
                       <div 
                         className="flex items-center"
@@ -701,7 +737,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         }}
                       >
                         <Download className="h-4 w-4 mr-1" />
-                        <span>{content.instantText || "Tải về ngay"}</span>
+                        <span>{localizedText.instantText}</span>
                       </div>
                     </div>
                   </div>

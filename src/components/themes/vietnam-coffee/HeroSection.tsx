@@ -63,6 +63,24 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
   const params = useParams();
   const projectId = params?.projectId as string;
 
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        learnMore: "Learn More"
+      };
+    } else {
+      return {
+        learnMore: "Tìm hiểu thêm"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
+
   // Use Unsplash for hero background image - ưu tiên hình ảnh upload trước
   const {
     imageUrl: unsplashImageUrl,
@@ -787,7 +805,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                 className={cn("group hover:scale-105 hover:shadow-xl transition-all duration-300", getCTASize(), getCTAWeight(), getCTAFont())}
                 style={getButtonStyles("primary")}
               >
-                {content.ctaText || "Tìm hiểu thêm"}
+                {content.ctaText || localizedText.learnMore}
                 <ArrowRight
                   size={20}
                   className="ml-2 group-hover:translate-x-1 transition-transform"

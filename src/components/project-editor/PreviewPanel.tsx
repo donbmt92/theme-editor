@@ -3,15 +3,22 @@ import { ThemeParams } from '@/types'
 
 interface PreviewPanelProps {
   themeParams: ThemeParams
+  projectLanguage?: string
 }
 
-const PreviewPanel = ({ themeParams }: PreviewPanelProps) => {
+const PreviewPanel = ({ themeParams, projectLanguage }: PreviewPanelProps) => {
+  // Merge projectLanguage into themeParams
+  const themeWithLanguage = {
+    ...themeParams,
+    projectLanguage: projectLanguage || 'vietnamese'
+  }
+
   return (
     <div className="flex-1 bg-gray-100">
       <div className="h-full overflow-auto">
         {/* Force desktop breakpoint for preview */}
         <div className="min-w-[768px]">
-          <VietnamCoffeeTheme theme={themeParams} />
+          <VietnamCoffeeTheme theme={themeWithLanguage} />
         </div>
       </div>
     </div>

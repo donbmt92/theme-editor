@@ -83,6 +83,24 @@ interface ProblemSolutionProps {
 }
 
 const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        learnMore: "Learn More About Us"
+      };
+    } else {
+      return {
+        learnMore: "Tìm hiểu thêm về chúng tôi"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
+
   // Get icon component by name
   const getIcon = (iconName?: string) => {
     switch (iconName) {
@@ -590,7 +608,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                 className="bg-white text-primary hover:bg-white/90"
                 style={getButtonStyles()}
               >
-                {content.cta?.buttonText || "Tìm hiểu thêm về chúng tôi"}
+                {content.cta?.buttonText || localizedText.learnMore}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </CardContent>

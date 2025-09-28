@@ -55,6 +55,30 @@ interface WhyChooseUsSectionProps {
 }
 
 const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        contactNow: "Contact Now",
+        coreValues: "Core Values:",
+        goals2025: "2025 Goals:",
+        highQuality: "High Quality"
+      };
+    } else {
+      return {
+        contactNow: "Liên hệ ngay",
+        coreValues: "Giá Trị Cốt Lõi:",
+        goals2025: "Mục Tiêu 2025:",
+        highQuality: "Chất lượng cao"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
+
   // Map tên icon (string) sang component thực tế để render an toàn
   const ICONS: Record<string, LucideIcon> = {
     Users,
@@ -454,7 +478,7 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                     }}
                   >
                     <Award className="h-4 w-4 mr-1" />
-                    Chất lượng cao
+                    {localizedText.highQuality}
                   </div>
                 </div>
               </CardContent>
@@ -501,13 +525,13 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
               </p>
               <div className="space-y-3">
                 <h4 
-                  className="font-semibold"
+                  className="font-bold"
                   style={{ 
                     color: content.textColor || theme.colors?.text || '#2D3748',
-                    fontWeight: theme.typography?.fontWeight || '600'
+                    fontWeight: theme.typography?.fontWeight || '700'
                   }}
                 >
-                  Giá Trị Cốt Lõi:
+                  {localizedText.coreValues}
                 </h4>
                 <p 
                   className="leading-relaxed"
@@ -558,13 +582,13 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
               </p>
               <div className="space-y-3">
                 <h4 
-                  className="font-semibold"
+                  className="font-bold"
                   style={{ 
                     color: content.textColor || theme.colors?.text || '#2D3748',
-                    fontWeight: theme.typography?.fontWeight || '600'
+                    fontWeight: theme.typography?.fontWeight || '700'
                   }}
                 >
-                  Mục Tiêu 2025:
+                  {localizedText.goals2025}
                 </h4>
                 <p 
                   className="leading-relaxed"
@@ -610,7 +634,7 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                 className="bg-white text-primary hover:bg-white/90"
                 style={getButtonStyles('secondary')}
               >
-                {ctaData.buttonText || ctaData.primaryButton || 'Liên hệ ngay'}
+                {ctaData.buttonText || ctaData.primaryButton || localizedText.contactNow}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>

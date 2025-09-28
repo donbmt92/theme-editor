@@ -34,6 +34,7 @@ interface AIContentGeneratorProps {
   onGenerate: (themeParams: ThemeParams) => void
   currentTheme?: ThemeParams
   forceOpen?: boolean
+  projectId?: string
 }
 
 const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
@@ -41,7 +42,8 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
   onOpenChange,
   onGenerate,
   currentTheme,
-  forceOpen = false
+  forceOpen = false,
+  projectId
 }) => {
   const [businessInfo, setBusinessInfo] = useState<BusinessInfo>({
     companyName: '',
@@ -98,7 +100,14 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
         setGeneratedContent(result.themeParams)
         setStep('preview')
       } else {
-        throw new Error(result.error || 'Có lỗi xảy ra')
+        // Handle specific error types
+        if (result.errorType === 'AI_SERVICE_UNAVAILABLE') {
+          throw new Error(`${result.error}\n\n${result.suggestion || ''}`)
+        } else if (result.errorType === 'QUOTA_EXCEEDED') {
+          throw new Error(`${result.error}\n\nVui lòng thử lại sau ${Math.ceil(result.retryAfter / 60)} phút.`)
+        } else {
+          throw new Error(result.error || 'Có lỗi xảy ra')
+        }
       }
     } catch (err) {
       console.error('Generation error:', err)
@@ -108,8 +117,25 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
     }
   }
 
-  const applyContent = () => {
+  const applyContent = async () => {
     if (generatedContent) {
+      // Lưu language vào project nếu có projectId
+      if (projectId) {
+        try {
+          await fetch(`/api/projects/${projectId}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              language: businessInfo.language
+            })
+          })
+        } catch (error) {
+          console.error('Error saving language to project:', error)
+        }
+      }
+      
       onGenerate(generatedContent)
       setStep('success')
       setTimeout(() => {
@@ -272,16 +298,36 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                     >
                       <option value="vietnamese">Tiếng Việt</option>
                       <option value="english">English</option>
-                      <option value="both">Song ngữ</option>
                     </select>
                   </div>
                 </CardContent>
               </Card>
 
               {error && (
-                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700">
-                  <AlertCircle className="h-4 w-4" />
-                  {error}
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700">
+                    <AlertCircle className="h-4 w-4" />
+                    <div className="flex-1">
+                      <p className="text-sm whitespace-pre-line">{error}</p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center">
+                    <Button 
+                      variant="outline" 
+                      onClick={generateContent}
+                      disabled={isGenerating}
+                      className="text-sm"
+                    >
+                      {isGenerating ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Đang thử lại...
+                        </>
+                      ) : (
+                        'Thử lại'
+                      )}
+                    </Button>
+                  </div>
                 </div>
               )}
             </div>

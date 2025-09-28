@@ -32,29 +32,66 @@ interface FooterProps {
 }
 
 const Footer = ({ theme, content }: FooterProps) => {
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        quickLinks: [
+          { name: "About Us", href: "#about" },
+          { name: "Products", href: "#products" },
+          { name: "Export Services", href: "#services" },
+          { name: "Quality Assurance", href: "#quality" },
+          { name: "Contact", href: "#contact" }
+        ],
+        resources: [
+          { name: "Import/Export Guide", href: "#guide" },
+          { name: "Market Reports", href: "#reports" },
+          { name: "Documents", href: "#docs" },
+          { name: "FAQ", href: "#faq" },
+          { name: "Blog", href: "#blog" }
+        ],
+        legal: [
+          { name: "Privacy Policy", href: "#privacy" },
+          { name: "Terms of Service", href: "#terms" },
+          { name: "Cookie Policy", href: "#cookies" },
+          { name: "Compliance", href: "#compliance" }
+        ]
+      };
+    } else {
+      return {
+        quickLinks: [
+          { name: "Về Chúng Tôi", href: "#about" },
+          { name: "Sản Phẩm", href: "#products" },
+          { name: "Dịch Vụ Xuất Khẩu", href: "#services" },
+          { name: "Đảm Bảo Chất Lượng", href: "#quality" },
+          { name: "Liên Hệ", href: "#contact" }
+        ],
+        resources: [
+          { name: "Hướng Dẫn Xuất/Nhập Khẩu", href: "#guide" },
+          { name: "Báo Cáo Thị Trường", href: "#reports" },
+          { name: "Tài Liệu", href: "#docs" },
+          { name: "FAQ", href: "#faq" },
+          { name: "Blog", href: "#blog" }
+        ],
+        legal: [
+          { name: "Chính Sách Bảo Mật", href: "#privacy" },
+          { name: "Điều Khoản Dịch Vụ", href: "#terms" },
+          { name: "Chính Sách Cookie", href: "#cookies" },
+          { name: "Tuân Thủ", href: "#compliance" }
+        ]
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
+
   // Default data
-  const defaultQuickLinks = [
-    { name: "Về Chúng Tôi", href: "#about" },
-    { name: "Sản Phẩm", href: "#products" },
-    { name: "Dịch Vụ Xuất Khẩu", href: "#services" },
-    { name: "Đảm Bảo Chất Lượng", href: "#quality" },
-    { name: "Liên Hệ", href: "#contact" }
-  ];
-
-  const defaultResources = [
-    { name: "Hướng Dẫn Xuất/Nhập Khẩu", href: "#guide" },
-    { name: "Báo Cáo Thị Trường", href: "#reports" },
-    { name: "Tài Liệu", href: "#docs" },
-    { name: "FAQ", href: "#faq" },
-    { name: "Blog", href: "#blog" }
-  ];
-
-  const defaultLegal = [
-    { name: "Chính Sách Bảo Mật", href: "#privacy" },
-    { name: "Điều Khoản Dịch Vụ", href: "#terms" },
-    { name: "Chính Sách Cookie", href: "#cookies" },
-    { name: "Tuân Thủ", href: "#compliance" }
-  ];
+  const defaultQuickLinks = localizedText.quickLinks;
+  const defaultResources = localizedText.resources;
+  const defaultLegal = localizedText.legal;
 
   const defaultSocialLinks = [
     { icon: "Facebook", href: "#", label: "Facebook" },

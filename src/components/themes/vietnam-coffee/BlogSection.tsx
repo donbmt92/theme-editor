@@ -55,6 +55,26 @@ interface BlogSectionProps {
 }
 
 const BlogSection = ({ theme, content }: BlogSectionProps) => {
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        readFullArticle: "Read Full Article",
+        readMore: "Read More"
+      };
+    } else {
+      return {
+        readFullArticle: "Đọc Bài Viết Đầy Đủ",
+        readMore: "Đọc Thêm"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
+
   // Default blog posts data
   const defaultBlogPosts: BlogPost[] = [
     {
@@ -451,7 +471,7 @@ const BlogSection = ({ theme, content }: BlogSectionProps) => {
                 className="w-fit shadow-elegant"
                 style={getButtonStyles('primary')}
               >
-                Đọc Bài Viết Đầy Đủ
+                {localizedText.readFullArticle}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </CardContent>
@@ -521,7 +541,7 @@ const BlogSection = ({ theme, content }: BlogSectionProps) => {
                   className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                   style={getButtonStyles('outline')}
                 >
-                  Đọc Thêm
+                  {localizedText.readMore}
                   <ArrowRight className="ml-2 h-3 w-3" />
                 </Button>
               </CardContent>

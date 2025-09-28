@@ -28,6 +28,32 @@ interface HeaderProps {
 const Header = ({ theme, content }: HeaderProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        home: "Home",
+        about: "About Us",
+        products: "Products",
+        resources: "Resources",
+        contact: "Contact"
+      };
+    } else {
+      return {
+        home: "Trang chủ",
+        about: "Về chúng tôi",
+        products: "Sản phẩm",
+        resources: "Tài nguyên",
+        contact: "Liên hệ"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
+
   const scrollToGuide = (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
     const el = document.getElementById('guide');
@@ -119,11 +145,11 @@ const Header = ({ theme, content }: HeaderProps) => {
   }
 
   const navigation = [
-    { name: "Trang chủ", href: "#home" },
-    { name: "Về chúng tôi", href: "#about" },
-    { name: "Sản phẩm", href: "#products" },
-    { name: "Tài nguyên", href: "#resources" },
-    { name: "Liên hệ", href: "#contact" }
+    { name: localizedText.home, href: "#home" },
+    { name: localizedText.about, href: "#about" },
+    { name: localizedText.products, href: "#products" },
+    { name: localizedText.resources, href: "#resources" },
+    { name: localizedText.contact, href: "#contact" }
   ];
 
   return (
