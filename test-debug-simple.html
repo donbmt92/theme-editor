@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Generate Theme API</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .error { color: red; }
+        .success { color: green; }
+        .loading { color: blue; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Debug Generate Theme API</h1>
+        
+        <div class="section">
+            <h3>System Status</h3>
+            <button onclick="checkHealth()">Check Health</button>
+            <button onclick="checkDebug()">Debug Info</button>
+            <div id="status"></div>
+        </div>
+        
+        <div class="section">
+            <h3>Test API</h3>
+            <div>
+                <label>Company Name:</label><br>
+                <input type="text" id="companyName" value="Test Coffee Company" style="width: 100%; padding: 5px; margin: 5px 0;">
+            </div>
+            <div>
+                <label>Industry:</label><br>
+                <input type="text" id="industry" value="Nông sản" style="width: 100%; padding: 5px; margin: 5px 0;">
+            </div>
+            <div>
+                <label>Description:</label><br>
+                <textarea id="description" style="width: 100%; padding: 5px; margin: 5px 0; height: 60px;">Cung cấp cà phê chất lượng cao</textarea>
+            </div>
+            <div>
+                <label>Language:</label><br>
+                <select id="language" style="padding: 5px; margin: 5px 0;">
+                    <option value="vietnamese">Vietnamese</option>
+                    <option value="english">English</option>
+                </select>
+            </div>
+            <button onclick="testGenerate()">Test Generate Theme</button>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function checkHealth() {
+            const div = document.getElementById(' status')
+            div.innerHTML = '<div class="loading">🔄 Checking...</div>'
+            
+            try {
+                const response = await fetch('/api/generate-theme?action=health')
+                const data = await response.json()
+                
+                if (data.success) {
+                    div.innerHTML = `<div class="success">✅ System Healthy</div><pre>${JSON.stringify(data, null, 2)}</pre>`
+                } else {
+                    div.innerHTML = `<div class="error">❌ System Issues</div><pre>${JSON.stringify(data, null, 2)}</pre>`
+                }
+            } catch (error) {
+                div.innerHTML = `<div class="error">💥 Error: ${error.message}</div>`
+            }
+        }
+        
+        async function checkDebug() {
+            const div = document.getElementById('status')
+            div.innerHTML = '<div class="loading">🔄 Debugging...</div>'
+            
+            try {
+                const response = await fetch('/api/generate-theme?action=debug')
+                const data = await response.json()
+                
+                div.innerHTML = `<div class="success">📊 Debug Info</div><pre>${JSON.stringify(data, null, 2)}</pre>`
+            } catch (error) {
+                div.innerHTML = `<div class="error">💥 Error: ${error.message}</div>`
+            }
+        }
+        
+        async function testGenerate() {
+            const div = document.getElementById('result')
+            div.innerHTML = '<div class="loading">🔄 Generating...</div>'
+            
+            try {
+                const data = {
+                    businessInfo: {
+                        companyName: document.getElementById('companyName').value,
+                        industry: document.getElementById('industry').value,
+                        description: document.getElementById('description').value,
+                        language: document.getElementById('language').value,
+                        services: 'Test services',
+                        targetAudience: 'Test customers',
+                        tone: 'Professional'
+                    },
+                    currentTheme: null
+                }
+                
+                console.log('Sending:', data)
+                
+                const response = await fetch('/api/generate-theme', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                
+                const result = await response.json()
+                console.log('Response:', result)
+                
+                if (response.ok && result.success) {
+                    div.innerHTML = `<div class="success">✅ Success!</div><pre>${JSON.stringify(result, null, 2)}</pre>`
+                } else {
+                    div.innerHTML = `<div class="error">❌ Error: ${result.error}</div><pre>${JSON.stringify(result, null, 2)}</pre>`
+                }
+            } catch (error) {
+                div.innerHTML = `<div class="error">💥 Network Error: ${error.message}</div>`
+                console.error('Error:', error)
+            }
+        }
+    </script>
+</body>
+</html>
