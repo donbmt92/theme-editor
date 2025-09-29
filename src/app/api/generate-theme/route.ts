@@ -13,17 +13,40 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Initialize Google Gemini AI
-    const apiKey = process.env.GOOGLE_GEMINI_API_KEY
-    if (!apiKey) {
-      console.error('Google Gemini API key not found')
+    // Initialize Google Gemini AI with multiple API keys
+    const apiKeys = [
+      process.env.GOOGLE_GEMINI_API_KEY,
+      process.env.GOOGLE_GEMINI_API_KEY_2,
+      process.env.GOOGLE_GEMINI_API_KEY_3,
+      process.env.GOOGLE_GEMINI_API_KEY_4,
+      process.env.GOOGLE_GEMINI_API_KEY_5,
+      process.env.GOOGLE_GEMINI_API_KEY_6,
+      process.env.GOOGLE_GEMINI_API_KEY_7,
+      process.env.GOOGLE_GEMINI_API_KEY_8,
+      process.env.GOOGLE_GEMINI_API_KEY_9,
+      process.env.GOOGLE_GEMINI_API_KEY_10,
+      process.env.GOOGLE_GEMINI_API_KEY_11,
+      process.env.GOOGLE_GEMINI_API_KEY_12,
+      process.env.GOOGLE_GEMINI_API_KEY_13,
+      process.env.GOOGLE_GEMINI_API_KEY_14,
+      process.env.GOOGLE_GEMINI_API_KEY_15,
+      process.env.GOOGLE_GEMINI_API_KEY_16,
+      process.env.GOOGLE_GEMINI_API_KEY_17
+    ].filter(key => key && key.trim() !== '') // Remove empty keys
+
+    if (apiKeys.length === 0) {
+      console.error('No Google Gemini API keys found')
       return NextResponse.json(
         { success: false, error: 'Cấu hình AI chưa đầy đủ' },
         { status: 500 }
       )
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey)
+    // Randomly select an API key for load balancing
+    const selectedApiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)]
+    console.log(`Using API key: ${selectedApiKey.substring(0, 10)}... (${apiKeys.length} keys available)`)
+
+    const genAI = new GoogleGenerativeAI(selectedApiKey)
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
 
     // Create comprehensive prompt for content and color generation
@@ -435,14 +458,20 @@ Hãy đảm bảo:
 - Tất cả các section đều có nội dung đầy đủ và phù hợp
 `
 
-    // Generate content using Gemini AI with retry logic
+    // Generate content using Gemini AI with retry logic and API key failover
     let result, response, text
     let retryCount = 0
     const maxRetries = 3
     
-    while (retryCount < maxRetries) {
+    while (retryCount < maxRetries && retryCount < apiKeys.length) {
       try {
-        console.log(`Attempting to generate content (attempt ${retryCount + 1}/${maxRetries})`)
+        const currentApiKey = retryCount === 0 ? selectedApiKey : apiKeys[retryCount % apiKeys.length]
+        
+        console.log(`Attempting to generate content (attempt ${retryCount + 1}/${maxRetries}) with API key: ${currentApiKey.substring(0, 10)}...`)
+        
+        const genAI = new GoogleGenerativeAI(currentApiKey)
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
+        
         result = await model.generateContent(prompt)
         
         response = await result.response
