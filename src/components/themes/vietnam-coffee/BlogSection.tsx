@@ -57,6 +57,8 @@ interface BlogSectionProps {
 const BlogSection = ({ theme, content }: BlogSectionProps) => {
   // Get project language from theme or default to vietnamese
   const projectLanguage = theme?.projectLanguage || 'vietnamese';
+  console.log(theme);
+  
 
   // Get localized text based on project language
   const getLocalizedText = () => {

@@ -72,8 +72,29 @@ class AILoadBalancer {
              (Date.now() - keyInfo.lastUsed) > 1000 // Used more than 1 second ago
     })
 
-    // If no good keys available, use fallback selection
-    const keysToUse = availableKeys.length > 0 ? availableKeys : this.apiKeys
+    // Check if all keys are quota exceeded
+    const quotaExceededKeys = this.apiKeys.filter(keyInfo => keyInfo.errors >= 999)
+    console.log(`🔍 Key status check: ${quotaExceededKeys.length}/${this.apiKeys.length} keys quota exceeded`)
+    
+    if (quotaExceededKeys.length === this.apiKeys.length) {
+      console.log(`🚨 All ${this.apiKeys.length} API keys have exceeded quota limits!`)
+      throw new Error('Tất cả API keys đều đã hết quota')
+    }
+
+    // If no good keys available, check if we can use any non-quota-exceeded keys
+    let keysToUse = availableKeys
+    if (keysToUse.length === 0) {
+      // Try to use keys that are not quota exceeded but might have other issues
+      const nonQuotaExceededKeys = this.apiKeys.filter(keyInfo => keyInfo.errors < 999)
+      if (nonQuotaExceededKeys.length > 0) {
+        keysToUse = nonQuotaExceededKeys
+        console.log(`⚠️ No perfect keys available, using ${nonQuotaExceededKeys.length} non-quota-exceeded keys`)
+      } else {
+        console.log(`🚨 No usable keys available - all keys are quota exceeded or heavily errored`)
+        throw new Error('Tất cả API keys đều đã hết quota hoặc có lỗi nghiêm trọng')
+      }
+    }
+    console.log(`🎯 Using ${keysToUse.length} keys for selection (${availableKeys.length} available, ${this.apiKeys.length} total)`)
 
     // Score keys based on multiple factors
     const scoredKeys = keysToUse.map(keyInfo => {
@@ -159,6 +180,12 @@ class AILoadBalancer {
 
       // Reduce response time estimate for failed requests
       metrics.averageResponseTime *= 0.9
+
+      // If it's a quota error, mark this key as temporarily unavailable
+      if (error.includes('quota') || error.includes('429')) {
+        console.log(`🚫 Marking API key ${key.substring(0, 10)}... as quota exceeded`)
+        keyInfo.errors = 999 // Mark as heavily errored to avoid selection
+      }
     }
   }
 
@@ -179,15 +206,60 @@ class AILoadBalancer {
     // Reset daily usage at midnight
     setInterval(() => {
       const now = Date.now()
+      let quotaResetCount = 0
       for (const keyInfo of this.apiKeys) {
         if (now >= keyInfo.resetTime) {
+          const wasQuotaExceeded = keyInfo.errors >= 999
           keyInfo.usageToday = 0
           keyInfo.errors = 0
+          keyInfo.successRate = 1.0
           keyInfo.resetTime = this.getNextMidnight()
+          
+          if (wasQuotaExceeded) {
+            quotaResetCount++
+          }
         }
+      }
+      
+      if (quotaResetCount > 0) {
+        console.log(`🔄 Reset quota for ${quotaResetCount} API keys (quota exceeded)`)
       }
       console.log('🔄 Reset daily API key usage limits')
     }, 60 * 1000) // Check every minute
+  }
+
+  // Get all API keys
+  getAllKeys(): string[] {
+    return this.apiKeys.map(keyInfo => keyInfo.key)
+  }
+
+  // Select best key from a specific list of available keys
+  selectBestKeyFromAvailable(availableKeys: string[]): string {
+    if (availableKeys.length === 0) {
+      throw new Error('No available keys provided')
+    }
+
+    // Get key info for available keys
+    const availableKeyInfos = this.apiKeys.filter(keyInfo => 
+      availableKeys.includes(keyInfo.key)
+    )
+
+    // Score keys based on multiple factors
+    const scoredKeys = availableKeyInfos.map(keyInfo => {
+      const metrics = this.metrics.get(keyInfo.key)!
+      const score = this.calculateKeyScore(keyInfo, metrics)
+      return { ...keyInfo, score }
+    })
+
+    // Sort by score (highest first) and select best one
+    scoredKeys.sort((a, b) => b.score - a.score)
+    
+    const selectedKey = scoredKeys[0].key
+    this.updateKeyUsage(selectedKey)
+
+    console.log(`🎯 Selected API key from available: ${selectedKey.substring(0, 10)}... (Score: ${scoredKeys[0].score.toFixed(3)})`)
+    
+    return selectedKey
   }
 
   getStats(): {
@@ -231,3 +303,4 @@ class AILoadBalancer {
 export type { APIKeyInfo, APIPerformanceMetrics }
 export const aiLoadBalancer = new AILoadBalancer()
 export default AILoadBalancer
+

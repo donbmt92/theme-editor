@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server'
 import { generateCacheKey, getCachedResponse } from '@/lib/ai-cache'
 import { aiGenerationQueue, calculatePriority, getQueueStats } from '@/lib/request-queue'
-import { aiLoadBalancer } from '@/lib/ai-load-balancer'
 import { generateThemeContent, prepareThemeParams } from '@/lib/generate-theme-core'
 
 export async function POST(request: NextRequest) {
@@ -64,20 +63,17 @@ export async function POST(request: NextRequest) {
               timestamp: new Date().toISOString()
             })}\n\n`))
 
-            const selectedApiKey = aiLoadBalancer.selectBestKey()
-            
             // Stream the AI generation progress
             controller.enqueue(encoder.encode(`data: ${JSON.stringify({
               status: 'ai_generating',
               message: 'AI đang tạo nội dung theme...',
-              apiKey: `${selectedApiKey.substring(0, 10)}...`,
               timestamp: new Date().toISOString()
             })}\n\n`))
 
              const result = await Promise.race([
-               generateThemeContent(businessInfo, selectedApiKey),
+               generateThemeContent(businessInfo),
                new Promise((_, reject) => 
-                 setTimeout(() => reject(new Error('Generation timeout')), 55000)
+                 setTimeout(() => reject(new Error('Generation timeout')), 120000)
                )
              ]) as {
                generatedData: any
@@ -98,7 +94,6 @@ export async function POST(request: NextRequest) {
             return {
               themeParams,
               generatedData: result.generatedData,
-              selectedApiKey,
               responseTime: result.responseTime
             }
           },
@@ -106,9 +101,6 @@ export async function POST(request: NextRequest) {
         )
 
         if (taskResult.success) {
-          // Update load balancer
-          aiLoadBalancer.updateKeySuccess(taskResult.data.selectedApiKey, taskResult.data.responseTime)
-
           // Send final result
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({
             status: 'completed',
