@@ -31,7 +31,7 @@ model Payment {
   bankTxnId String?       @unique @map("bank_txn_id")
   paidAt    DateTime?     @map("paid_at")
   createdAt DateTime      @default(now()) @map("created_at")
-  metadata  Json?         // Store additional payment data like planId, customerInfo, etc.
+  metadata  Json?
   user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("payments")
