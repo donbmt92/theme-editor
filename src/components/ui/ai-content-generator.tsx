@@ -79,22 +79,31 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
     setError('')
 
     try {
+      const requestData = { businessInfo, currentTheme }
+      console.log('🚀 [AI-GENERATOR] Sending request:', requestData)
+      
       const response = await fetch('/api/generate-theme', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          businessInfo,
-          currentTheme
-        })
+        body: JSON.stringify(requestData)
       })
+      
+      console.log('📡 [AI-GENERATOR] Response status:', response.status, response.statusText)
 
       if (!response.ok) {
-        throw new Error('Không thể tạo nội dung. Vui lòng thử lại.')
+        const errorText = await response.text()
+        console.error('🚨 [AI-GENERATOR] HTTP Error:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText: errorText
+        })
+        throw new Error(`HTTP ${response.status}: ${response.statusText}\n\nChi tiết: ${errorText}`)
       }
 
       const result = await response.json()
+      console.log('✅ [AI-GENERATOR] Response received:', result)
       
       if (result.success) {
         setGeneratedContent(result.themeParams)
@@ -110,7 +119,13 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
         }
       }
     } catch (err) {
-      console.error('Generation error:', err)
+      console.error('🚨 [AI-GENERATOR] Generation error:', {
+        error: err,
+        message: err instanceof Error ? err.message : 'Unknown error',
+        stack: err instanceof Error ? err.stack : 'No stack trace',
+        businessInfo: businessInfo,
+        currentTheme: currentTheme
+      })
       setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi tạo nội dung')
     } finally {
       setIsGenerating(false)
