@@ -208,7 +208,7 @@ class AsyncQueue<T> {
 export const aiGenerationQueue = new AsyncQueue<any>({
   maxConcurrentTasks: 200,   // Process 200 AI requests simultaneously (true parallelism for 500 users)
   maxQueueSize: 5000,        // Allow up to 5000 requests in queue (high volume capacity)
-  defaultTimeout: 60000,     // 60 seconds timeout (optimized for parallel processing)
+  defaultTimeout: 150000,    // 150 seconds timeout (tăng từ 60s để phù hợp với AI request timeout 120s)
   priorityThreshold: 0.7     // Lower threshold for better distribution
 })
 

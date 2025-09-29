@@ -106,16 +106,12 @@ export async function POST(request: NextRequest) {
         try {
           console.log(`🔄 [ASYNC] Starting non-blocking AI generation for task: ${taskId}`)
           
-          // Non-blocking API key selection
-          const selectedApiKey = aiLoadBalancer.selectBestKey()
-          console.log(`🎯 [PARALLEL] Selected API key: ${selectedApiKey.substring(0, 10)}...`)
-          
           // Async theme generation (doesn't block other requests)
           console.log(`⚡ [NON-BLOCKING] Generating theme content in parallel...`)
           const result = await Promise.race([
-            generateThemeContent(businessInfo, selectedApiKey),
+            generateThemeContent(businessInfo),
             new Promise((_, reject) => 
-              setTimeout(() => reject(new Error('Generation timeout')), 55000)
+              setTimeout(() => reject(new Error('Generation timeout')), 120000)
             )
           ]) as {
             generatedData: any
@@ -132,7 +128,6 @@ export async function POST(request: NextRequest) {
           return {
             themeParams,
             generatedData: result.generatedData,
-            selectedApiKey,
             responseTime: result.responseTime,
             processedAsync: true
           }
@@ -157,10 +152,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Process successful task result
-    const { themeParams, generatedData, selectedApiKey, responseTime } = taskResult.data
-
-    // Update load balancer with results
-    aiLoadBalancer.updateKeySuccess(selectedApiKey, responseTime)
+    const { themeParams, generatedData, responseTime } = taskResult.data
 
     // Enhanced caching with business context - increased TTL for high volume traffic
     setBusinessCachedResponse(businessInfo, taskResult.data, 30 * 60 * 1000) // 30 minutes TTL for better cache hit rate

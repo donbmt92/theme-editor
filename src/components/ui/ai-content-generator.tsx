@@ -170,7 +170,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
   return (
     <Dialog 
       open={open} 
-      onOpenChange={(newOpen) => {
+      onOpenChange={(newOpen: boolean) => {
         // Nếu forceOpen = true và đang ở step form, không cho phép đóng
         if (forceOpen && step === 'form' && !newOpen) {
           return
@@ -510,11 +510,30 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                     <p className="text-sm text-gray-600">{generatedContent.content?.leadMagnet?.description}</p>
                   </div>
                   <div>
+                    <p className="font-medium">Tiêu đề hướng dẫn:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.leadMagnet?.guideTitle}</p>
+                    <p className="text-xs text-gray-500">{generatedContent.content?.leadMagnet?.guideSubtitle}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Form:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.leadMagnet?.formTitle}</p>
+                    <p className="text-xs text-gray-500">{generatedContent.content?.leadMagnet?.formDescription}</p>
+                    <p className="text-xs text-blue-600">{generatedContent.content?.leadMagnet?.buttonText}</p>
+                  </div>
+                  <div>
                     <p className="font-medium">Tính năng chính:</p>
                     {generatedContent.content?.leadMagnet?.features?.map((feature, index) => (
                       <div key={index} className="ml-4 mb-2">
                         <p className="text-sm font-medium">• {feature.title}</p>
                         <p className="text-xs text-gray-600 ml-2">{feature.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <p className="font-medium">Chỉ số tin cậy:</p>
+                    {generatedContent.content?.leadMagnet?.trustIndicators?.map((indicator, index) => (
+                      <div key={index} className="ml-4 mb-2">
+                        <p className="text-sm font-medium">• {indicator.number} {indicator.label}</p>
                       </div>
                     ))}
                   </div>
@@ -529,6 +548,10 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                   <div>
                     <p className="font-medium">Tiêu đề:</p>
                     <p className="text-sm text-gray-600">{generatedContent.content?.whyChooseUs?.title}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Phụ đề:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.whyChooseUs?.subtitle}</p>
                   </div>
                   <div>
                     <p className="font-medium">Điểm mạnh:</p>
@@ -569,18 +592,39 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                   <CardTitle className="text-lg">Sản phẩm/Dịch vụ</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {generatedContent.content?.products?.items?.map((product, index) => (
-                    <div key={index} className="border-l-4 border-gray-200 pl-3 mb-3">
-                      <p className="font-medium">{product.name}</p>
-                      <p className="text-sm text-gray-600">{product.description}</p>
-                      {product.price && (
-                        <p className="text-sm font-medium text-green-600">{product.price}</p>
-                      )}
-                      {product.category && (
-                        <p className="text-xs text-gray-500">Danh mục: {product.category}</p>
-                      )}
-                    </div>
-                  ))}
+                  <div>
+                    <p className="font-medium">Tiêu đề:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.products?.title}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Mô tả:</p>
+                    <p className="text-sm text-gray-600">{generatedContent.content?.products?.description}</p>
+                  </div>
+                  <div>
+                    <p className="font-medium">Sản phẩm/Dịch vụ:</p>
+                    {generatedContent.content?.products?.items?.map((product, index) => (
+                      <div key={index} className="border-l-4 border-gray-200 pl-3 mb-3">
+                        <p className="font-medium">{product.name}</p>
+                        <p className="text-sm text-gray-600">{product.description}</p>
+                        {product.price && (
+                          <p className="text-sm font-medium text-green-600">{product.price}</p>
+                        )}
+                        {product.category && (
+                          <p className="text-xs text-gray-500">Danh mục: {product.category}</p>
+                        )}
+                        {product.features && (
+                          <div className="mt-2">
+                            <p className="text-xs text-gray-500">Tính năng:</p>
+                            <ul className="text-xs text-gray-500 ml-4">
+                              {product.features.map((feature, idx) => (
+                                <li key={idx}>• {feature}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
 

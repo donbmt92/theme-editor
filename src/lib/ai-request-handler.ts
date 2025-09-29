@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
+import { aiLoadBalancer } from './ai-load-balancer'
 
 export interface AIRequestResult {
   success: boolean
@@ -9,20 +10,22 @@ export interface AIRequestResult {
   error?: string
 }
 
-export async function executeAIRequestWithRetry(prompt: string, apiKey: string): Promise<AIRequestResult> {
+export async function executeAIRequestWithRetry(prompt: string, initialApiKey?: string): Promise<AIRequestResult> {
   const startTime = Date.now()
-  let retryCount = 0
-  const maxRetries = 3
+  let attemptCount = 0
+  let currentApiKey = initialApiKey || aiLoadBalancer.selectBestKey()
+  const usedKeys = new Set<string>() // Track keys đã thử
 
-  while (retryCount < maxRetries) {
+  while (true) {
+    attemptCount++
     try {
-      console.log(`🔄 Executing AI request (attempt ${retryCount + 1}/${maxRetries}) with API key: ${apiKey.substring(0, 10)}...`)
+      console.log(`🔄 Executing AI request (attempt ${attemptCount}) with API key: ${currentApiKey.substring(0, 10)}...`)
       
-      const genAI = new GoogleGenerativeAI(apiKey)
+      const genAI = new GoogleGenerativeAI(currentApiKey)
       const model = genAI.getGenerativeModel({ 
         model: 'gemini-2.5-flash',
         generationConfig: {
-          maxOutputTokens: 8192,
+          maxOutputTokens: 32768, // Tăng lên 32K tokens để đảm bảo đủ chỗ cho response dài
           temperature: 0.7,
           topP: 0.9,
           topK: 40
@@ -43,6 +46,9 @@ export async function executeAIRequestWithRetry(prompt: string, apiKey: string):
       const responseTime = Date.now() - startTime
       console.log(`✅ AI request completed in ${responseTime}ms`)
       
+      // Update success metrics
+      aiLoadBalancer.updateKeySuccess(currentApiKey, responseTime)
+      
       return {
         success: true,
         result,
@@ -51,23 +57,54 @@ export async function executeAIRequestWithRetry(prompt: string, apiKey: string):
         responseTime
       }
     } catch (aiError: unknown) {
-      retryCount++
-      console.error(`❌ AI request error (attempt ${retryCount}):`, aiError)
+      console.error(`❌ AI request error (attempt ${attemptCount}):`, aiError)
       
-      if (retryCount >= maxRetries) {
-        const error = aiError as { status?: number; message?: string }
-        
-        // Determine error type and return appropriate result
+      const error = aiError as { status?: number; message?: string }
+      
+      // Update error metrics
+      aiLoadBalancer.updateKeyError(currentApiKey, error?.message || 'Unknown error')
+      
+      // Mark this key as used
+      usedKeys.add(currentApiKey)
+      
+      // If it's a quota error (429), try next available key
+      if (error?.status === 429 || error?.message?.includes('quota')) {
+        console.log(`🚫 API key ${currentApiKey.substring(0, 10)}... hit quota limit, trying next key...`)
+        try {
+          // Get all available keys that haven't been used
+          const allKeys = aiLoadBalancer.getAllKeys()
+          const availableKeys = allKeys.filter(key => !usedKeys.has(key))
+          
+          if (availableKeys.length === 0) {
+            console.log('🚨 All API keys have been tried and exceeded quota limits!')
+            return {
+              success: false,
+              error: 'QUOTA_EXCEEDED',
+              responseTime: Date.now() - startTime
+            }
+          }
+          
+          // Select next best key from available ones
+          currentApiKey = aiLoadBalancer.selectBestKeyFromAvailable(availableKeys)
+          console.log(`🔄 Switching to API key: ${currentApiKey.substring(0, 10)}...`)
+          continue // Try again with new key
+        } catch (keyError) {
+          console.error('❌ No more API keys available:', keyError)
+          return {
+            success: false,
+            error: 'QUOTA_EXCEEDED',
+            responseTime: Date.now() - startTime
+          }
+        }
+      }
+      
+      // For non-quota errors, check if we should retry
+      if (attemptCount >= 10) { // Max 10 attempts for non-quota errors
+        console.log(`🚨 Max attempts (${attemptCount}) reached for non-quota errors`)
         if (error?.status === 503 || error?.message?.includes('overloaded') || error?.message?.includes('Service Unavailable')) {
           return {
             success: false,
             error: 'AI_SERVICE_UNAVAILABLE',
-            responseTime: Date.now() - startTime
-          }
-        } else if (error?.status === 429 || error?.message?.includes('quota')) {
-          return {
-            success: false,
-            error: 'QUOTA_EXCEEDED',
             responseTime: Date.now() - startTime
           }
         } else {
@@ -80,15 +117,9 @@ export async function executeAIRequestWithRetry(prompt: string, apiKey: string):
       }
       
       // Wait before retry (exponential backoff)
-      const waitTime = Math.pow(2, retryCount) * 1000
+      const waitTime = Math.pow(2, Math.min(attemptCount, 5)) * 1000
       console.log(`⏰ Waiting ${waitTime}ms before retry...`)
       await new Promise(resolve => setTimeout(resolve, waitTime))
     }
-  }
-
-  return {
-    success: false,
-    error: 'MAX_RETRIES_EXCEEDED',
-    responseTime: Date.now() - startTime
   }
 }
