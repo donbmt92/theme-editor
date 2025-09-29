@@ -54,9 +54,6 @@ export async function POST(request: NextRequest) {
     
     console.log(`Using API key: ${selectedApiKey.substring(0, 10)}... (${apiKeys.length} keys available)`)
 
-    const genAI = new GoogleGenerativeAI(selectedApiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
-
     // Create comprehensive prompt for content and color generation
     const prompt = `
 Bạn là một chuyên gia thiết kế website và branding. Hãy tạo nội dung và màu sắc cho website doanh nghiệp dựa trên thông tin sau:
@@ -474,6 +471,11 @@ Hãy đảm bảo:
     while (retryCount < maxRetries && retryCount < apiKeys.length) {
       try {
         const currentApiKey = retryCount === 0 ? selectedApiKey : apiKeys[retryCount % apiKeys.length]
+        
+        if (!currentApiKey) {
+          retryCount++
+          continue
+        }
         
         console.log(`Attempting to generate content (attempt ${retryCount + 1}/${maxRetries}) with API key: ${currentApiKey.substring(0, 10)}...`)
         
