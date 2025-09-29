@@ -44,6 +44,14 @@ export async function POST(request: NextRequest) {
 
     // Randomly select an API key for load balancing
     const selectedApiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)]
+    if (!selectedApiKey) {
+      console.error('No valid API key selected')
+      return NextResponse.json(
+        { success: false, error: 'Cấu hình AI chưa đầy đủ' },
+        { status: 500 }
+      )
+    }
+    
     console.log(`Using API key: ${selectedApiKey.substring(0, 10)}... (${apiKeys.length} keys available)`)
 
     const genAI = new GoogleGenerativeAI(selectedApiKey)
