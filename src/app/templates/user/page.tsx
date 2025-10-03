@@ -124,13 +124,17 @@ const UserTemplatesPageContent = () => {
             }
           }
           
-          // Nếu có themeId được truyền từ URL, tự động chọn theme đó
-          if (preselectedThemeId) {
-            const preselectedTheme = themesWithUnsplash.find((theme: ThemeWithUnsplash) => theme.id === preselectedThemeId)
-            if (preselectedTheme) {
-              setSelectedTheme(preselectedTheme)
-              setShowCreateDialog(true) // Mở dialog tạo project ngay lập tức
-            }
+          // Tự động chọn theme đầu tiên và tạo project
+          if (themesWithUnsplash.length > 0) {
+            const firstTheme = themesWithUnsplash[0]
+            setSelectedTheme(firstTheme)
+            setProjectName('Website mới') // Tên mặc định
+            setShowCreateDialog(true) // Mở dialog tạo project ngay lập tức
+            
+            // Tự động tạo project sau 1 giây
+            setTimeout(() => {
+              createProject()
+            }, 1000)
           }
         }
       } catch (error: unknown) {
@@ -156,7 +160,7 @@ const UserTemplatesPageContent = () => {
   }, [preselectedThemeId, loadThemes])
 
   const createProject = async () => {
-    if (!selectedTheme || !projectName.trim()) return
+    if (!selectedTheme) return
 
     setIsCreating(true)
     
@@ -168,7 +172,7 @@ const UserTemplatesPageContent = () => {
         },
         body: JSON.stringify({
           themeId: selectedTheme.id,
-          name: projectName
+          name: projectName.trim() || 'Website mới'
         })
       })
       
