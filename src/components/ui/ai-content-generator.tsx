@@ -61,6 +61,8 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
   const [error, setError] = useState('')
   const [step, setStep] = useState<'form' | 'preview' | 'success'>('form')
   const [generatedContent, setGeneratedContent] = useState<ThemeParams | null>(null)
+  const [retryAttempt, setRetryAttempt] = useState(0)
+  const [progressMessage, setProgressMessage] = useState('')
 
   const handleInputChange = (field: keyof BusinessInfo, value: string) => {
     setBusinessInfo(prev => ({
@@ -69,28 +71,61 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
     }))
   }
 
-  const generateContent = async () => {
+  const generateContent = async (retryCount = 0): Promise<void> => {
     if (!businessInfo.companyName || !businessInfo.industry || !businessInfo.description) {
       setError('Vui lòng điền đầy đủ thông tin bắt buộc')
       return
     }
 
+    const maxRetries = 3
     setIsGenerating(true)
     setError('')
+    setRetryAttempt(retryCount)
+    setProgressMessage(retryCount === 0 ? 'Đang gửi yêu cầu đến AI...' : `Đang thử lại lần ${retryCount + 1}...`)
 
     try {
       const requestData = { businessInfo, currentTheme }
-      console.log('🚀 [AI-GENERATOR] Sending request:', requestData)
+      console.log(`🚀 [AI-GENERATOR] Sending request (attempt ${retryCount + 1}/${maxRetries + 1}):`, requestData)
+      
+      // Tăng timeout cho fetch request
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 150000) // 150 seconds timeout
       
       const response = await fetch('/api/generate-theme', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify(requestData),
+        signal: controller.signal
       })
       
+      clearTimeout(timeoutId)
       console.log('📡 [AI-GENERATOR] Response status:', response.status, response.statusText)
+      setProgressMessage('Đang xử lý phản hồi từ server...')
+
+      // Xử lý 504 Gateway Timeout với retry logic
+      if (response.status === 504) {
+        console.warn(`⏱️ [AI-GENERATOR] Gateway timeout (attempt ${retryCount + 1}/${maxRetries + 1})`)
+        
+        if (retryCount < maxRetries) {
+          // Exponential backoff: 2s, 4s, 8s
+          const backoffDelay = Math.pow(2, retryCount) * 2000
+          setError(`⏱️ Server đang xử lý... Đang thử lại lần ${retryCount + 2}/${maxRetries + 1} sau ${backoffDelay / 1000}s...`)
+          
+          await new Promise(resolve => setTimeout(resolve, backoffDelay))
+          return generateContent(retryCount + 1)
+        } else {
+          throw new Error(
+            `⏱️ Server timeout sau ${maxRetries + 1} lần thử.\n\n` +
+            `💡 Gợi ý:\n` +
+            `• Thông tin của bạn đang được xử lý nhưng mất nhiều thời gian hơn dự kiến\n` +
+            `• Vui lòng thử lại với mô tả ngắn gọn hơn\n` +
+            `• Hoặc thử lại sau vài phút khi server bớt tải\n\n` +
+            `📞 Nếu vấn đề tiếp diễn, vui lòng liên hệ hỗ trợ.`
+          )
+        }
+      }
 
       if (!response.ok) {
         const errorText = await response.text()
@@ -99,6 +134,15 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
           statusText: response.statusText,
           errorText: errorText
         })
+        
+        // Xử lý các lỗi khác với retry cho 503
+        if (response.status === 503 && retryCount < maxRetries) {
+          const backoffDelay = Math.pow(2, retryCount) * 2000
+          setError(`🔄 Service tạm thời không khả dụng. Đang thử lại sau ${backoffDelay / 1000}s...`)
+          await new Promise(resolve => setTimeout(resolve, backoffDelay))
+          return generateContent(retryCount + 1)
+        }
+        
         throw new Error(`HTTP ${response.status}: ${response.statusText}\n\nChi tiết: ${errorText}`)
       }
 
@@ -114,6 +158,14 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
           throw new Error(`${result.error}\n\n${result.suggestion || ''}`)
         } else if (result.errorType === 'QUOTA_EXCEEDED') {
           throw new Error(`${result.error}\n\nVui lòng thử lại sau ${Math.ceil(result.retryAfter / 60)} phút.`)
+        } else if (result.errorType === 'QUEUE_OVERLOADED') {
+          throw new Error(
+            `⚠️ Hệ thống đang xử lý nhiều yêu cầu.\n\n` +
+            `Vui lòng thử lại sau ${Math.ceil(result.retryAfter / 60)} phút.\n\n` +
+            `Trạng thái hàng đợi:\n` +
+            `• Đang xử lý: ${result.queueStats?.activeTasks || 0} yêu cầu\n` +
+            `• Đang chờ: ${result.queueStats?.queuedTasks || 0} yêu cầu`
+          )
         } else {
           throw new Error(result.error || 'Có lỗi xảy ra')
         }
@@ -124,11 +176,30 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
         message: err instanceof Error ? err.message : 'Unknown error',
         stack: err instanceof Error ? err.stack : 'No stack trace',
         businessInfo: businessInfo,
-        currentTheme: currentTheme
+        currentTheme: currentTheme,
+        retryCount
       })
-      setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi tạo nội dung')
+      
+      // Handle AbortError (timeout)
+      if (err instanceof Error && err.name === 'AbortError') {
+        if (retryCount < maxRetries) {
+          const backoffDelay = Math.pow(2, retryCount) * 2000
+          setError(`⏱️ Request timeout. Đang thử lại lần ${retryCount + 2}/${maxRetries + 1} sau ${backoffDelay / 1000}s...`)
+          await new Promise(resolve => setTimeout(resolve, backoffDelay))
+          return generateContent(retryCount + 1)
+        } else {
+          setError(
+            `⏱️ Request timeout sau ${maxRetries + 1} lần thử.\n\n` +
+            `💡 Vui lòng thử lại với mô tả ngắn gọn hơn hoặc thử lại sau vài phút.`
+          )
+        }
+      } else {
+        setError(err instanceof Error ? err.message : 'Có lỗi xảy ra khi tạo nội dung')
+      }
     } finally {
       setIsGenerating(false)
+      setRetryAttempt(0)
+      setProgressMessage('')
     }
   }
 
@@ -318,31 +389,42 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                 </CardContent>
               </Card>
 
+              {/* Progress Message when generating */}
+              {isGenerating && progressMessage && (
+                <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                  <Loader2 className="h-5 w-5 text-blue-600 animate-spin flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-blue-900">{progressMessage}</p>
+                    {retryAttempt > 0 && (
+                      <p className="text-xs text-blue-700 mt-1">
+                        Lần thử: {retryAttempt + 1}/4 | AI đang xử lý thông tin của bạn...
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {error && (
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md text-red-700">
-                    <AlertCircle className="h-4 w-4" />
+                    <AlertCircle className="h-4 w-4 flex-shrink-0" />
                     <div className="flex-1">
                       <p className="text-sm whitespace-pre-line">{error}</p>
                     </div>
                   </div>
-                  <div className="flex justify-center">
-                    <Button 
-                      variant="outline" 
-                      onClick={generateContent}
-                      disabled={isGenerating}
-                      className="text-sm"
-                    >
-                      {isGenerating ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Đang thử lại...
-                        </>
-                      ) : (
-                        'Thử lại'
-                      )}
-                    </Button>
-                  </div>
+                  {!isGenerating && (
+                    <div className="flex justify-center">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => generateContent(0)}
+                        disabled={isGenerating}
+                        className="text-sm"
+                      >
+                        <Loader2 className="h-4 w-4 mr-2" />
+                        Thử lại
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -359,14 +441,14 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                 </div>
               )}
               <Button 
-                onClick={generateContent}
+                onClick={() => generateContent(0)}
                 disabled={isGenerating || !businessInfo.companyName || !businessInfo.industry || !businessInfo.description}
                 className="bg-purple-600 hover:bg-purple-700"
               >
                 {isGenerating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Đang tạo nội dung...
+                    {retryAttempt > 0 ? `Đang thử lại (${retryAttempt + 1}/4)...` : 'Đang tạo nội dung...'}
                   </>
                 ) : (
                   <>
