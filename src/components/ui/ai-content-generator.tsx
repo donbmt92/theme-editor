@@ -81,15 +81,47 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
     setIsGenerating(true)
     setError('')
     setRetryAttempt(retryCount)
-    setProgressMessage(retryCount === 0 ? 'Đang gửi yêu cầu đến AI...' : `Đang thử lại lần ${retryCount + 1}...`)
+    
+    // Enhanced progress messages
+    if (retryCount === 0) {
+      setProgressMessage('🚀 Đang gửi yêu cầu đến AI...')
+    } else {
+      setProgressMessage(`🔄 Đang thử lại lần ${retryCount + 1}... (AI có thể cần nhiều thời gian hơn)`)
+    }
 
     try {
       const requestData = { businessInfo, currentTheme }
       console.log(`🚀 [AI-GENERATOR] Sending request (attempt ${retryCount + 1}/${maxRetries + 1}):`, requestData)
       
-      // Tăng timeout cho fetch request
+      // Update progress messages gradually
+      const progressTimeouts: NodeJS.Timeout[] = []
+      progressTimeouts.push(setTimeout(() => {
+        setProgressMessage('🤖 AI đang phân tích thông tin doanh nghiệp của bạn...')
+      }, 5000))
+      
+      progressTimeouts.push(setTimeout(() => {
+        setProgressMessage('✨ AI đang tạo nội dung và màu sắc phù hợp...')
+      }, 15000))
+      
+      progressTimeouts.push(setTimeout(() => {
+        setProgressMessage('📝 AI đang hoàn thiện các section chi tiết...')
+      }, 30000))
+      
+      progressTimeouts.push(setTimeout(() => {
+        setProgressMessage('⏳ Sắp xong rồi... AI đang kiểm tra và tối ưu nội dung...')
+      }, 60000))
+      
+      progressTimeouts.push(setTimeout(() => {
+        setProgressMessage('🕐 AI vẫn đang xử lý... Đây là một request phức tạp, vui lòng kiên nhẫn...')
+      }, 90000))
+      
+      progressTimeouts.push(setTimeout(() => {
+        setProgressMessage('⏰ Gần hoàn thành... AI đang tổng hợp tất cả nội dung...')
+      }, 120000))
+      
+      // Tăng timeout cho fetch request lên 180 giây (3 phút)
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 150000) // 150 seconds timeout
+      const fetchTimeoutId = setTimeout(() => controller.abort(), 180000) // 180 seconds timeout
       
       const response = await fetch('/api/generate-theme', {
         method: 'POST',
@@ -100,29 +132,41 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
         signal: controller.signal
       })
       
-      clearTimeout(timeoutId)
+      // Clear all timeouts
+      clearTimeout(fetchTimeoutId)
+      progressTimeouts.forEach(t => clearTimeout(t))
+      
       console.log('📡 [AI-GENERATOR] Response status:', response.status, response.statusText)
-      setProgressMessage('Đang xử lý phản hồi từ server...')
+      setProgressMessage('📦 Đang xử lý và định dạng dữ liệu...')
 
       // Xử lý 504 Gateway Timeout với retry logic
       if (response.status === 504) {
         console.warn(`⏱️ [AI-GENERATOR] Gateway timeout (attempt ${retryCount + 1}/${maxRetries + 1})`)
         
         if (retryCount < maxRetries) {
-          // Exponential backoff: 2s, 4s, 8s
-          const backoffDelay = Math.pow(2, retryCount) * 2000
-          setError(`⏱️ Server đang xử lý... Đang thử lại lần ${retryCount + 2}/${maxRetries + 1} sau ${backoffDelay / 1000}s...`)
+          // Exponential backoff: 3s, 6s, 12s
+          const backoffDelay = Math.pow(2, retryCount) * 3000
+          setError(
+            `⏱️ Server đang xử lý yêu cầu của bạn...\n\n` +
+            `🔄 Đang thử lại lần ${retryCount + 2}/${maxRetries + 1} sau ${backoffDelay / 1000}s\n\n` +
+            `💡 AI đang phân tích và tạo nội dung chi tiết cho doanh nghiệp của bạn. Vui lòng đợi thêm chút...`
+          )
           
           await new Promise(resolve => setTimeout(resolve, backoffDelay))
           return generateContent(retryCount + 1)
         } else {
           throw new Error(
-            `⏱️ Server timeout sau ${maxRetries + 1} lần thử.\n\n` +
-            `💡 Gợi ý:\n` +
-            `• Thông tin của bạn đang được xử lý nhưng mất nhiều thời gian hơn dự kiến\n` +
-            `• Vui lòng thử lại với mô tả ngắn gọn hơn\n` +
-            `• Hoặc thử lại sau vài phút khi server bớt tải\n\n` +
-            `📞 Nếu vấn đề tiếp diễn, vui lòng liên hệ hỗ trợ.`
+            `⏱️ **Timeout: Server mất nhiều thời gian xử lý hơn dự kiến**\n\n` +
+            `❌ **Nguyên nhân có thể:**\n` +
+            `• Server đang quá tải với nhiều yêu cầu đồng thời\n` +
+            `• Thông tin business quá phức tạp cần nhiều thời gian xử lý\n` +
+            `• Kết nối đến AI service bị gián đoạn\n\n` +
+            `✅ **Giải pháp đề xuất:**\n` +
+            `1️⃣ Thử lại với **mô tả ngắn gọn hơn** (3-5 câu)\n` +
+            `2️⃣ Chỉ điền **thông tin bắt buộc** (tên, ngành nghề, mô tả)\n` +
+            `3️⃣ Thử lại sau **2-3 phút** khi server bớt tải\n` +
+            `4️⃣ Sử dụng **API Streaming** (tính năng mới, ít bị timeout)\n\n` +
+            `📞 Nếu vấn đề tiếp diễn, vui lòng liên hệ hỗ trợ kỹ thuật.`
           )
         }
       }
@@ -149,7 +193,17 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
       const result = await response.json()
       console.log('✅ [AI-GENERATOR] Response received:', result)
       
-      if (result.success) {
+      // Check if response has themeParams (success) or explicit success flag
+      if (result.success || result.themeParams) {
+        // Log cache info if available
+        if (result.cached || result.cacheHit) {
+          console.log('💾 [AI-GENERATOR] Served from cache:', {
+            cachedAt: result.cachedAt,
+            servedAt: result.servedAt,
+            cacheHit: result.cacheHit
+          })
+        }
+        
         setGeneratedContent(result.themeParams)
         setStep('preview')
       } else {
@@ -167,7 +221,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
             `• Đang chờ: ${result.queueStats?.queuedTasks || 0} yêu cầu`
           )
         } else {
-          throw new Error(result.error || 'Có lỗi xảy ra')
+          throw new Error(result.error || 'Có lỗi xảy ra khi tạo nội dung. Vui lòng thử lại.')
         }
       }
     } catch (err) {
@@ -180,17 +234,31 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
         retryCount
       })
       
-      // Handle AbortError (timeout)
+      // Handle AbortError (client-side timeout)
       if (err instanceof Error && err.name === 'AbortError') {
         if (retryCount < maxRetries) {
-          const backoffDelay = Math.pow(2, retryCount) * 2000
-          setError(`⏱️ Request timeout. Đang thử lại lần ${retryCount + 2}/${maxRetries + 1} sau ${backoffDelay / 1000}s...`)
+          const backoffDelay = Math.pow(2, retryCount) * 3000
+          setError(
+            `⏱️ **Request đang xử lý quá lâu...**\n\n` +
+            `🔄 Đang thử lại lần ${retryCount + 2}/${maxRetries + 1} sau ${backoffDelay / 1000}s\n\n` +
+            `💡 Yêu cầu của bạn đang được xử lý, vui lòng kiên nhẫn...`
+          )
           await new Promise(resolve => setTimeout(resolve, backoffDelay))
           return generateContent(retryCount + 1)
         } else {
           setError(
-            `⏱️ Request timeout sau ${maxRetries + 1} lần thử.\n\n` +
-            `💡 Vui lòng thử lại với mô tả ngắn gọn hơn hoặc thử lại sau vài phút.`
+            `⏱️ **Request timeout sau ${maxRetries + 1} lần thử (180 giây/3 phút mỗi lần)**\n\n` +
+            `❌ **Nguyên nhân:**\n` +
+            `• AI service đang xử lý quá lâu (>180s)\n` +
+            `• Thông tin business có thể quá chi tiết\n` +
+            `• Kết nối mạng không ổn định\n` +
+            `• Server AI đang quá tải\n\n` +
+            `✅ **Giải pháp:**\n` +
+            `1️⃣ **Rút gọn mô tả** business xuống 3-5 câu ngắn gọn\n` +
+            `2️⃣ **Bỏ qua** các trường không bắt buộc (website, location...)\n` +
+            `3️⃣ **Thử lại sau 2-3 phút** khi server bớt tải\n` +
+            `4️⃣ **Kiểm tra kết nối internet** của bạn\n\n` +
+            `📧 Liên hệ hỗ trợ nếu vấn đề vẫn tiếp diễn.`
           )
         }
       } else {
@@ -389,6 +457,24 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                 </CardContent>
               </Card>
 
+              {/* Tips to avoid timeout - Show when not generating */}
+              {!isGenerating && !error && (
+                <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-start gap-2 mb-2">
+                    <Sparkles className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <div>
+                      <p className="text-sm font-semibold text-blue-900">💡 Tips để tạo nội dung nhanh và chính xác:</p>
+                      <ul className="text-xs text-blue-800 mt-2 space-y-1 ml-1">
+                        <li>✅ Mô tả ngắn gọn, súc tích (3-5 câu)</li>
+                        <li>✅ Tập trung vào điểm mạnh chính của doanh nghiệp</li>
+                        <li>✅ Chỉ điền thông tin bắt buộc nếu muốn tạo nhanh</li>
+                        <li>⚠️ Tránh mô tả quá dài (&gt;500 từ) để không bị timeout</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Progress Message when generating */}
               {isGenerating && progressMessage && (
                 <div className="flex items-center gap-3 p-4 bg-blue-50 border border-blue-200 rounded-md">
@@ -400,6 +486,9 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                         Lần thử: {retryAttempt + 1}/4 | AI đang xử lý thông tin của bạn...
                       </p>
                     )}
+                    <p className="text-xs text-blue-600 mt-2">
+                      ⏱️ Thời gian xử lý thường: 30-60 giây | Tối đa: 180 giây (3 phút)
+                    </p>
                   </div>
                 </div>
               )}

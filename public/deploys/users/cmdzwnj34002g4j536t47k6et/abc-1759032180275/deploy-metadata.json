@@ -1,0 +1,15 @@
+{
+  "projectId": "cmel6hh0l000nvk9324twr3v9",
+  "userId": "cmdzwnj34002g4j536t47k6et",
+  "projectName": "abc",
+  "deployTime": "2025-09-28T04:03:00.297Z",
+  "fileCount": 13,
+  "userFolderPath": "users/cmdzwnj34002g4j536t47k6et/abc-1759032180275/",
+  "deployScriptPath": "deploy-nginx.sh",
+  "serverType": "nginx",
+  "domain": "vn.tptmarketing.info",
+  "includeAssets": true,
+  "version": "2.0-vps-optimized",
+  "vpsSpecs": "4vCPU-16GB-200GB-NVMe",
+  "optimized": true
+}
