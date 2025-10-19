@@ -27,7 +27,6 @@ export class TemplateEngine {
       generateStaticProductsSection, 
       generateStaticTestimonialsSection,
       generateStaticWhyChooseUsSection,
-      generateStaticBlogSection,
       generateStaticFooter 
     } = await import('./html-templates')
 
@@ -84,7 +83,6 @@ export class TemplateEngine {
     const productsSection = await this.generateProductsSection(content, themeParams)
     const whyChooseUsSection = await this.generateWhyChooseUsSection(content, themeParams)
     const testimonialsSection = await this.generateTestimonialsSection(content, themeParams)
-    const blogSection = await this.generateBlogSection(content, themeParams)
     const footerSection = await this.generateFooterSection(themeParams)
     
     return `<!DOCTYPE html>
@@ -177,9 +175,6 @@ export class TemplateEngine {
         
         <!-- Testimonials Section -->
         ${testimonialsSection}
-        
-        <!-- Blog Section -->
-        ${blogSection}
     </main>
     
     <!-- Footer -->
@@ -229,11 +224,6 @@ export class TemplateEngine {
   private static async generateTestimonialsSection(content: any, themeParams: any): Promise<string> {
     const { generateStaticTestimonialsSection } = await import('./html-templates')
     return generateStaticTestimonialsSection({ content: content?.testimonials, colors: themeParams?.colors, themeParams })
-  }
-
-  private static async generateBlogSection(content: any, themeParams: any): Promise<string> {
-    const { generateStaticBlogSection } = await import('./html-templates')
-    return generateStaticBlogSection({ content: content?.blog, colors: themeParams?.colors, themeParams })
   }
 
   private static async generateFooterSection(themeParams: any): Promise<string> {

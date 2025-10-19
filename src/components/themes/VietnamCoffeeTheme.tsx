@@ -7,7 +7,6 @@ import HeroSection from './vietnam-coffee/HeroSection'
 import ProblemSolution from './vietnam-coffee/ProblemSolution'
 import LeadMagnetSection from './vietnam-coffee/LeadMagnetSection'
 import WhyChooseUsSection from './vietnam-coffee/WhyChooseUsSection'
-import BlogSection from './vietnam-coffee/BlogSection'
 import ProductsServices from './vietnam-coffee/ProductsServices'
 import Testimonials from './vietnam-coffee/Testimonials'
 import Footer from './vietnam-coffee/Footer'
@@ -223,12 +222,6 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
         { number: "98%", label: "Tỷ lệ hài lòng", sublabel: "Khách hàng đánh giá" }
       ]
     },
-    blog: {
-      title: "Thông Tin Ngành Mới Nhất",
-      subtitle: "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về xuất khẩu cà phê Việt Nam và thị trường nhập khẩu Mỹ.",
-      backgroundColor: "#F8F9FA",
-      textColor: "#2D3748"
-    },
     footer: {
       companyName: "Cà Phê Việt",
       description: "Chuyên cung cấp cà phê chất lượng cao cho thị trường quốc tế với cam kết về chất lượng và bền vững",
@@ -342,7 +335,6 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
       <LeadMagnetSection theme={theme} content={finalContent.leadMagnet} />
       <ProductsServices theme={theme} content={finalContent.products} />
       <WhyChooseUsSection theme={theme} content={finalContent.whyChooseUs} />
-      <BlogSection theme={theme} content={finalContent.blog} />
       <Testimonials theme={theme} content={finalContent.testimonials} />
       <Footer theme={theme} content={finalContent.footer} />
     </div>

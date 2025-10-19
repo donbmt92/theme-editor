@@ -121,11 +121,6 @@ export interface TestimonialsParams {
   themeParams: ThemeParams
 }
 
-export interface BlogParams {
-  content: any
-  colors?: any
-  themeParams: ThemeParams
-}
 
 export interface DeployScriptParams {
   projectName: string

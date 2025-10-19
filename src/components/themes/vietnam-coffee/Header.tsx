@@ -39,7 +39,8 @@ const Header = ({ theme, content }: HeaderProps) => {
         about: "About Us",
         products: "Products",
         resources: "Resources",
-        contact: "Contact"
+        contact: "Contact",
+        freeConsultation: "Free Consultation"
       };
     } else {
       return {
@@ -47,7 +48,8 @@ const Header = ({ theme, content }: HeaderProps) => {
         about: "Về chúng tôi",
         products: "Sản phẩm",
         resources: "Tài nguyên",
-        contact: "Liên hệ"
+        contact: "Liên hệ",
+        freeConsultation: "Tư vấn miễn phí"
       };
     }
   };
@@ -245,15 +247,6 @@ const Header = ({ theme, content }: HeaderProps) => {
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center space-x-3">
             <Button 
-              variant="outline" 
-              size="sm"
-              style={getButtonStyles('outline')}
-              onClick={scrollToGuide}
-            >
-              <Download size={16} />
-              Cẩm nang XNK 2024
-            </Button>
-            <Button 
               size="sm"
               style={{ 
                 backgroundColor: content.colorMode === 'custom' && content.primaryColor 
@@ -263,7 +256,7 @@ const Header = ({ theme, content }: HeaderProps) => {
               className="hover:opacity-90 transition-colors"
             >
               <Phone size={16} />
-              Tư vấn miễn phí
+              {localizedText.freeConsultation}
             </Button>
           </div>
 
@@ -314,20 +307,13 @@ const Header = ({ theme, content }: HeaderProps) => {
                   className="border-t pt-4 space-y-3"
                   style={{ borderColor: theme.colors?.border || theme.colors?.primary }}
                 >
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
-                    style={getButtonStyles('outline')}
-                  >
-                    <Download size={16} />
-                    Cẩm nang XNK 2024
-                  </Button>
+                  
                   <Button 
                     className="w-full"
                     style={{...getButtonStyles('premium'), backgroundColor: theme.colors.primary}}
                   >
                     <Phone size={16} />
-                    Tư vấn miễn phí
+                    {localizedText.freeConsultation}
                   </Button>
                 </div>
               </div>

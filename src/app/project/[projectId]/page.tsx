@@ -297,8 +297,7 @@ const createDefaultThemeParams = (): ThemeParams => ({
         { name: "Hướng Dẫn", href: "#guide" },
         { name: "Báo Cáo", href: "#reports" },
         { name: "Tài Liệu", href: "#docs" },
-        { name: "FAQ", href: "#faq" },
-        { name: "Blog", href: "#blog" }
+        { name: "FAQ", href: "#faq" }
       ],
       legal: [
         { name: "Chính Sách Bảo Mật", href: "#privacy" },
@@ -425,69 +424,6 @@ const createDefaultThemeParams = (): ThemeParams => ({
         title: "Bắt đầu hợp tác ngay hôm nay",
         description: "Liên hệ với chúng tôi để được tư vấn miễn phí.",
         buttonText: "Liên hệ ngay"
-      }
-    },
-    blog: {
-      title: "Thông Tin Ngành Mới Nhất",
-      subtitle: "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về cà phê",
-      backgroundColor: "#F8F9FA",
-      textColor: "#2D3748",
-      colorMode: "custom",
-      primaryColor: "#8B4513",
-      titleSize: "2xl",
-      titleWeight: "bold",
-      titleFont: "inter",
-      subtitleSize: "lg",
-      subtitleWeight: "normal",
-      subtitleFont: "inter",
-      categories: [
-        { name: "Thị trường", count: 15 },
-        { name: "Kỹ thuật", count: 12 },
-        { name: "Xuất khẩu", count: 8 },
-        { name: "Chất lượng", count: 10 }
-      ],
-      featuredPost: {
-        title: "Xu hướng thị trường cà phê 2024",
-        excerpt: "Phân tích chi tiết về xu hướng tiêu dùng và cơ hội cho ngành cà phê.",
-        author: "Chuyên gia",
-        date: "2024-01-15",
-        image: "/assets/blog-featured.jpg",
-        category: "Thị trường"
-      },
-      posts: [
-        {
-          id: "1",
-          title: "Hướng dẫn xuất khẩu cà phê",
-          excerpt: "Quy trình chi tiết từ chuẩn bị hồ sơ đến giao hàng thành công.",
-          author: "Chuyên gia",
-          date: "2024-01-10",
-          image: "/assets/blog-1.jpg",
-          category: "Xuất khẩu"
-        },
-        {
-          id: "2",
-          title: "Tiêu chuẩn chất lượng cho cà phê",
-          excerpt: "Những yêu cầu cần thiết để đạt tiêu chuẩn quốc tế.",
-          author: "Chuyên gia",
-          date: "2024-01-08",
-          image: "/assets/blog-2.jpg",
-          category: "Chất lượng"
-        },
-        {
-          id: "3",
-          title: "Kỹ thuật hiện đại cho cà phê",
-          excerpt: "Phương pháp hiện đại giúp tăng năng suất và chất lượng.",
-          author: "Chuyên gia",
-          date: "2024-01-05",
-          image: "/assets/blog-3.jpg",
-          category: "Kỹ thuật"
-        }
-      ],
-      newsletter: {
-        title: "Đăng ký nhận tin tức",
-        description: "Nhận thông tin mới nhất về thị trường và cơ hội.",
-        placeholder: "Email của bạn",
-        buttonText: "Đăng ký"
       }
     }
   }

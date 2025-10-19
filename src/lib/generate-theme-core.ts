@@ -244,43 +244,6 @@ function createFallbackThemeData(businessInfo: BusinessInfo) {
           }
         ]
       },
-      blog: {
-        title: businessInfo.language === 'english' ? 'Latest Industry News' : 'Thông Tin Ngành Mới Nhất',
-        subtitle: businessInfo.language === 'english' ? 'Stay updated with industry trends' : 'Cập nhật xu hướng ngành',
-        backgroundColor: "#F8F9FA",
-        textColor: "#2D3748",
-        categories: [
-          {"name": businessInfo.language === 'english' ? 'Market' : 'Thị trường', "count": 15},
-          {"name": businessInfo.language === 'english' ? 'Technology' : 'Kỹ thuật', "count": 12},
-          {"name": businessInfo.language === 'english' ? 'Export' : 'Xuất khẩu', "count": 8},
-          {"name": businessInfo.language === 'english' ? 'Quality' : 'Chất lượng', "count": 10}
-        ],
-        featuredPost: {
-          title: businessInfo.language === 'english' ? 'Market Trends 2024' : 'Xu hướng thị trường 2024',
-          excerpt: businessInfo.language === 'english' ? 'Detailed analysis of market trends' : 'Phân tích chi tiết xu hướng thị trường',
-          author: businessInfo.language === 'english' ? 'Industry Expert' : 'Chuyên gia ngành',
-          date: "2024-01-15",
-          image: "/assets/blog-featured.jpg",
-          category: businessInfo.language === 'english' ? 'Market' : 'Thị trường'
-        },
-        posts: [
-          {
-            id: "1",
-            title: businessInfo.language === 'english' ? 'Industry Guide 1' : 'Hướng dẫn ngành 1',
-            excerpt: businessInfo.language === 'english' ? 'Detailed guide for professionals' : 'Hướng dẫn chi tiết cho chuyên gia',
-            author: businessInfo.language === 'english' ? 'Expert A' : 'Chuyên gia A',
-            date: "2024-01-10",
-            image: "/assets/blog-1.jpg",
-            category: businessInfo.language === 'english' ? 'Export' : 'Xuất khẩu'
-          }
-        ],
-        newsletter: {
-          title: businessInfo.language === 'english' ? 'Subscribe to Newsletter' : 'Đăng ký nhận tin tức',
-          description: businessInfo.language === 'english' ? 'Get latest industry news' : 'Nhận tin tức ngành mới nhất',
-          placeholder: businessInfo.language === 'english' ? 'Your email' : 'Email của bạn',
-          buttonText: businessInfo.language === 'english' ? 'Subscribe' : 'Đăng ký'
-        }
-      },
       footer: {
         companyName: businessInfo.companyName,
         description: businessInfo.language === 'english' ? 'Professional services' : 'Dịch vụ chuyên nghiệp',
@@ -615,61 +578,6 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
         {"number": "15+", "label": "${businessInfo.language === 'english' ? 'Years Experience' : 'Năm kinh nghiệm'}", "sublabel": "${businessInfo.language === 'english' ? 'Market' : 'Thị trường'}"},
         {"number": "98%", "label": "${businessInfo.language === 'english' ? 'Satisfaction Rate' : 'Tỷ lệ hài lòng'}", "sublabel": "${businessInfo.language === 'english' ? 'Customers' : 'Khách hàng'}"}
       ]
-    },
-    "blog": {
-      "title": "${businessInfo.language === 'english' ? 'Latest Industry News' : 'Thông Tin Ngành Mới Nhất'}",
-      "subtitle": "${businessInfo.language === 'english' ? 'Stay updated with latest news, market trends and industry insights' : 'Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về ngành'}",
-      "backgroundColor": "#F8F9FA",
-      "textColor": "#2D3748",
-      "categories": [
-        {"name": "${businessInfo.language === 'english' ? 'Market' : 'Thị trường'}", "count": 15},
-        {"name": "${businessInfo.language === 'english' ? 'Technology' : 'Kỹ thuật'}", "count": 12},
-        {"name": "${businessInfo.language === 'english' ? 'Export' : 'Xuất khẩu'}", "count": 8},
-        {"name": "${businessInfo.language === 'english' ? 'Quality' : 'Chất lượng'}", "count": 10}
-      ],
-      "featuredPost": {
-        "title": "${businessInfo.language === 'english' ? 'Market Trends 2024' : 'Xu hướng thị trường 2024'}",
-        "excerpt": "${businessInfo.language === 'english' ? 'Detailed analysis of market trends and opportunities' : 'Phân tích chi tiết về xu hướng thị trường và cơ hội'}",
-        "author": "${businessInfo.language === 'english' ? 'Industry Expert' : 'Chuyên gia ngành'}",
-        "date": "2024-01-15",
-        "image": "/assets/blog-featured.jpg",
-        "category": "${businessInfo.language === 'english' ? 'Market' : 'Thị trường'}"
-      },
-      "posts": [
-        {
-          "id": "1",
-          "title": "${businessInfo.language === 'english' ? 'Industry Guide 1' : 'Hướng dẫn ngành 1'}",
-          "excerpt": "${businessInfo.language === 'english' ? 'Detailed guide for industry professionals' : 'Hướng dẫn chi tiết cho chuyên gia ngành'}",
-          "author": "${businessInfo.language === 'english' ? 'Expert A' : 'Chuyên gia A'}",
-          "date": "2024-01-10",
-          "image": "/assets/blog-1.jpg",
-          "category": "${businessInfo.language === 'english' ? 'Export' : 'Xuất khẩu'}"
-        },
-        {
-          "id": "2", 
-          "title": "${businessInfo.language === 'english' ? 'Quality Standards' : 'Tiêu chuẩn chất lượng'}",
-          "excerpt": "${businessInfo.language === 'english' ? 'Requirements for quality standards' : 'Yêu cầu cho tiêu chuẩn chất lượng'}",
-          "author": "${businessInfo.language === 'english' ? 'Expert B' : 'Chuyên gia B'}",
-          "date": "2024-01-08",
-          "image": "/assets/blog-2.jpg",
-          "category": "${businessInfo.language === 'english' ? 'Quality' : 'Chất lượng'}"
-        },
-        {
-          "id": "3",
-          "title": "${businessInfo.language === 'english' ? 'Technology Innovation' : 'Đổi mới công nghệ'}",
-          "excerpt": "${businessInfo.language === 'english' ? 'Modern methods for better results' : 'Phương pháp hiện đại cho kết quả tốt hơn'}",
-          "author": "${businessInfo.language === 'english' ? 'Expert C' : 'Chuyên gia C'}",
-          "date": "2024-01-05",
-          "image": "/assets/blog-3.jpg",
-          "category": "${businessInfo.language === 'english' ? 'Technology' : 'Kỹ thuật'}"
-        }
-      ],
-      "newsletter": {
-        "title": "${businessInfo.language === 'english' ? 'Subscribe to Newsletter' : 'Đăng ký nhận tin tức'}",
-        "description": "${businessInfo.language === 'english' ? 'Get latest industry news and opportunities' : 'Nhận thông tin mới nhất về ngành và cơ hội'}",
-        "placeholder": "${businessInfo.language === 'english' ? 'Your email' : 'Email của bạn'}",
-        "buttonText": "${businessInfo.language === 'english' ? 'Subscribe' : 'Đăng ký'}"
-      }
     },
     "footer": {
       "companyName": "${businessInfo.companyName}",

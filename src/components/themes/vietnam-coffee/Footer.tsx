@@ -50,15 +50,26 @@ const Footer = ({ theme, content }: FooterProps) => {
           { name: "Import/Export Guide", href: "#guide" },
           { name: "Market Reports", href: "#reports" },
           { name: "Documents", href: "#docs" },
-          { name: "FAQ", href: "#faq" },
-          { name: "Blog", href: "#blog" }
+          { name: "FAQ", href: "#faq" }
         ],
         legal: [
           { name: "Privacy Policy", href: "#privacy" },
           { name: "Terms of Service", href: "#terms" },
           { name: "Cookie Policy", href: "#cookies" },
           { name: "Compliance", href: "#compliance" }
-        ]
+        ],
+        // Additional localized text
+        companyDescription: "Your trusted partner for premium Vietnamese coffee exports to the US market. Quality, reliability and excellent service since 2009.",
+        vietnamOffice: "Vietnam Office",
+        usBusinessHours: "US Business Hours",
+        quickLinksTitle: "Quick Links",
+        resourcesTitle: "Resources",
+        connectTitle: "Connect",
+        newsletterDescription: "Get weekly market updates and import tips delivered to your inbox.",
+        emailPlaceholder: "Enter your email",
+        subscribeButton: "Subscribe",
+        copyright: "All rights reserved.",
+        businessHours: "Mon-Fri: 8AM-6PM (EST)"
       };
     } else {
       return {
@@ -73,15 +84,26 @@ const Footer = ({ theme, content }: FooterProps) => {
           { name: "Hướng Dẫn Xuất/Nhập Khẩu", href: "#guide" },
           { name: "Báo Cáo Thị Trường", href: "#reports" },
           { name: "Tài Liệu", href: "#docs" },
-          { name: "FAQ", href: "#faq" },
-          { name: "Blog", href: "#blog" }
+          { name: "FAQ", href: "#faq" }
         ],
         legal: [
           { name: "Chính Sách Bảo Mật", href: "#privacy" },
           { name: "Điều Khoản Dịch Vụ", href: "#terms" },
           { name: "Chính Sách Cookie", href: "#cookies" },
           { name: "Tuân Thủ", href: "#compliance" }
-        ]
+        ],
+        // Additional localized text
+        companyDescription: "Đối tác tin cậy của bạn cho xuất khẩu cà phê Việt Nam cao cấp đến thị trường Mỹ. Chất lượng, độ tin cậy và dịch vụ xuất sắc từ năm 2009.",
+        vietnamOffice: "Văn Phòng Việt Nam",
+        usBusinessHours: "Giờ Làm Việc Mỹ",
+        quickLinksTitle: "Liên Kết Nhanh",
+        resourcesTitle: "Tài Nguyên",
+        connectTitle: "Kết Nối",
+        newsletterDescription: "Nhận cập nhật thị trường hàng tuần và mẹo nhập khẩu gửi đến hộp thư của bạn.",
+        emailPlaceholder: "Nhập email của bạn",
+        subscribeButton: "Đăng Ký",
+        copyright: "Tất cả quyền được bảo lưu.",
+        businessHours: "Thứ 2-Thứ 6: 8AM-6PM (EST)"
       };
     }
   };
@@ -223,7 +245,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   lineHeight: theme.typography?.lineHeight || '1.6'
                 }}
               >
-                {content.description || "Đối tác tin cậy của bạn cho xuất khẩu cà phê Việt Nam cao cấp đến thị trường Mỹ. Chất lượng, độ tin cậy và dịch vụ xuất sắc từ năm 2009."}
+                {content.description || localizedText.companyDescription}
               </p>
               
               {/* Contact Info */}
@@ -241,7 +263,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                         fontWeight: theme.typography?.fontWeight || '500'
                       }}
                     >
-                      Văn Phòng Việt Nam
+                      {localizedText.vietnamOffice}
                     </div>
                     <div 
                       className="text-sm"
@@ -276,7 +298,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                         fontSize: theme.typography?.fontSize || '16px'
                       }}
                     >
-                      Giờ Làm Việc Mỹ
+                      {localizedText.usBusinessHours}
                     </div>
                   </div>
                 </div>
@@ -309,7 +331,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {content.contact?.businessHours || "Thứ 2-Thứ 6: 8AM-6PM (EST)"}
+                    {content.contact?.businessHours || localizedText.businessHours}
                   </div>
                 </div>
               </div>
@@ -324,7 +346,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                Liên Kết Nhanh
+                {localizedText.quickLinksTitle}
               </h3>
               <ul className="space-y-3">
                 {quickLinks.map((link, index) => (
@@ -353,7 +375,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                Tài Nguyên
+                {localizedText.resourcesTitle}
               </h3>
               <ul className="space-y-3">
                 {resources.map((resource, index) => (
@@ -382,7 +404,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                Kết Nối
+                {localizedText.connectTitle}
               </h3>
               <p 
                 className="mb-4"
@@ -391,12 +413,12 @@ const Footer = ({ theme, content }: FooterProps) => {
                   fontSize: theme.typography?.fontSize || '16px'
                 }}
               >
-                Nhận cập nhật thị trường hàng tuần và mẹo nhập khẩu gửi đến hộp thư của bạn.
+                {localizedText.newsletterDescription}
               </p>
               <div className="space-y-3">
                 <Input
                   type="email"
-                  placeholder="Nhập email của bạn"
+                  placeholder={localizedText.emailPlaceholder}
                   className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground placeholder:text-secondary-foreground/50"
                   style={{ 
                     backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
@@ -411,7 +433,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   className="w-full"
                   style={getButtonStyles('primary')}
                 >
-                  Đăng Ký
+                  {localizedText.subscribeButton}
                 </Button>
               </div>
               
@@ -454,10 +476,10 @@ const Footer = ({ theme, content }: FooterProps) => {
                 fontSize: theme.typography?.fontSize || '16px'
               }}
             >
-              © 2024 {content.companyName || "VietCoffee Export"}. Tất cả quyền được bảo lưu.
+              © 2024 {content.companyName || "VietCoffee Export"}. {localizedText.copyright}
             </div>
             
-            <div className="flex flex-wrap gap-6">
+            {/* <div className="flex flex-wrap gap-6">
               {legal.map((item, index) => (
                 <a
                   key={index}
@@ -471,7 +493,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   {item.name}
                 </a>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

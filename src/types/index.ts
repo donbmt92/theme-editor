@@ -169,10 +169,6 @@ export interface ThemeSections {
       label: string
     }>
   }
-  blog?: {
-    backgroundColor?: string
-    textColor?: string
-  }
   whyChooseUs?: {
     backgroundColor?: string
     textColor?: string
@@ -555,54 +551,7 @@ export interface ThemeContent {
     }
   }
 
-  // Blog
-  blog?: {
-    title?: string
-    subtitle?: string
-    backgroundColor?: string
-    textColor?: string
-    colorMode?: 'theme' | 'custom'
-    primaryColor?: string
-    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
-    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
-    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
-    subtitleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
-    subtitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
-    subtitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
-    categories?: Array<{
-      name: string
-      count: number
-      color?: string
-    }>
-    featuredPost?: {
-      title: string
-      excerpt: string
-      author: string
-      date: string
-      image: string
-      category: string
-      readTime?: string
-    }
-    posts?: Array<{
-      id: string
-      title: string
-      excerpt: string
-      author: string
-      date: string
-      image: string
-      category: string
-      readTime?: string
-      featured?: boolean
-    }>
-    newsletter?: {
-      title: string
-      description: string
-      placeholder: string
-      buttonText: string
-      footerText?: string
-    }
-  }
-}
+  // Footer
 
 export interface ThemeParams {
   colors: ThemeColors

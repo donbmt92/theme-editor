@@ -9,7 +9,6 @@ export type TabType =
   | "products"
   | "whyChooseUs"
   | "testimonials"
-  | "blog"
   | "footer"
   | "colors"
   | "typography"
@@ -30,7 +29,6 @@ const TabSelector = ({ activeTab, onTabChange }: TabSelectorProps) => {
     { id: "products" as TabType, label: "Sản phẩm", icon: FileText },
     { id: "whyChooseUs" as TabType, label: "Tại sao chọn", icon: FileText },
     { id: "testimonials" as TabType, label: "Đánh giá", icon: FileText },
-    { id: "blog" as TabType, label: "Blog", icon: FileText },
     { id: "footer" as TabType, label: "Footer", icon: FileText },
     { id: "colors" as TabType, label: "Màu sắc", icon: Palette },
     { id: "typography" as TabType, label: "Chữ", icon: Type },

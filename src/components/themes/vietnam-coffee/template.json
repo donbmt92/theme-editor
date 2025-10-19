@@ -423,73 +423,6 @@
           }
         ]
       },
-      "blog": {
-        "title": "Thông Tin Ngành Mới Nhất",
-        "subtitle": "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về xuất khẩu cà phê Việt Nam và thị trường nhập khẩu Mỹ.",
-        "backgroundColor": "#F8F9FA",
-        "textColor": "#2D3748",
-        "categories": [
-          {
-            "name": "Thị trường",
-            "count": 15
-          },
-          {
-            "name": "Kỹ thuật",
-            "count": 12
-          },
-          {
-            "name": "Xuất khẩu",
-            "count": 8
-          },
-          {
-            "name": "Chất lượng",
-            "count": 10
-          }
-        ],
-        "featuredPost": {
-          "title": "Xu hướng thị trường cà phê Mỹ 2024",
-          "excerpt": "Phân tích chi tiết về xu hướng tiêu dùng cà phê tại Mỹ và cơ hội cho cà phê Việt Nam.",
-          "author": "Nguyễn Văn A",
-          "date": "2024-01-15",
-          "image": "/assets/blog-featured.jpg",
-          "category": "Thị trường"
-        },
-        "posts": [
-          {
-            "id": "1",
-            "title": "Hướng dẫn xuất khẩu cà phê sang Mỹ",
-            "excerpt": "Quy trình chi tiết từ chuẩn bị hồ sơ đến giao hàng thành công.",
-            "author": "Trần Thị B",
-            "date": "2024-01-10",
-            "image": "/assets/blog-1.jpg",
-            "category": "Xuất khẩu"
-          },
-          {
-            "id": "2",
-            "title": "Tiêu chuẩn chất lượng FDA cho cà phê",
-            "excerpt": "Những yêu cầu cần thiết để đạt tiêu chuẩn FDA khi xuất khẩu cà phê.",
-            "author": "Lê Văn C",
-            "date": "2024-01-08",
-            "image": "/assets/blog-2.jpg",
-            "category": "Chất lượng"
-          },
-          {
-            "id": "3",
-            "title": "Kỹ thuật trồng cà phê bền vững",
-            "excerpt": "Phương pháp canh tác hiện đại giúp tăng năng suất và chất lượng.",
-            "author": "Phạm Thị D",
-            "date": "2024-01-05",
-            "image": "/assets/blog-3.jpg",
-            "category": "Kỹ thuật"
-          }
-        ],
-        "newsletter": {
-          "title": "Đăng ký nhận tin tức",
-          "description": "Nhận thông tin mới nhất về thị trường cà phê và cơ hội xuất khẩu.",
-          "placeholder": "Email của bạn",
-          "buttonText": "Đăng ký"
-        }
-      },
       "footer": {
         "companyName": "Cà Phê Việt",
         "description": "Chuyên cung cấp cà phê chất lượng cao cho thị trường quốc tế với cam kết về chất lượng và bền vững",
@@ -539,10 +472,6 @@
           {
             "name": "FAQ",
             "href": "#faq"
-          },
-          {
-            "name": "Blog",
-            "href": "#blog"
           }
         ],
         "legal": [
@@ -662,11 +591,6 @@
         "editableFields": ["title", "subtitle", "testimonials", "partners", "stats"]
       },
       {
-        "name": "blog",
-        "description": "Blog và tin tức",
-        "editableFields": ["title", "subtitle", "categories", "featuredPost", "posts", "newsletter"]
-      },
-      {
         "name": "footer",
         "description": "Footer và thông tin liên hệ",
         "editableFields": ["companyName", "description", "contact", "quickLinks", "resources", "legal", "socialLinks"]
@@ -679,10 +603,6 @@
       "/assets/arabica-coffee.jpg",
       "/assets/weasel-coffee.jpg",
       "/assets/cta-coffee.jpg",
-      "/assets/blog-featured.jpg",
-      "/assets/blog-1.jpg",
-      "/assets/blog-2.jpg",
-      "/assets/blog-3.jpg",
       "/assets/logo.png"
     ],
     "icons": [

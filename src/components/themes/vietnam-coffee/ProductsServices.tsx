@@ -459,22 +459,23 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
               <CardContent className="p-8">
                 <div className="flex items-center mb-6">
                   <div 
-                    className={cn("h-12 w-12 rounded-lg flex items-center justify-center mr-4", getBorderRadiusClass())}
+                    className={cn("h-12 w-28 rounded-lg flex items-center justify-center mr-4", getBorderRadiusClass())}
                     style={{ 
                       background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
                     }}
                   >
                     <service.icon className="h-6 w-6 text-white" />
                   </div>
-                  <h3 
+                  <h4 
                     className={cn("font-bold", getHeadingSize('small'))}
                     style={{ 
                       color: content.textColor || theme.colors.text,
-                      fontWeight: theme.typography?.fontWeight || '700'
+                      fontWeight: '700',
+                      fontSize:  '30px'
                     }}
                   >
                     {service.title}
-                  </h3>
+                  </h4>
                 </div>
 
                 <p 
@@ -488,22 +489,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                   {service.description}
                 </p>
 
-                <ul className="space-y-2 mb-6">
-                  {service.features.map((feature: string, idx: number) => (
-                    <li 
-                      key={idx} 
-                      className="flex items-center text-sm"
-                      style={{ color: content.textColor || theme.colors.text }}
-                    >
-                      <div 
-                        className={cn("h-1.5 w-1.5 rounded-full mr-3", getBorderRadiusClass())}
-                        style={{ backgroundColor: theme.colors.primary }}
-                      ></div>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
+             
                 <Button 
                   variant="outline" 
                   className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"

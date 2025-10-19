@@ -6,9 +6,8 @@ import { ArrowRight, Download, CheckCircle } from "lucide-react";
 import { ThemeParams } from "@/types";
 import Image from "next/image";
 import { useHeroImage } from "@/hooks/use-unsplash-image";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 interface HeroContent {
@@ -50,6 +49,11 @@ interface HeroContent {
   benefits?: Array<{
     icon: string;
     text: string;
+  }>;
+  // Stats array
+  stats?: Array<{
+    number: string;
+    label: string;
   }>;
 }
 
@@ -122,38 +126,10 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
   // Use Unsplash for hero background image - ưu tiên hình ảnh upload trước
   const {
     imageUrl: unsplashImageUrl,
-    isLoading: imageLoading,
-    error: imageError,
   } = useHeroImage(content.backgroundImage, 'coffee shop');
 
-  // Save Unsplash URL to project when it's fetched (chỉ khi không có hình ảnh upload)
-  useEffect(() => {
-    if (
-      unsplashImageUrl &&
-      unsplashImageUrl !== content.unsplashImageUrl &&
-      projectId &&
-      onContentUpdate &&
-      !content.backgroundImage?.startsWith('/uploads/') // Chỉ lưu Unsplash khi không có hình ảnh upload
-    ) {
-      const updatedContent = {
-        ...content,
-        unsplashImageUrl,
-        backgroundImage: unsplashImageUrl,
-      };
-
-      onContentUpdate(updatedContent);
-      saveUnsplashUrl(projectId, unsplashImageUrl);
-    }
-  }, [
-    unsplashImageUrl,
-    content.unsplashImageUrl,
-    projectId,
-    content,
-    onContentUpdate,
-  ]);
-
   // Function to save Unsplash URL to project
-  const saveUnsplashUrl = async (projectId: string, imageUrl: string) => {
+  const saveUnsplashUrl = useCallback(async (projectId: string, imageUrl: string) => {
     try {
       const response = await fetch(`/api/projects/${projectId}`, {
         method: "GET",
@@ -201,7 +177,34 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
     } catch (error) {
       console.error("Error saving Unsplash URL:", error);
     }
-  };
+  }, [theme]);
+
+  // Save Unsplash URL to project when it's fetched (chỉ khi không có hình ảnh upload)
+  useEffect(() => {
+    if (
+      unsplashImageUrl &&
+      unsplashImageUrl !== content.unsplashImageUrl &&
+      projectId &&
+      onContentUpdate &&
+      !content.backgroundImage?.startsWith('/uploads/') // Chỉ lưu Unsplash khi không có hình ảnh upload
+    ) {
+      const updatedContent = {
+        ...content,
+        unsplashImageUrl,
+        backgroundImage: unsplashImageUrl,
+      };
+
+      onContentUpdate(updatedContent);
+      saveUnsplashUrl(projectId, unsplashImageUrl);
+    }
+  }, [
+    unsplashImageUrl,
+    content.unsplashImageUrl,
+    projectId,
+    content,
+    onContentUpdate,
+    saveUnsplashUrl,
+  ]);
 
   // Determine which image to use - ưu tiên hình ảnh upload
   const getBackgroundImageUrl = () => {
@@ -287,39 +290,6 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
     };
   };
 
-  // Get heading size
-  const getHeadingSize = () => {
-    switch (theme.typography?.headingSize) {
-      case "sm":
-        return "text-3xl md:text-5xl";
-      case "base":
-        return "text-4xl md:text-6xl";
-      case "lg":
-        return "text-5xl md:text-7xl";
-      case "xl":
-        return "text-6xl md:text-8xl";
-      case "2xl":
-      default:
-        return "text-4xl md:text-6xl";
-    }
-  };
-
-  // Get body text size
-  const getBodySize = () => {
-    switch (theme.typography?.bodySize) {
-      case "xs":
-        return "text-lg";
-      case "sm":
-        return "text-xl";
-      case "lg":
-        return "text-2xl";
-      case "xl":
-        return "text-3xl";
-      case "base":
-      default:
-        return "text-xl";
-    }
-  };
 
   // Get title size
   const getTitleSize = () => {
@@ -745,6 +715,13 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
 
   // Get benefits from content or use localized default
   const benefits = content.benefits || localizedText.benefits;
+  
+  // Get stats from content or use localized default
+  const stats = content.stats || [
+    { number: "500+", label: localizedText.stats.orders },
+    { number: "15", label: localizedText.stats.experience },
+    { number: "100+", label: localizedText.stats.partners }
+  ];
 
   return (
     <section
@@ -862,60 +839,26 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
 
             {/* Trust Indicators */}
             <div className="flex items-center space-x-8 pt-8">
-              <div className="text-center">
-                <div
-                  className={cn("mb-1", getStatsSize(), getStatsWeight(), getStatsFont())}
-                  style={{ color: content.colorMode === 'custom' && content.primaryColor 
-                    ? content.primaryColor 
-                    : theme.colors.accent }}
-                >
-                  500+
+              {stats.map((stat, index) => (
+                <div key={index} className="text-center">
+                  <div
+                    className={cn("mb-1", getStatsSize(), getStatsWeight(), getStatsFont())}
+                    style={{ color: content.colorMode === 'custom' && content.primaryColor 
+                      ? content.primaryColor 
+                      : theme.colors.accent }}
+                  >
+                    {stat.number}
+                  </div>
+                  <div
+                    className="text-sm"
+                    style={{ color: content.colorMode === 'custom' && content.textColor 
+                      ? `${content.textColor}CC` 
+                      : `${theme.colors.text || "#000000"}CC` }}
+                  >
+                    {stat.label}
+                  </div>
                 </div>
-                <div
-                  className="text-sm"
-                  style={{ color: content.colorMode === 'custom' && content.textColor 
-                    ? `${content.textColor}CC` 
-                    : `${theme.colors.text || "#000000"}CC` }}
-                >
-                  {localizedText.stats.orders}
-                </div>
-              </div>
-              <div className="text-center">
-                <div
-                  className={cn("mb-1", getStatsSize(), getStatsWeight(), getStatsFont())}
-                  style={{ color: content.colorMode === 'custom' && content.primaryColor 
-                    ? content.primaryColor 
-                    : theme.colors.accent }}
-                >
-                  15
-                </div>
-                <div
-                  className="text-sm"
-                  style={{ color: content.colorMode === 'custom' && content.textColor 
-                    ? `${content.textColor}CC` 
-                    : `${theme.colors.text || "#000000"}CC` }}
-                >
-                  {localizedText.stats.experience}
-                </div>
-              </div>
-              <div className="text-center">
-                <div
-                  className={cn("mb-1", getStatsSize(), getStatsWeight(), getStatsFont())}
-                  style={{ color: content.colorMode === 'custom' && content.textColor 
-                    ? `${content.textColor}CC` 
-                    : `${theme.colors.text || "#000000"}CC` }}
-                >
-                  100+
-                </div>
-                <div
-                  className="text-sm"
-                  style={{ color: content.colorMode === 'custom' && content.textColor 
-                    ? `${content.textColor}CC` 
-                    : `${theme.colors.text || "#000000"}CC` }}
-                >
-                  {localizedText.stats.partners}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
 

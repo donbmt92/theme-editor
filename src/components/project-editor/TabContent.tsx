@@ -10,7 +10,6 @@ import LeadMagnetTab from './tabs/LeadMagnetTab'
 import ProductsTab from './tabs/ProductsTab'
 import WhyChooseUsTab from './tabs/WhyChooseUsTab'
 import TestimonialsTab from './tabs/TestimonialsTab'
-import BlogTab from './tabs/BlogTab'
 import FooterTab from './tabs/FooterTab'
 import { ThemeParams } from '@/types'
 
@@ -55,9 +54,6 @@ const TabContent = ({ activeTab, themeParams, updateThemeParam }: TabContentProp
     
     case 'testimonials':
       return <TestimonialsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
-    case 'blog':
-      return <BlogTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
     
     case 'footer':
       return <FooterTab themeParams={themeParams} updateThemeParam={updateThemeParam} />

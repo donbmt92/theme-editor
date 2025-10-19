@@ -4,6 +4,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import ImageUpload from '@/components/ui/image-upload'
 import { ThemeParams } from '@/types'
 import { Plus, Trash2 } from 'lucide-react'
 
@@ -244,13 +245,14 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium mb-1">Hình ảnh đại diện</label>
-                  <Input
+                  <Label htmlFor={`testimonial-image-${index}`}>Hình ảnh đại diện</Label>
+                  <ImageUpload
                     value={testimonial.image || ''}
-                    onChange={(e) => updateTestimonial(index, 'image', e.target.value)}
-                    placeholder="URL hình ảnh (100x100px hoặc 200x200px)"
+                    onChange={(imageUrl) => updateTestimonial(index, 'image', imageUrl)}
+                    placeholder="Upload hình ảnh đại diện"
+                    recommendedSize="200x200px"
+                    aspectRatio="1:1"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Gợi ý: 100x100px hoặc 200x200px (tỷ lệ 1:1)</p>
                 </div>
               </div>
             </div>

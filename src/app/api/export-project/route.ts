@@ -472,9 +472,6 @@ function generateStaticHtml(projectName: string, description: string, themeParam
         
         <!-- Products Section -->
         ${generateStaticProductsSection(content, colors)}
-        
-        <!-- Blog Section -->
-        ${generateStaticBlogSection(content, colors)}
     </main>
     
     <!-- Footer -->
@@ -1516,125 +1513,7 @@ function generateStaticSolutionsSection(content: any, colors: any) {
 }
 
 function generateStaticBlogSection(content: any, colors: any) {
-  const blogContent = content?.blog || {}
-  
-  // Default blog posts data
-  const defaultBlogPosts = [
-    {
-      title: "Triển Vọng Thị Trường Cà Phê 2024: Xu Hướng Nhập Khẩu Mỹ & Dự Báo Giá",
-      excerpt: "Phân tích toàn diện thị trường cà phê Mỹ bao gồm dự báo nhu cầu, xu hướng giá cả và các yếu tố chính ảnh hưởng đến nhập khẩu từ Việt Nam.",
-      category: "Phân Tích Thị Trường",
-      author: "Sarah Johnson",
-      date: "15 Tháng 1, 2024",
-      readTime: "8 phút đọc",
-      image: "https://images.unsplash.com/photo-1589927986089-35812388d1f4?w=600&h=400&fit=crop",
-      featured: true
-    },
-    {
-      title: "Quy Định FDA Mới Cho Nhập Khẩu Cà Phê: Những Điều Bạn Cần Biết",
-      excerpt: "Cập nhật yêu cầu FDA cho nhập khẩu cà phê có hiệu lực 2024, bao gồm thay đổi tài liệu và hướng dẫn tuân thủ cho nhà nhập khẩu Mỹ.",
-      category: "Quy Định",
-      author: "Michael Chen",
-      date: "10 Tháng 1, 2024",
-      readTime: "6 phút đọc",
-      image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop"
-    },
-    {
-      title: "Cập Nhật Thu Hoạch Cà Phê Việt Nam: Đánh Giá Chất Lượng & Dự Báo Sản Lượng",
-      excerpt: "Cập nhật mới nhất từ các vùng trồng cà phê Việt Nam bao gồm đánh giá chất lượng thu hoạch và dự báo sản lượng cho năm 2024.",
-      category: "Chuỗi Cung Ứng",
-      author: "Nguyễn Trần",
-      date: "8 Tháng 1, 2024",
-      readTime: "5 phút đọc",
-      image: "https://images.unsplash.com/photo-1588155487507-a5e9ce8b1987?w=600&h=400&fit=crop"
-    }
-  ];
-
-  const blogPosts = blogContent.posts || defaultBlogPosts;
-  const categories = blogContent.categories || [
-    { name: "Phân Tích Thị Trường", count: 12 },
-    { name: "Quy Định", count: 8 },
-    { name: "Chuỗi Cung Ứng", count: 15 },
-    { name: "Bền Vững", count: 6 }
-  ];
-
-  const newsletter = blogContent.newsletter || {
-    title: "Cập Nhật Thông Tin Thị Trường",
-    description: "Đăng ký nhận bản tin hàng tuần để có thông tin mới nhất về xu hướng thị trường cà phê, mẹo nhập khẩu và cập nhật ngành.",
-    placeholder: "Nhập địa chỉ email của bạn",
-    buttonText: "Đăng Ký",
-    footerText: "Tham gia cùng 2,000+ nhà nhập khẩu nhận thông tin thị trường hàng tuần. Hủy đăng ký bất cứ lúc nào."
-  };
-  
-  return `<section id="blog" class="section blog">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">${blogContent.title || 'Thông Tin Ngành Mới Nhất'}</h2>
-                <p class="section-description">
-                    ${blogContent.subtitle || 'Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về xuất khẩu cà phê Việt Nam và thị trường nhập khẩu Mỹ.'}
-                </p>
-            </div>
-            
-            <!-- Categories -->
-            <div class="categories">
-                ${categories.map((category: any) => `
-                    <span class="category-tag">${category.name} (${category.count})</span>
-                `).join('')}
-            </div>
-            
-            <!-- Featured Post -->
-            <div class="featured-post">
-                <div class="post-image">
-                    <img src="${blogPosts[0].image}" alt="${blogPosts[0].title}" />
-                    <span class="featured-badge">Nổi Bật</span>
-                </div>
-                <div class="post-content">
-                    <span class="post-category">${blogPosts[0].category}</span>
-                    <h3>${blogPosts[0].title}</h3>
-                    <p>${blogPosts[0].excerpt}</p>
-                    <div class="post-meta">
-                        <span>👤 ${blogPosts[0].author}</span>
-                        <span>📅 ${blogPosts[0].date}</span>
-                        <span>⏱️ ${blogPosts[0].readTime}</span>
-                    </div>
-                    <a href="#" class="btn btn-primary">Đọc Bài Viết Đầy Đủ</a>
-                </div>
-            </div>
-            
-            <!-- Other Posts -->
-            <div class="posts-grid">
-                ${blogPosts.slice(1).map((post: any) => `
-                    <div class="post-card">
-                        <div class="post-image">
-                            <img src="${post.image}" alt="${post.title}" />
-                            <span class="post-category">${post.category}</span>
-                        </div>
-                        <div class="post-content">
-                            <h4>${post.title}</h4>
-                            <p>${post.excerpt}</p>
-                            <div class="post-meta">
-                                <span>👤 ${post.author}</span>
-                                <span>📅 ${post.date}</span>
-                                <span>⏱️ ${post.readTime}</span>
-                            </div>
-                            <a href="#" class="btn btn-outline">Đọc Thêm</a>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-            
-            <!-- Newsletter -->
-            <div class="newsletter">
-                <h3>${newsletter.title}</h3>
-                <p>${newsletter.description}</p>
-                <div class="newsletter-form">
-                    <input type="email" placeholder="${newsletter.placeholder}" />
-                    <button class="btn btn-secondary">${newsletter.buttonText}</button>
-                </div>
-                <p class="newsletter-footer">${newsletter.footerText}</p>
-            </div>
-        </div>
-    </section>`
+  return '';
 }
 
 function generateStaticProductsSection(content: any, colors: any) {
@@ -1729,7 +1608,6 @@ function generateStaticFooter(content: any, colors: any) {
                         <li><a href="#about">Về chúng tôi</a></li>
                         <li><a href="#products">Sản phẩm & Dịch vụ</a></li>
                         <li><a href="#contact">Liên hệ</a></li>
-                        <li><a href="#">Blog</a></li>
                         <li><a href="#">Tài nguyên</a></li>
                     </ul>
                 </div>
