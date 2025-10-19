@@ -2,20 +2,74 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import VietnamCoffeeTheme from '@/components/themes/VietnamCoffeeTheme'
 import { ThemeParams } from '@/types'
 
 export default function ThemePreviewPage() {
   const params = useParams()
+  const searchParams = useSearchParams()
   const themeId = params.themeId as string
+  const projectId = searchParams.get('projectId')
   const [theme, setTheme] = useState<ThemeParams | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    fetchTheme()
-  }, [themeId])
+    if (projectId) {
+      fetchProject()
+    } else {
+      fetchTheme()
+    }
+  }, [themeId, projectId])
+
+  const fetchProject = async () => {
+    try {
+      const response = await fetch(`/api/preview/${projectId}`)
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && data.project) {
+          // Use latest version or default params
+          const latestVersion = data.project.versions[0]
+          let params: ThemeParams
+          
+          if (latestVersion && latestVersion.snapshot) {
+            params = latestVersion.snapshot as ThemeParams
+          } else if (data.project.theme.defaultParams) {
+            try {
+              const parsedParams = typeof data.project.theme.defaultParams === 'string' 
+                ? JSON.parse(data.project.theme.defaultParams) 
+                : data.project.theme.defaultParams
+              params = parsedParams
+            } catch {
+              setError('Dữ liệu theme không hợp lệ')
+              return
+            }
+          } else {
+            setError('Không tìm thấy dữ liệu theme')
+            return
+          }
+          
+          // Merge projectLanguage into themeParams
+          const themeWithLanguage = {
+            ...params,
+            projectLanguage: data.project.language || 'vietnamese'
+          }
+          
+          setTheme(themeWithLanguage)
+        } else {
+          setError('Không tìm thấy project')
+        }
+      } else {
+        setError('Không tìm thấy project')
+      }
+    } catch (error) {
+      console.error('Error fetching project:', error)
+      setError('Có lỗi xảy ra khi tải project')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const fetchTheme = async () => {
     try {
@@ -62,8 +116,13 @@ export default function ThemePreviewPage() {
   }
 
   return (
-    <div className="theme-preview">
-      <VietnamCoffeeTheme theme={theme} />
+    <div className="min-h-screen bg-gray-100">
+      <div className="h-full overflow-auto">
+        {/* Force desktop breakpoint for preview */}
+        <div className="min-w-[768px]">
+          <VietnamCoffeeTheme theme={theme} />
+        </div>
+      </div>
     </div>
   )
 } 

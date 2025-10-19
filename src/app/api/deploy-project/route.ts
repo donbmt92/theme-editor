@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
 import { DeployProcessor } from './deploy-processor'
 import { initializeCleanupInterval } from './utils/cleanup'
 import { VPS_CONFIG } from './constants'
 import { DeployData } from './types'
 
 // Deploy queue management
-const deployQueue = new Map<string, Promise<any>>()
+const deployQueue = new Map<string, Promise<unknown>>()
 
 // Background cleanup job
 let cleanupInterval: NodeJS.Timeout | null = null
@@ -40,14 +41,83 @@ export async function POST(request: NextRequest) {
     }
 
     const deployData: DeployData = await request.json()
-    const { projectId, userId, projectName, themeParams } = deployData
+    const { projectId, userId, projectName } = deployData
 
     // Validation
-    if (!projectId || !projectName || !themeParams) {
+    if (!projectId || !projectName) {
       return NextResponse.json(
         { success: false, error: 'Missing required fields' },
         { status: 400 }
       )
+    }
+
+    // Load project data to get latest themeParams
+    const project = await prisma.project.findFirst({
+      where: {
+        id: projectId,
+        userId: session.user.id
+      },
+      select: {
+        id: true,
+        name: true,
+        language: true,
+        theme: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            defaultParams: true
+          }
+        },
+        versions: {
+          orderBy: { versionNumber: 'desc' },
+          take: 1
+        }
+      }
+    })
+
+    if (!project) {
+      return NextResponse.json(
+        { success: false, error: 'Project không tồn tại hoặc bạn không có quyền truy cập' },
+        { status: 404 }
+      )
+    }
+
+    // Get latest themeParams from project
+    let themeParams: unknown
+    const latestVersion = project.versions[0]
+    
+    if (latestVersion && latestVersion.snapshot) {
+      themeParams = latestVersion.snapshot
+    } else if (project.theme.defaultParams) {
+      try {
+        themeParams = typeof project.theme.defaultParams === 'string' 
+          ? JSON.parse(project.theme.defaultParams) 
+          : project.theme.defaultParams
+      } catch {
+        return NextResponse.json(
+          { success: false, error: 'Dữ liệu theme không hợp lệ' },
+          { status: 400 }
+        )
+      }
+    } else {
+      return NextResponse.json(
+        { success: false, error: 'Không tìm thấy dữ liệu theme' },
+        { status: 400 }
+      )
+    }
+
+    // Merge projectLanguage into themeParams
+    const themeWithLanguage = {
+      ...(themeParams as Record<string, unknown>),
+      projectLanguage: project.language || 'vietnamese'
+    }
+
+    // Update deployData with loaded themeParams
+    const updatedDeployData: DeployData = {
+      ...deployData,
+      themeParams: themeWithLanguage,
+      userId: session.user.id
     }
 
     // Check if this deploy is already in progress
@@ -63,7 +133,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Add to queue and start processing
-    const deployPromise = processDeploy(deployData, userId, projectId, startTime)
+    const deployPromise = processDeploy(updatedDeployData, userId, projectId, startTime)
     deployQueue.set(deployKey, deployPromise)
 
     try {

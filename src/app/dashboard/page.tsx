@@ -224,7 +224,7 @@ export default function DashboardPage() {
                         <Edit className="h-4 w-4" />
                       </Link>
                       <Link
-                        href={`/preview/${project.theme.id}`}
+                        href={`/preview/${project.theme.id}?projectId=${project.id}`}
                         className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                         title="Xem trước"
                       >

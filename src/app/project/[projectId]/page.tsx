@@ -772,6 +772,8 @@ const ProjectEditor = () => {
       <ProjectHeader
         projectName={project.name}
         themeName={project.theme.name}
+        projectId={projectId}
+        themeId={project.theme.id}
         isPreviewMode={isPreviewMode}
         isSaving={isSaving}
         canUndo={canUndo}

@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Save, Download, Eye, Wand2, Undo, Redo } from 'lucide-react'
+import { ArrowLeft, Save, Download, Eye, Wand2, Undo, Redo, ExternalLink } from 'lucide-react'
 import { ThemeParams } from '@/types'
 
 interface ProjectHeaderProps {
   projectName: string
   themeName: string
+  projectId: string
+  themeId: string
   isPreviewMode: boolean
   isSaving: boolean
   canUndo: boolean
@@ -22,6 +24,8 @@ interface ProjectHeaderProps {
 const ProjectHeader = ({
   projectName,
   themeName,
+  projectId,
+  themeId,
   isPreviewMode,
   isSaving,
   canUndo,
@@ -91,6 +95,15 @@ const ProjectHeader = ({
           >
             <Eye size={16} className="mr-2" />
             {isPreviewMode ? 'Chỉnh sửa' : 'Xem trước'}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => window.open(`/preview/${themeId}?projectId=${projectId}`, '_blank')}
+            title="Mở preview trong tab mới"
+          >
+            <ExternalLink size={16} className="mr-2" />
+            Preview Tab Mới
           </Button>
           <Button
             variant="outline"

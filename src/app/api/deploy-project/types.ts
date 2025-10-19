@@ -28,7 +28,7 @@ export interface DeployData {
   generateDeployScript: boolean
   serverType: 'nginx' | 'apache' | 'node' | 'docker'
   domain: string
-  themeParams: any
+  themeParams?: any // Made optional since it will be loaded from project
 }
 
 export interface FileManifestItem {
