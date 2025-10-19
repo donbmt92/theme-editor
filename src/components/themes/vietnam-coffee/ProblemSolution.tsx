@@ -90,11 +90,145 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
   const getLocalizedText = () => {
     if (projectLanguage === 'english') {
       return {
-        learnMore: "Learn More About Us"
+        learnMore: "Learn More About Us",
+        defaultAboutTitle: "Solving Real Import-Export Challenges",
+        defaultAboutDescription: "We understand the difficulties of exporting coffee from Vietnam. Here's how we solve them for you.",
+        defaultProblemsTitle: "Common Challenges",
+        defaultSolutionsTitle: "Our Solutions",
+        defaultCtaTitle: "Why Choose Vietnam Coffee Export?",
+        defaultCtaDescription: "We are the only coffee export company that combines Vietnamese agricultural expertise with deep knowledge of the US market, providing comprehensive solutions that eliminate all import difficulties.",
+        stats: {
+          experience: "Years of US Market Experience",
+          orders: "Successful Shipments",
+          delivery: "On-Time Delivery"
+        },
+        defaultProblems: [
+          {
+            id: 'problem-1',
+            icon: 'AlertTriangle',
+            title: "Complex Import Regulations",
+            description: "Complying with FDA requirements and US customs procedures can be challenging for new importers."
+          },
+          {
+            id: 'problem-2',
+            icon: 'Clock',
+            title: "Unstable Supply Chain",
+            description: "Finding high-quality coffee suppliers with on-time delivery is a major challenge."
+          },
+          {
+            id: 'problem-3',
+            icon: 'DollarSign',
+            title: "Hidden Costs and Price Volatility",
+            description: "Unexpected fees and price fluctuations can destroy profit margins."
+          },
+          {
+            id: 'problem-4',
+            icon: 'Shield',
+            title: "Quality Concerns",
+            description: "Ensuring quality standards and product safety in international shipments."
+          }
+        ],
+        defaultSolutions: [
+          {
+            id: 'solution-1',
+            icon: 'CheckCircle',
+            title: "Full Regulatory Compliance",
+            description: "We handle all FDA, USDA and customs documentation to ensure smooth clearance.",
+            benefit: "100% Compliant Delivery"
+          },
+          {
+            id: 'solution-2',
+            icon: 'Truck',
+            title: "Reliable Supply Network",
+            description: "Direct partnerships with premium Vietnamese coffee farms ensure quality and stable supply.",
+            benefit: "Guaranteed On-Time Delivery"
+          },
+          {
+            id: 'solution-3',
+            icon: 'DollarSign',
+            title: "Transparent Pricing",
+            description: "Fixed prices with no hidden fees. You know exactly what you'll pay upfront.",
+            benefit: "Predictable Costs"
+          },
+          {
+            id: 'solution-4',
+            icon: 'Shield',
+            title: "Quality Assurance",
+            description: "Rigorous testing and certification processes ensure only the best coffee beans reach you.",
+            benefit: "High-Quality Products"
+          }
+        ]
       };
     } else {
       return {
-        learnMore: "Tìm hiểu thêm về chúng tôi"
+        learnMore: "Tìm hiểu thêm về chúng tôi",
+        defaultAboutTitle: "Giải Quyết Thách Thức Xuất Nhập Khẩu Thực Tế",
+        defaultAboutDescription: "Chúng tôi hiểu rõ những khó khăn khi xuất khẩu cà phê từ Việt Nam. Đây là cách chúng tôi giải quyết chúng cho bạn.",
+        defaultProblemsTitle: "Thách Thức Thường Gặp",
+        defaultSolutionsTitle: "Giải Pháp Của Chúng Tôi",
+        defaultCtaTitle: "Tại sao chọn Cà Phê Việt Export?",
+        defaultCtaDescription: "Chúng tôi là công ty xuất khẩu cà phê duy nhất kết hợp chuyên môn nông nghiệp Việt Nam với kiến thức sâu rộng về thị trường Mỹ, cung cấp giải pháp toàn diện loại bỏ mọi khó khăn nhập khẩu.",
+        stats: {
+          experience: "Năm kinh nghiệm thị trường Mỹ",
+          orders: "Lô hàng thành công",
+          delivery: "Giao hàng đúng hạn"
+        },
+        defaultProblems: [
+          {
+            id: 'problem-1',
+            icon: 'AlertTriangle',
+            title: "Quy định nhập khẩu phức tạp",
+            description: "Việc tuân thủ các yêu cầu FDA và thủ tục hải quan Mỹ có thể gây khó khăn cho các nhà nhập khẩu mới."
+          },
+          {
+            id: 'problem-2',
+            icon: 'Clock',
+            title: "Chuỗi cung ứng không ổn định",
+            description: "Tìm kiếm nhà cung cấp cà phê chất lượng cao với giao hàng đúng hạn là thách thức lớn."
+          },
+          {
+            id: 'problem-3',
+            icon: 'DollarSign',
+            title: "Chi phí ẩn và biến động giá",
+            description: "Các khoản phí bất ngờ và giá cả biến động có thể phá hủy biên lợi nhuận."
+          },
+          {
+            id: 'problem-4',
+            icon: 'Shield',
+            title: "Lo ngại về chất lượng",
+            description: "Đảm bảo tiêu chuẩn chất lượng và an toàn sản phẩm trong các lô hàng quốc tế."
+          }
+        ],
+        defaultSolutions: [
+          {
+            id: 'solution-1',
+            icon: 'CheckCircle',
+            title: "Tuân thủ quy định đầy đủ",
+            description: "Chúng tôi xử lý tất cả tài liệu FDA, USDA và hải quan để đảm bảo thông quan suôn sẻ.",
+            benefit: "100% Giao hàng tuân thủ"
+          },
+          {
+            id: 'solution-2',
+            icon: 'Truck',
+            title: "Mạng lưới cung ứng đáng tin cậy",
+            description: "Đối tác trực tiếp với các trang trại cà phê Việt Nam cao cấp đảm bảo chất lượng và nguồn cung ổn định.",
+            benefit: "Đảm bảo giao hàng đúng hạn"
+          },
+          {
+            id: 'solution-3',
+            icon: 'DollarSign',
+            title: "Định giá minh bạch",
+            description: "Giá cố định không có phí ẩn. Bạn biết chính xác những gì sẽ phải trả trước.",
+            benefit: "Chi phí dự đoán được"
+          },
+          {
+            id: 'solution-4',
+            icon: 'Shield',
+            title: "Đảm bảo chất lượng",
+            description: "Quy trình kiểm tra và chứng nhận nghiêm ngặt đảm bảo chỉ những hạt cà phê tốt nhất đến tay bạn.",
+            benefit: "Sản phẩm chất lượng cao"
+          }
+        ]
       };
     }
   };
@@ -264,67 +398,9 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
   const solutionsItemDescClasses = cn(sizeToClasses(content.solutions?.itemDescriptionSize, 'text-base md:text-lg'), fontToClasses(content.solutions?.itemDescriptionFont))
   const solutionsBenefitClasses = cn(weightToClasses(content.solutions?.itemBenefitWeight, 'font-medium'), fontToClasses(content.solutions?.itemBenefitFont))
 
-  // Default problems and solutions if not provided
-  const defaultProblems = [
-    {
-      id: 'problem-1',
-      icon: 'AlertTriangle',
-      title: "Quy định nhập khẩu phức tạp",
-      description: "Việc tuân thủ các yêu cầu FDA và thủ tục hải quan Mỹ có thể gây khó khăn cho các nhà nhập khẩu mới."
-    },
-    {
-      id: 'problem-2',
-      icon: 'Clock',
-      title: "Chuỗi cung ứng không ổn định",
-      description: "Tìm kiếm nhà cung cấp cà phê chất lượng cao với giao hàng đúng hạn là thách thức lớn."
-    },
-    {
-      id: 'problem-3',
-      icon: 'DollarSign',
-      title: "Chi phí ẩn và biến động giá",
-      description: "Các khoản phí bất ngờ và giá cả biến động có thể phá hủy biên lợi nhuận."
-    },
-    {
-      id: 'problem-4',
-      icon: 'Shield',
-      title: "Lo ngại về chất lượng",
-      description: "Đảm bảo tiêu chuẩn chất lượng và an toàn sản phẩm trong các lô hàng quốc tế."
-    }
-  ];
 
-  const defaultSolutions = [
-    {
-      id: 'solution-1',
-      icon: 'CheckCircle',
-      title: "Tuân thủ quy định đầy đủ",
-      description: "Chúng tôi xử lý tất cả tài liệu FDA, USDA và hải quan để đảm bảo thông quan suôn sẻ.",
-      benefit: "100% Giao hàng tuân thủ"
-    },
-    {
-      id: 'solution-2',
-      icon: 'Truck',
-      title: "Mạng lưới cung ứng đáng tin cậy",
-      description: "Đối tác trực tiếp với các trang trại cà phê Việt Nam cao cấp đảm bảo chất lượng và nguồn cung ổn định.",
-      benefit: "Đảm bảo giao hàng đúng hạn"
-    },
-    {
-      id: 'solution-3',
-      icon: 'DollarSign',
-      title: "Định giá minh bạch",
-      description: "Giá cố định không có phí ẩn. Bạn biết chính xác những gì sẽ phải trả trước.",
-      benefit: "Chi phí dự đoán được"
-    },
-    {
-      id: 'solution-4',
-      icon: 'Shield',
-      title: "Đảm bảo chất lượng",
-      description: "Quy trình kiểm tra và chứng nhận nghiêm ngặt đảm bảo chỉ những hạt cà phê tốt nhất đến tay bạn.",
-      benefit: "Sản phẩm chất lượng cao"
-    }
-  ];
-
-  const problems = content.problems?.items || defaultProblems;
-  const solutions = content.solutions?.items || defaultSolutions;
+  const problems = content.problems?.items || localizedText.defaultProblems;
+  const solutions = content.solutions?.items || localizedText.defaultSolutions;
 
   return (
     <section 
@@ -352,7 +428,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
               fontWeight: theme.typography?.fontWeight || '700'
             }}
           >
-            {content.about?.title || "Giải Quyết Thách Thức Xuất Nhập Khẩu Thực Tế"}
+            {content.about?.title || localizedText.defaultAboutTitle}
           </h2>
           <p 
             className={cn("max-w-3xl mx-auto", problemsDescClasses)}
@@ -361,7 +437,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
               lineHeight: theme.typography?.lineHeight || '1.6'
             }}
           >
-            {content.about?.description || "Chúng tôi hiểu rõ những khó khăn khi xuất khẩu cà phê từ Việt Nam. Đây là cách chúng tôi giải quyết chúng cho bạn."}
+            {content.about?.description || localizedText.defaultAboutDescription}
           </p>
         </div>
 
@@ -380,7 +456,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {content.problems?.title || "Thách Thức Thường Gặp"}
+                {content.problems?.title || localizedText.defaultProblemsTitle}
               </h3>
             </div>
             <div className="space-y-6">
@@ -445,7 +521,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {content.solutions?.title || "Giải Pháp Của Chúng Tôi"}
+                {content.solutions?.title || localizedText.defaultSolutionsTitle}
               </h3>
             </div>
             <div className="space-y-6">
@@ -529,7 +605,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {content.cta?.title || "Tại sao chọn Cà Phê Việt Export?"}
+                {content.cta?.title || localizedText.defaultCtaTitle}
               </h3>
               <p 
                 className={cn("mb-8 opacity-90", getBodySize())}
@@ -538,7 +614,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   lineHeight: theme.typography?.lineHeight || '1.6'
                 }}
               >
-                {content.cta?.description || "Chúng tôi là công ty xuất khẩu cà phê duy nhất kết hợp chuyên môn nông nghiệp Việt Nam với kiến thức sâu rộng về thị trường Mỹ, cung cấp giải pháp toàn diện loại bỏ mọi khó khăn nhập khẩu."}
+                {content.cta?.description || localizedText.defaultCtaDescription}
               </p>
               <div className="grid md:grid-cols-3 gap-8 mb-8">
                 <div className="text-center">
@@ -558,7 +634,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    Năm kinh nghiệm thị trường Mỹ
+                    {localizedText.stats.experience}
                   </div>
                 </div>
                 <div className="text-center">
@@ -578,7 +654,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    Lô hàng thành công
+                    {localizedText.stats.orders}
                   </div>
                 </div>
                 <div className="text-center">
@@ -598,7 +674,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    Giao hàng đúng hạn
+                    {localizedText.stats.delivery}
                   </div>
                 </div>
               </div>

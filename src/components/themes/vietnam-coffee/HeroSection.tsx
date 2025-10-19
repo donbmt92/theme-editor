@@ -70,11 +70,49 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
   const getLocalizedText = () => {
     if (projectLanguage === 'english') {
       return {
-        learnMore: "Learn More"
+        learnMore: "Learn More",
+        benefits: [
+          { icon: "✅", text: "High Quality" },
+          { icon: "💰", text: "Competitive Price" },
+          { icon: "🚚", text: "On-time Delivery" },
+          { icon: "📞", text: "24/7 Support" },
+        ],
+        defaultTitle: "Vietnamese Coffee",
+        defaultSubtitle: "International Quality",
+        defaultDescription: "We specialize in providing high-quality Vietnamese coffee for international markets, ensuring distinctive flavor and export standards.",
+        guideText: "Complete Import-Export Guide",
+        stats: {
+          orders: "Successful Orders",
+          experience: "Years Experience", 
+          partners: "US Partners"
+        },
+        trust: {
+          quality: "100% Quality",
+          certified: "FDA & HACCP Certified"
+        }
       };
     } else {
       return {
-        learnMore: "Tìm hiểu thêm"
+        learnMore: "Tìm hiểu thêm",
+        benefits: [
+          { icon: "✅", text: "Chất lượng cao" },
+          { icon: "💰", text: "Giá cạnh tranh" },
+          { icon: "🚚", text: "Giao hàng đúng hạn" },
+          { icon: "📞", text: "Hỗ trợ 24/7" },
+        ],
+        defaultTitle: "Cà Phê Việt Nam",
+        defaultSubtitle: "Chất Lượng Quốc Tế", 
+        defaultDescription: "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
+        guideText: "Hướng dẫn XNK từ A-Z",
+        stats: {
+          orders: "Đơn hàng thành công",
+          experience: "Năm kinh nghiệm",
+          partners: "Đối tác Mỹ"
+        },
+        trust: {
+          quality: "100% Chất lượng",
+          certified: "FDA & HACCP Certified"
+        }
       };
     }
   };
@@ -705,13 +743,8 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
     }
   };
 
-  // Get benefits from content or use default
-  const benefits = content.benefits || [
-    { icon: "✅", text: "Chất lượng cao" },
-    { icon: "💰", text: "Giá cạnh tranh" },
-    { icon: "🚚", text: "Giao hàng đúng hạn" },
-    { icon: "📞", text: "Hỗ trợ 24/7" },
-  ];
+  // Get benefits from content or use localized default
+  const benefits = content.benefits || localizedText.benefits;
 
   return (
     <section
@@ -739,7 +772,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                   lineHeight: theme.typography?.lineHeight || '1.2'
                 }}
               >
-                {content.title || "Cà Phê Việt Nam"}
+                {content.title || localizedText.defaultTitle}
                 <span
                   className={cn("block text-transparent bg-clip-text", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
                   style={{
@@ -748,7 +781,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                       : `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.primary})`,
                   }}
                 >
-                  {content.subtitle || "Chất Lượng Quốc Tế"}
+                  {content.subtitle || localizedText.defaultSubtitle}
                 </span>
               </h1>
 
@@ -761,8 +794,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                   lineHeight: theme.typography?.lineHeight || "1.6",
                 }}
               >
-                {content.description ||
-                  "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu."}
+                {content.description || localizedText.defaultDescription}
               </p>
             </div>
 
@@ -824,7 +856,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                 }}
               >
                 <Download size={20} className="mr-2" />
-                Hướng dẫn XNK từ A-Z
+                {localizedText.guideText}
               </Button>
             </div>
 
@@ -845,7 +877,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                     ? `${content.textColor}CC` 
                     : `${theme.colors.text || "#000000"}CC` }}
                 >
-                  Đơn hàng thành công
+                  {localizedText.stats.orders}
                 </div>
               </div>
               <div className="text-center">
@@ -863,7 +895,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                     ? `${content.textColor}CC` 
                     : `${theme.colors.text || "#000000"}CC` }}
                 >
-                  Năm kinh nghiệm
+                  {localizedText.stats.experience}
                 </div>
               </div>
               <div className="text-center">
@@ -881,7 +913,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                     ? `${content.textColor}CC` 
                     : `${theme.colors.text || "#000000"}CC` }}
                 >
-                  Đối tác Mỹ
+                  {localizedText.stats.partners}
                 </div>
               </div>
             </div>
@@ -955,7 +987,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                       ? content.textColor 
                       : theme.colors.text }}
                   >
-                    100% Chất lượng
+                    {localizedText.trust.quality}
                   </div>
                   <div
                     className="text-sm"
@@ -965,7 +997,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                         : `${theme.colors.text}CC`,
                     }}
                   >
-                    FDA & HACCP Certified
+                    {localizedText.trust.certified}
                   </div>
                 </div>
               </div>

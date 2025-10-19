@@ -75,7 +75,8 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
         secureText: "100% Secure",
         noSpamText: "No Spam", 
         instantText: "Instant Download",
-        privacyText: "By downloading, you agree to receive occasional emails about coffee export opportunities. Unsubscribe anytime."
+        privacyText: "By downloading, you agree to receive occasional emails about coffee export opportunities. Unsubscribe anytime.",
+        badgeText: "Free Guide",
       };
     } else {
       return {
@@ -88,7 +89,8 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
         secureText: "100% An toàn",
         noSpamText: "Không spam",
         instantText: "Tải về ngay",
-        privacyText: "Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu cà phê. Hủy đăng ký bất cứ lúc nào."
+        privacyText: "Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu cà phê. Hủy đăng ký bất cứ lúc nào.",
+        badgeText: "Hướng dẫn miễn phí",
       };
     }
   };
@@ -427,7 +429,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
               }}
             >
               <Download className="h-4 w-4 mr-2" />
-              <span className="font-medium">{content.badgeText || "Tài nguyên miễn phí"}</span>
+              <span className="font-medium">{content.badgeText || localizedText.badgeText}</span>
             </div>
             <h2 
               className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
