@@ -44,6 +44,153 @@ interface WhyChooseUsContent {
  * Generate static Why Choose Us section HTML
  */
 export function generateStaticWhyChooseUsSection({ content, themeParams }: WhyChooseUsParams): string {
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        title: "Why Choose VietCoffee Export?",
+        subtitle: "We combine Vietnamese agricultural heritage with modern export expertise to deliver exceptional value to US partners.",
+        strengths: [
+          {
+            icon: 'Users',
+            title: 'Expert Team',
+            description: '15+ years combined experience in Vietnamese coffee export and US import regulations.',
+            highlight: 'Bilingual team fluent in Vietnamese and English'
+          },
+          {
+            icon: 'Award',
+            title: 'Quality Commitment',
+            description: 'Strict quality control process ensures only premium Grade A coffee reaches customers.',
+            highlight: 'ISO 22000 & HACCP certified facilities'
+          },
+          {
+            icon: 'Globe',
+            title: 'Global Network',
+            description: 'Strategic partnerships with leading Vietnamese farms and US logistics providers.',
+            highlight: 'Direct relationships with 5 provinces'
+          },
+          {
+            icon: 'TrendingUp',
+            title: 'Market Intelligence',
+            description: 'Deep understanding of Vietnamese supply and US demand to optimize pricing and strategy.',
+            highlight: 'Weekly market reports & trend analysis'
+          },
+          {
+            icon: 'Shield',
+            title: 'Risk Management',
+            description: 'Comprehensive insurance and contingency plans to protect your investment.',
+            highlight: '100% cargo insurance included'
+          },
+          {
+            icon: 'Clock',
+            title: 'Reliable Delivery',
+            description: 'Track record of on-time delivery with full tracking and updates.',
+            highlight: '99.8% on-time delivery rate'
+          }
+        ],
+        mission: {
+          title: 'Our Mission',
+          description: 'Connecting Vietnamese coffee excellence with US market demand, creating lasting partnerships that benefit farmers, importers, and consumers.',
+          values: [
+            'Transparency in all transactions',
+            'Sustainable farming practices',
+            'Customer success focus',
+            'Continuous improvement'
+          ]
+        },
+        vision: {
+          title: 'Our Vision',
+          description: 'To become the leading Vietnamese coffee export company in the US market, known for exceptional quality, reliable service, and innovative solutions.',
+          goals: [
+            'Expand to 100+ US partners by 2025',
+            'Support 1,000+ Vietnamese farmers',
+            'Achieve carbon-neutral shipping',
+            'Launch direct-to-consumer platform'
+          ]
+        },
+        cta: {
+          title: 'Ready to Start Your Coffee Import Journey?',
+          description: 'Join 50+ successful US importers who trust us for their Vietnamese coffee needs. Start with a free consultation today.',
+          buttonText: 'Schedule Free Consultation',
+          secondaryButtonText: 'Download Company Profile'
+        }
+      };
+    } else {
+      return {
+        title: "Tại Sao Chọn VietCoffee Export?",
+        subtitle: "Chúng tôi kết hợp di sản nông nghiệp Việt Nam với chuyên môn xuất khẩu hiện đại để mang lại giá trị vượt trội cho đối tác Mỹ.",
+        strengths: [
+          {
+            icon: 'Users',
+            title: 'Đội Ngũ Chuyên Gia',
+            description: '15+ năm kinh nghiệm kết hợp trong xuất khẩu cà phê Việt Nam và quy định nhập khẩu Mỹ.',
+            highlight: 'Đội ngũ song ngữ thông thạo tiếng Việt và tiếng Anh'
+          },
+          {
+            icon: 'Award',
+            title: 'Cam Kết Chất Lượng',
+            description: 'Quy trình kiểm soát chất lượng nghiêm ngặt đảm bảo chỉ cà phê loại A cao cấp đến tay khách hàng.',
+            highlight: 'Cơ sở được chứng nhận ISO 22000 & HACCP'
+          },
+          {
+            icon: 'Globe',
+            title: 'Mạng Lưới Toàn Cầu',
+            description: 'Đối tác chiến lược với các trang trại hàng đầu Việt Nam và nhà cung cấp logistics Mỹ.',
+            highlight: 'Quan hệ trực tiếp với 5 tỉnh thành'
+          },
+          {
+            icon: 'TrendingUp',
+            title: 'Thông Tin Thị Trường',
+            description: 'Hiểu sâu về cung cầu Việt Nam và Mỹ để tối ưu hóa giá cả và chiến lược.',
+            highlight: 'Báo cáo thị trường hàng tuần & phân tích xu hướng'
+          },
+          {
+            icon: 'Shield',
+            title: 'Quản Lý Rủi Ro',
+            description: 'Bảo hiểm toàn diện và kế hoạch dự phòng để bảo vệ đầu tư của bạn.',
+            highlight: 'Bảo hiểm 100% hàng hóa bao gồm'
+          },
+          {
+            icon: 'Clock',
+            title: 'Giao Hàng Đáng Tin Cậy',
+            description: 'Thành tích giao hàng đúng hạn với theo dõi và cập nhật đầy đủ.',
+            highlight: 'Tỷ lệ giao hàng đúng hạn 99.8%'
+          }
+        ],
+        mission: {
+          title: 'Sứ Mệnh Của Chúng Tôi',
+          description: 'Kết nối sự xuất sắc của cà phê Việt Nam với nhu cầu thị trường Mỹ, tạo ra những mối quan hệ đối tác lâu dài mang lại lợi ích cho nông dân, nhà nhập khẩu và người tiêu dùng.',
+          values: [
+            'Minh bạch trong mọi giao dịch',
+            'Thực hành canh tác bền vững',
+            'Tập trung vào thành công khách hàng',
+            'Cải tiến liên tục'
+          ]
+        },
+        vision: {
+          title: 'Tầm Nhìn Của Chúng Tôi',
+          description: 'Trở thành công ty xuất khẩu cà phê Việt Nam hàng đầu tại thị trường Mỹ, được biết đến với chất lượng xuất sắc, dịch vụ đáng tin cậy và giải pháp sáng tạo.',
+          goals: [
+            'Mở rộng đến 100+ đối tác Mỹ vào năm 2025',
+            'Hỗ trợ 1,000+ nông dân Việt Nam',
+            'Đạt được vận chuyển carbon-neutral',
+            'Ra mắt nền tảng trực tiếp đến người tiêu dùng'
+          ]
+        },
+        cta: {
+          title: 'Sẵn Sàng Bắt Đầu Hành Trình Nhập Khẩu Cà Phê?',
+          description: 'Tham gia cùng 50+ nhà nhập khẩu Mỹ thành công tin tưởng chúng tôi cho nhu cầu cà phê Việt Nam. Bắt đầu với tư vấn miễn phí ngay hôm nay.',
+          buttonText: 'Đặt Lịch Tư Vấn Miễn Phí',
+          secondaryButtonText: 'Tải Hồ Sơ Công Ty'
+        }
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
   const getTypographyStyles = () => {
     return {
       fontFamily: themeParams?.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -141,80 +288,11 @@ export function generateStaticWhyChooseUsSection({ content, themeParams }: WhyCh
 
   const accentColor = themeParams?.colors?.accent || '#CD853F'
 
-  // Default data with highlights
-  const defaultStrengths = [
-    {
-      icon: 'Users',
-      title: 'Đội Ngũ Chuyên Gia',
-      description: '15+ năm kinh nghiệm kết hợp trong xuất khẩu cà phê Việt Nam và quy định nhập khẩu Mỹ.',
-      highlight: 'Đội ngũ song ngữ thông thạo tiếng Việt và tiếng Anh'
-    },
-    {
-      icon: 'Award',
-      title: 'Cam Kết Chất Lượng',
-      description: 'Quy trình kiểm soát chất lượng nghiêm ngặt đảm bảo chỉ cà phê loại A cao cấp đến tay khách hàng.',
-      highlight: 'Cơ sở được chứng nhận ISO 22000 & HACCP'
-    },
-    {
-      icon: 'Globe',
-      title: 'Mạng Lưới Toàn Cầu',
-      description: 'Đối tác chiến lược với các trang trại hàng đầu Việt Nam và nhà cung cấp logistics Mỹ.',
-      highlight: 'Quan hệ trực tiếp với 5 tỉnh thành'
-    },
-    {
-      icon: 'TrendingUp',
-      title: 'Thông Tin Thị Trường',
-      description: 'Hiểu sâu về cung cầu Việt Nam và Mỹ để tối ưu hóa giá cả và chiến lược.',
-      highlight: 'Báo cáo thị trường hàng tuần & phân tích xu hướng'
-    },
-    {
-      icon: 'Shield',
-      title: 'Quản Lý Rủi Ro',
-      description: 'Bảo hiểm toàn diện và kế hoạch dự phòng để bảo vệ đầu tư của bạn.',
-      highlight: 'Bảo hiểm 100% hàng hóa bao gồm'
-    },
-    {
-      icon: 'Clock',
-      title: 'Giao Hàng Đáng Tin Cậy',
-      description: 'Thành tích giao hàng đúng hạn với theo dõi và cập nhật đầy đủ.',
-      highlight: 'Tỷ lệ giao hàng đúng hạn 99.8%'
-    }
-  ]
-
-  const defaultMission = {
-    title: 'Sứ Mệnh Của Chúng Tôi',
-    description: 'Kết nối sự xuất sắc của cà phê Việt Nam với nhu cầu thị trường Mỹ, tạo ra những mối quan hệ đối tác lâu dài mang lại lợi ích cho nông dân, nhà nhập khẩu và người tiêu dùng.',
-    values: [
-      'Minh bạch trong mọi giao dịch',
-      'Thực hành canh tác bền vững',
-      'Tập trung vào thành công khách hàng',
-      'Cải tiến liên tục'
-    ]
-  }
-
-  const defaultVision = {
-    title: 'Tầm Nhìn Của Chúng Tôi',
-    description: 'Trở thành công ty xuất khẩu cà phê Việt Nam hàng đầu tại thị trường Mỹ, được biết đến với chất lượng xuất sắc, dịch vụ đáng tin cậy và giải pháp sáng tạo.',
-    goals: [
-      'Mở rộng đến 100+ đối tác Mỹ vào năm 2025',
-      'Hỗ trợ 1,000+ nông dân Việt Nam',
-      'Đạt được vận chuyển carbon-neutral',
-      'Ra mắt nền tảng trực tiếp đến người tiêu dùng'
-    ]
-  }
-
-  const defaultCta = {
-    title: 'Sẵn Sàng Bắt Đầu Hành Trình Nhập Khẩu Cà Phê?',
-    description: 'Tham gia cùng 50+ nhà nhập khẩu Mỹ thành công tin tưởng chúng tôi cho nhu cầu cà phê Việt Nam. Bắt đầu với tư vấn miễn phí ngay hôm nay.',
-    buttonText: 'Đặt Lịch Tư Vấn Miễn Phí',
-    secondaryButtonText: 'Tải Hồ Sơ Công Ty'
-  }
-
-  // Use content or defaults
-  const strengths = whyChooseUsContent?.strengths || defaultStrengths
-  const mission = whyChooseUsContent?.mission || defaultMission
-  const vision = whyChooseUsContent?.vision || defaultVision
-  const cta = whyChooseUsContent?.cta || defaultCta
+  // Use content or localized defaults
+  const strengths = whyChooseUsContent?.strengths || localizedText.strengths
+  const mission = whyChooseUsContent?.mission || localizedText.mission
+  const vision = whyChooseUsContent?.vision || localizedText.vision
+  const cta = whyChooseUsContent?.cta || localizedText.cta
 
   return `<section id="why-choose-us" style="
     background-color: ${bgColor};
@@ -241,7 +319,7 @@ export function generateStaticWhyChooseUsSection({ content, themeParams }: WhyCh
           font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
           margin-bottom: 1rem;
         ">
-          ${whyChooseUsContent?.title || "Tại Sao Chọn VietCoffee Export?"}
+          ${whyChooseUsContent?.title || localizedText.title}
         </h2>
         <p style="
           color: ${textColor}CC;
@@ -254,7 +332,7 @@ export function generateStaticWhyChooseUsSection({ content, themeParams }: WhyCh
           margin: 0 auto;
           opacity: 0.8;
         ">
-          ${whyChooseUsContent?.subtitle || "Chúng tôi kết hợp di sản nông nghiệp Việt Nam với chuyên môn xuất khẩu hiện đại để mang lại giá trị vượt trội cho đối tác Mỹ."}
+          ${whyChooseUsContent?.subtitle || localizedText.subtitle}
         </p>
       </div>
 
@@ -391,7 +469,7 @@ export function generateStaticWhyChooseUsSection({ content, themeParams }: WhyCh
               font-weight: ${getFontWeight('subtitleWeight', themeParams?.typography?.fontWeight || '600')};
               color: ${textColor};
               margin-bottom: 1rem;
-            ">Giá Trị Cốt Lõi:</h4>
+            ">${projectLanguage === 'english' ? 'Core Values:' : 'Giá Trị Cốt Lõi:'}</h4>
             <ul style="
               list-style: none;
               padding: 0;
@@ -462,7 +540,7 @@ export function generateStaticWhyChooseUsSection({ content, themeParams }: WhyCh
               font-weight: ${getFontWeight('subtitleWeight', themeParams?.typography?.fontWeight || '600')};
               color: ${textColor};
               margin-bottom: 1rem;
-            ">Mục Tiêu 2025:</h4>
+            ">${projectLanguage === 'english' ? '2025 Goals:' : 'Mục Tiêu 2025:'}</h4>
             <ul style="
               list-style: none;
               padding: 0;

@@ -2,7 +2,7 @@ import { LeadMagnetParams } from '../../types'
 import { renderLucideIcon } from '../icons'
 
 interface LeadMagnetContent {
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined | Array<string> | object
   title?: string
   subtitle?: string
   description?: string
@@ -38,6 +38,109 @@ interface LeadMagnetContent {
  * Generate static Lead Magnet section HTML
  */
 export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMagnetParams): string {
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        title: "Unlock Import-Export Success",
+        description: "Download comprehensive guide 'Vietnamese Coffee Export Handbook 2024' - everything you need to know about successful coffee export to the US market.",
+        badgeText: "Free Resource",
+        guideTitle: "Complete Export Guide",
+        guideSubtitle: "2024 Edition - 45 pages",
+        formTitle: "Download Free Guide",
+        formDescription: "Enter your information below to get instant access to this valuable resource.",
+        buttonText: "Download Free Guide Now",
+        features: [
+          {
+            icon: "FileText",
+            title: "Complete Document List",
+            description: "All forms, certifications and documents needed for FDA compliance"
+          },
+          {
+            icon: "TrendingUp",
+            title: "Market Analysis & Price Trends",
+            description: "Current US coffee market data and 2024 pricing information"
+          },
+          {
+            icon: "Shield",
+            title: "Quality Standards & Testing",
+            description: "Detailed requirements for US import quality standards"
+          },
+          {
+            icon: "CheckCircle",
+            title: "Step-by-step Import Process",
+            description: "Clear timeline from order to warehouse delivery"
+          }
+        ],
+        trustIndicators: [
+          { number: "5,000+", label: "Downloads" },
+          { number: "92%", label: "Success Rate" },
+          { number: "4.9/5", label: "User Rating" }
+        ],
+        privacyText: "By downloading, you agree to receive occasional emails about export opportunities. Unsubscribe anytime.",
+        secureText: "100% Secure",
+        noSpamText: "No spam",
+        instantText: "Instant download",
+        formPlaceholders: {
+          name: "Full Name *",
+          email: "Business Email *",
+          company: "Company Name (Optional)"
+        }
+      };
+    } else {
+      return {
+        title: "Mở khóa thành công xuất nhập khẩu",
+        description: "Tải về hướng dẫn toàn diện \"Cẩm nang xuất khẩu cà phê Việt Nam 2024\" - tất cả những gì bạn cần biết để thành công vào thị trường Mỹ.",
+        badgeText: "Tài nguyên miễn phí",
+        guideTitle: "Hướng dẫn xuất khẩu đầy đủ",
+        guideSubtitle: "Phiên bản 2024 - 45 trang",
+        formTitle: "Tải về hướng dẫn miễn phí",
+        formDescription: "Nhập thông tin bên dưới để nhận tài liệu ngay.",
+        buttonText: "Tải về hướng dẫn miễn phí ngay",
+        features: [
+          {
+            icon: "FileText",
+            title: "Danh sách tài liệu đầy đủ",
+            description: "Biểu mẫu, chứng nhận và tài liệu cần thiết"
+          },
+          {
+            icon: "TrendingUp",
+            title: "Phân tích thị trường",
+            description: "Dữ liệu và xu hướng giá mới nhất"
+          },
+          {
+            icon: "Shield",
+            title: "Tiêu chuẩn chất lượng",
+            description: "Yêu cầu chi tiết cho thị trường Mỹ"
+          },
+          {
+            icon: "CheckCircle",
+            title: "Quy trình từng bước",
+            description: "Từ đặt hàng đến giao hàng tại kho"
+          }
+        ],
+        trustIndicators: [
+          { number: "5,000+", label: "Lượt tải" },
+          { number: "92%", label: "Tỷ lệ thành công" },
+          { number: "4.9/5", label: "Đánh giá người dùng" }
+        ],
+        privacyText: "Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu. Hủy đăng ký bất cứ lúc nào.",
+        secureText: "100% An toàn",
+        noSpamText: "Không spam",
+        instantText: "Tải về ngay",
+        formPlaceholders: {
+          name: "Họ và tên *",
+          email: "Email doanh nghiệp *",
+          company: "Tên công ty (Tùy chọn)"
+        }
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
   const getTypographyStyles = () => {
     return {
       fontFamily:
@@ -85,20 +188,11 @@ export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMa
 
   const features = (c.guideFeatures && Array.isArray(c.guideFeatures) && c.guideFeatures.length > 0)
     ? c.guideFeatures
-    : [
-        { icon: 'FileText', title: 'Danh sách tài liệu đầy đủ', description: 'Biểu mẫu, chứng nhận và tài liệu cần thiết' },
-        { icon: 'TrendingUp', title: 'Phân tích thị trường', description: 'Dữ liệu và xu hướng giá mới nhất' },
-        { icon: 'Shield', title: 'Tiêu chuẩn chất lượng', description: 'Yêu cầu chi tiết cho thị trường Mỹ' },
-        { icon: 'CheckCircle', title: 'Quy trình từng bước', description: 'Từ đặt hàng đến giao hàng tại kho' },
-      ]
+    : localizedText.features
 
   const indicators = (c.trustIndicators && Array.isArray(c.trustIndicators) && c.trustIndicators.length > 0)
     ? c.trustIndicators
-    : [
-        { number: '5,000+', label: 'Lượt tải' },
-        { number: '92%', label: 'Tỷ lệ thành công' },
-        { number: '4.9/5', label: 'Đánh giá người dùng' },
-      ]
+    : localizedText.trustIndicators
 
   return `<section id="guide" style="
     padding: 5rem 0;
@@ -116,18 +210,18 @@ export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMa
             background-color: ${primary}10; color: ${primary}; margin-bottom: 0.75rem; font-weight: 600;
           ">
             <span style="font-size: 1rem; margin-right: 0.5rem;">${renderLucideIcon('Download', 16, primary)}</span>
-            ${c.badgeText || 'Tài nguyên miễn phí'}
+            ${c.badgeText || localizedText.badgeText}
           </div>
           <h2 style="
             color: ${textColor}; margin: 0 0 0.75rem 0;
             font-weight: 700; font-size: ${themeParams?.typography?.headingSize === '2xl' ? '2.5rem' : themeParams?.typography?.headingSize === 'xl' ? '2.25rem' : '2rem'};
           ">
-            ${c.title || 'Mở khóa thành công xuất nhập khẩu'}
+            ${c.title || localizedText.title}
           </h2>
           <p style="
             color: ${textColor}CC; margin: 0 auto; max-width: 800px;
           ">
-            ${c.description || 'Tải về hướng dẫn toàn diện "Cẩm nang xuất khẩu cà phê Việt Nam 2024" - tất cả những gì bạn cần biết để thành công vào thị trường Mỹ.'}
+            ${c.description || localizedText.description}
           </p>
         </div>
 
@@ -145,8 +239,8 @@ export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMa
                   ${renderLucideIcon('BookOpen', 28, '#FFFFFF')}
                 </div>
                 <div>
-                  <h3 style="color: ${textColor}; margin: 0 0 0.25rem 0; font-weight: 700;">${c.guideTitle || 'Hướng dẫn xuất khẩu đầy đủ'}</h3>
-                  <p style="color: ${textColor}CC; margin: 0;">${c.guideSubtitle || 'Phiên bản 2024 - 45 trang'}</p>
+                  <h3 style="color: ${textColor}; margin: 0 0 0.25rem 0; font-weight: 700;">${c.guideTitle || localizedText.guideTitle}</h3>
+                  <p style="color: ${textColor}CC; margin: 0;">${c.guideSubtitle || localizedText.guideSubtitle}</p>
                 </div>
               </div>
 
@@ -183,28 +277,28 @@ export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMa
           ">
             <div style="padding: 2rem;">
               <div style="text-align: center; margin-bottom: 1rem;">
-                <h3 style="color: ${textColor}; margin: 0 0 0.25rem 0; font-weight: 700;">${c.formTitle || 'Tải về hướng dẫn miễn phí'}</h3>
-                <p style="color: ${textColor}CC; margin: 0;">${c.formDescription || 'Nhập thông tin bên dưới để nhận tài liệu ngay.'}</p>
+                <h3 style="color: ${textColor}; margin: 0 0 0.25rem 0; font-weight: 700;">${c.formTitle || localizedText.formTitle}</h3>
+                <p style="color: ${textColor}CC; margin: 0;">${c.formDescription || localizedText.formDescription}</p>
               </div>
 
               <div style="display: grid; grid-template-columns: 1fr; gap: 0.75rem;">
-                <input placeholder="Họ và tên *" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
-                <input placeholder="Email doanh nghiệp *" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
-                <input placeholder="Tên công ty (Tùy chọn)" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
+                <input placeholder="${localizedText.formPlaceholders.name}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
+                <input placeholder="${localizedText.formPlaceholders.email}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
+                <input placeholder="${localizedText.formPlaceholders.company}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
                 <button style="
                   background: linear-gradient(135deg, ${primary}, ${accent}); color: #FFFFFF; border: none; padding: 0.875rem 1.25rem; border-radius: ${themeParams?.components?.button?.rounded ? '9999px' : radius};
                   font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-                " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"><span style="margin-right: 0.5rem; vertical-align: middle;">${renderLucideIcon('Download', 18, '#FFFFFF')}</span>${c.buttonText || 'Tải về hướng dẫn miễn phí ngay'}</button>
+                " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"><span style="margin-right: 0.5rem; vertical-align: middle;">${renderLucideIcon('Download', 18, '#FFFFFF')}</span>${c.buttonText || localizedText.buttonText}</button>
                 <p style="color: ${textColor}99; font-size: 0.8rem; text-align: center; margin: 0.5rem 0 0 0;">
-                  ${c.privacyText || 'Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu. Hủy đăng ký bất cứ lúc nào.'}
+                  ${c.privacyText || localizedText.privacyText}
                 </p>
               </div>
 
               <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid ${themeParams?.colors?.border || '#E2E8F0'};">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 1.25rem; color: ${textColor}B3; font-size: 0.9rem;">
-                  <span style="display: inline-flex; align-items: center; gap: 0.25rem;">${renderLucideIcon('Shield', 16, textColor)} ${c.secureText || '100% An toàn'}</span>
-                  <span style="display: inline-flex; align-items: center; gap: 0.25rem;">${renderLucideIcon('CheckCircle', 16, textColor)} ${c.noSpamText || 'Không spam'}</span>
-                  <span style="display: inline-flex; align-items: center; gap: 0.25rem;">${renderLucideIcon('Download', 16, textColor)} ${c.instantText || 'Tải về ngay'}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 0.25rem;">${renderLucideIcon('Shield', 16, textColor)} ${c.secureText || localizedText.secureText}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 0.25rem;">${renderLucideIcon('CheckCircle', 16, textColor)} ${c.noSpamText || localizedText.noSpamText}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 0.25rem;">${renderLucideIcon('Download', 16, textColor)} ${c.instantText || localizedText.instantText}</span>
                 </div>
               </div>
             </div>

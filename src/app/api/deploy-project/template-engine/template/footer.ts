@@ -1,10 +1,106 @@
 import { ThemeParams } from '../../types'
-import { DEFAULT_CONTENT } from '../../constants'
 
 /**
  * Generate static footer HTML
  */
 export function generateStaticFooter(themeParams: ThemeParams): string {
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        companyName: "Viet Coffee",
+        companySubtitle: "Premium Export Partner",
+        description: "Specialized in providing high-quality coffee for international markets with commitment to quality and sustainability",
+        quickLinks: {
+          title: "Quick Links",
+          links: [
+            { name: "Home", href: "#" },
+            { name: "About Us", href: "#about" },
+            { name: "Products", href: "#products" },
+            { name: "Services", href: "#services" },
+            { name: "Contact", href: "#contact" }
+          ]
+        },
+        services: {
+          title: "Main Services",
+          items: [
+            { icon: "☕", name: "Coffee Export" },
+            { icon: "🚚", name: "Logistics & Shipping" },
+            { icon: "📋", name: "Documentation Support" },
+            { icon: "👥", name: "Training & Development" },
+            { icon: "💡", name: "Strategic Consulting" }
+          ]
+        },
+        contact: {
+          title: "Contact Information",
+          address: "Ho Chi Minh City, Vietnam",
+          phone: "+84 28 1234 5678",
+          email: "info@caphevn.com",
+          hours: "Mon - Fri: 8:00 - 18:00"
+        },
+        newsletter: {
+          title: "Subscribe to Newsletter",
+          placeholder: "Your email"
+        },
+        copyright: "© 2024 Viet Coffee. All rights reserved.",
+        legal: [
+          { name: "Privacy Policy", href: "#" },
+          { name: "Terms of Service", href: "#" },
+          { name: "Sitemap", href: "#" }
+        ],
+        footer: "Developed with ❤️ in Vietnam | Theme Editor v2.0"
+      };
+    } else {
+      return {
+        companyName: "Cà Phê Việt",
+        companySubtitle: "Đối tác xuất khẩu cao cấp",
+        description: "Chuyên gia xuất khẩu cà phê Việt Nam chất lượng cao, đồng hành cùng doanh nghiệp chinh phục thị trường quốc tế.",
+        quickLinks: {
+          title: "Liên kết nhanh",
+          links: [
+            { name: "Trang chủ", href: "#" },
+            { name: "Về chúng tôi", href: "#about" },
+            { name: "Dịch vụ", href: "#products" },
+            { name: "Khách hàng", href: "#testimonials" },
+            { name: "Liên hệ", href: "#contact" }
+          ]
+        },
+        services: {
+          title: "Dịch vụ chính",
+          items: [
+            { icon: "☕", name: "Xuất khẩu cà phê" },
+            { icon: "🚚", name: "Logistics & Vận chuyển" },
+            { icon: "📋", name: "Tư vấn thủ tục" },
+            { icon: "👥", name: "Đào tạo & Phát triển" },
+            { icon: "💡", name: "Tư vấn chiến lược" }
+          ]
+        },
+        contact: {
+          title: "Thông tin liên hệ",
+          address: "TP. Hồ Chí Minh, Việt Nam",
+          phone: "+84 28 1234 5678",
+          email: "info@caphevn.com",
+          hours: "Thứ 2 - Thứ 6: 8:00 - 18:00"
+        },
+        newsletter: {
+          title: "Đăng ký nhận tin",
+          placeholder: "Email của bạn"
+        },
+        copyright: "© 2024 Cà Phê Việt. Tất cả quyền được bảo lưu.",
+        legal: [
+          { name: "Chính sách bảo mật", href: "#" },
+          { name: "Điều khoản sử dụng", href: "#" },
+          { name: "Sitemap", href: "#" }
+        ],
+        footer: "Được phát triển với ❤️ tại Việt Nam | Theme Editor v2.0"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
   const getTypographyStyles = () => {
     return {
       fontFamily: themeParams?.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -94,12 +190,12 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
                            themeParams?.typography?.headingSize === 'xl' ? '1.25rem' : '1.125rem'};
                 font-weight: ${themeParams?.typography?.fontWeight || '700'};
                 margin: 0;
-              ">${DEFAULT_CONTENT.COMPANY_NAME}</h3>
+              ">${localizedText.companyName}</h3>
               <p style="
                 color: rgba(255,255,255,0.8);
                 font-size: 0.875rem;
                 margin: 0;
-              ">${DEFAULT_CONTENT.COMPANY_SUBTITLE}</p>
+              ">${localizedText.companySubtitle}</p>
             </div>
           </div>
           
@@ -110,7 +206,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             margin-bottom: 1.5rem;
             max-width: 300px;
           ">
-            Chuyên gia xuất khẩu cà phê Việt Nam chất lượng cao, đồng hành cùng doanh nghiệp chinh phục thị trường quốc tế.
+            ${localizedText.description}
           </p>
           
           <!-- Social Links -->
@@ -187,15 +283,16 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             margin-bottom: 1.5rem;
             border-bottom: 2px solid rgba(255,255,255,0.3);
             padding-bottom: 0.5rem;
-          ">Liên kết nhanh</h4>
+          ">${localizedText.quickLinks.title}</h4>
           
           <ul style="
             list-style: none;
             padding: 0;
             margin: 0;
           ">
+            ${localizedText.quickLinks.links.map(link => `
             <li style="margin-bottom: 0.75rem;">
-              <a href="#" style="
+              <a href="${link.href}" style="
                 color: rgba(255,255,255,0.9);
                 text-decoration: none;
                 transition: all 0.3s ease;
@@ -203,57 +300,10 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
                 align-items: center;
                 gap: 0.5rem;
               " onmouseover="this.style.color='white'; this.style.transform='translateX(5px)'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.transform='translateX(0)'">
-                <span>→</span> Trang chủ
+                <span>→</span> ${link.name}
               </a>
             </li>
-            <li style="margin-bottom: 0.75rem;">
-              <a href="#about" style="
-                color: rgba(255,255,255,0.9);
-                text-decoration: none;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-              " onmouseover="this.style.color='white'; this.style.transform='translateX(5px)'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.transform='translateX(0)'">
-                <span>→</span> Về chúng tôi
-              </a>
-            </li>
-            <li style="margin-bottom: 0.75rem;">
-              <a href="#products" style="
-                color: rgba(255,255,255,0.9);
-                text-decoration: none;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-              " onmouseover="this.style.color='white'; this.style.transform='translateX(5px)'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.transform='translateX(0)'">
-                <span>→</span> Dịch vụ
-              </a>
-            </li>
-            <li style="margin-bottom: 0.75rem;">
-              <a href="#testimonials" style="
-                color: rgba(255,255,255,0.9);
-                text-decoration: none;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-              " onmouseover="this.style.color='white'; this.style.transform='translateX(5px)'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.transform='translateX(0)'">
-                <span>→</span> Khách hàng
-              </a>
-            </li>
-            <li style="margin-bottom: 0.75rem;">
-              <a href="#contact" style="
-                color: rgba(255,255,255,0.9);
-                text-decoration: none;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-              " onmouseover="this.style.color='white'; this.style.transform='translateX(5px)'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.transform='translateX(0)'">
-                <span>→</span> Liên hệ
-              </a>
-            </li>
+            `).join('')}
           </ul>
         </div>
 
@@ -267,13 +317,14 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             margin-bottom: 1.5rem;
             border-bottom: 2px solid rgba(255,255,255,0.3);
             padding-bottom: 0.5rem;
-          ">Dịch vụ chính</h4>
+          ">${localizedText.services.title}</h4>
           
           <ul style="
             list-style: none;
             padding: 0;
             margin: 0;
           ">
+            ${localizedText.services.items.map(service => `
             <li style="margin-bottom: 0.75rem;">
               <span style="
                 color: rgba(255,255,255,0.9);
@@ -281,49 +332,10 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
                 align-items: center;
                 gap: 0.5rem;
               ">
-                <span>☕</span> Xuất khẩu cà phê
+                <span>${service.icon}</span> ${service.name}
               </span>
             </li>
-            <li style="margin-bottom: 0.75rem;">
-              <span style="
-                color: rgba(255,255,255,0.9);
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-              ">
-                <span>🚚</span> Logistics & Vận chuyển
-              </span>
-            </li>
-            <li style="margin-bottom: 0.75rem;">
-              <span style="
-                color: rgba(255,255,255,0.9);
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-              ">
-                <span>📋</span> Tư vấn thủ tục
-              </span>
-            </li>
-            <li style="margin-bottom: 0.75rem;">
-              <span style="
-                color: rgba(255,255,255,0.9);
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-              ">
-                <span>👥</span> Đào tạo & Phát triển
-              </span>
-            </li>
-            <li style="margin-bottom: 0.75rem;">
-              <span style="
-                color: rgba(255,255,255,0.9);
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-              ">
-                <span>💡</span> Tư vấn chiến lược
-              </span>
-            </li>
+            `).join('')}
           </ul>
         </div>
 
@@ -337,7 +349,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             margin-bottom: 1.5rem;
             border-bottom: 2px solid rgba(255,255,255,0.3);
             padding-bottom: 0.5rem;
-          ">Thông tin liên hệ</h4>
+          ">${localizedText.contact.title}</h4>
           
           <div style="margin-bottom: 1rem;">
             <div style="
@@ -348,7 +360,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             ">
               <span style="font-size: 1.25rem;">📍</span>
               <span style="color: rgba(255,255,255,0.9);">
-                TP. Hồ Chí Minh, Việt Nam
+                ${localizedText.contact.address}
               </span>
             </div>
             
@@ -360,7 +372,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             ">
               <span style="font-size: 1.25rem;">📞</span>
               <span style="color: rgba(255,255,255,0.9);">
-                +84 28 1234 5678
+                ${localizedText.contact.phone}
               </span>
             </div>
             
@@ -372,7 +384,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             ">
               <span style="font-size: 1.25rem;">✉️</span>
               <span style="color: rgba(255,255,255,0.9);">
-                info@caphevn.com
+                ${localizedText.contact.email}
               </span>
             </div>
             
@@ -384,7 +396,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             ">
               <span style="font-size: 1.25rem;">🕒</span>
               <span style="color: rgba(255,255,255,0.9);">
-                Thứ 2 - Thứ 6: 8:00 - 18:00
+                ${localizedText.contact.hours}
               </span>
             </div>
           </div>
@@ -401,12 +413,12 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
               font-size: 0.875rem;
               font-weight: ${themeParams?.typography?.fontWeight || '600'};
               margin-bottom: 0.75rem;
-            ">Đăng ký nhận tin</h5>
+            ">${localizedText.newsletter.title}</h5>
             <div style="
               display: flex;
               gap: 0.5rem;
             ">
-              <input type="email" placeholder="Email của bạn" style="
+              <input type="email" placeholder="${localizedText.newsletter.placeholder}" style="
                 flex: 1;
                 padding: 0.5rem;
                 border: none;
@@ -452,7 +464,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             font-size: 0.875rem;
             margin: 0;
           ">
-            © 2024 ${DEFAULT_CONTENT.COMPANY_NAME}. Tất cả quyền được bảo lưu.
+            ${localizedText.copyright}
           </p>
           
           <div style="
@@ -460,30 +472,16 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
             gap: 1.5rem;
             flex-wrap: wrap;
           ">
-            <a href="#" style="
+            ${localizedText.legal.map(legal => `
+            <a href="${legal.href}" style="
               color: rgba(255,255,255,0.8);
               text-decoration: none;
               font-size: 0.875rem;
               transition: color 0.3s ease;
             " onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">
-              Chính sách bảo mật
+              ${legal.name}
             </a>
-            <a href="#" style="
-              color: rgba(255,255,255,0.8);
-              text-decoration: none;
-              font-size: 0.875rem;
-              transition: color 0.3s ease;
-            " onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">
-              Điều khoản sử dụng
-            </a>
-            <a href="#" style="
-              color: rgba(255,255,255,0.8);
-              text-decoration: none;
-              font-size: 0.875rem;
-              transition: color 0.3s ease;
-            " onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.8)'">
-              Sitemap
-            </a>
+            `).join('')}
           </div>
         </div>
         
@@ -492,7 +490,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
           font-size: 0.75rem;
           margin: 0;
         ">
-          Được phát triển với ❤️ tại Việt Nam | Theme Editor v2.0
+          ${localizedText.footer}
         </p>
       </div>
     </div>

@@ -70,6 +70,7 @@ export interface ThemeParams {
   layout?: any
   sections?: any
   components?: any
+  projectLanguage?: string
 }
 
 export interface HtmlParams {

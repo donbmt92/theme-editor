@@ -21,17 +21,32 @@ export async function POST(request: NextRequest) {
     const body = await request.text()
     const authHeader = request.headers.get('authorization')
     
-    // Verify Authorization header
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      console.error('Missing or invalid Authorization header')
+    // Log để debug
+    console.log('=== SEPAY WEBHOOK DEBUG ===')
+    console.log('Headers:', {
+      authorization: authHeader,
+      contentType: request.headers.get('content-type'),
+      userAgent: request.headers.get('user-agent')
+    })
+    console.log('Raw body:', body)
+    
+    // Verify Authorization header - Sepay format: "Apikey API_KEY"
+    if (!authHeader || !authHeader.startsWith('Apikey ')) {
+      console.error('Missing or invalid Authorization header - expected Apikey format')
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
       )
     }
 
-    const apiKey = authHeader.replace('Bearer ', '')
-    const expectedApiKey = process.env.SEPAY_API_KEY || 'đây_là_khóa_bí_mật'
+    const apiKey = authHeader.replace('Apikey ', '')
+    const expectedApiKey = process.env.SEPAY_API_KEY || 'H0N4ZD49WRMW5FBDIFYJOW7VP1LPQAQRKHQIN8DSJYCQSR76CFWXYXLKT2ETP2UU'
+    
+    console.log('API Key check:', {
+      received: apiKey,
+      expected: expectedApiKey,
+      match: apiKey === expectedApiKey
+    })
     
     if (apiKey !== expectedApiKey) {
       console.error('Invalid API key')
@@ -70,8 +85,28 @@ export async function POST(request: NextRequest) {
 
     if (!payment) {
       console.error('Payment not found:', payload.referenceCode)
+      
+      // Log các payment gần đây để debug
+      const recentPayments = await prisma.payment.findMany({
+        take: 5,
+        orderBy: { createdAt: 'desc' },
+        select: { id: true, bankTxnId: true, amount: true, status: true, createdAt: true }
+      })
+      
+      console.log('Recent payments:', recentPayments)
+      
       return NextResponse.json(
-        { success: false, error: 'Payment not found' },
+        { 
+          success: false, 
+          error: 'Payment not found',
+          referenceCode: payload.referenceCode,
+          recentPayments: recentPayments.map(p => ({
+            id: p.id,
+            bankTxnId: p.bankTxnId,
+            amount: p.amount,
+            status: p.status
+          }))
+        },
         { status: 404 }
       )
     }

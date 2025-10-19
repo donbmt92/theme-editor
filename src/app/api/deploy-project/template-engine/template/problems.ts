@@ -73,6 +73,142 @@ interface ProblemsContentExtended {
  * Generate static problems section HTML
  */
 export function generateStaticProblemsSection({ content, themeParams }: ProblemsParams): string {
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+  
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        about: {
+          title: "About Us",
+          description: "With over 20 years of experience in the coffee industry, we are proud to be a trusted partner of international importers. We are committed to bringing the highest quality coffee beans from the Central Highlands region."
+        },
+        problems: {
+          title: "Current Challenges",
+          description: "Difficulties that Vietnamese businesses face when exporting coffee",
+          items: [
+            {
+              id: "1",
+              title: "Difficulty accessing US market",
+              description: "Lack of direct connections with importers and distributors, complex trade barriers",
+              icon: "AlertCircle"
+            },
+            {
+              id: "2", 
+              title: "Complex procedures",
+              description: "Complex export procedures, quality certifications and plant quarantine",
+              icon: "AlertCircle"
+            },
+            {
+              id: "3",
+              title: "Non-competitive pricing",
+              description: "Many intermediaries increase costs, reducing farmers' profits",
+              icon: "AlertCircle"
+            }
+          ]
+        },
+        solutions: {
+          title: "Our Solutions",
+          description: "Comprehensive solutions to overcome challenges and develop sustainably",
+          items: [
+            {
+              id: "1",
+              title: "Direct connection",
+              description: "Wide network of import partners across the US, eliminating intermediaries, optimizing supply chain",
+              benefit: "Increase profits 30-40%",
+              icon: "Globe"
+            },
+            {
+              id: "2",
+              title: "Comprehensive support",
+              description: "From quality certification, plant quarantine to logistics and customs procedures",
+              benefit: "Save 80% time",
+              icon: "Shield"
+            },
+            {
+              id: "3",
+              title: "Optimized process",
+              description: "Modern management system, real-time order tracking, ensuring transparency",
+              benefit: "100% transparency",
+              icon: "Zap"
+            }
+          ]
+        },
+        cta: {
+          title: "Ready to start your export journey?",
+          description: "Free consultation on coffee export process to the US, product potential assessment and market development planning.",
+          buttonText: "Register for free consultation"
+        }
+      };
+    } else {
+      return {
+        about: {
+          title: "Về Chúng Tôi",
+          description: "Với hơn 20 năm kinh nghiệm trong ngành cà phê, chúng tôi tự hào là đối tác tin cậy của các nhà nhập khẩu quốc tế. Chúng tôi cam kết mang đến những hạt cà phê chất lượng nhất từ vùng đất Tây Nguyên."
+        },
+        problems: {
+          title: "Thách Thức Hiện Tại",
+          description: "Những khó khăn mà doanh nghiệp Việt Nam gặp phải khi xuất khẩu cà phê",
+          items: [
+            {
+              id: "1",
+              title: "Khó tiếp cận thị trường Mỹ",
+              description: "Thiếu kết nối trực tiếp với nhà nhập khẩu và phân phối, rào cản thương mại phức tạp",
+              icon: "AlertCircle"
+            },
+            {
+              id: "2",
+              title: "Thủ tục phức tạp",
+              description: "Quy trình xuất khẩu, chứng nhận chất lượng và kiểm dịch thực vật phức tạp",
+              icon: "AlertCircle"
+            },
+            {
+              id: "3",
+              title: "Giá cả không cạnh tranh",
+              description: "Nhiều khâu trung gian làm tăng chi phí, giảm lợi nhuận của nông dân",
+              icon: "AlertCircle"
+            }
+          ]
+        },
+        solutions: {
+          title: "Giải Pháp Của Chúng Tôi",
+          description: "Những giải pháp toàn diện để vượt qua thách thức và phát triển bền vững",
+          items: [
+            {
+              id: "1",
+              title: "Kết nối trực tiếp",
+              description: "Mạng lưới đối tác nhập khẩu rộng khắp tại Mỹ, loại bỏ trung gian, tối ưu hóa chuỗi cung ứng",
+              benefit: "Tăng lợi nhuận 30-40%",
+              icon: "Globe"
+            },
+            {
+              id: "2",
+              title: "Hỗ trợ toàn diện",
+              description: "Từ chứng nhận chất lượng, kiểm dịch thực vật đến logistics và thủ tục hải quan",
+              benefit: "Tiết kiệm 80% thời gian",
+              icon: "Shield"
+            },
+            {
+              id: "3",
+              title: "Quy trình tối ưu",
+              description: "Hệ thống quản lý hiện đại, theo dõi đơn hàng realtime, đảm bảo minh bạch",
+              benefit: "Minh bạch 100%",
+              icon: "Zap"
+            }
+          ]
+        },
+        cta: {
+          title: "Sẵn sàng bắt đầu hành trình xuất khẩu?",
+          description: "Tư vấn miễn phí về quy trình xuất khẩu cà phê sang Mỹ, đánh giá tiềm năng sản phẩm và lập kế hoạch phát triển thị trường.",
+          buttonText: "Đăng ký tư vấn miễn phí"
+        }
+      };
+    }
+  };
+  
+  const localizedText = getLocalizedText();
+  
   const getTypographyStyles = () => {
     return {
       fontFamily: themeParams?.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -155,63 +291,9 @@ export function generateStaticProblemsSection({ content, themeParams }: Problems
   const problemsContent = content as ProblemsContentExtended;
   
   // Default problems if none provided
-  const defaultProblems = [
-    {
-      id: 'problem-1',
-      icon: 'AlertTriangle',
-      title: "Quy định nhập khẩu phức tạp",
-      description: "Việc tuân thủ các yêu cầu FDA và thủ tục hải quan Mỹ có thể gây khó khăn cho các nhà nhập khẩu mới."
-    },
-    {
-      id: 'problem-2',
-      icon: 'Clock',
-      title: "Chuỗi cung ứng không ổn định",
-      description: "Tìm kiếm nhà cung cấp cà phê chất lượng cao với giao hàng đúng hạn là thách thức lớn."
-    },
-    {
-      id: 'problem-3',
-      icon: 'DollarSign',
-      title: "Chi phí ẩn và biến động giá",
-      description: "Các khoản phí bất ngờ và giá cả biến động có thể phá hủy biên lợi nhuận."
-    },
-    {
-      id: 'problem-4',
-      icon: 'Shield',
-      title: "Lo ngại về chất lượng",
-      description: "Đảm bảo tiêu chuẩn chất lượng và an toàn sản phẩm trong các lô hàng quốc tế."
-    }
-  ];
+  const defaultProblems = localizedText.problems.items;
 
-  const defaultSolutions = [
-    {
-      id: 'solution-1',
-      icon: 'CheckCircle',
-      title: "Tuân thủ quy định đầy đủ",
-      description: "Chúng tôi xử lý tất cả tài liệu FDA, USDA và hải quan để đảm bảo thông quan suôn sẻ.",
-      benefit: "100% Giao hàng tuân thủ"
-    },
-    {
-      id: 'solution-2',
-      icon: 'Truck',
-      title: "Mạng lưới cung ứng đáng tin cậy",
-      description: "Đối tác trực tiếp với các trang trại cà phê Việt Nam cao cấp đảm bảo chất lượng và nguồn cung ổn định.",
-      benefit: "Đảm bảo giao hàng đúng hạn"
-    },
-    {
-      id: 'solution-3',
-      icon: 'DollarSign',
-      title: "Định giá minh bạch",
-      description: "Giá cố định không có phí ẩn. Bạn biết chính xác những gì sẽ phải trả trước.",
-      benefit: "Chi phí dự đoán được"
-    },
-    {
-      id: 'solution-4',
-      icon: 'Shield',
-      title: "Đảm bảo chất lượng",
-      description: "Quy trình kiểm tra và chứng nhận nghiêm ngặt đảm bảo chỉ những hạt cà phê tốt nhất đến tay bạn.",
-      benefit: "Sản phẩm chất lượng cao"
-    }
-  ];
+  const defaultSolutions = localizedText.solutions.items;
 
   const problems = problemsContent?.problems?.items || defaultProblems;
   const solutions = problemsContent?.solutions?.items || defaultSolutions;
@@ -241,7 +323,7 @@ export function generateStaticProblemsSection({ content, themeParams }: Problems
           font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
           margin-bottom: 1rem;
         ">
-          ${problemsContent?.about?.title || "Giải Quyết Thách Thức Xuất Nhập Khẩu Thực Tế"}
+          ${problemsContent?.about?.title || localizedText.about.title}
         </h2>
         <p style="
           color: ${problemsContent?.about?.textColor || problemsContent?.problems?.textColor || themeParams?.sections?.problems?.textColor || themeParams?.colors?.muted || '#718096'};
@@ -254,7 +336,7 @@ export function generateStaticProblemsSection({ content, themeParams }: Problems
           margin: 0 auto;
           line-height: 1.6;
         ">
-          ${problemsContent?.about?.description || "Chúng tôi hiểu rõ những khó khăn khi xuất khẩu cà phê từ Việt Nam. Đây là cách chúng tôi giải quyết chúng cho bạn."}
+          ${problemsContent?.about?.description || localizedText.about.description}
         </p>
       </div>
 

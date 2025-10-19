@@ -50,6 +50,60 @@ export function generateStaticHeroSection({
   content,
   themeParams,
 }: HeroParams): string {
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+  
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        defaultTitle: "Vietnamese Coffee",
+        defaultSubtitle: "International Quality",
+        defaultDescription: "We specialize in providing high-quality Vietnamese coffee for international markets, ensuring distinctive flavor and export standards.",
+        learnMore: "Learn More",
+        benefits: [
+          { icon: "✅", text: "High Quality" },
+          { icon: "💰", text: "Competitive Price" },
+          { icon: "🚚", text: "On-time Delivery" },
+          { icon: "📞", text: "24/7 Support" },
+        ],
+        stats: {
+          orders: "Successful Orders",
+          experience: "Years Experience", 
+          partners: "US Partners"
+        },
+        trust: {
+          quality: "100% Quality",
+          certified: "FDA & HACCP Certified"
+        }
+      };
+    } else {
+      return {
+        defaultTitle: "Cà Phê Việt Nam",
+        defaultSubtitle: "Chất Lượng Quốc Tế",
+        defaultDescription: "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
+        learnMore: "Tìm hiểu thêm",
+        benefits: [
+          { icon: "✅", text: "Chất lượng cao" },
+          { icon: "💰", text: "Giá cạnh tranh" },
+          { icon: "🚚", text: "Giao hàng đúng hạn" },
+          { icon: "📞", text: "Hỗ trợ 24/7" },
+        ],
+        stats: {
+          orders: "Đơn hàng thành công",
+          experience: "Năm kinh nghiệm", 
+          partners: "Đối tác Mỹ"
+        },
+        trust: {
+          quality: "100% Chất lượng",
+          certified: "Chứng nhận FDA & HACCP"
+        }
+      };
+    }
+  };
+  
+  const localizedText = getLocalizedText();
+  
   const getTypographyStyles = () => {
     return {
       fontFamily:
@@ -316,7 +370,7 @@ export function generateStaticHeroSection({
               line-height: 1.2;
               margin: 0;
             ">
-              ${content?.title || "Cà Phê Việt Nam"}
+              ${content?.title || localizedText.defaultTitle}
               <span style="
                 display: block;
                 background: linear-gradient(135deg, ${content?.primaryColor || themeParams?.colors?.accent || "#CD853F"}, ${content?.primaryColor || themeParams?.colors?.primary || "#8B4513"});
@@ -327,7 +381,7 @@ export function generateStaticHeroSection({
                 font-size: ${getSubtitleSize()};
                 font-weight: ${getFontWeight("subtitleWeight", themeParams?.typography?.fontWeight || "600")};
               ">
-                ${content?.subtitle || "Chất Lượng Quốc Tế"}
+                ${content?.subtitle || localizedText.defaultSubtitle}
               </span>
             </h1>
 
@@ -339,7 +393,7 @@ export function generateStaticHeroSection({
               line-height: 1.6;
               margin: 0;
             ">
-              ${content?.description || "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu."}
+              ${content?.description || localizedText.defaultDescription}
             </p>
           </div>
 
@@ -351,12 +405,7 @@ export function generateStaticHeroSection({
           ">
             ${(() => {
               const heroContent = content as HeroContentExtended;
-              const benefits = heroContent?.benefits || [
-                { icon: "✅", text: "Chất lượng cao" },
-                { icon: "💰", text: "Giá cạnh tranh" },
-                { icon: "🚚", text: "Giao hàng đúng hạn" },
-                { icon: "📞", text: "Hỗ trợ 24/7" },
-              ];
+              const benefits = heroContent?.benefits || localizedText.benefits;
 
               return benefits
                 .map(

@@ -34,6 +34,97 @@ interface TestimonialsContent {
  * Generate static testimonials section HTML
  */
 export function generateStaticTestimonialsSection({ content, themeParams }: TestimonialsParams): string {
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        title: "What Our Customers Say",
+        subtitle: "Testimonials from international partners and customers",
+        testimonials: [
+          {
+            id: "1",
+            name: "Sarah Johnson",
+            title: "Coffee Buyer",
+            company: "Starbucks Reserve",
+            content: "Vietnamese coffee quality exceeded expectations. Rich flavor and very professional production process.",
+            rating: 5,
+            image: "https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face"
+          },
+          {
+            id: "2",
+            name: "Michael Chen",
+            title: "Quality Manager",
+            company: "Blue Bottle Coffee",
+            content: "Trusted partner with high quality commitment. On-time delivery and excellent customer service.",
+            rating: 5,
+            image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
+          },
+          {
+            id: "3",
+            name: "David Rodriguez",
+            title: "Import Director",
+            company: "Intelligentsia",
+            content: "Vietnamese Robusta coffee has unique flavor, perfect for our espresso blend.",
+            rating: 5,
+            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face"
+          }
+        ],
+        stats: [
+          { number: "500+", label: "Export Shipments", sublabel: "High Quality" },
+          { number: "200+", label: "Trusted Customers", sublabel: "Global" },
+          { number: "15+", label: "Years Experience", sublabel: "Market" },
+          { number: "98%", label: "Satisfaction Rate", sublabel: "Customers" }
+        ],
+        statsTitle: "Numbers Speak for Themselves"
+      };
+    } else {
+      return {
+        title: "Được Tin Tưởng Bởi Các Nhà Nhập Khẩu Hàng Đầu",
+        subtitle: "Xem những gì khách hàng nói về trải nghiệm nhập khẩu cà phê Việt Nam cao cấp thông qua dịch vụ của chúng tôi.",
+        testimonials: [
+          {
+            id: "1",
+            name: "Sarah Johnson",
+            title: "Coffee Buyer",
+            company: "Starbucks Reserve",
+            content: "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
+            rating: 5,
+            image: "https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face"
+          },
+          {
+            id: "2",
+            name: "Michael Chen",
+            title: "Quality Manager",
+            company: "Blue Bottle Coffee",
+            content: "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
+            rating: 5,
+            image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
+          },
+          {
+            id: "3",
+            name: "David Rodriguez",
+            title: "Import Director",
+            company: "Intelligentsia",
+            content: "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
+            rating: 5,
+            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face"
+          }
+        ],
+        stats: [
+          { number: "500+", label: "Lô hàng xuất khẩu", sublabel: "Cà phê chất lượng cao" },
+          { number: "200+", label: "Khách hàng tin tưởng", sublabel: "Từ 25 tiểu bang Mỹ" },
+          { number: "15+", label: "Năm kinh nghiệm", sublabel: "Thị trường quốc tế" },
+          { number: "98%", label: "Tỷ lệ hài lòng", sublabel: "Khách hàng đánh giá" }
+        ],
+        statsTitle: "Những Con Số Nói Lên Tất Cả"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
   const getTypographyStyles = () => {
     return {
       fontFamily: themeParams?.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -131,47 +222,9 @@ export function generateStaticTestimonialsSection({ content, themeParams }: Test
 
   const accentColor = themeParams?.colors?.accent || '#CD853F'
 
-  // Default data
-  const defaultTestimonials = [
-    {
-      id: "1",
-      name: "Sarah Johnson",
-      title: "Coffee Buyer",
-      company: "Starbucks Reserve",
-      content: "Chất lượng cà phê Việt Nam vượt trội hơn mong đợi. Hương vị đậm đà và quy trình sản xuất rất chuyên nghiệp.",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face"
-    },
-    {
-      id: "2",
-      name: "Michael Chen",
-      title: "Quality Manager",
-      company: "Blue Bottle Coffee",
-      content: "Đối tác tin cậy với cam kết chất lượng cao. Giao hàng đúng hạn và dịch vụ khách hàng xuất sắc.",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
-    },
-    {
-      id: "3",
-      name: "David Rodriguez",
-      title: "Import Director",
-      company: "Intelligentsia",
-      content: "Cà phê Robusta Việt Nam có hương vị độc đáo, phù hợp hoàn hảo cho blend espresso của chúng tôi.",
-      rating: 5,
-      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face"
-    }
-  ]
-
-  const defaultStats = [
-    { number: "500+", label: "Lô hàng xuất khẩu", sublabel: "Cà phê chất lượng cao" },
-    { number: "200+", label: "Khách hàng tin tưởng", sublabel: "Từ 25 tiểu bang Mỹ" },
-    { number: "15+", label: "Năm kinh nghiệm", sublabel: "Thị trường quốc tế" },
-    { number: "98%", label: "Tỷ lệ hài lòng", sublabel: "Khách hàng đánh giá" }
-  ]
-
-  // Use content or defaults
-  const testimonials = testimonialsContent?.testimonials || defaultTestimonials
-  const stats = testimonialsContent?.stats || defaultStats
+  // Use content or localized defaults
+  const testimonials = testimonialsContent?.testimonials || localizedText.testimonials
+  const stats = testimonialsContent?.stats || localizedText.stats
 
   return `<section id="testimonials" style="
     background-color: ${bgColor};
@@ -198,7 +251,7 @@ export function generateStaticTestimonialsSection({ content, themeParams }: Test
           font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
           margin-bottom: 1rem;
         ">
-          ${testimonialsContent?.title || "Được Tin Tưởng Bởi Các Nhà Nhập Khẩu Hàng Đầu"}
+          ${testimonialsContent?.title || localizedText.title}
         </h2>
         <p style="
           color: ${textColor}CC;
@@ -211,7 +264,7 @@ export function generateStaticTestimonialsSection({ content, themeParams }: Test
           margin: 0 auto;
           opacity: 0.8;
         ">
-          ${testimonialsContent?.subtitle || "Xem những gì khách hàng nói về trải nghiệm nhập khẩu cà phê Việt Nam cao cấp thông qua dịch vụ của chúng tôi."}
+          ${testimonialsContent?.subtitle || localizedText.subtitle}
         </p>
       </div>
 
@@ -328,7 +381,7 @@ export function generateStaticTestimonialsSection({ content, themeParams }: Test
           font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
           margin-bottom: 3rem;
         ">
-          Những Con Số Nói Lên Tất Cả
+          ${localizedText.statsTitle}
         </h3>
         
         <div style="

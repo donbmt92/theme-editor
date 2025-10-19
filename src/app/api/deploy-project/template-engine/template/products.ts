@@ -1,9 +1,8 @@
 import { ProductsParams } from '../../types'
-import { DEFAULT_CONTENT, DEFAULT_SERVICES } from '../../constants'
 import { renderLucideIcon } from '../icons'
 
 interface ProductsContent {
-  [key: string]: any
+  [key: string]: string | number | boolean | undefined | Array<string> | object
   title?: string
   description?: string
   backgroundColor?: string
@@ -38,7 +37,152 @@ interface ProductsContent {
 /**
  * Generate static products/services section HTML
  */
-export function generateStaticProductsSection({ content, colors, themeParams }: ProductsParams): string {
+export function generateStaticProductsSection({ content, themeParams }: ProductsParams): string {
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        title: "Our Products",
+        description: "Discover unique Vietnamese coffee varieties with distinctive flavors",
+        items: [
+          {
+            id: "1",
+            name: "Vietnamese Robusta Coffee",
+            description: "Vietnamese Robusta coffee with rich flavor, high caffeine content, perfect for espresso",
+            price: "2.50 USD/kg",
+            category: "Robusta"
+          },
+          {
+            id: "2",
+            name: "Vietnamese Arabica Coffee",
+            description: "Premium Arabica coffee with smooth taste and aromatic notes",
+            price: "3.20 USD/kg",
+            category: "Arabica"
+          },
+          {
+            id: "3",
+            name: "Vietnamese Coffee Blend",
+            description: "Perfect blend of Robusta and Arabica for balanced flavor",
+            price: "2.80 USD/kg",
+            category: "Blend"
+          }
+        ],
+        services: [
+          {
+            id: "1",
+            name: "Export Consultation",
+            description: "Comprehensive export process support",
+            icon: "Package",
+            cta: "Learn More",
+            features: ["Documentation Support", "Compliance Guidance", "Market Analysis"]
+          },
+          {
+            id: "2",
+            name: "Quality Control",
+            description: "Professional quality testing and certification",
+            icon: "Shield",
+            cta: "Learn More",
+            features: ["FDA Compliance", "Quality Testing", "Certification"]
+          },
+          {
+            id: "3",
+            name: "Logistics Support",
+            description: "Complete shipping and delivery solutions",
+            icon: "Truck",
+            cta: "Learn More",
+            features: ["Container Options", "Temperature Control", "Real-time Tracking"]
+          }
+        ],
+        stats: {
+          title: "📊 Outstanding Achievements",
+          items: [
+            { number: "500+", label: "Export Shipments" },
+            { number: "200+", label: "Trusted Customers" },
+            { number: "15+", label: "Years Experience" },
+            { number: "98%", label: "Satisfaction Rate" }
+          ]
+        },
+        cta: {
+          title: "🎯 Ready to conquer the international market?",
+          description: "Let us accompany you on your successful export journey",
+          buttonText: "🚀 Start today"
+        }
+      };
+    } else {
+      return {
+        title: "Sản Phẩm Của Chúng Tôi",
+        description: "Khám phá các loại cà phê đặc trưng của Việt Nam với hương vị độc đáo",
+        items: [
+          {
+            id: "1",
+            name: "Cà Phê Robusta Việt Nam",
+            description: "Cà phê Robusta Việt Nam với hương vị đậm đà, hàm lượng caffeine cao, hoàn hảo cho espresso",
+            price: "2.50 USD/kg",
+            category: "Robusta"
+          },
+          {
+            id: "2",
+            name: "Cà Phê Arabica Việt Nam",
+            description: "Cà phê Arabica cao cấp với vị ngọt ngào và hương thơm đặc trưng",
+            price: "3.20 USD/kg",
+            category: "Arabica"
+          },
+          {
+            id: "3",
+            name: "Cà Phê Pha Trộn Việt Nam",
+            description: "Pha trộn hoàn hảo giữa Robusta và Arabica cho hương vị cân bằng",
+            price: "2.80 USD/kg",
+            category: "Blend"
+          }
+        ],
+        services: [
+          {
+            id: "1",
+            name: "Tư Vấn Xuất Khẩu",
+            description: "Hỗ trợ toàn diện quy trình xuất khẩu",
+            icon: "Package",
+            cta: "Tìm hiểu thêm",
+            features: ["Hỗ trợ tài liệu", "Hướng dẫn tuân thủ", "Phân tích thị trường"]
+          },
+          {
+            id: "2",
+            name: "Kiểm Soát Chất Lượng",
+            description: "Kiểm tra và chứng nhận chất lượng chuyên nghiệp",
+            icon: "Shield",
+            cta: "Tìm hiểu thêm",
+            features: ["Tuân thủ FDA", "Kiểm tra chất lượng", "Chứng nhận"]
+          },
+          {
+            id: "3",
+            name: "Hỗ Trợ Logistics",
+            description: "Giải pháp vận chuyển và giao hàng hoàn chỉnh",
+            icon: "Truck",
+            cta: "Tìm hiểu thêm",
+            features: ["Tùy chọn container", "Kiểm soát nhiệt độ", "Theo dõi thời gian thực"]
+          }
+        ],
+        stats: {
+          title: "📊 Thành tích nổi bật",
+          items: [
+            { number: "500+", label: "Lô hàng xuất khẩu" },
+            { number: "200+", label: "Khách hàng tin tưởng" },
+            { number: "15+", label: "Năm kinh nghiệm" },
+            { number: "98%", label: "Tỷ lệ hài lòng" }
+          ]
+        },
+        cta: {
+          title: "🎯 Sẵn sàng chinh phục thị trường quốc tế?",
+          description: "Hãy để chúng tôi đồng hành cùng bạn trên hành trình xuất khẩu thành công",
+          buttonText: "🚀 Bắt đầu ngay hôm nay"
+        }
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
   const getTypographyStyles = () => {
     return {
       fontFamily: themeParams?.typography?.fontFamily || 'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
@@ -136,9 +280,9 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
 
   const accentColor = themeParams?.colors?.accent || '#CD853F'
 
-  // Use provided services or default ones
-  const services = productsContent?.services || DEFAULT_SERVICES
-  const products = productsContent?.items || []
+  // Use provided services or default ones, merge with localized content
+  const services = productsContent?.services || localizedText.services
+  const products = productsContent?.items || localizedText.items
 
   return `<section id="products" style="
     background-color: ${bgColor};
@@ -165,7 +309,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
           margin-bottom: 1rem;
         ">
-          ${productsContent?.title || "Giải Pháp Xuất Nhập Khẩu Toàn Diện"}
+          ${productsContent?.title || localizedText.title}
         </h2>
         <p style="
           color: ${textColor}CC;
@@ -178,7 +322,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           margin: 0 auto;
           opacity: 0.8;
         ">
-          ${productsContent?.description || "Từ việc tìm nguồn cà phê cao cấp tại Việt Nam đến giao hàng tại kho Mỹ, chúng tôi xử lý mọi bước của quy trình xuất khẩu."}
+          ${productsContent?.description || localizedText.description}
         </p>
       </div>
 
@@ -189,7 +333,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
         gap: 2rem;
         margin-bottom: 3rem;
       ">
-        ${services && Array.isArray(services) ? services.map((service, index) => `
+        ${services && Array.isArray(services) ? services.map((service) => `
           <div style="
             background: white;
             padding: 2.5rem;
@@ -326,7 +470,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
                 <p style="
                   color: ${textColor};
                   font-size: 1.125rem;
-                ">${products[0]?.name || "Hạt điều Việt Nam"}</p>
+                ">${products[0]?.name || localizedText.items[0]?.name}</p>
               </div>
             </div>
           </div>
@@ -340,7 +484,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 1rem;
             ">
-              ${products[0]?.name || "Hạt Điều Việt Nam Cao Cấp"}
+              ${products[0]?.name || localizedText.items[0]?.name}
             </h3>
             <p style="
               color: ${textColor};
@@ -349,7 +493,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               line-height: 1.6;
               margin-bottom: 1.5rem;
             ">
-              ${products[0]?.description || "Chúng tôi tìm nguồn trực tiếp từ các trang trại hạt điều tốt nhất tại Bình Phước và Đồng Nai, nơi sản xuất những hạt điều ngon nhất thế giới."}
+              ${products[0]?.description || localizedText.items[0]?.description}
             </p>
             <div style="
               display: grid;
@@ -404,7 +548,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               transition: all 0.3s ease;
               box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
             " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 35px rgba(139, 69, 19, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(139, 69, 19, 0.4)'">
-              🚀 Xem danh mục sản phẩm
+              ${localizedText.services[0]?.cta || "🚀 Xem danh mục sản phẩm"}
             </button>
           </div>
         </div>
@@ -443,7 +587,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
                 <p style="
                   color: ${textColor};
                   font-size: 1.125rem;
-                ">${products[1]?.name || "Vận chuyển quốc tế"}</p>
+                ">${products[1]?.name || localizedText.items[1]?.name}</p>
               </div>
             </div>
           </div>
@@ -457,7 +601,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 1rem;
             ">
-              ${products[1]?.name || "Logistics & Giao Hàng Liền Mạch"}
+              ${products[1]?.name || localizedText.items[1]?.name}
             </h3>
             <p style="
               color: ${textColor};
@@ -466,10 +610,10 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               line-height: 1.6;
               margin-bottom: 1.5rem;
             ">
-              ${products[1]?.description || "Mạng lưới logistics của chúng tôi đảm bảo hạt điều của bạn đến đúng hạn và trong tình trạng hoàn hảo."}
+              ${products[1]?.description || localizedText.items[1]?.description}
             </p>
             <div style="space-y: 1rem;">
-              ${(products[1]?.features || [
+              ${(localizedText.services[2]?.features || [
                 "Tùy chọn container 20ft & 40ft",
                 "Vận chuyển kiểm soát nhiệt độ",
                 "Theo dõi & cập nhật thời gian thực",
@@ -502,7 +646,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
               transition: all 0.3s ease;
               box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
             " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 35px rgba(139, 69, 19, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(139, 69, 19, 0.4)'">
-              🚀 Tìm hiểu về vận chuyển
+              ${localizedText.services[2]?.cta || "🚀 Tìm hiểu về vận chuyển"}
             </button>
           </div>
         </div>
@@ -526,7 +670,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
           margin-bottom: 2rem;
         ">
-          📊 Thành tích nổi bật
+          ${localizedText.stats.title}
         </h3>
         
         <div style="
@@ -534,50 +678,19 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 2rem;
         ">
+          ${localizedText.stats.items.map(stat => `
           <div>
             <div style="
               font-size: 3rem;
               font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
               margin-bottom: 0.5rem;
-            ">500+</div>
+            ">${stat.number}</div>
             <div style="
               font-size: 0.875rem;
               opacity: 0.9;
-            ">Lô hàng xuất khẩu</div>
+            ">${stat.label}</div>
           </div>
-          <div>
-            <div style="
-              font-size: 3rem;
-              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
-              margin-bottom: 0.5rem;
-            ">200+</div>
-            <div style="
-              font-size: 0.875rem;
-              opacity: 0.9;
-            ">Khách hàng tin tưởng</div>
-          </div>
-          <div>
-            <div style="
-              font-size: 3rem;
-              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
-              margin-bottom: 0.5rem;
-            ">15+</div>
-            <div style="
-              font-size: 0.875rem;
-              opacity: 0.9;
-            ">Năm kinh nghiệm</div>
-          </div>
-          <div>
-            <div style="
-              font-size: 3rem;
-              font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '700')};
-              margin-bottom: 0.5rem;
-            ">98%</div>
-            <div style="
-              font-size: 0.875rem;
-              opacity: 0.9;
-            ">Tỷ lệ hài lòng</div>
-          </div>
+          `).join('')}
         </div>
       </div>
 
@@ -592,7 +705,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           font-weight: ${getFontWeight('titleWeight', themeParams?.typography?.fontWeight || '600')};
           margin-bottom: 1rem;
         ">
-          🎯 Sẵn sàng chinh phục thị trường quốc tế?
+          ${localizedText.cta.title}
         </h3>
         <p style="
           color: ${textColor}CC;
@@ -601,7 +714,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           margin-bottom: 2rem;
           opacity: 0.8;
         ">
-          Hãy để chúng tôi đồng hành cùng bạn trên hành trình xuất khẩu thành công
+          ${localizedText.cta.description}
         </p>
         <button style="
           background: linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%);
@@ -616,7 +729,7 @@ export function generateStaticProductsSection({ content, colors, themeParams }: 
           transition: all 0.3s ease;
           box-shadow: 0 8px 25px rgba(139, 69, 19, 0.4);
         " onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 35px rgba(139, 69, 19, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 25px rgba(139, 69, 19, 0.4)'">
-          🚀 Bắt đầu ngay hôm nay
+          ${localizedText.cta.buttonText}
         </button>
       </div>
     </div>

@@ -52,6 +52,111 @@ export function generateStaticBlogSection({
   content,
   themeParams,
 }: BlogParams): string {
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        title: "Latest Industry News",
+        subtitle: "Stay updated with the latest news, market trends and expertise on Vietnamese coffee export and US import market",
+        categories: [
+          { name: "Market", count: 15, color: "#8B4513" },
+          { name: "Technology", count: 12, color: "#3B82F6" },
+          { name: "Export", count: 8, color: "#10B981" },
+          { name: "Quality", count: 10, color: "#F59E0B" }
+        ],
+        featuredPost: {
+          title: "Coffee Market Trends 2024",
+          excerpt: "Detailed analysis of consumption trends and business opportunities in the coffee industry.",
+          author: "Expert",
+          date: "2024-01-15",
+          category: "Market"
+        },
+        posts: [
+          {
+            title: "Coffee Export Guide",
+            excerpt: "Detailed process from document preparation to successful delivery.",
+            author: "Expert",
+            date: "2024-01-10",
+            category: "Export"
+          },
+          {
+            title: "Quality Control Standards",
+            excerpt: "Understanding FDA requirements and quality assurance processes.",
+            author: "Expert",
+            date: "2024-01-08",
+            category: "Quality"
+          },
+          {
+            title: "Technology in Coffee Processing",
+            excerpt: "Modern processing techniques and their impact on quality.",
+            author: "Expert",
+            date: "2024-01-05",
+            category: "Technology"
+          }
+        ],
+        newsletter: {
+          title: "Subscribe to Newsletter",
+          description: "Get the latest market information and opportunities.",
+          placeholder: "Your email",
+          buttonText: "Subscribe",
+          footerText: "Join 2,000+ importers receiving weekly market updates. Unsubscribe anytime."
+        }
+      };
+    } else {
+      return {
+        title: "Thông Tin Ngành Mới Nhất",
+        subtitle: "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về xuất khẩu cà phê Việt Nam và thị trường nhập khẩu Mỹ.",
+        categories: [
+          { name: "Phân Tích Thị Trường", count: 12, color: "#8B4513" },
+          { name: "Quy Định", count: 8, color: "#3B82F6" },
+          { name: "Chuỗi Cung Ứng", count: 15, color: "#10B981" },
+          { name: "Bền Vững", count: 6, color: "#F59E0B" }
+        ],
+        featuredPost: {
+          title: "Triển Vọng Thị Trường Cà Phê 2024: Xu Hướng Nhập Khẩu Mỹ & Dự Báo Giá",
+          excerpt: "Phân tích toàn diện thị trường cà phê Mỹ bao gồm dự báo nhu cầu, xu hướng giá cả và các yếu tố chính ảnh hưởng đến nhập khẩu từ Việt Nam.",
+          author: "Sarah Johnson",
+          date: "15 Tháng 1, 2024",
+          category: "Phân Tích Thị Trường"
+        },
+        posts: [
+          {
+            title: "Quy Định FDA Mới Cho Nhập Khẩu Cà Phê: Những Điều Bạn Cần Biết",
+            excerpt: "Cập nhật yêu cầu FDA cho nhập khẩu cà phê có hiệu lực 2024, bao gồm thay đổi tài liệu và hướng dẫn tuân thủ cho nhà nhập khẩu Mỹ.",
+            author: "Michael Chen",
+            date: "10 Tháng 1, 2024",
+            category: "Quy Định"
+          },
+          {
+            title: "Cập Nhật Thu Hoạch Cà Phê Việt Nam: Đánh Giá Chất Lượng & Dự Báo Sản Lượng",
+            excerpt: "Cập nhật mới nhất từ các vùng trồng cà phê Việt Nam bao gồm đánh giá chất lượng thu hoạch và dự báo sản lượng cho năm 2024.",
+            author: "Nguyễn Trần",
+            date: "8 Tháng 1, 2024",
+            category: "Chuỗi Cung Ứng"
+          },
+          {
+            title: "Canh Tác Cà Phê Bền Vững: Hỗ Trợ Cộng Đồng Việt Nam",
+            excerpt: "Cách đối tác của chúng tôi với nông dân Việt Nam thúc đẩy thực hành bền vững trong khi đảm bảo cà phê chất lượng cao cho thị trường Mỹ.",
+            author: "David Park",
+            date: "5 Tháng 1, 2024",
+            category: "Bền Vững"
+          }
+        ],
+        newsletter: {
+          title: "Cập Nhật Thông Tin Thị Trường",
+          description: "Đăng ký nhận bản tin hàng tuần để có thông tin mới nhất về xu hướng thị trường cà phê, mẹo nhập khẩu và cập nhật ngành.",
+          placeholder: "Nhập địa chỉ email của bạn",
+          buttonText: "Đăng Ký",
+          footerText: "Tham gia cùng 2,000+ nhà nhập khẩu nhận thông tin thị trường hàng tuần. Hủy đăng ký bất cứ lúc nào."
+        }
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText();
   const getTypographyStyles = () => {
     return {
       fontFamily:
@@ -94,30 +199,6 @@ export function generateStaticBlogSection({
     }
   };
 
-  // Get font size based on blog content settings
-  const getFontSize = (sizeType: string, defaultSize: string) => {
-    const blogContent = content as BlogContentExtended;
-    const size = blogContent?.[sizeType];
-
-    switch (size) {
-      case "xs":
-        return "0.75rem";    // text-xs
-      case "sm":
-        return "0.875rem";   // text-sm
-      case "base":
-        return "1rem";       // text-base
-      case "lg":
-        return "1.125rem";   // text-lg
-      case "xl":
-        return "1.25rem";    // text-xl
-      case "2xl":
-        return "1.5rem";     // text-2xl
-      case "3xl":
-        return "1.875rem";   // text-3xl
-      default:
-        return defaultSize;
-    }
-  };
 
   // Get title size - matches BlogSection.tsx getTitleSize function
   const getTitleSize = () => {
@@ -204,61 +285,29 @@ export function generateStaticBlogSection({
   const typographyStyles = getTypographyStyles();
   const borderRadius = getBorderRadiusClass();
 
-  // Default blog posts data
-  const defaultBlogPosts: BlogPost[] = [
+  // Build localized blog posts data
+  const localizedBlogPosts: BlogPost[] = [
     {
-      title: "Triển Vọng Thị Trường Cà Phê 2024: Xu Hướng Nhập Khẩu Mỹ & Dự Báo Giá",
-      excerpt: "Phân tích toàn diện thị trường cà phê Mỹ bao gồm dự báo nhu cầu, xu hướng giá cả và các yếu tố chính ảnh hưởng đến nhập khẩu từ Việt Nam.",
-      category: "Phân Tích Thị Trường",
-      author: "Sarah Johnson",
-      date: "15 Tháng 1, 2024",
-      readTime: "8 phút đọc",
+      title: localizedText.featuredPost.title,
+      excerpt: localizedText.featuredPost.excerpt,
+      category: localizedText.featuredPost.category,
+      author: localizedText.featuredPost.author,
+      date: localizedText.featuredPost.date,
+      readTime: projectLanguage === 'english' ? "8 min read" : "8 phút đọc",
       image: "https://images.unsplash.com/photo-1589927986089-35812388d1f4?w=600&h=400&fit=crop",
       featured: true
     },
-    {
-      title: "Quy Định FDA Mới Cho Nhập Khẩu Cà Phê: Những Điều Bạn Cần Biết",
-      excerpt: "Cập nhật yêu cầu FDA cho nhập khẩu cà phê có hiệu lực 2024, bao gồm thay đổi tài liệu và hướng dẫn tuân thủ cho nhà nhập khẩu Mỹ.",
-      category: "Quy Định",
-      author: "Michael Chen",
-      date: "10 Tháng 1, 2024",
-      readTime: "6 phút đọc",
-      image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop"
-    },
-    {
-      title: "Cập Nhật Thu Hoạch Cà Phê Việt Nam: Đánh Giá Chất Lượng & Dự Báo Sản Lượng",
-      excerpt: "Cập nhật mới nhất từ các vùng trồng cà phê Việt Nam bao gồm đánh giá chất lượng thu hoạch và dự báo sản lượng cho năm 2024.",
-      category: "Chuỗi Cung Ứng",
-      author: "Nguyễn Trần",
-      date: "8 Tháng 1, 2024",
-      readTime: "5 phút đọc",
-      image: "https://images.unsplash.com/photo-1588155487507-a5e9ce8b1987?w=600&h=400&fit=crop"
-    },
-    {
-      title: "Canh Tác Cà Phê Bền Vững: Hỗ Trợ Cộng Đồng Việt Nam",
-      excerpt: "Cách đối tác của chúng tôi với nông dân Việt Nam thúc đẩy thực hành bền vững trong khi đảm bảo cà phê chất lượng cao cho thị trường Mỹ.",
-      category: "Bền Vững",
-      author: "David Park",
-      date: "5 Tháng 1, 2024",
-      readTime: "7 phút đọc",
-      image: "https://images.unsplash.com/photo-1594736797933-d0c3659ad253?w=600&h=400&fit=crop"
-    }
+    ...localizedText.posts.map((post, index) => ({
+      title: post.title,
+      excerpt: post.excerpt,
+      category: post.category,
+      author: post.author,
+      date: post.date,
+      readTime: projectLanguage === 'english' ? `${6 + index} min read` : `${6 + index} phút đọc`,
+      image: `https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop&ix=${index}`,
+      featured: false
+    }))
   ];
-
-  const defaultCategories: Category[] = [
-    { name: "Phân Tích Thị Trường", count: 12, color: "#8B4513" },
-    { name: "Quy Định", count: 8, color: "#3B82F6" },
-    { name: "Chuỗi Cung Ứng", count: 15, color: "#10B981" },
-    { name: "Bền Vững", count: 6, color: "#F59E0B" }
-  ];
-
-  const defaultNewsletter = {
-    title: "Cập Nhật Thông Tin Thị Trường",
-    description: "Đăng ký nhận bản tin hàng tuần để có thông tin mới nhất về xu hướng thị trường cà phê, mẹo nhập khẩu và cập nhật ngành.",
-    placeholder: "Nhập địa chỉ email của bạn",
-    buttonText: "Đăng Ký",
-    footerText: "Tham gia cùng 2,000+ nhà nhập khẩu nhận thông tin thị trường hàng tuần. Hủy đăng ký bất cứ lúc nào."
-  };
 
   // Build blog posts from content
   const toBlogPost = (p: Partial<BlogPost>): BlogPost => ({
@@ -281,9 +330,9 @@ export function generateStaticBlogSection({
     composed.push(...blogContent.posts.map((p) => toBlogPost(p)));
   }
 
-  const blogPosts = composed.length > 0 ? composed : (blogContent.blogPosts || defaultBlogPosts);
-  const categories = blogContent.categories || defaultCategories;
-  const newsletter = blogContent.newsletter || defaultNewsletter;
+  const blogPosts = composed.length > 0 ? composed : localizedBlogPosts;
+  const categories = blogContent.categories || localizedText.categories;
+  const newsletter = blogContent.newsletter || localizedText.newsletter;
 
   return `<section id="blog" style="
     padding: 5rem 0;
@@ -317,7 +366,7 @@ export function generateStaticBlogSection({
           line-height: 1.2;
           margin: 0 0 1rem 0;
         ">
-          ${blogContent?.title || "Thông Tin Ngành Mới Nhất"}
+          ${blogContent?.title || localizedText.title}
         </h2>
         <p style="
           color: ${blogContent?.colorMode === 'custom' && blogContent?.textColor ? `${blogContent.textColor}E6` : `${themeParams?.colors?.text || "#2D3748"}E6`};
@@ -329,7 +378,7 @@ export function generateStaticBlogSection({
           max-width: 48rem;
           margin: 0 auto;
         ">
-          ${blogContent?.subtitle || "Cập nhật thông tin với tin tức mới nhất, xu hướng thị trường và chuyên môn về xuất khẩu cà phê Việt Nam và thị trường nhập khẩu Mỹ."}
+          ${blogContent?.subtitle || localizedText.subtitle}
         </p>
       </div>
 
@@ -341,7 +390,7 @@ export function generateStaticBlogSection({
         gap: 1rem;
         margin-bottom: 3rem;
       ">
-        ${categories.map((category, index) => `
+        ${categories.map((category) => `
           <div style="
             background-color: ${category.color || themeParams?.colors?.primary || "#8B4513"}20;
             color: ${category.color || themeParams?.colors?.primary || "#8B4513"};
@@ -404,7 +453,7 @@ export function generateStaticBlogSection({
               gap: 0.25rem;
             ">
               ${renderLucideIcon("trending-up", 12)}
-              Nổi Bật
+              ${projectLanguage === 'english' ? 'Featured' : 'Nổi Bật'}
             </div>
           </div>
           <div style="
@@ -471,7 +520,7 @@ export function generateStaticBlogSection({
               transition: all 0.3s ease;
               box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
             " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 20px 40px -10px rgba(0, 0, 0, 0.2)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'">
-              Đọc Bài Viết Đầy Đủ
+              ${projectLanguage === 'english' ? 'Read Full Article' : 'Đọc Bài Viết Đầy Đủ'}
               ${renderLucideIcon("arrow-right", 16)}
             </button>
           </div>
@@ -574,7 +623,7 @@ export function generateStaticBlogSection({
                 justify-content: center;
                 transition: all 0.3s ease;
               " onmouseover="this.style.backgroundColor='${blogContent?.primaryColor || themeParams?.colors?.primary || "#8B4513"}'; this.style.color='#FFFFFF'" onmouseout="this.style.backgroundColor='transparent'; this.style.color='${blogContent?.primaryColor || themeParams?.colors?.primary || "#8B4513"}'">
-                Đọc Thêm
+                ${projectLanguage === 'english' ? 'Read More' : 'Đọc Thêm'}
                 ${renderLucideIcon("arrow-right", 12)}
               </button>
             </div>
