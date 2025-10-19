@@ -550,8 +550,7 @@ export interface ThemeContent {
       buttonText: string
     }
   }
-
-  // Footer
+}
 
 export interface ThemeParams {
   colors: ThemeColors
