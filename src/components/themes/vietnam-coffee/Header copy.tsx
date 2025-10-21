@@ -201,7 +201,7 @@ const Header = ({ theme, content }: HeaderProps) => {
               style={getButtonStyles('outline')}
             >
               <Download size={16} />
-              Cẩm nang XNK 2024
+              Cẩm nang XNK 2025
             </Button>
             <Button 
               variant="premium" 
@@ -300,7 +300,7 @@ const Header = ({ theme, content }: HeaderProps) => {
                 style={getButtonStyles('outline')}
               >
                 <Download size={16} />
-                Cẩm nang XNK 2024
+                Cẩm nang XNK 2025
               </Button>
               <Button 
                 variant="premium" 

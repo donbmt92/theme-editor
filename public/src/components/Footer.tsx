@@ -157,7 +157,7 @@ const Footer = () => {
         <div className="py-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-sm text-secondary-foreground/70">
-              © 2024 VietCashew Export. All rights reserved.
+              © 2025 VietCashew Export. All rights reserved.
             </div>
             
             <div className="flex flex-wrap gap-6">

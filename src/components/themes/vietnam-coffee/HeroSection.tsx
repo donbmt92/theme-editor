@@ -90,10 +90,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           experience: "Years Experience", 
           partners: "US Partners"
         },
-        trust: {
-          quality: "100% Quality",
-          certified: "FDA & HACCP Certified"
-        }
+        
       };
     } else {
       return {
@@ -113,10 +110,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           experience: "Năm kinh nghiệm",
           partners: "Đối tác Mỹ"
         },
-        trust: {
-          quality: "100% Chất lượng",
-          certified: "FDA & HACCP Certified"
-        }
+       
       };
     }
   };
@@ -897,7 +891,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
             </Card>
 
             {/* Floating Stats Card */}
-            <Card
+            {/* <Card
               className={cn(
                 "absolute -bottom-6 -left-6 p-6 backdrop-blur border shadow-lg",
                 getBorderRadiusClass()
@@ -944,7 +938,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                   </div>
                 </div>
               </div>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>

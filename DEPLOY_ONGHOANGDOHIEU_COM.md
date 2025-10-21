@@ -170,7 +170,7 @@ DATABASE_URL="postgresql://deploy:SECURE_PASSWORD_HERE_123!@#@localhost:5432/the
 
 # Next Auth for onghoangdohieu.com
 NEXTAUTH_URL="https://onghoangdohieu.com"
-NEXTAUTH_SECRET="your_very_long_random_secret_key_for_onghoangdohieu_com_2024"
+NEXTAUTH_SECRET="your_very_long_random_secret_key_for_onghoangdohieu_com_2025"
 
 # Google AI API
 GOOGLE_AI_API_KEY="your_google_gemini_api_key_here"

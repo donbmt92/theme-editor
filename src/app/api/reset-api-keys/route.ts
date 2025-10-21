@@ -5,7 +5,7 @@ export async function POST(request: NextRequest) {
   try {
     // Check if request is from admin or has proper authorization
     const authHeader = request.headers.get('authorization')
-    const expectedToken = process.env.ADMIN_RESET_TOKEN || 'admin-reset-2024'
+    const expectedToken = process.env.ADMIN_RESET_TOKEN || 'admin-reset-2025'
     
     if (authHeader !== `Bearer ${expectedToken}`) {
       return NextResponse.json(

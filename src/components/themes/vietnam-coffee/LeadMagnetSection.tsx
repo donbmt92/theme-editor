@@ -374,7 +374,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     {
       icon: 'TrendingUp',
       title: "Phân tích thị trường & Xu hướng giá",
-      description: "Dữ liệu thị trường cà phê Mỹ hiện tại và thông tin giá cả 2024"
+      description: "Dữ liệu thị trường cà phê Mỹ hiện tại và thông tin giá cả 2025"
     },
     {
       icon: 'Shield',
@@ -450,7 +450,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                 lineHeight: theme.typography?.lineHeight || '1.6',
               }}
             >
-              {content.description || "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2024' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ."}
+              {content.description || "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2025' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ."}
             </p>
           </div>
 
@@ -493,7 +493,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                           fontSize: theme.typography?.fontSize || '16px'
                         }}
                       >
-                        {content.guideSubtitle || "Phiên bản 2024 - 45 trang"}
+                        {content.guideSubtitle || "Phiên bản 2025 - 45 trang"}
                       </p>
                     </div>
                   </div>

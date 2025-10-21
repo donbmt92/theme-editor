@@ -26,8 +26,8 @@
     "themeId": "theme-id",
     "userId": "user-id",
     "status": "EDITING",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z",
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-01-01T00:00:00Z",
     "theme": {
       "id": "theme-id",
       "name": "Theme Name",
@@ -60,8 +60,8 @@
       "id": "project-id",
       "name": "Project Name",
       "status": "EDITING",
-      "createdAt": "2024-01-01T00:00:00Z",
-      "updatedAt": "2024-01-01T00:00:00Z",
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z",
       "theme": {
         "id": "theme-id",
         "name": "Theme Name",
@@ -71,7 +71,7 @@
         {
           "id": "version-id",
           "versionNumber": 1,
-          "createdAt": "2024-01-01T00:00:00Z"
+          "createdAt": "2025-01-01T00:00:00Z"
         }
       ]
     }
@@ -91,8 +91,8 @@
     "name": "Project Name",
     "themeId": "theme-id",
     "status": "EDITING",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z",
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-01-01T00:00:00Z",
     "theme": {
       "id": "theme-id",
       "name": "Theme Name",
@@ -109,7 +109,7 @@
           "layout": {},
           "content": {}
         },
-        "createdAt": "2024-01-01T00:00:00Z"
+        "createdAt": "2025-01-01T00:00:00Z"
       }
     ]
   }
@@ -139,7 +139,7 @@
   "project": {
     "id": "project-id",
     "name": "Updated Project Name",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "updatedAt": "2025-01-01T00:00:00Z"
   },
   "message": "Project đã được cập nhật thành công"
 }
@@ -172,8 +172,8 @@
       "description": "Theme chuyên biệt cho xuất khẩu cà phê",
       "previewUrl": "https://example.com/preview.jpg",
       "defaultParams": {},
-      "createdAt": "2024-01-01T00:00:00Z",
-      "updatedAt": "2024-01-01T00:00:00Z"
+      "createdAt": "2025-01-01T00:00:00Z",
+      "updatedAt": "2025-01-01T00:00:00Z"
     }
   ]
 }
@@ -197,8 +197,8 @@
       "layout": {},
       "content": {}
     },
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": "2024-01-01T00:00:00Z"
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-01-01T00:00:00Z"
   }
 }
 ```
@@ -411,7 +411,7 @@
     "id": "user-id",
     "email": "user@example.com",
     "name": "User Name",
-    "createdAt": "2024-01-01T00:00:00Z"
+    "createdAt": "2025-01-01T00:00:00Z"
   }
 }
 ```
@@ -472,7 +472,7 @@
   "payment": {
     "id": "payment-id",
     "status": "paid",
-    "paidAt": "2024-01-01T00:00:00Z",
+    "paidAt": "2025-01-01T00:00:00Z",
     "amount": 500000,
     "currency": "VND"
   }

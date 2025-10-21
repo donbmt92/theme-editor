@@ -247,14 +247,14 @@ async function main() {
 
   // Create a sample payment for the user
   await prisma.payment.upsert({
-    where: { bankTxnId: 'TXN_2024_001' },
+    where: { bankTxnId: 'TXN_2025_001' },
     update: {},
     create: {
       userId: sampleUser.id,
       amount: 299000, // 299,000 VND
       currency: 'VND',
       status: 'PAID',
-      bankTxnId: 'TXN_2024_001',
+      bankTxnId: 'TXN_2025_001',
       paidAt: new Date()
     }
   })

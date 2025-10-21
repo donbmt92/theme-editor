@@ -46,10 +46,10 @@ export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMa
     if (projectLanguage === 'english') {
       return {
         title: "Unlock Import-Export Success",
-        description: "Download comprehensive guide 'Vietnamese Coffee Export Handbook 2024' - everything you need to know about successful coffee export to the US market.",
+        description: "Download comprehensive guide 'Vietnamese Coffee Export Handbook 2025' - everything you need to know about successful coffee export to the US market.",
         badgeText: "Free Resource",
         guideTitle: "Complete Export Guide",
-        guideSubtitle: "2024 Edition - 45 pages",
+        guideSubtitle: "2025 Edition - 45 pages",
         formTitle: "Download Free Guide",
         formDescription: "Enter your information below to get instant access to this valuable resource.",
         buttonText: "Download Free Guide Now",
@@ -62,7 +62,7 @@ export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMa
           {
             icon: "TrendingUp",
             title: "Market Analysis & Price Trends",
-            description: "Current US coffee market data and 2024 pricing information"
+            description: "Current US coffee market data and 2025 pricing information"
           },
           {
             icon: "Shield",
@@ -93,10 +93,10 @@ export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMa
     } else {
       return {
         title: "Mở khóa thành công xuất nhập khẩu",
-        description: "Tải về hướng dẫn toàn diện \"Cẩm nang xuất khẩu cà phê Việt Nam 2024\" - tất cả những gì bạn cần biết để thành công vào thị trường Mỹ.",
+        description: "Tải về hướng dẫn toàn diện \"Cẩm nang xuất khẩu cà phê Việt Nam 2025\" - tất cả những gì bạn cần biết để thành công vào thị trường Mỹ.",
         badgeText: "Tài nguyên miễn phí",
         guideTitle: "Hướng dẫn xuất khẩu đầy đủ",
-        guideSubtitle: "Phiên bản 2024 - 45 trang",
+        guideSubtitle: "Phiên bản 2025 - 45 trang",
         formTitle: "Tải về hướng dẫn miễn phí",
         formDescription: "Nhập thông tin bên dưới để nhận tài liệu ngay.",
         buttonText: "Tải về hướng dẫn miễn phí ngay",

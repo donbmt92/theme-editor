@@ -6,7 +6,7 @@ async function testSepayWebhook() {
   // Sample Sepay webhook data
   const webhookData = {
     gateway: "MBBank",
-    transactionDate: "2024-05-25 21:11:02",
+    transactionDate: "2025-05-25 21:11:02",
     accountNumber: "0359123456",
     subAccount: null,
     code: null,
@@ -58,7 +58,7 @@ async function runSepayTests() {
   console.log('Test 2: Outgoing transfer (should be ignored)')
   const outgoingData = {
     gateway: "MBBank",
-    transactionDate: "2024-05-25 21:15:02",
+    transactionDate: "2025-05-25 21:15:02",
     accountNumber: "0359123456",
     subAccount: null,
     code: null,

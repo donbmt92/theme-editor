@@ -102,11 +102,11 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
     },
     leadMagnet: {
       title: "Mở khóa thành công xuất nhập khẩu",
-      description: "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2024' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ.",
+      description: "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2025' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ.",
       backgroundColor: "#F8F9FA",
       textColor: "#2D3748",
       guideTitle: "Hướng dẫn xuất khẩu đầy đủ",
-      guideSubtitle: "Phiên bản 2024 - 45 trang",
+      guideSubtitle: "Phiên bản 2025 - 45 trang",
       formTitle: "Tải về hướng dẫn miễn phí",
       formDescription: "Nhập thông tin bên dưới để có quyền truy cập ngay lập tức vào tài nguyên quý giá này.",
       buttonText: "Tải về hướng dẫn miễn phí ngay",
@@ -119,7 +119,7 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
         {
           icon: "TrendingUp",
           title: "Phân tích thị trường & Xu hướng giá",
-          description: "Dữ liệu thị trường cà phê Mỹ hiện tại và thông tin giá cả 2024"
+          description: "Dữ liệu thị trường cà phê Mỹ hiện tại và thông tin giá cả 2025"
         },
         {
           icon: "Shield",

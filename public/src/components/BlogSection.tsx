@@ -6,30 +6,30 @@ import { ArrowRight, Calendar, User, TrendingUp } from "lucide-react";
 const BlogSection = () => {
   const blogPosts = [
     {
-      title: "2024 Cashew Market Outlook: US Import Trends & Pricing Forecast",
+      title: "2025 Cashew Market Outlook: US Import Trends & Pricing Forecast",
       excerpt: "Comprehensive analysis of the US cashew market including demand projections, pricing trends, and key factors affecting imports from Vietnam.",
       category: "Market Analysis",
       author: "Sarah Johnson",
-      date: "January 15, 2024",
+      date: "January 15, 2025",
       readTime: "8 min read",
       image: "https://images.unsplash.com/photo-1589927986089-35812388d1f4?w=600&h=400&fit=crop",
       featured: true
     },
     {
       title: "New FDA Regulations for Cashew Imports: What You Need to Know",
-      excerpt: "Updated FDA requirements for cashew imports effective 2024, including documentation changes and compliance guidelines for US importers.",
+      excerpt: "Updated FDA requirements for cashew imports effective 2025, including documentation changes and compliance guidelines for US importers.",
       category: "Regulations",
       author: "Michael Chen",
-      date: "January 10, 2024",
+      date: "January 10, 2025",
       readTime: "6 min read",
       image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&h=400&fit=crop"
     },
     {
       title: "Vietnamese Cashew Harvest Update: Quality & Volume Projections",
-      excerpt: "Latest updates from Vietnamese cashew growing regions including harvest quality assessments and volume projections for 2024.",
+      excerpt: "Latest updates from Vietnamese cashew growing regions including harvest quality assessments and volume projections for 2025.",
       category: "Supply Chain",
       author: "Nguyen Tran",
-      date: "January 8, 2024",
+      date: "January 8, 2025",
       readTime: "5 min read",
       image: "https://images.unsplash.com/photo-1588155487507-a5e9ce8b1987?w=600&h=400&fit=crop"
     },
@@ -38,7 +38,7 @@ const BlogSection = () => {
       excerpt: "How our partnerships with Vietnamese farmers promote sustainable practices while ensuring premium quality cashews for US markets.",
       category: "Sustainability",
       author: "David Park",
-      date: "January 5, 2024",
+      date: "January 5, 2025",
       readTime: "7 min read",
       image: "https://images.unsplash.com/photo-1594736797933-d0c3659ad253?w=600&h=400&fit=crop"
     }

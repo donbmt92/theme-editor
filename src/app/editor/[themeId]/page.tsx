@@ -1253,7 +1253,7 @@ const ThemeEditor = () => {
                         <Input
                           value={themeParams?.content?.footer?.copyright || ''}
                           onChange={(e) => updateThemeParam(['content', 'footer', 'copyright'], e.target.value)}
-                          placeholder="© 2024 Cà Phê Việt. Tất cả quyền được bảo lưu."
+                          placeholder="© 2025 Cà Phê Việt. Tất cả quyền được bảo lưu."
                         />
                       </div>
                     </div>

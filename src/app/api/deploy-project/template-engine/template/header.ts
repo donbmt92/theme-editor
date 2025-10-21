@@ -199,7 +199,7 @@ export function generateStaticHeader({ content, themeParams }: HeaderParams): st
 							<polyline points="7 10 12 15 17 10"/>
 							<line x1="12" x2="12" y1="15" y2="3"/>
 						</svg>
-						Cẩm nang XNK 2024
+						Cẩm nang XNK 2025
 					</button>
 					<button style="
 						background-color: ${content?.colorMode === 'custom' && content?.primaryColor 
@@ -344,7 +344,7 @@ export function generateStaticHeader({ content, themeParams }: HeaderParams): st
 							<polyline points="7 10 12 15 17 10"/>
 							<line x1="12" x2="12" y1="15" y2="3"/>
 						</svg>
-						Cẩm nang XNK 2024
+						Cẩm nang XNK 2025
 					</button>
 					<button style="
 						background-color: ${content?.colorMode === 'custom' && content?.primaryColor 

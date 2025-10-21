@@ -171,11 +171,11 @@
     },
     "leadMagnet": {
       "title": "Mở khóa thành công xuất nhập khẩu",
-      "description": "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2024' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ.",
+      "description": "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2025' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ.",
       "backgroundColor": "#F8F9FA",
       "textColor": "#2D3748",
       "guideTitle": "Hướng dẫn xuất khẩu đầy đủ",
-      "guideSubtitle": "Phiên bản 2024 - 45 trang",
+      "guideSubtitle": "Phiên bản 2025 - 45 trang",
       "formTitle": "Tải về hướng dẫn miễn phí",
       "formDescription": "Nhập thông tin bên dưới để có quyền truy cập ngay lập tức vào tài nguyên quý giá này.",
       "buttonText": "Tải về hướng dẫn miễn phí ngay",
@@ -188,7 +188,7 @@
         {
           "icon": "TrendingUp",
           "title": "Phân tích thị trường & Xu hướng giá",
-          "description": "Dữ liệu thị trường cà phê Mỹ hiện tại và thông tin giá cả 2024"
+          "description": "Dữ liệu thị trường cà phê Mỹ hiện tại và thông tin giá cả 2025"
         },
         {
           "icon": "Shield",
@@ -447,10 +447,10 @@
         }
       ],
       "featuredPost": {
-        "title": "Xu hướng thị trường cà phê Mỹ 2024",
+        "title": "Xu hướng thị trường cà phê Mỹ 2025",
         "excerpt": "Phân tích chi tiết về xu hướng tiêu dùng cà phê tại Mỹ và cơ hội cho cà phê Việt Nam.",
         "author": "Nguyễn Văn A",
-        "date": "2024-01-15",
+        "date": "2025-01-15",
         "image": "/assets/blog-featured.jpg",
         "category": "Thị trường"
       },
@@ -460,7 +460,7 @@
           "title": "Hướng dẫn xuất khẩu cà phê sang Mỹ",
           "excerpt": "Quy trình chi tiết từ chuẩn bị hồ sơ đến giao hàng thành công.",
           "author": "Trần Thị B",
-          "date": "2024-01-10",
+          "date": "2025-01-10",
           "image": "/assets/blog-1.jpg",
           "category": "Xuất khẩu"
         },
@@ -469,7 +469,7 @@
           "title": "Tiêu chuẩn chất lượng FDA cho cà phê",
           "excerpt": "Những yêu cầu cần thiết để đạt tiêu chuẩn FDA khi xuất khẩu cà phê.",
           "author": "Lê Văn C",
-          "date": "2024-01-08",
+          "date": "2025-01-08",
           "image": "/assets/blog-2.jpg",
           "category": "Chất lượng"
         },
@@ -478,7 +478,7 @@
           "title": "Kỹ thuật trồng cà phê bền vững",
           "excerpt": "Phương pháp canh tác hiện đại giúp tăng năng suất và chất lượng.",
           "author": "Phạm Thị D",
-          "date": "2024-01-05",
+          "date": "2025-01-05",
           "image": "/assets/blog-3.jpg",
           "category": "Kỹ thuật"
         }

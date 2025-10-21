@@ -1326,7 +1326,7 @@ function generateStaticHeader(content: any, colors: any) {
                 </nav>
                 
                 <div class="header-cta">
-                    <a href="#contact" class="btn btn-secondary">⬇️ Cẩm nang XNK 2024</a>
+                    <a href="#contact" class="btn btn-secondary">⬇️ Cẩm nang XNK 2025</a>
                     <a href="#contact" class="btn btn-accent">📞 Tư vấn miễn phí</a>
                 </div>
                 
@@ -1341,7 +1341,7 @@ function generateStaticHeader(content: any, colors: any) {
                     <a href="#contact">Liên hệ</a>
                 </nav>
                 <div class="mobile-cta">
-                    <a href="#contact" class="btn btn-secondary">⬇️ Cẩm nang XNK 2024</a>
+                    <a href="#contact" class="btn btn-secondary">⬇️ Cẩm nang XNK 2025</a>
                     <a href="#contact" class="btn btn-accent">📞 Tư vấn miễn phí</a>
                 </div>
             </div>
@@ -1652,7 +1652,7 @@ function generateStaticFooter(content: any, colors: any) {
             
             <div class="footer-bottom">
                 <div style="opacity: 0.8;">
-                    © 2024 ${footerContent.companyName || 'Cà Phê Việt'}. Tất cả quyền được bảo lưu.
+                    © 2025 ${footerContent.companyName || 'Cà Phê Việt'}. Tất cả quyền được bảo lưu.
                 </div>
                 <div class="footer-links-bottom">
                     <a href="#">Chính sách bảo mật</a>

@@ -125,7 +125,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               id="guideSubtitle"
               value={leadMagnet.guideSubtitle || ''}
               onChange={(e) => updateThemeParam(['content', 'leadMagnet', 'guideSubtitle'], e.target.value)}
-              placeholder="2024 Edition - 45 Pages"
+              placeholder="2025 Edition - 45 Pages"
             />
           </div>
         </div>

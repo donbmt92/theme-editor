@@ -362,7 +362,7 @@ const createDefaultThemeParams = (): ThemeParams => ({
       ]
     },
     leadMagnet: {
-      title: "Tải xuống báo cáo thị trường cà phê 2024",
+      title: "Tải xuống báo cáo thị trường cà phê 2025",
       description: "Phân tích chi tiết xu hướng thị trường, cơ hội kinh doanh và dự báo tương lai của ngành cà phê.",
       backgroundColor: "#F8F9FA",
       textColor: "#2D3748",
@@ -374,7 +374,7 @@ const createDefaultThemeParams = (): ThemeParams => ({
       descriptionSize: "base",
       descriptionWeight: "normal",
       descriptionFont: "inter",
-      guideTitle: "Báo cáo thị trường cà phê 2024",
+      guideTitle: "Báo cáo thị trường cà phê 2025",
       guideSubtitle: "Dữ liệu cập nhật, phân tích chuyên sâu",
       formTitle: "Nhận báo cáo miễn phí",
       formDescription: "Điền thông tin của bạn để tải xuống báo cáo ngay bây giờ!",

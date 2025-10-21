@@ -128,10 +128,10 @@ const getLocalizedText = () => {
         { name: "Quality", count: 10 }
       ],
       featuredPost: {
-        title: "Coffee Market Trends 2024",
+        title: "Coffee Market Trends 2025",
         excerpt: "Detailed analysis of consumption trends and business opportunities in the coffee industry.",
         author: "Expert",
-        date: "2024-01-15",
+        date: "2025-01-15",
         category: "Market"
       },
       posts: [
@@ -139,7 +139,7 @@ const getLocalizedText = () => {
           title: "Coffee Export Guide",
           excerpt: "Detailed process from document preparation to successful delivery.",
           author: "Expert",
-          date: "2024-01-10",
+          date: "2025-01-10",
           category: "Export"
         },
         // ... more posts
@@ -252,9 +252,9 @@ const getLocalizedText = () => {
   if (projectLanguage === 'english') {
     return {
       title: "Unlock Import-Export Success",
-      description: "Download comprehensive guide 'Vietnamese Coffee Export Handbook 2024' - everything you need to know about successful coffee export to the US market.",
+      description: "Download comprehensive guide 'Vietnamese Coffee Export Handbook 2025' - everything you need to know about successful coffee export to the US market.",
       guideTitle: "Complete Export Guide",
-      guideSubtitle: "2024 Edition - 45 pages",
+      guideSubtitle: "2025 Edition - 45 pages",
       formTitle: "Download Free Guide",
       formDescription: "Enter your information below to get instant access to this valuable resource.",
       buttonText: "Download Free Guide Now",
@@ -267,7 +267,7 @@ const getLocalizedText = () => {
         {
           icon: "TrendingUp",
           title: "Market Analysis & Price Trends",
-          description: "Current US coffee market data and 2024 pricing information"
+          description: "Current US coffee market data and 2025 pricing information"
         },
         {
           icon: "Shield",

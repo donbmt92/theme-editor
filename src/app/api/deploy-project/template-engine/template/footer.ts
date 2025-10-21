@@ -45,7 +45,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
           title: "Subscribe to Newsletter",
           placeholder: "Your email"
         },
-        copyright: "© 2024 Viet Coffee. All rights reserved.",
+        copyright: "© 2025 Viet Coffee. All rights reserved.",
         legal: [
           { name: "Privacy Policy", href: "#" },
           { name: "Terms of Service", href: "#" },
@@ -89,7 +89,7 @@ export function generateStaticFooter(themeParams: ThemeParams): string {
           title: "Đăng ký nhận tin",
           placeholder: "Email của bạn"
         },
-        copyright: "© 2024 Cà Phê Việt. Tất cả quyền được bảo lưu.",
+        copyright: "© 2025 Cà Phê Việt. Tất cả quyền được bảo lưu.",
         legal: [
           { name: "Chính sách bảo mật", href: "#" },
           { name: "Điều khoản sử dụng", href: "#" },

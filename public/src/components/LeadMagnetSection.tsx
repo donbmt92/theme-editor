@@ -33,7 +33,7 @@ const LeadMagnetSection = () => {
     {
       icon: TrendingUp,
       title: "Market Analysis & Pricing Trends",
-      description: "Current US cashew market data and pricing insights for 2024"
+      description: "Current US cashew market data and pricing insights for 2025"
     },
     {
       icon: Shield,
@@ -66,7 +66,7 @@ const LeadMagnetSection = () => {
               Unlock Your Import/Export Success
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Get our comprehensive "2024 Vietnamese Cashew Import Guide" - everything you need to know about importing cashews to the US market successfully.
+              Get our comprehensive "2025 Vietnamese Cashew Import Guide" - everything you need to know about importing cashews to the US market successfully.
             </p>
           </div>
 
@@ -81,7 +81,7 @@ const LeadMagnetSection = () => {
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold text-foreground">Complete Import Guide</h3>
-                      <p className="text-muted-foreground">2024 Edition - 45 Pages</p>
+                      <p className="text-muted-foreground">2025 Edition - 45 Pages</p>
                     </div>
                   </div>
 

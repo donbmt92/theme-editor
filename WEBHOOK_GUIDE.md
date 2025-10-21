@@ -37,7 +37,7 @@ Authorization: Bearer <API_KEY>
 ```json
 {
   "gateway": "MBBank",
-  "transactionDate": "2024-05-25 21:11:02",
+  "transactionDate": "2025-05-25 21:11:02",
   "accountNumber": "0359123456",
   "subAccount": null,
   "code": null,
@@ -104,7 +104,7 @@ curl -X POST http://localhost:3000/api/sepay/webhook \
   -H "Authorization: Bearer đây_là_khóa_bí_mật" \
   -d '{
     "gateway": "MBBank",
-    "transactionDate": "2024-05-25 21:11:02",
+    "transactionDate": "2025-05-25 21:11:02",
     "accountNumber": "0359123456",
     "content": "Thanh toan QR SE123456",
     "transferType": "in",
@@ -124,7 +124,7 @@ curl -X POST http://localhost:3000/api/sepay/webhook \
   -H "Authorization: Bearer đây_là_khóa_bí_mật" \
   -d '{
     "gateway": "MBBank",
-    "transactionDate": "2024-05-25 21:15:02",
+    "transactionDate": "2025-05-25 21:15:02",
     "accountNumber": "0359123456",
     "content": "Chuyen tien ra ngoai",
     "transferType": "out",

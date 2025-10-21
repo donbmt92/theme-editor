@@ -476,7 +476,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                 fontSize: theme.typography?.fontSize || '16px'
               }}
             >
-              © 2024 {content.companyName || "VietCoffee Export"}. {localizedText.copyright}
+              © 2025 {content.companyName || "VietCoffee Export"}. {localizedText.copyright}
             </div>
             
             {/* <div className="flex flex-wrap gap-6">

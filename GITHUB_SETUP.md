@@ -323,7 +323,7 @@ ENV GITHUB_TOKEN=ghp_your_token_here
 ### **Logging:**
 ```json
 {
-  "timestamp": "2024-01-15T10:30:45.123Z",
+  "timestamp": "2025-01-15T10:30:45.123Z",
   "service": "github",
   "operation": "create_repository",
   "repoName": "my-project",

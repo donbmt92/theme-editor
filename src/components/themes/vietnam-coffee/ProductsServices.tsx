@@ -490,14 +490,14 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                 </p>
 
              
-                <Button 
+                {/* <Button 
                   variant="outline" 
                   className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                   style={getButtonStyles('outline')}
                 >
                   {service.cta}
                   <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           ))}
@@ -646,14 +646,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                 </>
               )}
             </div>
-            <Button 
-              size="lg" 
-              className="shadow-elegant"
-              style={getButtonStyles('primary')}
-            >
-              {localizedText.viewProductCatalog}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            
           </div>
         </div>
 
@@ -697,14 +690,14 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                 </div>
               ))}
             </div>
-            <Button 
+            {/* <Button 
               size="lg" 
               className="shadow-elegant"
               style={getButtonStyles('primary')}
             >
               {localizedText.learnAboutShipping}
               <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            </Button> */}
           </div>
           <div className="order-1 lg:order-2">
             <Card 
