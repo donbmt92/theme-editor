@@ -62,7 +62,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
             />
           </div>
           
-          <div>
+          {/* <div>
             <Label htmlFor="description">Mô tả</Label>
             <Textarea
               id="description"
@@ -71,7 +71,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
               placeholder="Mô tả về những giải pháp mà bạn cung cấp cho khách hàng"
               rows={3}
             />
-          </div>
+          </div> */}
         </div>
       </Card>
 
@@ -615,7 +615,70 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
             />
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
+          {/* Stats Configuration */}
+          <div className="border-t pt-4">
+            <h4 className="text-md font-medium mb-3">Thống kê</h4>
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="stat1Value">Giá trị thống kê 1</Label>
+                <Input
+                  id="stat1Value"
+                  value={solutions.cta?.stats?.stat1?.value || '15+'}
+                  onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat1', 'value'], e.target.value)}
+                  placeholder="15+"
+                />
+              </div>
+              <div>
+                <Label htmlFor="stat2Value">Giá trị thống kê 2</Label>
+                <Input
+                  id="stat2Value"
+                  value={solutions.cta?.stats?.stat2?.value || '500+'}
+                  onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat2', 'value'], e.target.value)}
+                  placeholder="500+"
+                />
+              </div>
+              <div>
+                <Label htmlFor="stat3Value">Giá trị thống kê 3</Label>
+                <Input
+                  id="stat3Value"
+                  value={solutions.cta?.stats?.stat3?.value || '99.8%'}
+                  onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat3', 'value'], e.target.value)}
+                  placeholder="99.8%"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-4 mt-3">
+              <div>
+                <Label htmlFor="stat1Label">Nhãn thống kê 1</Label>
+                <Input
+                  id="stat1Label"
+                  value={solutions.cta?.stats?.stat1?.label || ''}
+                  onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat1', 'label'], e.target.value)}
+                  placeholder="Năm kinh nghiệm thị trường Mỹ"
+                />
+              </div>
+              <div>
+                <Label htmlFor="stat2Label">Nhãn thống kê 2</Label>
+                <Input
+                  id="stat2Label"
+                  value={solutions.cta?.stats?.stat2?.label || ''}
+                  onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat2', 'label'], e.target.value)}
+                  placeholder="Lô hàng thành công"
+                />
+              </div>
+              <div>
+                <Label htmlFor="stat3Label">Nhãn thống kê 3</Label>
+                <Input
+                  id="stat3Label"
+                  value={solutions.cta?.stats?.stat3?.label || ''}
+                  onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat3', 'label'], e.target.value)}
+                  placeholder="Giao hàng đúng hạn"
+                />
+              </div>
+            </div>
+          </div>
+          
+          {/* <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="ctaBackgroundColor">Màu nền CTA</Label>
               <div className="flex items-center space-x-3">
@@ -649,7 +712,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
                 />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </Card>
     </div>

@@ -27,6 +27,12 @@ interface ProblemSolutionContent {
     description?: string;
     backgroundColor?: string;
     textColor?: string;
+    titleSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
   };
   problems?: {
     title?: string;
@@ -46,6 +52,27 @@ interface ProblemSolutionContent {
     itemTitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
     itemDescriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
     itemDescriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    cta?: {
+      title?: string;
+      description?: string;
+      buttonText?: string;
+      backgroundColor?: string;
+      textColor?: string;
+      stats?: {
+        stat1?: {
+          value?: string;
+          label?: string;
+        };
+        stat2?: {
+          value?: string;
+          label?: string;
+        };
+        stat3?: {
+          value?: string;
+          label?: string;
+        };
+      };
+    };
   };
   solutions?: {
     title?: string;
@@ -67,6 +94,27 @@ interface ProblemSolutionContent {
     itemDescriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
     itemBenefitWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
     itemBenefitFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
+    cta?: {
+      title?: string;
+      description?: string;
+      buttonText?: string;
+      backgroundColor?: string;
+      textColor?: string;
+      stats?: {
+        stat1?: {
+          value?: string;
+          label?: string;
+        };
+        stat2?: {
+          value?: string;
+          label?: string;
+        };
+        stat3?: {
+          value?: string;
+          label?: string;
+        };
+      };
+    };
   };
   cta?: {
     title?: string;
@@ -385,9 +433,12 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
     }
   }
 
+  // Derived classes for About Section
+  const aboutTitleClasses = cn(sizeToClasses(content.about?.titleSize, getHeadingSize('large')), weightToClasses(content.about?.titleWeight, 'font-bold'), fontToClasses(content.about?.titleFont))
+  const aboutDescClasses = cn(sizeToClasses(content.about?.descriptionSize, getBodySize()), weightToClasses(content.about?.descriptionWeight, 'font-normal'), fontToClasses(content.about?.descriptionFont))
+
   // Derived classes for Problems
   const problemsTitleClasses = cn(sizeToClasses(content.problems?.titleSize, getHeadingSize('medium')), weightToClasses(content.problems?.titleWeight, 'font-bold'), fontToClasses(content.problems?.titleFont))
-  const problemsDescClasses = cn(sizeToClasses(content.problems?.descriptionSize, getBodySize()), weightToClasses(content.problems?.descriptionWeight, 'font-normal'), fontToClasses(content.problems?.descriptionFont))
   const problemsItemTitleClasses = cn(weightToClasses(content.problems?.itemTitleWeight, 'font-semibold'), fontToClasses(content.problems?.itemTitleFont))
   const problemsItemDescClasses = cn(sizeToClasses(content.problems?.itemDescriptionSize, 'text-base md:text-lg'), fontToClasses(content.problems?.itemDescriptionFont))
 
@@ -395,7 +446,6 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
   const solutionsTitleClasses = cn(sizeToClasses(content.solutions?.titleSize, getHeadingSize('medium')), weightToClasses(content.solutions?.titleWeight, 'font-bold'), fontToClasses(content.solutions?.titleFont))
   const solutionsDescClasses = cn(sizeToClasses(content.solutions?.descriptionSize, getBodySize()), weightToClasses(content.solutions?.descriptionWeight, 'font-normal'), fontToClasses(content.solutions?.descriptionFont))
   const solutionsItemTitleClasses = cn(weightToClasses(content.solutions?.itemTitleWeight, 'font-semibold'), fontToClasses(content.solutions?.itemTitleFont))
-  const solutionsItemDescClasses = cn(sizeToClasses(content.solutions?.itemDescriptionSize, 'text-base md:text-lg'), fontToClasses(content.solutions?.itemDescriptionFont))
   const solutionsBenefitClasses = cn(weightToClasses(content.solutions?.itemBenefitWeight, 'font-medium'), fontToClasses(content.solutions?.itemBenefitFont))
 
 
@@ -422,7 +472,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 
-            className={cn("font-bold mb-4", getHeadingSize('large'))}
+            className={cn("font-bold mb-4", aboutTitleClasses)}
             style={{ 
               color: content.about?.textColor || content.problems?.textColor || theme.sections?.problems?.textColor || theme.colors.text,
               fontWeight: theme.typography?.fontWeight || '700'
@@ -431,7 +481,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
             {content.about?.title || localizedText.defaultAboutTitle}
           </h2>
           <p 
-            className={cn("max-w-3xl mx-auto", problemsDescClasses)}
+            className={cn("max-w-3xl mx-auto", aboutDescClasses)}
             style={{ 
               color: content.about?.textColor || content.problems?.textColor || theme.sections?.problems?.textColor || theme.colors.muted || '#718096',
               lineHeight: theme.typography?.lineHeight || '1.6'
@@ -592,7 +642,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
             className={cn("max-w-4xl mx-auto border-0 shadow-elegant", getBorderRadiusClass())}
             style={{ 
               background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
-              color: content.cta?.textColor || '#FFFFFF',
+              color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
               fontFamily: theme.typography?.fontFamily || 'Inter',
               fontSize: theme.typography?.fontSize || '16px'
             }}
@@ -601,80 +651,80 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
               <h3 
                 className={cn("font-bold mb-4", getHeadingSize('medium'))}
                 style={{ 
-                  color: content.cta?.textColor || '#FFFFFF',
+                  color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {content.cta?.title || localizedText.defaultCtaTitle}
+                {content.problems?.cta?.title || content.solutions?.cta?.title || localizedText.defaultCtaTitle}
               </h3>
               <p 
                 className={cn("mb-8 opacity-90", getBodySize())}
                 style={{ 
-                  color: content.cta?.textColor || '#FFFFFF',
+                  color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                   lineHeight: theme.typography?.lineHeight || '1.6'
                 }}
               >
-                {content.cta?.description || localizedText.defaultCtaDescription}
+                {content.problems?.cta?.description || content.solutions?.cta?.description || localizedText.defaultCtaDescription}
               </p>
               <div className="grid md:grid-cols-3 gap-8 mb-8">
                 <div className="text-center">
                   <div 
                     className="text-4xl font-bold mb-2"
                     style={{ 
-                      color: content.cta?.textColor || '#FFFFFF',
+                      color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    15+
+                    {content.problems?.cta?.stats?.stat1?.value || content.solutions?.cta?.stats?.stat1?.value || '15+'}
                   </div>
                   <div 
                     className="opacity-90"
                     style={{ 
-                      color: content.cta?.textColor || '#FFFFFF',
+                      color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {localizedText.stats.experience}
+                    {content.problems?.cta?.stats?.stat1?.label || content.solutions?.cta?.stats?.stat1?.label || localizedText.stats.experience}
                   </div>
                 </div>
                 <div className="text-center">
                   <div 
                     className="text-4xl font-bold mb-2"
                     style={{ 
-                      color: content.cta?.textColor || '#FFFFFF',
+                      color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    500+
+                    {content.problems?.cta?.stats?.stat2?.value || content.solutions?.cta?.stats?.stat2?.value || '500+'}
                   </div>
                   <div 
                     className="opacity-90"
                     style={{ 
-                      color: content.cta?.textColor || '#FFFFFF',
+                      color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {localizedText.stats.orders}
+                    {content.problems?.cta?.stats?.stat2?.label || content.solutions?.cta?.stats?.stat2?.label || localizedText.stats.orders}
                   </div>
                 </div>
                 <div className="text-center">
                   <div 
                     className="text-4xl font-bold mb-2"
                     style={{ 
-                      color: content.cta?.textColor || '#FFFFFF',
+                      color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    99.8%
+                    {content.problems?.cta?.stats?.stat3?.value || content.solutions?.cta?.stats?.stat3?.value || '99.8%'}
                   </div>
                   <div 
                     className="opacity-90"
                     style={{ 
-                      color: content.cta?.textColor || '#FFFFFF',
+                      color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {localizedText.stats.delivery}
+                    {content.problems?.cta?.stats?.stat3?.label || content.solutions?.cta?.stats?.stat3?.label || localizedText.stats.delivery}
                   </div>
                 </div>
               </div>
@@ -684,7 +734,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                 className="bg-white text-primary hover:bg-white/90"
                 style={getButtonStyles()}
               >
-                {content.cta?.buttonText || localizedText.learnMore}
+                {content.problems?.cta?.buttonText || content.solutions?.cta?.buttonText || localizedText.learnMore}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </CardContent>

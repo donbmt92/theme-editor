@@ -421,33 +421,41 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
           margin: '0 auto'
         }}
       >
-        <div className="text-center mb-16">
-          <h2 
-            className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
-            style={{ 
-              color: content.colorMode === 'custom' && content.textColor 
-                ? content.textColor 
-                : theme.sections?.products?.textColor || theme.colors.text,
-            }}
-          >
-            {content.title || "Giải Pháp Xuất Nhập Khẩu Toàn Diện"}
-          </h2>
-          <p 
-            className={cn("max-w-3xl mx-auto", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
-            style={{ 
-              color: content.colorMode === 'custom' && content.textColor 
-                ? `${content.textColor}E6` 
-                : theme.sections?.products?.textColor || theme.colors.muted || '#718096',
-              lineHeight: theme.typography?.lineHeight || '1.6'
-            }}
-          >
-            {content.description || "Từ việc tìm nguồn cà phê cao cấp tại Việt Nam đến giao hàng tại kho Mỹ, chúng tôi xử lý mọi bước của quy trình xuất khẩu."}
-          </p>
-        </div>
+        {/* Header Section - chỉ hiển thị khi có title hoặc description */}
+        {((content.title && content.title.trim()) || (content.description && content.description.trim())) && (
+          <div className="text-center mb-16">
+            {(content.title && content.title.trim()) && (
+              <h2 
+                className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
+                style={{ 
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? content.textColor 
+                    : theme.sections?.products?.textColor || theme.colors.text,
+                }}
+              >
+                {content.title}
+              </h2>
+            )}
+            {(content.description && content.description.trim()) && (
+              <p 
+                className={cn("max-w-3xl mx-auto", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
+                style={{ 
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}E6` 
+                    : theme.sections?.products?.textColor || theme.colors.muted || '#718096',
+                  lineHeight: theme.typography?.lineHeight || '1.6'
+                }}
+              >
+                {content.description}
+              </p>
+            )}
+          </div>
+        )}
 
-        {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-          {services.map((service, index) => (
+        {/* Services Grid - chỉ hiển thị khi có services */}
+        {services && services.length > 0 && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+            {services.map((service, index) => (
             <Card 
               key={index} 
               className={cn("shadow-card hover:shadow-elegant transition-all duration-300 border-border/50 hover:border-primary/50", getBorderRadiusClass())}
@@ -500,251 +508,107 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                 </Button> */}
               </CardContent>
             </Card>
-          ))}
-        </div>
-
-        {/* Featured Services with Images */}
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <Card 
-              className={cn("overflow-hidden shadow-elegant border-0", getBorderRadiusClass())}
-              style={{ 
-                fontFamily: theme.typography?.fontFamily || 'Inter',
-                fontSize: theme.typography?.fontSize || '16px'
-              }}
-            >
-              {coffeeImageUrl ? (
-                <div className="relative w-full h-80">
-                  {coffeeImageLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-                    </div>
-                  )}
-                  <Image
-                    src={coffeeImageUrl}
-                    alt={content.items?.[0]?.name || "Hạt điều Việt Nam cao cấp"}
-                    fill
-                    className="object-cover"
-                    priority
-                    quality={90}
-                  />
-                </div>
-              ) : (
-                <div 
-                  className="w-full h-80 flex items-center justify-center"
-                  style={{ backgroundColor: `${theme.colors.primary}10` }}
-                >
-                  <div className="text-center">
-                    <Coffee 
-                      size={64} 
-                      style={{ color: theme.colors.primary }}
-                      className="mb-4"
-                    />
-                    <p 
-                      style={{ color: theme.colors.text }}
-                    >
-                      {content.items?.[0]?.name || "Hạt điều Việt Nam"}
-                    </p>
-                  </div>
-                </div>
-              )}
-            </Card>
+            ))}
           </div>
-          <div className="space-y-6">
-            <h3 
-              className={cn("font-bold", getHeadingSize('medium'))}
-              style={{ 
-                color: content.textColor || theme.colors.text,
-                fontWeight: theme.typography?.fontWeight || '700'
-              }}
-            >
-              {content.items?.[0]?.name || "Hạt Điều Việt Nam Cao Cấp"}
-            </h3>
-            <p 
-              className={cn("leading-relaxed", getBodySize())}
-              style={{ 
-                color: content.textColor || theme.colors.muted || '#718096',
-                lineHeight: theme.typography?.lineHeight || '1.6'
-              }}
-            >
-              {content.items?.[0]?.description || "Chúng tôi tìm nguồn trực tiếp từ các trang trại hạt điều tốt nhất tại Bình Phước và Đồng Nai, nơi sản xuất những hạt điều ngon nhất thế giới. Kiểm soát chất lượng nghiêm ngặt đảm bảo chỉ những hạt điều loại A đến được thị trường quốc tế."}
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-              {content.items?.slice(0, 2).map((item, index) => (
-                <div 
-                  key={item.id || index}
-                  className={cn("text-center p-4 rounded-lg", getBorderRadiusClass())}
-                  style={{ backgroundColor: `${theme.colors.primary}10` }}
-                >
-                  <div 
-                    className="text-2xl font-bold"
+        )}
+
+      
+
+        {/* Products Grid - hiển thị tất cả sản phẩm theo kiểu chẵn lẻ */}
+        {content.items && content.items.length > 0 && (
+          <div className="mt-20">
+            {content.items.map((item, index) => (
+              <div key={item.id || index} className={`grid lg:grid-cols-2 gap-12 items-center ${index > 0 ? 'mt-20' : ''}`}>
+                <div className={index % 2 === 0 ? 'order-1' : 'order-2'}>
+                  <Card 
+                    className={cn("overflow-hidden shadow-elegant border-0", getBorderRadiusClass())}
                     style={{ 
-                      color: theme.colors.primary,
-                      fontWeight: theme.typography?.fontWeight || '700'
-                    }}
-                  >
-                    {item.category || item.name}
-                  </div>
-                  <div 
-                    className="text-sm"
-                    style={{ 
-                      color: content.textColor || theme.colors.muted || '#718096',
+                      fontFamily: theme.typography?.fontFamily || 'Inter',
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {item.price || localizedText.contact}
-                  </div>
+                    {item.image ? (
+                      <div className="relative w-full h-80">
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                          quality={90}
+                        />
+                      </div>
+                    ) : (
+                      <div 
+                        className="w-full h-80 flex items-center justify-center"
+                        style={{ backgroundColor: `${theme.colors.primary}10` }}
+                      >
+                        <div className="text-center">
+                          <Coffee 
+                            size={64} 
+                            style={{ color: theme.colors.primary }}
+                            className="mb-4"
+                          />
+                          <p 
+                            style={{ color: theme.colors.text }}
+                          >
+                            {item.name || "Sản phẩm"}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </Card>
                 </div>
-              )) || (
-                <>
-                  <div 
-                    className={cn("text-center p-4 rounded-lg", getBorderRadiusClass())}
-                    style={{ backgroundColor: `${theme.colors.primary}10` }}
-                  >
-                    <div 
-                      className="text-2xl font-bold"
+                <div className={`space-y-6 ${index % 2 === 0 ? 'order-2' : 'order-1'}`}>
+                  {(item.name && item.name.trim()) && (
+                    <h3 
+                      className={cn("font-bold", getHeadingSize('medium'))}
                       style={{ 
-                        color: theme.colors.primary,
+                        color: content.textColor || theme.colors.text,
                         fontWeight: theme.typography?.fontWeight || '700'
                       }}
                     >
-                      WW320
-                    </div>
-                    <div 
-                      className="text-sm"
+                      {item.name}
+                    </h3>
+                  )}
+                  {(item.description && item.description.trim()) && (
+                    <p 
+                      className={cn("leading-relaxed", getBodySize())}
                       style={{ 
                         color: content.textColor || theme.colors.muted || '#718096',
-                        fontSize: theme.typography?.fontSize || '16px'
+                        lineHeight: theme.typography?.lineHeight || '1.6'
                       }}
                     >
-                      {localizedText.premiumGrade}
-                    </div>
-                  </div>
-                  <div 
-                    className={cn("text-center p-4 rounded-lg", getBorderRadiusClass())}
-                    style={{ backgroundColor: `${theme.colors.primary}10` }}
-                  >
+                      {item.description}
+                    </p>
+                  )}
+                  {(item.category && item.category.trim()) && (
                     <div 
-                      className="text-2xl font-bold"
+                      className="text-lg font-semibold"
                       style={{ 
                         color: theme.colors.primary,
-                        fontWeight: theme.typography?.fontWeight || '700'
+                        fontWeight: theme.typography?.fontWeight || '600'
                       }}
                     >
-                      WW240
-                    </div>
-                    <div 
-                      className="text-sm"
-                      style={{ 
-                        color: content.textColor || theme.colors.muted || '#718096',
-                        fontSize: theme.typography?.fontSize || '16px'
-                      }}
-                    >
-                      {localizedText.standardGrade}
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            
-          </div>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-12 items-center mt-20">
-          <div className="order-2 lg:order-1 space-y-6">
-            <h3 
-              className={cn("font-bold", getHeadingSize('medium'))}
-              style={{ 
-                color: content.textColor || theme.colors.text,
-                fontWeight: theme.typography?.fontWeight || '700'
-              }}
-            >
-              {content.items?.[1]?.name || "Logistics & Giao Hàng Liền Mạch"}
-            </h3>
-            <p 
-              className={cn("leading-relaxed", getBodySize())}
-              style={{ 
-                color: content.textColor || theme.colors.muted || '#718096',
-                lineHeight: theme.typography?.lineHeight || '1.6'
-              }}
-            >
-              {content.items?.[1]?.description || "Mạng lưới logistics của chúng tôi đảm bảo hạt điều của bạn đến đúng hạn và trong tình trạng hoàn hảo. Chúng tôi xử lý thông quan hải quan, tài liệu và theo dõi giao hàng để bạn có thể tập trung vào kinh doanh."}
-            </p>
-            <div className="space-y-4">
-              {(content.items?.[1]?.features || [
-                "Tùy chọn container 20ft & 40ft",
-                "Vận chuyển kiểm soát nhiệt độ",
-                "Theo dõi & cập nhật thời gian thực",
-                "Bảo hiểm hàng hóa bao gồm"
-              ]).map((feature: string, index: number) => (
-                <div key={index} className="flex items-center">
-                  <div 
-                    className={cn("h-2 w-2 rounded-full mr-3", getBorderRadiusClass())}
-                    style={{ backgroundColor: theme.colors.accent || '#28A745' }}
-                  ></div>
-                  <span 
-                    style={{ color: content.textColor || theme.colors.text }}
-                  >
-                    {feature}
-                  </span>
-                </div>
-              ))}
-            </div>
-            {/* <Button 
-              size="lg" 
-              className="shadow-elegant"
-              style={getButtonStyles('primary')}
-            >
-              {localizedText.learnAboutShipping}
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button> */}
-          </div>
-          <div className="order-1 lg:order-2">
-            <Card 
-              className={cn("overflow-hidden shadow-elegant border-0", getBorderRadiusClass())}
-              style={{ 
-                fontFamily: theme.typography?.fontFamily || 'Inter',
-                fontSize: theme.typography?.fontSize || '16px'
-              }}
-            >
-              {logisticsImageUrl ? (
-                <div className="relative w-full h-80">
-                  {logisticsImageLoading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                      {item.category}
                     </div>
                   )}
-                  <Image
-                    src={logisticsImageUrl}
-                    alt={content.items?.[1]?.name || "Vận chuyển quốc tế"}
-                    fill
-                    className="object-cover"
-                    priority
-                    quality={90}
-                  />
-                </div>
-              ) : (
-                <div 
-                  className="w-full h-80 flex items-center justify-center"
-                  style={{ backgroundColor: `${theme.colors.primary}10` }}
-                >
-                  <div className="text-center">
-                    <Truck 
-                      size={64} 
-                      style={{ color: theme.colors.primary }}
-                      className="mb-4"
-                    />
-                    <p 
-                      style={{ color: theme.colors.text }}
+                  {(item.price && item.price.trim()) && (
+                    <div 
+                      className="text-2xl font-bold"
+                      style={{ 
+                        color: theme.colors.primary,
+                        fontWeight: theme.typography?.fontWeight || '700'
+                      }}
                     >
-                      {content.items?.[1]?.name || "Vận chuyển quốc tế"}
-                    </p>
-                  </div>
+                      {item.price}
+                    </div>
+                  )}
                 </div>
-              )}
-            </Card>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
+       
       </div>
     </section>
   );

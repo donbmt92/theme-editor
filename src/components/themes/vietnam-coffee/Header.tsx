@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList, NavigationMenuLink } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, Phone, Download, Coffee } from "lucide-react";
+import { Menu, Phone, Coffee } from "lucide-react";
 import { useState } from "react";
 import { ThemeParams } from "@/types";
 import Image from "next/image";
@@ -18,6 +18,12 @@ interface HeaderContent {
   textColor?: string;
   primaryColor?: string;
   colorMode?: 'theme' | 'custom';
+  navigation?: Array<{ name: string; href: string }>;
+  socialLinks?: Array<{ platform: string; url: string; icon?: string }>;
+  contactInfo?: {
+    phone?: string;
+    email?: string;
+  };
 }
 
 interface HeaderProps {
@@ -56,15 +62,6 @@ const Header = ({ theme, content }: HeaderProps) => {
 
   const localizedText = getLocalizedText();
 
-  const scrollToGuide = (e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    const el = document.getElementById('guide');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      window.location.hash = '#guide';
-    }
-  };
 
   // Get typography styles
   const getTypographyStyles = () => {
@@ -146,13 +143,16 @@ const Header = ({ theme, content }: HeaderProps) => {
     }
   }
 
-  const navigation = [
-    { name: localizedText.home, href: "#home" },
-    { name: localizedText.about, href: "#about" },
-    { name: localizedText.products, href: "#products" },
-    { name: localizedText.resources, href: "#resources" },
-    { name: localizedText.contact, href: "#contact" }
-  ];
+  // Use navigation from content if available, otherwise fallback to default
+  const navigation = content.navigation && content.navigation.length > 0 
+    ? content.navigation 
+    : [
+        { name: localizedText.home, href: "#home" },
+        { name: localizedText.about, href: "#about" },
+        { name: localizedText.products, href: "#products" },
+        { name: localizedText.resources, href: "#resources" },
+        { name: localizedText.contact, href: "#contact" }
+      ];
 
   return (
     <header 
@@ -246,6 +246,33 @@ const Header = ({ theme, content }: HeaderProps) => {
 
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center space-x-3">
+            {/* Social Links */}
+            {content.socialLinks && content.socialLinks.length > 0 && (
+              <div className="flex items-center space-x-2">
+                {content.socialLinks.map((link, index) => (
+                  <a
+                    key={index}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-foreground hover:text-primary transition-colors"
+                    style={{ 
+                      color: content.textColor || theme.colors.text,
+                      fontSize: theme.typography?.fontSize || '16px'
+                    }}
+                    title={link.platform}
+                  >
+                    {link.icon ? (
+                      <span className="text-lg">{link.icon}</span>
+                    ) : (
+                      <span className="text-sm font-medium">{link.platform}</span>
+                    )}
+                  </a>
+                ))}
+              </div>
+            )}
+            
+            {/* Contact Button */}
             <Button 
               size="sm"
               style={{ 
@@ -256,7 +283,7 @@ const Header = ({ theme, content }: HeaderProps) => {
               className="hover:opacity-90 transition-colors"
             >
               <Phone size={16} />
-              {localizedText.freeConsultation}
+              {content.contactInfo?.phone || localizedText.freeConsultation}
             </Button>
           </div>
 
@@ -307,13 +334,38 @@ const Header = ({ theme, content }: HeaderProps) => {
                   className="border-t pt-4 space-y-3"
                   style={{ borderColor: theme.colors?.border || theme.colors?.primary }}
                 >
+                  {/* Social Links in Mobile */}
+                  {content.socialLinks && content.socialLinks.length > 0 && (
+                    <div className="flex items-center justify-center space-x-4">
+                      {content.socialLinks.map((link, index) => (
+                        <a
+                          key={index}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-foreground hover:text-primary transition-colors"
+                          style={{ 
+                            color: content.textColor || theme.colors.text,
+                            fontSize: theme.typography?.fontSize || '16px'
+                          }}
+                          title={link.platform}
+                        >
+                          {link.icon ? (
+                            <span className="text-xl">{link.icon}</span>
+                          ) : (
+                            <span className="text-sm font-medium">{link.platform}</span>
+                          )}
+                        </a>
+                      ))}
+                    </div>
+                  )}
                   
                   <Button 
                     className="w-full"
                     style={{...getButtonStyles('premium'), backgroundColor: theme.colors.primary}}
                   >
                     <Phone size={16} />
-                    {localizedText.freeConsultation}
+                    {content.contactInfo?.phone || localizedText.freeConsultation}
                   </Button>
                 </div>
               </div>

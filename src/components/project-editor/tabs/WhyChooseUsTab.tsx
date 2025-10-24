@@ -720,7 +720,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
             />
           </div>
           
-          <div>
+          {/* <div>
             <Label htmlFor="ctaSecondaryButtonText">Nút CTA phụ</Label>
             <Input
               id="ctaSecondaryButtonText"
@@ -728,7 +728,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               onChange={(e) => updateThemeParam(['content', 'whyChooseUs', 'cta', 'secondaryButtonText'], e.target.value)}
               placeholder="Tải Hồ Sơ Công Ty"
             />
-          </div>
+          </div> */}
         </div>
       </Card>
     </div>

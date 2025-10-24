@@ -3,6 +3,7 @@ import ColorsTab from './tabs/ColorsTab'
 import TypographyTab from './tabs/TypographyTab'
 import LayoutTab from './tabs/LayoutTab'
 import HeaderTab from './tabs/HeaderTab'
+import AboutTab from './tabs/AboutTab'
 import HeroTab from './tabs/HeroTab'
 import ProblemsTab from './tabs/ProblemsTab'
 import SolutionsTab from './tabs/SolutionsTab'
@@ -33,6 +34,9 @@ const TabContent = ({ activeTab, themeParams, updateThemeParam }: TabContentProp
     
     case 'header':
       return <HeaderTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
+    
+    case 'about':
+      return <AboutTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
     
     case 'hero':
       return <HeroTab themeParams={themeParams} updateThemeParam={updateThemeParam} />

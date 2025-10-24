@@ -330,99 +330,115 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
           maxWidth: theme.layout?.containerWidth || "1200px",
         }}
       >
-        <div className="text-center mb-16">
-          <h2
-            className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
-            style={{
-              color: content.colorMode === 'custom' && content.textColor 
-                ? content.textColor 
-                : theme.colors?.text || "#2D3748",
-            }}
-          >
-            {content.title || "Được Tin Tưởng Bởi Các Nhà Nhập Khẩu Hàng Đầu"}
-          </h2>
-          <p
-            className={cn("max-w-3xl mx-auto", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
-            style={{
-              color: content.colorMode === 'custom' && content.textColor 
-                ? `${content.textColor}E6` 
-                : theme.colors?.muted || "#718096",
-            }}
-          >
-            {content.subtitle ||
-              "Xem những gì khách hàng nói về trải nghiệm nhập khẩu cà phê Việt Nam cao cấp thông qua dịch vụ của chúng tôi."}
-          </p>
-        </div>
+        {/* Header Section - chỉ hiển thị khi có title hoặc subtitle */}
+        {((content.title && content.title.trim()) || (content.subtitle && content.subtitle.trim())) && (
+          <div className="text-center mb-16">
+            {(content.title && content.title.trim()) && (
+              <h2
+                className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
+                style={{
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? content.textColor 
+                    : theme.colors?.text || "#2D3748",
+                }}
+              >
+                {content.title}
+              </h2>
+            )}
+            {(content.subtitle && content.subtitle.trim()) && (
+              <p
+                className={cn("max-w-3xl mx-auto", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
+                style={{
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}E6` 
+                    : theme.colors?.muted || "#718096",
+                }}
+              >
+                {content.subtitle}
+              </p>
+            )}
+          </div>
+        )}
 
-        {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-3 gap-8 mb-20">
-          {testimonials.map((testimonial, index) => (
-            <Card
-              key={index}
-              className={cn("shadow-card hover:shadow-elegant transition-all duration-300 border-border/50", getBorderRadiusClass())}
-              style={{
-                fontFamily: theme.typography?.fontFamily || 'Inter',
-                fontSize: theme.typography?.fontSize || '16px'
-              }}
-            >
-              <CardContent className="p-8">
-                <div className="mb-6">
-                  <Quote 
-                    className="h-8 w-8 mb-4" 
-                    style={{ color: theme.colors?.primary || "#8B4513" }}
-                  />
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating || 5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-5 w-5 fill-current"
-                        style={{ color: theme.colors?.accent || "#CD853F" }}
-                      />
-                    ))}
-                  </div>
-                  <p
-                    className="leading-relaxed italic"
-                    style={{
-                      color: content.textColor || theme.colors?.text || "#2D3748",
-                    }}
-                  >
-                    &ldquo;{testimonial.content || ''}&rdquo;
-                  </p>
-                </div>
-                
-                <div className="flex items-center">
-                  <img
-                    src={testimonial.image && testimonial.image.startsWith('/uploads/') 
-                      ? testimonial.image 
-                      : testimonial.image || `https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face`}
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full mr-4 object-cover"
-                  />
-                  <div>
-                    <div 
-                      className="font-semibold"
-                      style={{ color: content.textColor || theme.colors?.text || "#2D3748" }}
-                    >
-                      {testimonial.name || 'Unknown'}
-                    </div>
-                    <div 
-                      className="text-sm"
-                      style={{ color: content.textColor || theme.colors?.muted || "#718096" }}
-                    >
-                      {testimonial.title || ''}
-                    </div>
-                    <div 
-                      className="text-sm font-medium"
+        {/* Testimonials Grid - chỉ hiển thị khi có testimonials */}
+        {testimonials && testimonials.length > 0 && (
+          <div className="grid md:grid-cols-3 gap-8 mb-20">
+            {testimonials.map((testimonial, index) => (
+              <Card
+                key={index}
+                className={cn("shadow-card hover:shadow-elegant transition-all duration-300 border-border/50", getBorderRadiusClass())}
+                style={{
+                  fontFamily: theme.typography?.fontFamily || 'Inter',
+                  fontSize: theme.typography?.fontSize || '16px'
+                }}
+              >
+                <CardContent className="p-8">
+                  <div className="mb-6">
+                    <Quote 
+                      className="h-8 w-8 mb-4" 
                       style={{ color: theme.colors?.primary || "#8B4513" }}
-                    >
-                      {testimonial.company || ''}
+                    />
+                    <div className="flex mb-4">
+                      {[...Array(testimonial.rating || 5)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className="h-5 w-5 fill-current"
+                          style={{ color: theme.colors?.accent || "#CD853F" }}
+                        />
+                      ))}
+                    </div>
+                    {(testimonial.content && testimonial.content.trim()) && (
+                      <p
+                        className="leading-relaxed italic"
+                        style={{
+                          color: content.textColor || theme.colors?.text || "#2D3748",
+                        }}
+                      >
+                        &ldquo;{testimonial.content}&rdquo;
+                      </p>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <img
+                      src={testimonial.image && testimonial.image.startsWith('/uploads/') 
+                        ? testimonial.image 
+                        : testimonial.image || `https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face`}
+                      alt={testimonial.name}
+                      className="w-12 h-12 rounded-full mr-4 object-cover"
+                    />
+                    <div>
+                      {(testimonial.name && testimonial.name.trim()) && (
+                        <div 
+                          className="font-semibold"
+                          style={{ color: content.textColor || theme.colors?.text || "#2D3748" }}
+                        >
+                          {testimonial.name}
+                        </div>
+                      )}
+                      {(testimonial.title && testimonial.title.trim()) && (
+                        <div 
+                          className="text-sm"
+                          style={{ color: content.textColor || theme.colors?.muted || "#718096" }}
+                        >
+                          {testimonial.title}
+                        </div>
+                      )}
+                      {(testimonial.company && testimonial.company.trim()) && (
+                        <div 
+                          className="text-sm font-medium"
+                          style={{ color: theme.colors?.primary || "#8B4513" }}
+                        >
+                          {testimonial.company}
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
 
 
@@ -455,47 +471,55 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
           </div>
         </div> */}
 
-        {/* Key Metrics */}
-        <Card 
-          className={cn("border-0 shadow-elegant", getBorderRadiusClass())}
-          style={{ 
-            background: `linear-gradient(135deg, ${theme.colors?.primary || "#8B4513"}, ${theme.colors?.accent || "#CD853F"})`,
-            color: "#FFFFFF"
-          }}
-        >
-          <CardContent className="p-12">
-            <h3 
-              className={cn("text-3xl font-bold text-center mb-12")}
-              style={{ color: "#FFFFFF" }}
-            >
-              {localizedText.numbersSpeak}
-            </h3>
-            <div className="grid md:grid-cols-4 gap-8">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div 
-                    className={cn("text-4xl font-bold mb-2")}
-                    style={{ color: "#FFFFFF" }}
-                  >
-                    {stat.number || ''}
+        {/* Key Metrics - chỉ hiển thị khi có stats */}
+        {stats && stats.length > 0 && (
+          <Card 
+            className={cn("border-0 shadow-elegant", getBorderRadiusClass())}
+            style={{ 
+              background: `linear-gradient(135deg, ${theme.colors?.primary || "#8B4513"}, ${theme.colors?.accent || "#CD853F"})`,
+              color: "#FFFFFF"
+            }}
+          >
+            <CardContent className="p-12">
+              <h3 
+                className={cn("text-3xl font-bold text-center mb-12")}
+                style={{ color: "#FFFFFF" }}
+              >
+                {localizedText.numbersSpeak}
+              </h3>
+              <div className="grid md:grid-cols-4 gap-8">
+                {stats.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    {(stat.number && stat.number.trim()) && (
+                      <div 
+                        className={cn("text-4xl font-bold mb-2")}
+                        style={{ color: "#FFFFFF" }}
+                      >
+                        {stat.number}
+                      </div>
+                    )}
+                    {(stat.label && stat.label.trim()) && (
+                      <div 
+                        className={cn("text-xl font-semibold mb-1 opacity-90")}
+                        style={{ color: "#FFFFFF" }}
+                      >
+                        {stat.label}
+                      </div>
+                    )}
+                    {(stat.sublabel && stat.sublabel.trim()) && (
+                      <div 
+                        className={cn("text-sm opacity-75")}
+                        style={{ color: "#FFFFFF" }}
+                      >
+                        {stat.sublabel}
+                      </div>
+                    )}
                   </div>
-                  <div 
-                    className={cn("text-xl font-semibold mb-1 opacity-90")}
-                    style={{ color: "#FFFFFF" }}
-                  >
-                    {stat.label || ''}
-                  </div>
-                  <div 
-                    className={cn("text-sm opacity-75")}
-                    style={{ color: "#FFFFFF" }}
-                  >
-                    {stat.sublabel || ''}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </section>
   );

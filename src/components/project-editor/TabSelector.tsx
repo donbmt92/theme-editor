@@ -2,6 +2,7 @@ import { FileText, Palette, Type, Layout } from "lucide-react";
 
 export type TabType =
   | "header"
+  | "about"
   | "hero"
   | "problems"
   | "solutions"
@@ -22,6 +23,7 @@ interface TabSelectorProps {
 const TabSelector = ({ activeTab, onTabChange }: TabSelectorProps) => {
   const tabs = [
     { id: "header" as TabType, label: "Header", icon: FileText },
+    { id: "about" as TabType, label: "Giới thiệu", icon: FileText },
     { id: "hero" as TabType, label: "Hero", icon: FileText },
     { id: "problems" as TabType, label: "Vấn đề", icon: FileText },
     { id: "solutions" as TabType, label: "Giải pháp", icon: FileText },

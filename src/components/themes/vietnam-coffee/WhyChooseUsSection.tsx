@@ -28,24 +28,27 @@ interface WhyChooseUsContent {
   subtitleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black';
   subtitleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather';
   strengths?: Array<{
+    id?: string;
     icon: string;
     title: string;
     description: string;
+    highlight?: string;
   }>;
   mission?: {
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
+    values?: string[];
   };
   vision?: {
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
+    goals?: string[];
   };
   cta?: {
-    title: string;
-    description: string;
+    title?: string;
+    description?: string;
     buttonText?: string;
-    primaryButton?: string;
-    secondaryButton?: string;
+    secondaryButtonText?: string;
   };
 }
 
@@ -170,6 +173,7 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
     title: "Sẵn Sàng Bắt Đầu Hành Trình Nhập Khẩu Cà Phê?",
     description: "Tham gia cùng 50+ nhà nhập khẩu Mỹ thành công tin tưởng chúng tôi cho nhu cầu cà phê Việt Nam. Bắt đầu với tư vấn miễn phí ngay hôm nay.",
     buttonText: "Đặt Lịch Tư Vấn Miễn Phí",
+    secondaryButtonText: "Tải Hồ Sơ Công Ty",
   };
 
   // Get typography styles
@@ -381,8 +385,8 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
   const mission = content.mission || defaultMission;
   const vision = content.vision || defaultVision;
   const cta = content.cta || defaultCta;
-  const ctaData: { title: string; description: string; buttonText?: string; primaryButton?: string } = cta as unknown as {
-    title: string; description: string; buttonText?: string; primaryButton?: string
+  const ctaData: { title: string; description: string; buttonText?: string; primaryButton?: string; secondaryButtonText?: string } = cta as unknown as {
+    title: string; description: string; buttonText?: string; primaryButton?: string; secondaryButtonText?: string
   };
 
   return (
@@ -402,244 +406,301 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
           margin: '0 auto'
         }}
       >
-        <div className="text-center mb-16">
-          <h2 
-            className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
-            style={{ 
-              color: content.colorMode === 'custom' && content.textColor 
-                ? content.textColor 
-                : theme.colors?.text || '#2D3748',
-            }}
-          >
-            {content.title || "Tại Sao Chọn VietCoffee Export?"}
-          </h2>
-          <p 
-            className={cn("max-w-3xl mx-auto", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
-            style={{ 
-              color: content.colorMode === 'custom' && content.textColor 
-                ? `${content.textColor}E6` 
-                : theme.colors?.muted || '#718096'
-            }}
-          >
-            {content.subtitle || "Chúng tôi kết hợp di sản nông nghiệp Việt Nam với chuyên môn xuất khẩu hiện đại để mang lại giá trị vượt trội cho đối tác Mỹ."}
-          </p>
-        </div>
-
-        {/* Strengths Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-          {strengths.map((strength, index) => (
-            <Card 
-              key={index} 
-              className={cn("shadow-card hover:shadow-elegant transition-all duration-300 border-border/50 hover:border-primary/30", getBorderRadiusClass())}
-              style={{ 
-                fontFamily: theme.typography?.fontFamily || 'Inter',
-                fontSize: theme.typography?.fontSize || '16px'
-              }}
-            >
-              <CardContent className="p-8">
-                <div className="mb-6">
-                  <div 
-                    className={cn("h-14 w-14 rounded-xl flex items-center justify-center mb-4", getBorderRadiusClass())}
-                    style={{ 
-                      background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
-                    }}
-                  >
-                    {(() => {
-                      const iconValue = strength.icon as unknown;
-                      const IconComp: LucideIcon =
-                        typeof iconValue === "string"
-                          ? ICONS[normalizeIconName(iconValue)] || Award
-                          : (iconValue as LucideIcon) || Award;
-                      return <IconComp className="h-7 w-7 text-white" />;
-                    })()}
-                  </div>
-                  <h3 
-                    className={cn("text-xl font-bold mb-3")}
-                    style={{ 
-                      color: content.textColor || theme.colors?.text || '#2D3748',
-                      fontWeight: theme.typography?.fontWeight || '700'
-                    }}
-                  >
-                    {strength.title}
-                  </h3>
-                  <p 
-                    className="mb-4 leading-relaxed"
-                    style={{ 
-                      color: content.textColor || theme.colors?.muted || '#718096'
-                    }}
-                  >
-                    {strength.description}
-                  </p>
-                  <div 
-                    className={cn("inline-flex items-center px-3 py-1 rounded-full text-sm font-medium", getBorderRadiusClass())}
-                    style={{ 
-                      backgroundColor: `${theme.colors.primary}10`,
-                      color: theme.colors.primary
-                    }}
-                  >
-                    <Award className="h-4 w-4 mr-1" />
-                    {localizedText.highQuality}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Mission & Vision */}
-        <div className="grid lg:grid-cols-2 gap-12 mb-16">
-          {/* Mission */}
-          <Card 
-            className={cn("shadow-elegant", getBorderRadiusClass())}
-            style={{ 
-              borderColor: `${theme.colors.primary}20`,
-              fontFamily: theme.typography?.fontFamily || 'Inter',
-              fontSize: theme.typography?.fontSize || '16px'
-            }}
-          >
-            <CardContent className="p-8">
-              <div className="flex items-center mb-6">
-                <div 
-                  className={cn("h-12 w-12 rounded-lg flex items-center justify-center mr-4", getBorderRadiusClass())}
-                  style={{ backgroundColor: theme.colors.primary }}
-                >
-                  <Shield className="h-6 w-6 text-white" />
-                </div>
-                <h3 
-                  className={cn("text-2xl font-bold")}
-                  style={{ 
-                    color: content.textColor || theme.colors?.text || '#2D3748',
-                    fontWeight: theme.typography?.fontWeight || '700'
-                  }}
-                >
-                  {mission.title}
-                </h3>
-              </div>
-              <p 
-                className="mb-6 leading-relaxed"
+        {/* Header Section - chỉ hiển thị khi có title hoặc subtitle */}
+        {((content.title && content.title.trim()) || (content.subtitle && content.subtitle.trim())) && (
+          <div className="text-center mb-16">
+            {(content.title && content.title.trim()) && (
+              <h2 
+                className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
                 style={{ 
-                  color: content.textColor || theme.colors?.muted || '#718096'
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? content.textColor 
+                    : theme.colors?.text || '#2D3748',
                 }}
               >
-                {mission.description}
+                {content.title}
+              </h2>
+            )}
+            {(content.subtitle && content.subtitle.trim()) && (
+              <p 
+                className={cn("max-w-3xl mx-auto", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
+                style={{ 
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}E6` 
+                    : theme.colors?.muted || '#718096'
+                }}
+              >
+                {content.subtitle}
               </p>
-              <div className="space-y-3">
-                <h4 
-                  className="font-bold"
-                  style={{ 
-                    color: content.textColor || theme.colors?.text || '#2D3748',
-                    fontWeight: theme.typography?.fontWeight || '700'
-                  }}
-                >
-                  {localizedText.coreValues}
-                </h4>
+            )}
+          </div>
+        )}
+
+        {/* Strengths Grid - chỉ hiển thị khi có strengths */}
+        {strengths && strengths.length > 0 && (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+            {strengths.map((strength, index) => (
+              <Card 
+                key={index} 
+                className={cn("shadow-card hover:shadow-elegant transition-all duration-300 border-border/50 hover:border-primary/30", getBorderRadiusClass())}
+                style={{ 
+                  fontFamily: theme.typography?.fontFamily || 'Inter',
+                  fontSize: theme.typography?.fontSize || '16px'
+                }}
+              >
+                <CardContent className="p-8">
+                  <div className="mb-6">
+                    <div 
+                      className={cn("h-14 w-14 rounded-xl flex items-center justify-center mb-4", getBorderRadiusClass())}
+                      style={{ 
+                        background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
+                      }}
+                    >
+                      {(() => {
+                        const iconValue = strength.icon as unknown;
+                        const IconComp: LucideIcon =
+                          typeof iconValue === "string"
+                            ? ICONS[normalizeIconName(iconValue)] || Award
+                            : (iconValue as LucideIcon) || Award;
+                        return <IconComp className="h-7 w-7 text-white" />;
+                      })()}
+                    </div>
+                    {(strength.title && strength.title.trim()) && (
+                      <h3 
+                        className={cn("text-xl font-bold mb-3")}
+                        style={{ 
+                          color: content.textColor || theme.colors?.text || '#2D3748',
+                          fontWeight: theme.typography?.fontWeight || '700'
+                        }}
+                      >
+                        {strength.title}
+                      </h3>
+                    )}
+                    {(strength.description && strength.description.trim()) && (
+                      <p 
+                        className="mb-4 leading-relaxed"
+                        style={{ 
+                          color: content.textColor || theme.colors?.muted || '#718096'
+                        }}
+                      >
+                        {strength.description}
+                      </p>
+                    )}
+                    {(strength.highlight && strength.highlight.trim()) && (
+                      <div 
+                        className={cn("inline-flex items-center px-3 py-1 rounded-full text-sm font-medium", getBorderRadiusClass())}
+                        style={{ 
+                          backgroundColor: `${theme.colors.primary}10`,
+                          color: theme.colors.primary
+                        }}
+                      >
+                        <Award className="h-4 w-4 mr-1" />
+                        {strength.highlight}
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Mission & Vision - chỉ hiển thị khi có mission hoặc vision */}
+        {((mission.title && mission.title.trim()) || (vision.title && vision.title.trim())) && (
+          <div className="grid lg:grid-cols-2 gap-12 mb-16">
+            {/* Mission - chỉ hiển thị khi có title */}
+            {(mission.title && mission.title.trim()) && (
+              <Card 
+                className={cn("shadow-elegant", getBorderRadiusClass())}
+                style={{ 
+                  borderColor: `${theme.colors.primary}20`,
+                  fontFamily: theme.typography?.fontFamily || 'Inter',
+                  fontSize: theme.typography?.fontSize || '16px'
+                }}
+              >
+                <CardContent className="p-8">
+                  <div className="flex items-center mb-6">
+                    <div 
+                      className={cn("h-12 w-12 rounded-lg flex items-center justify-center mr-4", getBorderRadiusClass())}
+                      style={{ backgroundColor: theme.colors.primary }}
+                    >
+                      <Shield className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 
+                      className={cn("text-2xl font-bold")}
+                      style={{ 
+                        color: content.textColor || theme.colors?.text || '#2D3748',
+                        fontWeight: theme.typography?.fontWeight || '700'
+                      }}
+                    >
+                      {mission.title}
+                    </h3>
+                  </div>
+                  {(mission.description && mission.description.trim()) && (
+                    <p 
+                      className="mb-6 leading-relaxed"
+                      style={{ 
+                        color: content.textColor || theme.colors?.muted || '#718096'
+                      }}
+                    >
+                      {mission.description}
+                    </p>
+                  )}
+                  {(mission.values && mission.values.length > 0) && (
+                    <div className="space-y-3">
+                      <h4 
+                        className="font-bold"
+                        style={{ 
+                          color: content.textColor || theme.colors?.text || '#2D3748',
+                          fontWeight: theme.typography?.fontWeight || '700'
+                        }}
+                      >
+                        {localizedText.coreValues}
+                      </h4>
+                      <div className="space-y-2">
+                        {mission.values.map((value: string, index: number) => (
+                          <div key={index} className="flex items-center">
+                            <div 
+                              className={cn("h-2 w-2 rounded-full mr-3", getBorderRadiusClass())}
+                              style={{ backgroundColor: theme.colors.primary }}
+                            ></div>
+                            <span 
+                              style={{ color: content.textColor || theme.colors?.muted || '#718096' }}
+                            >
+                              {value}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Vision - chỉ hiển thị khi có title */}
+            {(vision.title && vision.title.trim()) && (
+              <Card 
+                className={cn("shadow-elegant", getBorderRadiusClass())}
+                style={{ 
+                  borderColor: `${theme.colors.accent}20`,
+                  fontFamily: theme.typography?.fontFamily || 'Inter',
+                  fontSize: theme.typography?.fontSize || '16px'
+                }}
+              >
+                <CardContent className="p-8">
+                  <div className="flex items-center mb-6">
+                    <div 
+                      className={cn("h-12 w-12 rounded-lg flex items-center justify-center mr-4", getBorderRadiusClass())}
+                      style={{ backgroundColor: theme.colors.accent }}
+                    >
+                      <TrendingUp className="h-6 w-6 text-white" />
+                    </div>
+                    <h3 
+                      className={cn("text-2xl font-bold")}
+                      style={{ 
+                        color: content.textColor || theme.colors?.text || '#2D3748',
+                        fontWeight: theme.typography?.fontWeight || '700'
+                      }}
+                    >
+                      {vision.title}
+                    </h3>
+                  </div>
+                  {(vision.description && vision.description.trim()) && (
+                    <p 
+                      className="mb-6 leading-relaxed"
+                      style={{ 
+                        color: content.textColor || theme.colors?.muted || '#718096'
+                      }}
+                    >
+                      {vision.description}
+                    </p>
+                  )}
+                  {(vision.goals && vision.goals.length > 0) && (
+                    <div className="space-y-3">
+                      <h4 
+                        className="font-bold"
+                        style={{ 
+                          color: content.textColor || theme.colors?.text || '#2D3748',
+                          fontWeight: theme.typography?.fontWeight || '700'
+                        }}
+                      >
+                        {localizedText.goals2025}
+                      </h4>
+                      <div className="space-y-2">
+                        {vision.goals.map((goal: string, index: number) => (
+                          <div key={index} className="flex items-center">
+                            <div 
+                              className={cn("h-2 w-2 rounded-full mr-3", getBorderRadiusClass())}
+                              style={{ backgroundColor: theme.colors.accent }}
+                            ></div>
+                            <span 
+                              style={{ color: content.textColor || theme.colors?.muted || '#718096' }}
+                            >
+                              {goal}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
+
+        {/* CTA Section - chỉ hiển thị khi có title */}
+        {(ctaData.title && ctaData.title.trim()) && (
+          <Card 
+            className={cn("border-0 shadow-elegant", getBorderRadiusClass())}
+            style={{ 
+              background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
+              color: '#FFFFFF'
+            }}
+          >
+            <CardContent className="p-12 text-center">
+              <h3 
+                className={cn("text-3xl font-bold mb-4")}
+                style={{ 
+                  color: '#FFFFFF',
+                  fontWeight: theme.typography?.fontWeight || '700'
+                }}
+              >
+                {ctaData.title}
+              </h3>
+              {(ctaData.description && ctaData.description.trim()) && (
                 <p 
-                  className="leading-relaxed"
-                  style={{ 
-                    color: content.textColor || theme.colors?.muted || '#718096'
-                  }}
+                  className={cn("text-xl mb-8 opacity-90 max-w-2xl mx-auto")}
+                  style={{ color: '#FFFFFF' }}
                 >
-                  {mission.description}
+                  {ctaData.description}
                 </p>
+              )}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button 
+                  size="lg" 
+                  variant="secondary" 
+                  className="bg-white text-primary hover:bg-white/90"
+                  style={getButtonStyles('secondary')}
+                >
+                  {ctaData.buttonText || localizedText.contactNow}
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                {(ctaData.secondaryButtonText && ctaData.secondaryButtonText.trim()) && (
+                  <Button 
+                    size="lg" 
+                    variant="outline" 
+                    className="border-white text-white hover:bg-white hover:text-primary"
+                    style={getButtonStyles('outline')}
+                  >
+                    {ctaData.secondaryButtonText}
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
-
-          {/* Vision */}
-          <Card 
-            className={cn("shadow-elegant", getBorderRadiusClass())}
-            style={{ 
-              borderColor: `${theme.colors.accent}20`,
-              fontFamily: theme.typography?.fontFamily || 'Inter',
-              fontSize: theme.typography?.fontSize || '16px'
-            }}
-          >
-            <CardContent className="p-8">
-              <div className="flex items-center mb-6">
-                <div 
-                  className={cn("h-12 w-12 rounded-lg flex items-center justify-center mr-4", getBorderRadiusClass())}
-                  style={{ backgroundColor: theme.colors.accent }}
-                >
-                  <TrendingUp className="h-6 w-6 text-white" />
-                </div>
-                <h3 
-                  className={cn("text-2xl font-bold")}
-                  style={{ 
-                    color: content.textColor || theme.colors?.text || '#2D3748',
-                    fontWeight: theme.typography?.fontWeight || '700'
-                  }}
-                >
-                  {vision.title}
-                </h3>
-              </div>
-              <p 
-                className="mb-6 leading-relaxed"
-                style={{ 
-                  color: content.textColor || theme.colors?.muted || '#718096'
-                }}
-              >
-                {vision.description}
-              </p>
-              <div className="space-y-3">
-                <h4 
-                  className="font-bold"
-                  style={{ 
-                    color: content.textColor || theme.colors?.text || '#2D3748',
-                    fontWeight: theme.typography?.fontWeight || '700'
-                  }}
-                >
-                  {localizedText.goals2025}
-                </h4>
-                <p 
-                  className="leading-relaxed"
-                  style={{ 
-                    color: content.textColor || theme.colors?.muted || '#718096'
-                  }}
-                >
-                  {vision.description}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* CTA Section */}
-        <Card 
-          className={cn("border-0 shadow-elegant", getBorderRadiusClass())}
-          style={{ 
-            background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
-            color: '#FFFFFF'
-          }}
-        >
-          <CardContent className="p-12 text-center">
-            <h3 
-              className={cn("text-3xl font-bold mb-4")}
-              style={{ 
-                color: '#FFFFFF',
-                fontWeight: theme.typography?.fontWeight || '700'
-              }}
-            >
-              {ctaData.title}
-            </h3>
-            <p 
-              className={cn("text-xl mb-8 opacity-90 max-w-2xl mx-auto")}
-              style={{ color: '#FFFFFF' }}
-            >
-              {ctaData.description}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                variant="secondary" 
-                className="bg-white text-primary hover:bg-white/90"
-                style={getButtonStyles('secondary')}
-              >
-                {ctaData.buttonText || ctaData.primaryButton || localizedText.contactNow}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        )}
       </div>
     </section>
   );

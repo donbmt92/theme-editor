@@ -14,6 +14,10 @@ interface FooterContent {
   textColor?: string;
   colorMode?: 'theme' | 'custom';
   primaryColor?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  lineHeight?: string;
   contact?: {
     phone?: string;
     email?: string;
@@ -24,6 +28,11 @@ interface FooterContent {
   resources?: Array<{ name: string; href: string }>;
   legal?: Array<{ name: string; href: string }>;
   socialLinks?: Array<{ icon: string; href: string; label: string }>;
+  newsletter?: {
+    placeholder?: string;
+    buttonText?: string;
+    description?: string;
+  };
 }
 
 interface FooterProps {
@@ -125,10 +134,10 @@ const Footer = ({ theme, content }: FooterProps) => {
   // Get typography styles
   const getTypographyStyles = () => {
     return {
-      fontFamily: theme.typography?.fontFamily || 'Inter',
-      fontSize: theme.typography?.fontSize || '16px',
-      lineHeight: theme.typography?.lineHeight || '1.6',
-      fontWeight: theme.typography?.fontWeight || '400',
+      fontFamily: content.fontFamily || theme.typography?.fontFamily || 'Inter',
+      fontSize: content.fontSize || theme.typography?.fontSize || '16px',
+      lineHeight: content.lineHeight || theme.typography?.lineHeight || '1.6',
+      fontWeight: content.fontWeight || theme.typography?.fontWeight || '400',
     }
   }
 
@@ -227,173 +236,191 @@ const Footer = ({ theme, content }: FooterProps) => {
                     background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
                   }}
                 ></div>
-                <span 
-                  className="text-xl font-bold"
+                {(content.companyName && content.companyName.trim()) && (
+                  <span 
+                    className="text-xl font-bold"
+                    style={{ 
+                      color: content.textColor || theme.colors.text || '#F9FAFB',
+                      fontWeight: theme.typography?.fontWeight || '700'
+                    }}
+                  >
+                    {content.companyName}
+                  </span>
+                )}
+              </div>
+              {(content.description && content.description.trim()) && (
+                <p 
+                  className="mb-6 leading-relaxed"
+                  style={{ 
+                    color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                    fontSize: theme.typography?.fontSize || '16px',
+                    lineHeight: theme.typography?.lineHeight || '1.6'
+                  }}
+                >
+                  {content.description}
+                </p>
+              )}
+              
+              {/* Contact Info - chỉ hiển thị khi có contact info */}
+              {content.contact && (
+                <div className="space-y-4">
+                  {(content.contact.address && content.contact.address.trim()) && (
+                    <div className="flex items-start space-x-3">
+                      <MapPin 
+                        className="h-5 w-5 mt-0.5" 
+                        style={{ color: theme.colors.primary }}
+                      />
+                      <div>
+                        <div 
+                          className="font-medium"
+                          style={{ 
+                            color: content.textColor || theme.colors.text || '#F9FAFB',
+                            fontWeight: theme.typography?.fontWeight || '500'
+                          }}
+                        >
+                          {localizedText.vietnamOffice}
+                        </div>
+                        <div 
+                          className="text-sm"
+                          style={{ 
+                            color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                            fontSize: theme.typography?.fontSize || '16px'
+                          }}
+                        >
+                          {content.contact.address}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {(content.contact.phone && content.contact.phone.trim()) && (
+                    <div className="flex items-center space-x-3">
+                      <Phone 
+                        className="h-5 w-5" 
+                        style={{ color: theme.colors.primary }}
+                      />
+                      <div>
+                        <div 
+                          className="font-medium"
+                          style={{ 
+                            color: content.textColor || theme.colors.text || '#F9FAFB',
+                            fontWeight: theme.typography?.fontWeight || '500'
+                          }}
+                        >
+                          {content.contact.phone}
+                        </div>
+                        <div 
+                          className="text-sm"
+                          style={{ 
+                            color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                            fontSize: theme.typography?.fontSize || '16px'
+                          }}
+                        >
+                          {localizedText.usBusinessHours}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {(content.contact.email && content.contact.email.trim()) && (
+                    <div className="flex items-center space-x-3">
+                      <Mail 
+                        className="h-5 w-5" 
+                        style={{ color: theme.colors.primary }}
+                      />
+                      <div>
+                        <div 
+                          className="font-medium"
+                          style={{ 
+                            color: content.textColor || theme.colors.text || '#F9FAFB',
+                            fontWeight: theme.typography?.fontWeight || '500'
+                          }}
+                        >
+                          {content.contact.email}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                  {(content.contact.businessHours && content.contact.businessHours.trim()) && (
+                    <div className="flex items-center space-x-3">
+                      <Clock 
+                        className="h-5 w-5" 
+                        style={{ color: theme.colors.primary }}
+                      />
+                      <div 
+                        className="text-sm"
+                        style={{ 
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {content.contact.businessHours}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Quick Links - chỉ hiển thị khi có links */}
+            {quickLinks && quickLinks.length > 0 && (
+              <div>
+                <h3 
+                  className="text-lg font-bold mb-6"
                   style={{ 
                     color: content.textColor || theme.colors.text || '#F9FAFB',
                     fontWeight: theme.typography?.fontWeight || '700'
                   }}
                 >
-                  {content.companyName || "VietCoffee Export"}
-                </span>
+                  {localizedText.quickLinksTitle}
+                </h3>
+                <ul className="space-y-3">
+                  {quickLinks.map((link, index) => (
+                    <li key={index}>
+                      <a
+                        href={link.href}
+                        className="hover:text-primary transition-colors"
+                        style={{ 
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {link.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <p 
-                className="mb-6 leading-relaxed"
-                style={{ 
-                  color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
-                  fontSize: theme.typography?.fontSize || '16px',
-                  lineHeight: theme.typography?.lineHeight || '1.6'
-                }}
-              >
-                {content.description || localizedText.companyDescription}
-              </p>
-              
-              {/* Contact Info */}
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <MapPin 
-                    className="h-5 w-5 mt-0.5" 
-                    style={{ color: theme.colors.primary }}
-                  />
-                  <div>
-                    <div 
-                      className="font-medium"
-                      style={{ 
-                        color: content.textColor || theme.colors.text || '#F9FAFB',
-                        fontWeight: theme.typography?.fontWeight || '500'
-                      }}
-                    >
-                      {localizedText.vietnamOffice}
-                    </div>
-                    <div 
-                      className="text-sm"
-                      style={{ 
-                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
-                        fontSize: theme.typography?.fontSize || '16px'
-                      }}
-                    >
-                      {content.contact?.address || "123 Đường Xuất Khẩu, Tỉnh Bình Phước, Việt Nam"}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Phone 
-                    className="h-5 w-5" 
-                    style={{ color: theme.colors.primary }}
-                  />
-                  <div>
-                    <div 
-                      className="font-medium"
-                      style={{ 
-                        color: content.textColor || theme.colors.text || '#F9FAFB',
-                        fontWeight: theme.typography?.fontWeight || '500'
-                      }}
-                    >
-                      {content.contact?.phone || "+1 (555) 123-4567"}
-                    </div>
-                    <div 
-                      className="text-sm"
-                      style={{ 
-                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
-                        fontSize: theme.typography?.fontSize || '16px'
-                      }}
-                    >
-                      {localizedText.usBusinessHours}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail 
-                    className="h-5 w-5" 
-                    style={{ color: theme.colors.primary }}
-                  />
-                  <div>
-                    <div 
-                      className="font-medium"
-                      style={{ 
-                        color: content.textColor || theme.colors.text || '#F9FAFB',
-                        fontWeight: theme.typography?.fontWeight || '500'
-                      }}
-                    >
-                      {content.contact?.email || "info@vietcoffeeexport.com"}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Clock 
-                    className="h-5 w-5" 
-                    style={{ color: theme.colors.primary }}
-                  />
-                  <div 
-                    className="text-sm"
-                    style={{ 
-                      color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
-                      fontSize: theme.typography?.fontSize || '16px'
-                    }}
-                  >
-                    {content.contact?.businessHours || localizedText.businessHours}
-                  </div>
-                </div>
+            )}
+
+            {/* Resources - chỉ hiển thị khi có resources */}
+            {resources && resources.length > 0 && (
+              <div>
+                <h3 
+                  className="text-lg font-bold mb-6"
+                  style={{ 
+                    color: content.textColor || theme.colors.text || '#F9FAFB',
+                    fontWeight: theme.typography?.fontWeight || '700'
+                  }}
+                >
+                  {localizedText.resourcesTitle}
+                </h3>
+                <ul className="space-y-3">
+                  {resources.map((resource, index) => (
+                    <li key={index}>
+                      <a
+                        href={resource.href}
+                        className="hover:text-primary transition-colors"
+                        style={{ 
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {resource.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h3 
-                className="text-lg font-bold mb-6"
-                style={{ 
-                  color: content.textColor || theme.colors.text || '#F9FAFB',
-                  fontWeight: theme.typography?.fontWeight || '700'
-                }}
-              >
-                {localizedText.quickLinksTitle}
-              </h3>
-              <ul className="space-y-3">
-                {quickLinks.map((link, index) => (
-                  <li key={index}>
-                    <a
-                      href={link.href}
-                      className="hover:text-primary transition-colors"
-                      style={{ 
-                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
-                        fontSize: theme.typography?.fontSize || '16px'
-                      }}
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Resources */}
-            <div>
-              <h3 
-                className="text-lg font-bold mb-6"
-                style={{ 
-                  color: content.textColor || theme.colors.text || '#F9FAFB',
-                  fontWeight: theme.typography?.fontWeight || '700'
-                }}
-              >
-                {localizedText.resourcesTitle}
-              </h3>
-              <ul className="space-y-3">
-                {resources.map((resource, index) => (
-                  <li key={index}>
-                    <a
-                      href={resource.href}
-                      className="hover:text-primary transition-colors"
-                      style={{ 
-                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
-                        fontSize: theme.typography?.fontSize || '16px'
-                      }}
-                    >
-                      {resource.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            )}
 
             {/* Newsletter Signup */}
             <div>
@@ -406,19 +433,21 @@ const Footer = ({ theme, content }: FooterProps) => {
               >
                 {localizedText.connectTitle}
               </h3>
-              <p 
-                className="mb-4"
-                style={{ 
-                  color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
-                  fontSize: theme.typography?.fontSize || '16px'
-                }}
-              >
-                {localizedText.newsletterDescription}
-              </p>
+              {(content.newsletter?.description && content.newsletter.description.trim()) && (
+                <p 
+                  className="mb-4"
+                  style={{ 
+                    color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                    fontSize: theme.typography?.fontSize || '16px'
+                  }}
+                >
+                  {content.newsletter.description}
+                </p>
+              )}
               <div className="space-y-3">
                 <Input
                   type="email"
-                  placeholder={localizedText.emailPlaceholder}
+                  placeholder={content.newsletter?.placeholder || localizedText.emailPlaceholder}
                   className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground placeholder:text-secondary-foreground/50"
                   style={{ 
                     backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
@@ -433,30 +462,32 @@ const Footer = ({ theme, content }: FooterProps) => {
                   className="w-full"
                   style={getButtonStyles('primary')}
                 >
-                  {localizedText.subscribeButton}
+                  {content.newsletter?.buttonText || localizedText.subscribeButton}
                 </Button>
               </div>
               
-              {/* Social Links */}
-              <div className="flex space-x-4 mt-6">
-                {socialLinks.map((social, index) => {
-                  const IconComponent = getSocialIcon(social.icon);
-                  return (
-                    <a
-                      key={index}
-                      href={social.href}
-                      aria-label={social.label}
-                      className={cn("w-10 h-10 rounded-lg flex items-center justify-center transition-colors", getBorderRadiusClass())}
-                      style={{ 
-                        backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
-                        color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`
-                      }}
-                    >
-                      <IconComponent className="h-5 w-5" />
-                    </a>
-                  );
-                })}
-              </div>
+              {/* Social Links - chỉ hiển thị khi có social links */}
+              {socialLinks && socialLinks.length > 0 && (
+                <div className="flex space-x-4 mt-6">
+                  {socialLinks.map((social, index) => {
+                    const IconComponent = getSocialIcon(social.icon);
+                    return (
+                      <a
+                        key={index}
+                        href={social.href}
+                        aria-label={social.label}
+                        className={cn("w-10 h-10 rounded-lg flex items-center justify-center transition-colors", getBorderRadiusClass())}
+                        style={{ 
+                          backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`
+                        }}
+                      >
+                        <IconComponent className="h-5 w-5" />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         </div>

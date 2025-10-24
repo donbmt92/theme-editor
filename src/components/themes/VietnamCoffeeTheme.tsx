@@ -11,6 +11,26 @@ import ProductsServices from './vietnam-coffee/ProductsServices'
 import Testimonials from './vietnam-coffee/Testimonials'
 import Footer from './vietnam-coffee/Footer'
 
+// Import HeroContent type
+interface HeroContent {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  ctaText?: string;
+  image?: string;
+  backgroundImage?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  primaryColor?: string;
+  colorMode?: 'theme' | 'custom';
+  overlayColor?: string;
+  overlayOpacity?: number;
+  unsplashImageUrl?: string;
+  titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+  subtitleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl';
+  descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+}
+
 interface VietnamCoffeeThemeProps {
   theme: ThemeParams
   content?: Record<string, unknown>
@@ -26,6 +46,12 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
       backgroundColor: "#D2691E",
       textColor: "#2D3748"
     },
+    about: {
+      title: "Giải Quyết Thách Thức Xuất Nhập Khẩu Thực Tế",
+      description: "Chúng tôi hiểu rõ những khó khăn khi xuất khẩu cà phê từ Việt Nam. Đây là cách chúng tôi giải quyết chúng cho bạn.",
+      textColor: "#2D3748",
+      backgroundColor: "#FFFFFF"
+    },
     hero: {
       title: "Cà Phê Việt Nam - Chất Lượng Quốc Tế",
       subtitle: "Xuất khẩu cà phê chất lượng cao",
@@ -33,10 +59,6 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
       ctaText: "Tìm hiểu thêm",
       image: "/assets/hero-coffee.jpg",
       backgroundImage: "/assets/hero-coffee.jpg",
-    },
-    about: {
-      title: "Về Chúng Tôi",
-      description: "Với hơn 20 năm kinh nghiệm trong ngành cà phê, chúng tôi tự hào là đối tác tin cậy của các nhà nhập khẩu quốc tế. Chúng tôi cam kết mang đến những hạt cà phê chất lượng nhất từ vùng đất Tây Nguyên."
     },
     problems: {
       title: "Thách Thức Hiện Tại",
@@ -243,6 +265,46 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
     ...theme.content
   }
 
+  // Ensure header content is properly merged
+  if (theme.content?.header) {
+    finalContent.header = {
+      ...defaultContent.header,
+      ...theme.content.header
+    }
+  }
+
+  // Ensure problems content is properly merged
+  if (theme.content?.problems) {
+    finalContent.problems = {
+      ...defaultContent.problems,
+      ...theme.content.problems
+    }
+  }
+
+  // Ensure solutions content is properly merged
+  if (theme.content?.solutions) {
+    finalContent.solutions = {
+      ...defaultContent.solutions,
+      ...theme.content.solutions
+    }
+  }
+
+  // Ensure about content is properly merged
+  if (theme.content?.about) {
+    finalContent.about = {
+      ...defaultContent.about,
+      ...theme.content.about
+    }
+  }
+
+  // Ensure cta content is properly merged (fallback for backward compatibility)
+  if (theme.content?.cta) {
+    finalContent.cta = {
+      ...defaultContent.cta,
+      ...theme.content.cta
+    }
+  }
+
   // Ensure problems.items and solutions.items are always arrays
   if (finalContent.problems && !Array.isArray(finalContent.problems.items)) {
     finalContent.problems.items = defaultContent.problems.items
@@ -253,7 +315,7 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
   }
 
   // Handle hero content update
-  const handleHeroContentUpdate = (updatedHeroContent: any) => {
+  const handleHeroContentUpdate = (updatedHeroContent: HeroContent) => {
     if (onContentUpdate) {
       const updatedContent = {
         ...finalContent,
@@ -263,28 +325,6 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
     }
   };
 
-  // Get spacing class based on theme layout spacing
-  const getSpacingClass = () => {
-    switch (theme.layout?.spacing) {
-      case 'minimal':
-        return 'py-8'
-      case 'spacious':
-        return 'py-20'
-      case 'comfortable':
-      default:
-        return 'py-16'
-    }
-  }
-
-  // Get container width style
-  const getContainerStyle = () => {
-    const maxWidth = theme.layout?.containerWidth || '1200px'
-    return {
-      maxWidth,
-      margin: '0 auto',
-      padding: '0 1rem'
-    }
-  }
 
   // Get typography styles
   const getTypographyStyles = () => {

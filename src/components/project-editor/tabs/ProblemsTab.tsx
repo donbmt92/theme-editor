@@ -62,7 +62,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
             />
           </div>
           
-          <div>
+          {/* <div>
             <Label htmlFor="description">Mô tả</Label>
             <Textarea
               id="description"
@@ -71,7 +71,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               placeholder="Mô tả về những thách thức mà khách hàng thường gặp phải"
               rows={3}
             />
-          </div>
+          </div> */}
         </div>
       </Card>
 
@@ -512,77 +512,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
       </Card>
 
       {/* CTA Section */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">Call-to-Action</h3>
-        <div className="space-y-4">
-          <div>
-            <Label htmlFor="ctaTitle">Tiêu đề CTA</Label>
-            <Input
-              id="ctaTitle"
-              value={problems.cta?.title || ''}
-              onChange={(e) => updateThemeParam(['content', 'problems', 'cta', 'title'], e.target.value)}
-              placeholder="Tại sao chọn chúng tôi?"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="ctaDescription">Mô tả CTA</Label>
-            <Textarea
-              id="ctaDescription"
-              value={problems.cta?.description || ''}
-              onChange={(e) => updateThemeParam(['content', 'problems', 'cta', 'description'], e.target.value)}
-              placeholder="Mô tả về lý do khách hàng nên chọn bạn"
-              rows={3}
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="ctaButtonText">Nút CTA</Label>
-            <Input
-              id="ctaButtonText"
-              value={problems.cta?.buttonText || ''}
-              onChange={(e) => updateThemeParam(['content', 'problems', 'cta', 'buttonText'], e.target.value)}
-              placeholder="Tìm hiểu thêm về chúng tôi"
-            />
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="ctaBackgroundColor">Màu nền CTA</Label>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={problems.cta?.backgroundColor || '#000000'}
-                  onChange={(e) => updateThemeParam(['content', 'problems', 'cta', 'backgroundColor'], e.target.value)}
-                  className="w-12 h-10 rounded border border-gray-300"
-                />
-                <Input
-                  value={problems.cta?.backgroundColor || '#000000'}
-                  onChange={(e) => updateThemeParam(['content', 'problems', 'cta', 'backgroundColor'], e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-            
-            <div>
-              <Label htmlFor="ctaTextColor">Màu chữ CTA</Label>
-              <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={problems.cta?.textColor || '#FFFFFF'}
-                  onChange={(e) => updateThemeParam(['content', 'problems', 'cta', 'textColor'], e.target.value)}
-                  className="w-12 h-10 rounded border border-gray-300"
-                />
-                <Input
-                  value={problems.cta?.textColor || '#FFFFFF'}
-                  onChange={(e) => updateThemeParam(['content', 'problems', 'cta', 'textColor'], e.target.value)}
-                  className="flex-1"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
+     
     </div>
   )
 }

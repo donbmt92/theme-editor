@@ -417,41 +417,52 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
       >
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <div 
-              className={cn("inline-flex items-center px-4 py-2 rounded-full mb-4", getBorderRadiusClass())}
-              style={{ 
-                backgroundColor: content.colorMode === 'custom' && content.primaryColor 
-                  ? `${content.primaryColor}10` 
-                  : `${theme.colors.primary}10`,
-                color: content.colorMode === 'custom' && content.primaryColor 
-                  ? content.primaryColor 
-                  : theme.colors.primary
-              }}
-            >
-              <Download className="h-4 w-4 mr-2" />
-              <span className="font-medium">{content.badgeText || localizedText.badgeText}</span>
-            </div>
-            <h2 
-              className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
-              style={{ 
-                color: content.colorMode === 'custom' && content.textColor 
-                  ? content.textColor 
-                  : theme.colors.text,
-              }}
-            >
-              {content.title || "Mở khóa thành công xuất nhập khẩu"}
-            </h2>
-            <p 
-              className={cn("max-w-3xl mx-auto", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
-              style={{ 
-                color: content.colorMode === 'custom' && content.textColor 
-                  ? `${content.textColor}E6` 
-                  : theme.colors.muted || '#718096',
-                lineHeight: theme.typography?.lineHeight || '1.6',
-              }}
-            >
-              {content.description || "Tải về hướng dẫn toàn diện 'Cẩm nang xuất khẩu cà phê Việt Nam 2025' - tất cả những gì bạn cần biết về xuất khẩu cà phê thành công vào thị trường Mỹ."}
-            </p>
+            {/* Badge - chỉ hiển thị khi có nội dung */}
+            {(content.badgeText && content.badgeText.trim()) && (
+              <div 
+                className={cn("inline-flex items-center px-4 py-2 rounded-full mb-4", getBorderRadiusClass())}
+                style={{ 
+                  backgroundColor: content.colorMode === 'custom' && content.primaryColor 
+                    ? `${content.primaryColor}10` 
+                    : `${theme.colors.primary}10`,
+                  color: content.colorMode === 'custom' && content.primaryColor 
+                    ? content.primaryColor 
+                    : theme.colors.primary
+                }}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                <span className="font-medium">{content.badgeText}</span>
+              </div>
+            )}
+            
+            {/* Title - chỉ hiển thị khi có nội dung */}
+            {(content.title && content.title.trim()) && (
+              <h2 
+                className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
+                style={{ 
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? content.textColor 
+                    : theme.colors.text,
+                }}
+              >
+                {content.title}
+              </h2>
+            )}
+            
+            {/* Description - chỉ hiển thị khi có nội dung */}
+            {(content.description && content.description.trim()) && (
+              <p 
+                className={cn("max-w-3xl mx-auto", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
+                style={{ 
+                  color: content.colorMode === 'custom' && content.textColor 
+                    ? `${content.textColor}E6` 
+                    : theme.colors.muted || '#718096',
+                  lineHeight: theme.typography?.lineHeight || '1.6',
+                }}
+              >
+                {content.description}
+              </p>
+            )}
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -466,37 +477,44 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                 }}
               >
                 <CardContent className="p-8">
-                  <div className="flex items-center mb-6">
-                    <div 
-                      className={cn("h-16 w-16 rounded-xl flex items-center justify-center mr-4", getBorderRadiusClass())}
-                      style={{ 
-                        background: content.colorMode === 'custom' && content.primaryColor
-                          ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
-                          : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
-                      }}
-                    >
-                      <BookOpen className="h-8 w-8 text-white" />
-                    </div>
-                    <div>
-                      <h3 
-                        className={cn("font-bold", getHeadingSize('small'))}
+                  {/* Guide Header - chỉ hiển thị khi có guideTitle hoặc guideSubtitle */}
+                  {((content.guideTitle && content.guideTitle.trim()) || (content.guideSubtitle && content.guideSubtitle.trim())) && (
+                    <div className="flex items-center mb-6">
+                      <div 
+                        className={cn("h-16 w-16 rounded-xl flex items-center justify-center mr-4", getBorderRadiusClass())}
                         style={{ 
-                          color: content.textColor || theme.colors.text,
-                          fontWeight: theme.typography?.fontWeight || '700'
+                          background: content.colorMode === 'custom' && content.primaryColor
+                            ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
+                            : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
                         }}
                       >
-                        {content.guideTitle || "Hướng dẫn xuất khẩu đầy đủ"}
-                      </h3>
-                      <p 
-                        style={{ 
-                          color: content.textColor || theme.colors.muted || '#718096',
-                          fontSize: theme.typography?.fontSize || '16px'
-                        }}
-                      >
-                        {content.guideSubtitle || "Phiên bản 2025 - 45 trang"}
-                      </p>
+                        <BookOpen className="h-8 w-8 text-white" />
+                      </div>
+                      <div>
+                        {(content.guideTitle && content.guideTitle.trim()) && (
+                          <h3 
+                            className={cn("font-bold", getHeadingSize('small'))}
+                            style={{ 
+                              color: content.textColor || theme.colors.text,
+                              fontWeight: theme.typography?.fontWeight || '700'
+                            }}
+                          >
+                            {content.guideTitle}
+                          </h3>
+                        )}
+                        {(content.guideSubtitle && content.guideSubtitle.trim()) && (
+                          <p 
+                            style={{ 
+                              color: content.textColor || theme.colors.muted || '#718096',
+                              fontSize: theme.typography?.fontSize || '16px'
+                            }}
+                          >
+                            {content.guideSubtitle}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <div className="space-y-6">
                     {features.map((feature, index) => {
@@ -537,39 +555,41 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                     })}
                   </div>
 
-                  {/* Trust Indicators */}
-                  <div className="mt-8 pt-6 border-t" style={{ 
-                    borderColor: content.colorMode === 'custom' && content.primaryColor 
-                      ? content.primaryColor 
-                      : theme.colors.border || theme.colors.primary 
-                  }}>
-                    <div className="grid grid-cols-3 gap-4 text-center">
-                      {trustIndicators.map((indicator, index) => (
-                        <div key={index}>
-                          <div 
-                            className="text-2xl font-bold"
-                            style={{ 
-                              color: content.colorMode === 'custom' && content.primaryColor 
-                                ? content.primaryColor 
-                                : theme.colors.primary,
-                              fontWeight: theme.typography?.fontWeight || '700'
-                            }}
-                          >
-                            {indicator.number}
+                  {/* Trust Indicators - chỉ hiển thị khi có trustIndicators */}
+                  {trustIndicators && trustIndicators.length > 0 && (
+                    <div className="mt-8 pt-6 border-t" style={{ 
+                      borderColor: content.colorMode === 'custom' && content.primaryColor 
+                        ? content.primaryColor 
+                        : theme.colors.border || theme.colors.primary 
+                    }}>
+                      <div className="grid grid-cols-3 gap-4 text-center">
+                        {trustIndicators.map((indicator, index) => (
+                          <div key={index}>
+                            <div 
+                              className="text-2xl font-bold"
+                              style={{ 
+                                color: content.colorMode === 'custom' && content.primaryColor 
+                                  ? content.primaryColor 
+                                  : theme.colors.primary,
+                                fontWeight: theme.typography?.fontWeight || '700'
+                              }}
+                            >
+                              {indicator.number}
+                            </div>
+                            <div 
+                              className="text-sm"
+                              style={{ 
+                                color: content.textColor || theme.colors.muted || '#718096',
+                                fontSize: theme.typography?.fontSize || '16px'
+                              }}
+                            >
+                              {indicator.label}
+                            </div>
                           </div>
-                          <div 
-                            className="text-sm"
-                            style={{ 
-                              color: content.textColor || theme.colors.muted || '#718096',
-                              fontSize: theme.typography?.fontSize || '16px'
-                            }}
-                          >
-                            {indicator.label}
-                          </div>
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -584,26 +604,33 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                 }}
               >
                 <CardContent className="p-8">
-                  <div className="text-center mb-8">
-                    <h3 
-                      className={cn("font-bold mb-2", getHeadingSize('small'))}
-                      style={{ 
-                        color: content.textColor || theme.colors.text,
-                        fontWeight: theme.typography?.fontWeight || '700'
-                      }}
-                    >
-                      {content.formTitle || "Tải về hướng dẫn miễn phí"}
-                    </h3>
-                    <p 
-                      style={{ 
-                        color: content.textColor || theme.colors.muted || '#718096',
-                        fontSize: theme.typography?.fontSize || '16px',
-                        lineHeight: theme.typography?.lineHeight || '1.6'
-                      }}
-                    >
-                      {content.formDescription || "Nhập thông tin bên dưới để có quyền truy cập ngay lập tức vào tài nguyên quý giá này."}
-                    </p>
-                  </div>
+                  {/* Form Header - chỉ hiển thị khi có formTitle hoặc formDescription */}
+                  {((content.formTitle && content.formTitle.trim()) || (content.formDescription && content.formDescription.trim())) && (
+                    <div className="text-center mb-8">
+                      {(content.formTitle && content.formTitle.trim()) && (
+                        <h3 
+                          className={cn("font-bold mb-2", getHeadingSize('small'))}
+                          style={{ 
+                            color: content.textColor || theme.colors.text,
+                            fontWeight: theme.typography?.fontWeight || '700'
+                          }}
+                        >
+                          {content.formTitle}
+                        </h3>
+                      )}
+                      {(content.formDescription && content.formDescription.trim()) && (
+                        <p 
+                          style={{ 
+                            color: content.textColor || theme.colors.muted || '#718096',
+                            fontSize: theme.typography?.fontSize || '16px',
+                            lineHeight: theme.typography?.lineHeight || '1.6'
+                          }}
+                        >
+                          {content.formDescription}
+                        </p>
+                      )}
+                    </div>
+                  )}
 
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
@@ -683,66 +710,82 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                       />
                     </div>
 
-                    <Button 
-                      type="submit" 
-                      size="lg" 
-                      className="w-full hover:scale-105 hover:shadow-xl transition-all duration-300"
-                      style={getButtonStyles()}
-                    >
-                      <Download className="mr-2 h-5 w-5" />
-                      {content.buttonText || "Tải về hướng dẫn miễn phí ngay"}
-                    </Button>
+                    {/* Button - chỉ hiển thị khi có buttonText */}
+                    {(content.buttonText && content.buttonText.trim()) && (
+                      <Button 
+                        type="submit" 
+                        size="lg" 
+                        className="w-full hover:scale-105 hover:shadow-xl transition-all duration-300"
+                        style={getButtonStyles()}
+                      >
+                        <Download className="mr-2 h-5 w-5" />
+                        {content.buttonText}
+                      </Button>
+                    )}
 
-                    <p 
-                      className="text-xs text-center"
-                      style={{ 
-                        color: content.textColor || theme.colors.muted || '#718096',
-                        fontSize: theme.typography?.fontSize || '16px'
-                      }}
-                    >
-                      {content.privacyText || localizedText.privacyText}
-                    </p>
+                    {/* Privacy Text - chỉ hiển thị khi có privacyText */}
+                    {(content.privacyText && content.privacyText.trim()) && (
+                      <p 
+                        className="text-xs text-center"
+                        style={{ 
+                          color: content.textColor || theme.colors.muted || '#718096',
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {content.privacyText}
+                      </p>
+                    )}
                   </form>
 
-                  {/* Additional Trust Elements */}
-                  <div className="mt-8 pt-6 border-t" style={{ 
-                    borderColor: content.colorMode === 'custom' && content.primaryColor 
-                      ? content.primaryColor 
-                      : theme.colors.border || theme.colors.primary 
-                  }}>
-                    <div className="flex items-center justify-center space-x-6 text-sm">
-                      <div 
-                        className="flex items-center"
-                        style={{ 
-                          color: content.textColor || theme.colors.muted || '#718096',
-                          fontSize: theme.typography?.fontSize || '16px'
-                        }}
-                      >
-                        <Shield className="h-4 w-4 mr-1" />
-                        <span>{localizedText.secureText}</span>
-                      </div>
-                      <div 
-                        className="flex items-center"
-                        style={{ 
-                          color: content.textColor || theme.colors.muted || '#718096',
-                          fontSize: theme.typography?.fontSize || '16px'
-                        }}
-                      >
-                        <CheckCircle className="h-4 w-4 mr-1" />
-                        <span>{localizedText.noSpamText}</span>
-                      </div>
-                      <div 
-                        className="flex items-center"
-                        style={{ 
-                          color: content.textColor || theme.colors.muted || '#718096',
-                          fontSize: theme.typography?.fontSize || '16px'
-                        }}
-                      >
-                        <Download className="h-4 w-4 mr-1" />
-                        <span>{localizedText.instantText}</span>
+                  {/* Additional Trust Elements - chỉ hiển thị khi có ít nhất một trust element */}
+                  {((content.secureText && content.secureText.trim()) || 
+                    (content.noSpamText && content.noSpamText.trim()) || 
+                    (content.instantText && content.instantText.trim())) && (
+                    <div className="mt-8 pt-6 border-t" style={{ 
+                      borderColor: content.colorMode === 'custom' && content.primaryColor 
+                        ? content.primaryColor 
+                        : theme.colors.border || theme.colors.primary 
+                    }}>
+                      <div className="flex items-center justify-center space-x-6 text-sm">
+                        {(content.secureText && content.secureText.trim()) && (
+                          <div 
+                            className="flex items-center"
+                            style={{ 
+                              color: content.textColor || theme.colors.muted || '#718096',
+                              fontSize: theme.typography?.fontSize || '16px'
+                            }}
+                          >
+                            <Shield className="h-4 w-4 mr-1" />
+                            <span>{content.secureText}</span>
+                          </div>
+                        )}
+                        {(content.noSpamText && content.noSpamText.trim()) && (
+                          <div 
+                            className="flex items-center"
+                            style={{ 
+                              color: content.textColor || theme.colors.muted || '#718096',
+                              fontSize: theme.typography?.fontSize || '16px'
+                            }}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            <span>{content.noSpamText}</span>
+                          </div>
+                        )}
+                        {(content.instantText && content.instantText.trim()) && (
+                          <div 
+                            className="flex items-center"
+                            style={{ 
+                              color: content.textColor || theme.colors.muted || '#718096',
+                              fontSize: theme.typography?.fontSize || '16px'
+                            }}
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            <span>{content.instantText}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

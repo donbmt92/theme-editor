@@ -200,6 +200,93 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
         </div>
       </Card>
 
+      {/* Typography */}
+      <Card className="p-4">
+        <h3 className="text-lg font-semibold mb-4">Kiểu chữ</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="fontSize">Kích thước chữ</Label>
+            <Select
+              value={themeParams?.content?.footer?.fontSize || 'base'}
+              onValueChange={(value) => updateThemeParam(['content', 'footer', 'fontSize'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="sm">Nhỏ</SelectItem>
+                <SelectItem value="base">Bình thường</SelectItem>
+                <SelectItem value="lg">Lớn</SelectItem>
+                <SelectItem value="xl">Rất lớn</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="fontWeight">Độ đậm</Label>
+            <Select
+              value={themeParams?.content?.footer?.fontWeight || 'normal'}
+              onValueChange={(value) => updateThemeParam(['content', 'footer', 'fontWeight'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Mỏng</SelectItem>
+                <SelectItem value="normal">Bình thường</SelectItem>
+                <SelectItem value="medium">Trung bình</SelectItem>
+                <SelectItem value="semibold">Bán đậm</SelectItem>
+                <SelectItem value="bold">Đậm</SelectItem>
+                <SelectItem value="extrabold">Rất đậm</SelectItem>
+                <SelectItem value="black">Đen</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="fontFamily">Font chữ</Label>
+            <Select
+              value={themeParams?.content?.footer?.fontFamily || 'inter'}
+              onValueChange={(value) => updateThemeParam(['content', 'footer', 'fontFamily'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="inter">Inter</SelectItem>
+                <SelectItem value="poppins">Poppins</SelectItem>
+                <SelectItem value="roboto">Roboto</SelectItem>
+                <SelectItem value="open-sans">Open Sans</SelectItem>
+                <SelectItem value="montserrat">Montserrat</SelectItem>
+                <SelectItem value="lato">Lato</SelectItem>
+                <SelectItem value="nunito">Nunito</SelectItem>
+                <SelectItem value="raleway">Raleway</SelectItem>
+                <SelectItem value="playfair-display">Playfair Display</SelectItem>
+                <SelectItem value="merriweather">Merriweather</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div>
+            <Label htmlFor="lineHeight">Chiều cao dòng</Label>
+            <Select
+              value={themeParams?.content?.footer?.lineHeight || 'normal'}
+              onValueChange={(value) => updateThemeParam(['content', 'footer', 'lineHeight'], value)}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="tight">Chặt</SelectItem>
+                <SelectItem value="normal">Bình thường</SelectItem>
+                <SelectItem value="relaxed">Thoải mái</SelectItem>
+                <SelectItem value="loose">Rộng</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </Card>
+
       {/* Contact Info Settings */}
       <Card className="p-4">
         <h3 className="text-lg font-semibold mb-4">Thông tin liên hệ</h3>

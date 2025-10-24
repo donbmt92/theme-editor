@@ -147,14 +147,70 @@ export interface ThemeSections {
   about?: {
     backgroundColor?: string
     textColor?: string
+    title?: string
+    description?: string
+    image?: string
+    titleSize?: string
+    titleWeight?: string
+    titleFont?: string
+    descriptionSize?: string
+    descriptionWeight?: string
+    descriptionFont?: string
+    features?: Array<{
+      icon: string
+      title: string
+      description: string
+    }>
   }
   problems?: {
     backgroundColor?: string
     textColor?: string
+    cta?: {
+      title?: string
+      description?: string
+      buttonText?: string
+      backgroundColor?: string
+      textColor?: string
+      stats?: {
+        stat1?: {
+          value?: string
+          label?: string
+        }
+        stat2?: {
+          value?: string
+          label?: string
+        }
+        stat3?: {
+          value?: string
+          label?: string
+        }
+      }
+    }
   }
   solutions?: {
     backgroundColor?: string
     textColor?: string
+    cta?: {
+      title?: string
+      description?: string
+      buttonText?: string
+      backgroundColor?: string
+      textColor?: string
+      stats?: {
+        stat1?: {
+          value?: string
+          label?: string
+        }
+        stat2?: {
+          value?: string
+          label?: string
+        }
+        stat3?: {
+          value?: string
+          label?: string
+        }
+      }
+    }
   }
   products?: {
     backgroundColor?: string
@@ -278,6 +334,12 @@ export interface ThemeContent {
     image?: string
     backgroundColor?: string
     textColor?: string
+    titleSize?: 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl'
+    titleWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    titleFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    descriptionSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl'
+    descriptionWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    descriptionFont?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     features?: Array<{
       icon: string
       title: string
@@ -317,6 +379,20 @@ export interface ThemeContent {
       buttonText: string
       backgroundColor?: string
       textColor?: string
+      stats?: {
+        stat1?: {
+          value?: string
+          label?: string
+        }
+        stat2?: {
+          value?: string
+          label?: string
+        }
+        stat3?: {
+          value?: string
+          label?: string
+        }
+      }
     }
   }
   
@@ -355,6 +431,20 @@ export interface ThemeContent {
       buttonText: string
       backgroundColor?: string
       textColor?: string
+      stats?: {
+        stat1?: {
+          value?: string
+          label?: string
+        }
+        stat2?: {
+          value?: string
+          label?: string
+        }
+        stat3?: {
+          value?: string
+          label?: string
+        }
+      }
     }
   }
   
@@ -441,6 +531,10 @@ export interface ThemeContent {
     textColor?: string
     colorMode?: 'theme' | 'custom'
     primaryColor?: string
+    fontSize?: 'sm' | 'base' | 'lg' | 'xl'
+    fontWeight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black'
+    fontFamily?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
+    lineHeight?: 'tight' | 'normal' | 'relaxed' | 'loose'
     copyright?: string
     quickLinks?: Array<{
       name: string
@@ -548,6 +642,7 @@ export interface ThemeContent {
       title: string
       description: string
       buttonText: string
+      secondaryButtonText?: string
     }
   }
 }
