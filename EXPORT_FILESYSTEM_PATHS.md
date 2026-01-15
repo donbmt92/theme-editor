@@ -1,4 +1,4 @@
-# Đường dẫn Filesystem cho Export Projects
+# Đường dẫn Filesystem cho Deploy Projects
 
 ## 📁 Cấu trúc thư mục lưu trữ
 
@@ -10,9 +10,14 @@
         └── users/
             └── {userId}/
                 └── {projectName}-{timestamp}/
-                    ├── {projectName}.zip
-                    ├── metadata.json
-                    └── (các file khác nếu có)
+                    ├── index.html
+                    ├── css/
+                    │   └── style.css
+                    ├── js/
+                    │   └── main.js
+                    ├── images/
+                    ├── deploy-{server}.sh
+                    └── metadata.json
 ```
 
 ### 2. **Ví dụ thực tế**
@@ -23,9 +28,14 @@ D:\2025\nextjs\theme\theme-editor\
         └── users\
             └── clx123abc456def\
                 └── vietnam-coffee-1703123456789\
-                    ├── vietnam-coffee.zip
-                    ├── metadata.json
-                    └── README.md
+                    ├── index.html
+                    ├── css\
+                    │   └── style.css
+                    ├── js\
+                    │   └── main.js
+                    ├── images\
+                    ├── deploy-nginx.sh
+                    └── metadata.json
 ```
 
 ## 🔧 Chi tiết từng thành phần
@@ -48,61 +58,132 @@ const projectDir = path.join(userExportsDir, `${projectName}-${Date.now()}`)
 // Kết quả: D:\2025\nextjs\theme\theme-editor\public\exports\users\clx123abc456def\vietnam-coffee-1703123456789
 ```
 
-### **ZIP File Path**
-```javascript
-const zipPath = path.join(projectDir, `${projectName}.zip`)
-// Kết quả: D:\2025\nextjs\theme\theme-editor\public\exports\users\clx123abc456def\vietnam-coffee-1703123456789\vietnam-coffee.zip
-```
-
-### **Metadata File Path**
-```javascript
-const metadataPath = path.join(projectDir, 'metadata.json')
-// Kết quả: D:\2025\nextjs\theme\theme-editor\public\exports\users\clx123abc456def\vietnam-coffee-1703123456789\metadata.json
-```
-
 ## 📄 Nội dung Metadata
 
-File `metadata.json` chứa thông tin chi tiết về export:
+File `metadata.json` chứa thông tin chi tiết về deploy:
 
 ```json
 {
   "projectId": "test-project-1703123456789",
   "userId": "clx123abc456def",
   "projectName": "vietnam-coffee",
-  "exportTime": "2023-12-21T10:30:45.123Z",
-  "fileSize": 245760,
-  "fileCount": 15,
+  "deployTime": "2023-12-21T10:30:45.123Z",
   "userFolderPath": "users/clx123abc456def/vietnam-coffee-1703123456789/",
   "deployScriptPath": "deploy-nginx.sh",
-  "framework": "html",
-  "serverType": "nginx"
+  "serverType": "nginx",
+  "domain": "coffee.example.com"
 }
 ```
 
-## 🌐 URL Access
+## 🌐 API Endpoints
 
-### **Download URL**
+### **Deploy Project**
 ```
-/api/download-project/{projectId}
+POST /api/deploy-project
+```
+Request body:
+```json
+{
+  "projectId": "...",
+  "projectName": "...",
+  "description": "...",
+  "userId": "...",
+  "includeAssets": true,
+  "createUserFolder": true,
+  "generateDeployScript": true,
+  "serverType": "nginx",
+  "domain": "example.com",
+  "themeParams": {...}
+}
 ```
 
-### **Filesystem URL** (nếu cần)
+Response:
+```json
+{
+  "success": true,
+  "folderPath": "vietnam-coffee-1703123456789",
+  "userFolderPath": "users/clx123abc456def/vietnam-coffee-1703123456789/",
+  "filesystemPath": "/full/path/to/project",
+  "deployScriptPath": "deploy-nginx.sh"
+}
 ```
-/exports/users/{userId}/{projectName}-{timestamp}/{projectName}.zip
+
+### **Execute Deploy Script**
+```
+POST /api/execute-deploy-script
+```
+Request body:
+```json
+{
+  "scriptPath": "deploy-nginx.sh",
+  "projectName": "vietnam-coffee",
+  "serverType": "nginx",
+  "domain": "example.com",
+  "filesystemPath": "/full/path/to/project"
+}
+```
+
+Response:
+```json
+{
+  "success": true,
+  "stdout": "Nginx reloaded successfully",
+  "stderr": ""
+}
+```
+
+### **Check Domain**
+```
+POST /api/check-domain
+```
+Request body:
+```json
+{
+  "domain": "example.com"
+}
+```
+
+Response (valid):
+```json
+{
+  "ip": "69.62.83.168"
+}
+```
+
+Response (invalid):
+```json
+{
+  "ip": "123.45.67.89",
+  "error": "IP does not match VPS"
+}
+```
+
+### **Update Deploy Script**
+```
+POST /api/update-deploy-script
+```
+Request body:
+```json
+{
+  "projectId": "...",
+  "domain": "example.com",
+  "serverType": "nginx",
+  "filesystemPath": "/full/path/to/project"
+}
 ```
 
 ## 🔍 Cách truy cập đường dẫn
 
-### **1. Từ Frontend (Export Dialog)**
+### **1. Từ Frontend (Deploy Dialog)**
 ```javascript
-// Trong export-project-dialog.tsx
-console.log('Filesystem Path:', exportProgress.filesystemPath)
+// Trong DeployProjectDialog
+console.log('Filesystem Path:', deployProgress.filesystemPath)
 // Output: D:\2025\nextjs\theme\theme-editor\public\exports\users\clx123abc456def\vietnam-coffee-1703123456789
 ```
 
 ### **2. Từ Backend (API Route)**
 ```javascript
-// Trong export-project/route.ts
+// Trong deploy-project/route.ts
 console.log('Project Directory:', projectDir)
 // Output: D:\2025\nextjs\theme\theme-editor\public\exports\users\clx123abc456def\vietnam-coffee-1703123456789
 ```
@@ -123,19 +204,14 @@ ls -la "/path/to/project/public/exports/users/clx123abc456def/vietnam-coffee-170
 await fs.mkdir(projectDir, { recursive: true })
 ```
 
-### **Lưu ZIP file**
+### **Lưu HTML file**
 ```javascript
-await fs.writeFile(zipPath, Buffer.from(zipBuffer))
+await fs.writeFile(path.join(projectDir, 'index.html'), htmlContent)
 ```
 
 ### **Lưu metadata**
 ```javascript
 await fs.writeFile(metadataPath, JSON.stringify(metadata, null, 2))
-```
-
-### **Đọc metadata**
-```javascript
-const metadata = JSON.parse(await fs.readFile(metadataPath, 'utf8'))
 ```
 
 ## 🧹 Cleanup & Maintenance
@@ -145,8 +221,8 @@ const metadata = JSON.parse(await fs.readFile(metadataPath, 'utf8'))
 // Xóa file cũ hơn 30 ngày
 const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000)
 
-for (const file of await fs.readdir(exportsDir)) {
-  const filePath = path.join(exportsDir, file)
+for (const file of await fs.readdir(userExportsDir)) {
+  const filePath = path.join(userExportsDir, file)
   const stats = await fs.stat(filePath)
   
   if (stats.mtime.getTime() < thirtyDaysAgo) {
@@ -155,43 +231,29 @@ for (const file of await fs.readdir(exportsDir)) {
 }
 ```
 
-### **Kiểm tra dung lượng**
-```javascript
-// Tính tổng dung lượng exports
-let totalSize = 0
-for (const file of await fs.readdir(exportsDir, { recursive: true })) {
-  const filePath = path.join(exportsDir, file)
-  const stats = await fs.stat(filePath)
-  totalSize += stats.size
-}
-console.log('Total exports size:', (totalSize / 1024 / 1024).toFixed(2), 'MB')
-```
-
 ## 🔒 Bảo mật
 
 ### **Permissions**
-- Thư mục `public/exports` có thể truy cập từ web
-- Chỉ admin mới có quyền xóa file
-- User chỉ có thể download file của mình
+- Thư mục `public/exports` có thể truy cập từ web (static files)
+- Deploy scripts chỉ execute thông qua API
+- User chỉ có thể deploy với userId của mình
 
 ### **Validation**
 ```javascript
-// Kiểm tra user có quyền truy cập file
-if (filePath.includes(userId) || user.role === 'ADMIN') {
-  // Cho phép truy cập
-} else {
-  // Từ chối truy cập
+// Kiểm tra user có quyền
+if (session.user.id !== userId) {
+  throw new Error('Unauthorized')
 }
 ```
 
 ## 📊 Monitoring
 
-### **Log Files**
+### **Log Messages**
 ```javascript
-console.log(`📁 [EXPORT] Created directory: ${projectDir}`)
-console.log(`💾 [EXPORT] ZIP saved to: ${zipPath}`)
-console.log(`📄 [EXPORT] Metadata saved to: ${metadataPath}`)
-console.log(`📂 [EXPORT] Files saved to filesystem: ${projectDir}`)
+console.log(`📁 [DEPLOY] Created directory: ${projectDir}`)
+console.log(`📄 [DEPLOY] HTML saved to: ${htmlPath}`)
+console.log(`📜 [DEPLOY] Script saved: ${scriptPath}`)
+console.log(`📂 [DEPLOY] Files saved to filesystem: ${projectDir}`)
 ```
 
 ### **Error Handling**
@@ -199,11 +261,11 @@ console.log(`📂 [EXPORT] Files saved to filesystem: ${projectDir}`)
 try {
   await fs.mkdir(projectDir, { recursive: true })
 } catch (error) {
-  console.error('❌ [EXPORT] Failed to save to filesystem:', error)
-  // Fallback to memory only
+  console.error('❌ [DEPLOY] Failed to create directory:', error)
+  throw error
 }
 ```
 
 ---
 
-*Đường dẫn filesystem này giúp quản lý và truy xuất file export một cách có tổ chức và bảo mật.* 
+*Đường dẫn filesystem này giúp quản lý và truy xuất file deploy một cách có tổ chức và bảo mật.*

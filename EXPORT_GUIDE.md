@@ -1,306 +1,169 @@
-# 🚀 Export Project Guide
+# 🚀 Deploy Project Guide
 
-## Tính năng Xuất Project ReactJS + GitHub + Vercel
+## Tính năng Deploy Static HTML Website lên VPS
 
 ### Mô tả
-Tính năng này cho phép xuất theme/project thành ứng dụng ReactJS hoàn chỉnh, tạo GitHub repository và deploy lên Vercel tự động.
+Tính năng này cho phép deploy theme/project thành website **Static HTML** hoàn chỉnh và tự động chạy script deploy trên VPS.
 
 ## ✨ Tính năng
 
-### 1. **Xuất ReactJS Project**
-- **React + Vite** hoặc **Next.js**
-- **TypeScript** hoặc **JavaScript**
-- **Tailwind CSS**, **Styled Components**, hoặc **CSS Modules**
-- **Components đầy đủ** từ theme design
-- **Responsive design** với mobile support
-- **SEO optimized** với meta tags
+### 1. **Deploy Static HTML**
+- Website HTML tĩnh, hoạt động trên mọi web server
+- Components được generate từ theme design
+- Responsive design với mobile support
+- SEO optimized với meta tags
 
-### 2. **GitHub Integration**
-- Tạo repository tự động
-- Push source code
-- Public hoặc Private repo
-- README.md tự động
-- Configured build scripts
+### 2. **User Folder**
+- Tạo folder riêng cho mỗi user
+- Tránh conflict khi nhiều user deploy cùng lúc
+- Cấu trúc: `users/{userId}/{projectName}-{timestamp}/`
 
-### 3. **Vercel Deployment**
-- Deploy tự động từ GitHub
-- Custom domain support
-- Production-ready build
-- Continuous deployment
+### 3. **Auto Deploy Script**
+- Tự động tạo và chạy deploy script trên VPS
+- Hỗ trợ: **Nginx**, **Apache**, **Node.js**, **Docker**
+- Script được execute tự động sau khi generate
+
+### 4. **Domain Validation**
+- Kiểm tra domain đã trỏ về đúng IP VPS
+- Yêu cầu domain trỏ về: `69.62.83.168`
+- Tự động cập nhật script với domain khi valid
 
 ## 🛠️ Cách sử dụng
 
 ### Từ Theme Editor:
 1. Mở `/editor/[themeId]`
-2. Click nút **"Xuất file"** ở header
+2. Click nút **"Deploy"** ở header
 3. Cấu hình options trong dialog
-4. Click **"Bắt đầu xuất file"**
+4. Click **"Bắt đầu deploy project"**
 
 ### Từ Project Editor:
 1. Mở `/project/[projectId]`
-2. Click nút **"Xuất file"** ở header
+2. Click nút **"Deploy"** ở header
 3. Cấu hình options trong dialog
-4. Click **"Bắt đầu xuất file"**
+4. Click **"Bắt đầu deploy project"**
 
-## ⚙️ Export Options
+## ⚙️ Deploy Options
 
 ### **Cài đặt cơ bản:**
-- **Tên project:** Tên folder và package name
-- **Mô tả:** Description cho package.json và README
-- **Framework:** React+Vite hoặc Next.js
-- **TypeScript:** Enable/disable TypeScript
-- **CSS Framework:** Tailwind, Styled Components, CSS Modules
-- **Include Assets:** Bao gồm ảnh và fonts
+| Option | Mô tả |
+|--------|-------|
+| **Tên project** | Tên folder và project |
+| **Mô tả** | Description cho project |
+| **Bao gồm assets** | Include ảnh, fonts |
 
-### **GitHub Integration:**
-- **Tạo GitHub repo:** Auto-create repository
-- **Tên repository:** GitHub repo name
-- **Private repo:** Public hoặc private
-
-### **Vercel Deployment:**
-- **Deploy lên Vercel:** Auto-deploy after GitHub creation
-- **Framework detection:** Auto-detect React/Next.js
-- **Environment setup:** Production-ready configuration
+### **Tùy chọn Deploy & Folder:**
+| Option | Mô tả |
+|--------|-------|
+| **Tạo folder riêng cho user** | Tránh trùng file giữa các user |
+| **Tạo và chạy script deploy** | Auto-generate và execute script |
+| **Loại server** | Nginx / Apache / Node.js / Docker |
+| **Domain** | Domain cho website (optional) |
 
 ## 📁 Cấu trúc Project được tạo
 
-### React + Vite:
 ```
-my-project/
-├── package.json
-├── vite.config.ts
-├── tsconfig.json
-├── tailwind.config.js
+public/exports/users/{userId}/{projectName}-{timestamp}/
 ├── index.html
-├── src/
-│   ├── main.tsx
-│   ├── App.tsx
-│   ├── index.css
-│   └── components/
-│       ├── Header.tsx
-│       ├── HeroSection.tsx
-│       ├── About.tsx
-│       ├── Problems.tsx
-│       ├── Solutions.tsx
-│       ├── Products.tsx
-│       └── Footer.tsx
-└── README.md
+├── css/
+│   └── style.css
+├── js/
+│   └── main.js
+├── images/
+│   └── (assets from theme)
+├── deploy-{server}.sh
+└── metadata.json
 ```
 
-### Next.js:
-```
-my-project/
-├── package.json
-├── next.config.js
-├── tsconfig.json
-├── tailwind.config.js
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   └── globals.css
-│   └── components/
-│       ├── Header.tsx
-│       ├── HeroSection.tsx
-│       ├── About.tsx
-│       ├── Problems.tsx
-│       ├── Solutions.tsx
-│       ├── Products.tsx
-│       └── Footer.tsx
-└── README.md
-```
+## 🎨 Generated Content
 
-## 🎨 Generated Components
-
-### **Header Component:**
-- Logo/company name từ theme
-- Navigation menu
-- Contact info
-- Responsive mobile menu
-
-### **Hero Section:**
-- Title, subtitle, description từ theme content
-- CTA buttons với theme colors
-- Background image support
-- Responsive layout
-
-### **About Section:**
-- Company description
-- Mission/vision content
-- Custom styling với theme colors
-
-### **Problems Section:**
-- List các vấn đề khách hàng gặp phải
-- Icon integration với Lucide React
-- Card-based layout
-
-### **Solutions Section:**
-- Giải pháp của công ty
-- Benefits highlighting
-- Call-to-action integration
-
-### **Products Section:**
-- Product/service showcase
-- Pricing display
-- Category filtering
-
-### **Footer:**
-- Company information
-- Contact details
-- Newsletter signup
-- Social links
-
-## 🎯 Generated Code Features
+### **Components được generate:**
+- Header với logo và navigation
+- Hero Section với CTA buttons
+- About Section
+- Problems Section
+- Solutions Section
+- Products/Services Section
+- Testimonials
+- Footer với contact info
 
 ### **Styling:**
-- **Tailwind CSS:** Utility-first CSS với custom theme colors
-- **Styled Components:** CSS-in-JS với theme provider
-- **CSS Modules:** Scoped CSS với BEM methodology
+- CSS thuần với CSS Variables
+- Responsive breakpoints
+- Theme colors từ editor
 
-### **TypeScript:**
-- Strict type checking
-- Component props typing
-- Theme types integration
-- ESLint configuration
+## 🔧 Server Types
 
-### **Performance:**
-- Optimized builds
-- Code splitting
-- Lazy loading
-- Image optimization
-
-### **SEO:**
-- Meta tags từ theme content
-- Open Graph tags
-- Structured data
-- Sitemap ready
-
-## 🔧 Development Commands
-
-### React + Vite:
+### **Nginx**
 ```bash
-npm install     # Install dependencies
-npm run dev     # Start development server (http://localhost:5173)
-npm run build   # Build for production
-npm run preview # Preview production build
+# Script tự động:
+# - Copy files to /var/www/{project-name}
+# - Tạo Nginx config
+# - Enable site và reload
 ```
 
-### Next.js:
+### **Apache**
 ```bash
-npm install     # Install dependencies
-npm run dev     # Start development server (http://localhost:3000)
-npm run build   # Build for production
-npm start       # Start production server
+# Script tự động:
+# - Copy files to /var/www/html/{project-name}
+# - Tạo VirtualHost config
+# - Enable site và reload
 ```
 
-## 🌐 Live Examples
+### **Node.js**
+```bash
+# Script tự động:
+# - Setup với PM2
+# - Tạo ecosystem.config.js
+# - Start/restart với PM2
+```
 
-### Coffee Export Business:
-- **Generated from:** Vietnam Coffee theme
-- **Framework:** Next.js + TypeScript + Tailwind
-- **Colors:** Brown coffee palette (#8B4513, #D2691E)
-- **Content:** Professional coffee export copy
-- **Features:** Bilingual support, product showcase
+### **Docker**
+```bash
+# Script tự động:
+# - Tạo Dockerfile
+# - Tạo docker-compose.yml
+# - Build và start container
+```
 
-### Tech Startup:
-- **Generated from:** Modern tech theme
-- **Framework:** React + Vite + TypeScript
-- **Colors:** Blue tech palette (#1E40AF, #3B82F6)
-- **Content:** SaaS-focused copy
-- **Features:** Feature comparison, pricing tables
+## 🌐 Domain Validation
 
-## 📊 Export Analytics
+### **Quy trình:**
+1. Nhập domain (vd: `mydomain.com`)
+2. Click **"Kiểm tra"**
+3. Hệ thống kiểm tra DNS
+4. ✅ Valid: Domain trỏ về `69.62.83.168`
+5. ❌ Invalid: Domain trỏ về IP khác hoặc chưa cấu hình
 
-Sau khi export, bạn sẽ nhận được:
-
-### **Download Package:**
-- ZIP file chứa toàn bộ source code
-- Ready-to-deploy project structure
-- Comprehensive README với instructions
-
-### **GitHub Repository:**
-- Initialized với commit history
-- Configured GitHub Actions (optional)
-- Issue templates và PR templates
-- License file
-
-### **Vercel Deployment:**
-- Live URL ngay lập tức
-- Custom domain setup instructions
-- Performance analytics
-- Automatic deployments từ GitHub
-
-## 🔐 Security & Best Practices
-
-### **Environment Variables:**
-- No sensitive data trong code
-- Environment-specific configs
-- Production-ready security headers
-
-### **Code Quality:**
-- ESLint configuration
-- Prettier formatting
-- Git hooks setup
-- TypeScript strict mode
-
-### **Performance:**
-- Bundle size optimization
-- Image compression
-- Lazy loading implementation
-- SEO best practices
+### **Lưu ý:**
+- Domain phải được trỏ trước khi deploy
+- Nếu không có domain, website sẽ accessible qua IP
 
 ## 🆘 Troubleshooting
 
-### **Export Failed:**
-- Check theme data completeness
-- Verify internet connection
-- Try simpler configuration first
+### **Deploy Failed:**
+- Kiểm tra authentication (đăng nhập)
+- Kiểm tra theme data có đầy đủ
+- Xem logs trong dialog
 
-### **GitHub Error:**
-- Ensure GitHub authentication (future feature)
-- Check repository name availability
-- Verify GitHub API limits
+### **Domain Validation Failed:**
+- Đảm bảo domain đã trỏ A record về `69.62.83.168`
+- Đợi DNS propagation (có thể mất vài phút đến vài giờ)
+- Kiểm tra lại cấu hình DNS
 
-### **Vercel Error:**
-- Check Vercel account status
-- Verify deployment settings
-- Monitor build logs
+### **Script Execution Failed:**
+- Kiểm tra quyền trên VPS
+- Xem logs chi tiết trong dialog
+- Đảm bảo server type phù hợp với VPS
 
-### **Build Errors:**
-- Check generated code syntax
-- Verify dependency versions
-- Review TypeScript errors
+## 📊 API Endpoints
 
-## 🚀 Roadmap
+| Endpoint | Chức năng |
+|----------|-----------|
+| `POST /api/deploy-project` | Tạo project và generate files |
+| `POST /api/execute-deploy-script` | Chạy deploy script trên VPS |
+| `POST /api/check-domain` | Validate domain DNS |
+| `POST /api/update-deploy-script` | Cập nhật script với domain |
 
-### **Current (v1.0):**
-- ✅ React + Next.js export
-- ✅ GitHub repository creation (mock)
-- ✅ Vercel deployment (mock)
-- ✅ Multiple CSS frameworks
-- ✅ TypeScript support
+---
 
-### **Coming Soon (v1.1):**
-- 🔄 Real GitHub API integration
-- 🔄 Real Vercel API integration
-- 🔄 Custom domain setup
-- 🔄 Analytics integration
-- 🔄 SEO audit tools
-
-### **Future (v2.0):**
-- 🔮 Vue.js export support
-- 🔮 Angular export support
-- 🔮 Docker containerization
-- 🔮 Database integration
-- 🔮 CMS integration
-
-## 💡 Tips & Best Practices
-
-1. **Project Naming:** Sử dụng kebab-case cho tên project
-2. **GitHub Repo:** Tên repo nên match với project name
-3. **Vercel Domain:** Custom domain tốt hơn subdomain default
-4. **TypeScript:** Recommend cho projects lớn
-5. **Tailwind CSS:** Fastest development, smallest bundle
-6. **Testing:** Setup automated testing sau khi export
-
-Với tính năng này, bạn có thể chuyển từ design concept đến live website chỉ trong vài phút! 🎉 
+*Tính năng Deploy giúp bạn đưa website từ design lên production chỉ trong vài phút!* 🎉
