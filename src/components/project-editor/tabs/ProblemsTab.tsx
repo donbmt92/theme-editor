@@ -21,9 +21,9 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
 
   const addProblem = () => {
     if (newProblem.title && newProblem.description) {
-      const updatedProblems = [...problemsItems, { 
-        id: `problem-${Date.now()}`, 
-        ...newProblem 
+      const updatedProblems = [...problemsItems, {
+        id: `problem-${Date.now()}`,
+        ...newProblem
       }]
       updateThemeParam(['content', 'problems', 'items'], updatedProblems)
       setNewProblem({ title: '', description: '', icon: 'AlertTriangle' })
@@ -61,7 +61,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               placeholder="Thách Thức Thường Gặp"
             />
           </div>
-          
+
           {/* <div>
             <Label htmlFor="description">Mô tả</Label>
             <Textarea
@@ -82,7 +82,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={problems.colorMode || 'custom'}
+              value={problems.colorMode || 'theme'}
               onValueChange={(value) => updateThemeParam(['content', 'problems', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -94,8 +94,8 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
-          {problems.colorMode === 'custom' && (
+
+          {problems.colorMode === 'theme' && (
             <>
               <div>
                 <Label htmlFor="backgroundColor">Màu nền</Label>
@@ -113,7 +113,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="textColor">Màu chữ</Label>
                 <div className="flex items-center space-x-3">
@@ -130,7 +130,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="primaryColor">Màu chính</Label>
                 <div className="flex items-center space-x-3">
@@ -175,7 +175,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="titleWeight">Độ đậm tiêu đề</Label>
             <Select
@@ -196,7 +196,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="titleFont">Font tiêu đề</Label>
             <Select
@@ -220,7 +220,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionSize">Kích thước mô tả</Label>
             <Select
@@ -239,7 +239,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionWeight">Độ đậm mô tả</Label>
             <Select
@@ -260,7 +260,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionFont">Font mô tả</Label>
             <Select
@@ -311,7 +311,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="itemTitleFont">Font tiêu đề item</Label>
             <Select
@@ -335,7 +335,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="itemDescriptionSize">Kích thước mô tả item</Label>
             <Select
@@ -354,7 +354,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="itemDescriptionFont">Font mô tả item</Label>
             <Select
@@ -401,7 +401,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
-                
+
                 <div className="grid grid-cols-3 gap-3 mb-3">
                   <div>
                     <Label htmlFor={`problem-icon-${index}`}>Icon</Label>
@@ -425,7 +425,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="col-span-2">
                     <Label htmlFor={`problem-title-${index}`}>Tiêu đề</Label>
                     <Input
@@ -440,7 +440,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <Label htmlFor={`problem-description-${index}`}>Mô tả</Label>
                   <Textarea
@@ -458,7 +458,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
               </div>
             )
           })}
-          
+
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
             <h4 className="font-medium mb-3">Thêm vấn đề mới</h4>
             <div className="grid grid-cols-3 gap-3 mb-3">
@@ -480,7 +480,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="col-span-2">
                 <Label htmlFor="new-problem-title">Tiêu đề</Label>
                 <Input
@@ -491,7 +491,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
                 />
               </div>
             </div>
-            
+
             <div className="mb-3">
               <Label htmlFor="new-problem-description">Mô tả</Label>
               <Textarea
@@ -502,7 +502,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
                 rows={2}
               />
             </div>
-            
+
             <Button onClick={addProblem} size="sm" className="w-full">
               <Plus className="w-4 h-4 mr-1" />
               Thêm vấn đề
@@ -512,7 +512,7 @@ const ProblemsTab = ({ themeParams, updateThemeParam }: ProblemsTabProps) => {
       </Card>
 
       {/* CTA Section */}
-     
+
     </div>
   )
 }

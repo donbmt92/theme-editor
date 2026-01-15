@@ -27,7 +27,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
 
   const updateQuickLink = (index: number, field: string, value: string) => {
     const currentLinks = themeParams?.content?.footer?.quickLinks || []
-    const updatedLinks = currentLinks.map((link, i) => 
+    const updatedLinks = currentLinks.map((link, i) =>
       i === index ? { ...link, [field]: value } : link
     )
     updateThemeParam(['content', 'footer', 'quickLinks'], updatedLinks)
@@ -47,7 +47,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
 
   const updateResource = (index: number, field: string, value: string) => {
     const currentResources = themeParams?.content?.footer?.resources || []
-    const updatedResources = currentResources.map((resource, i) => 
+    const updatedResources = currentResources.map((resource, i) =>
       i === index ? { ...resource, [field]: value } : resource
     )
     updateThemeParam(['content', 'footer', 'resources'], updatedResources)
@@ -67,7 +67,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
 
   const updateLegal = (index: number, field: string, value: string) => {
     const currentLegal = themeParams?.content?.footer?.legal || []
-    const updatedLegal = currentLegal.map((item, i) => 
+    const updatedLegal = currentLegal.map((item, i) =>
       i === index ? { ...item, [field]: value } : item
     )
     updateThemeParam(['content', 'footer', 'legal'], updatedLegal)
@@ -87,7 +87,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
 
   const updateSocialLink = (index: number, field: string, value: string) => {
     const currentSocial = themeParams?.content?.footer?.socialLinks || []
-    const updatedSocial = currentSocial.map((social, i) => 
+    const updatedSocial = currentSocial.map((social, i) =>
       i === index ? { ...social, [field]: value } : social
     )
     updateThemeParam(['content', 'footer', 'socialLinks'], updatedSocial)
@@ -119,7 +119,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={themeParams?.content?.footer?.colorMode || 'custom'}
+              value={themeParams?.content?.footer?.colorMode || 'theme'}
               onValueChange={(value) => updateThemeParam(['content', 'footer', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -131,8 +131,8 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
-          {(themeParams?.content?.footer?.colorMode || 'custom') === 'custom' && (
+
+          {(themeParams?.content?.footer?.colorMode || 'theme') === 'custom' && (
             <>
               <div>
                 <label className="block text-sm font-medium mb-2">Màu nền</label>
@@ -150,7 +150,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Màu chữ</label>
                 <div className="flex items-center space-x-3">
@@ -167,7 +167,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Màu chính</label>
                 <div className="flex items-center space-x-3">
@@ -186,8 +186,8 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
               </div>
             </>
           )}
-          
-          {(themeParams?.content?.footer?.colorMode || 'custom') === 'theme' && (
+
+          {(themeParams?.content?.footer?.colorMode || 'theme') === 'theme' && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
                 Sử dụng màu từ chủ đề chính: <strong>{themeParams.colors?.primary || '#8B4513'}</strong>, <strong>{themeParams.colors?.accent || '#F4A460'}</strong>
@@ -221,7 +221,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="fontWeight">Độ đậm</Label>
             <Select
@@ -242,7 +242,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="fontFamily">Font chữ</Label>
             <Select
@@ -266,7 +266,7 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="lineHeight">Chiều cao dòng</Label>
             <Select

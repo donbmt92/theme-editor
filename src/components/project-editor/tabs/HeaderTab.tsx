@@ -21,10 +21,10 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
   const header = themeParams.content?.header || {}
   const navigation = header.navigation || []
   const socialLinks = header.socialLinks || []
-  
+
   // Đảm bảo các thuộc tính cần thiết tồn tại
   const headerWithDefaults = {
-    colorMode: (header as any).colorMode || 'custom',
+    colorMode: (header as any).colorMode || 'theme',
     backgroundColor: header.backgroundColor || '#FFFFFF',
     textColor: header.textColor || '#000000',
     primaryColor: (header as any).primaryColor || '#3B82F6',
@@ -73,7 +73,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               aspectRatio="1:1"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="logoSize">Kích thước logo</Label>
             <Select
@@ -91,7 +91,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="title">Tiêu đề chính</Label>
             <Input
@@ -101,7 +101,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               placeholder="Tên công ty của bạn"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="subtitle">Tiêu đề phụ</Label>
             <Input
@@ -133,7 +133,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           {headerWithDefaults.colorMode === 'custom' && (
             <>
               <div>
@@ -152,7 +152,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="textColor">Màu chữ</Label>
                 <div className="flex items-center space-x-3">
@@ -169,7 +169,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="primaryColor">Màu chính</Label>
                 <div className="flex items-center space-x-3">
@@ -188,7 +188,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               </div>
             </>
           )}
-          
+
           {headerWithDefaults.colorMode === 'theme' && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
@@ -240,7 +240,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               </Button>
             </div>
           ))}
-          
+
           <div className="flex items-center space-x-3">
             <Input
               value={newNavItem.name}
@@ -273,7 +273,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               placeholder="+84 123 456 789"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="email">Email</Label>
             <Input
@@ -336,7 +336,7 @@ const HeaderTab = ({ themeParams, updateThemeParam }: HeaderTabProps) => {
               </Button>
             </div>
           ))}
-          
+
           <div className="flex items-center space-x-3">
             <Input
               value={newSocialLink.platform}

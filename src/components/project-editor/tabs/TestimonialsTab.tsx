@@ -36,7 +36,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
 
   const updateTestimonial = (index: number, field: string, value: string | number) => {
     const currentTestimonials = themeParams?.content?.testimonials?.testimonials || []
-    const updatedTestimonials = currentTestimonials.map((testimonial, i) => 
+    const updatedTestimonials = currentTestimonials.map((testimonial, i) =>
       i === index ? { ...testimonial, [field]: value } : testimonial
     )
     updateThemeParam(['content', 'testimonials', 'testimonials'], updatedTestimonials)
@@ -56,7 +56,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
 
   const updateStat = (index: number, field: string, value: string) => {
     const currentStats = themeParams?.content?.testimonials?.stats || []
-    const updatedStats = currentStats.map((stat, i) => 
+    const updatedStats = currentStats.map((stat, i) =>
       i === index ? { ...stat, [field]: value } : stat
     )
     updateThemeParam(['content', 'testimonials', 'stats'], updatedStats)
@@ -88,7 +88,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={themeParams?.content?.testimonials?.colorMode || 'custom'}
+              value={themeParams?.content?.testimonials?.colorMode || 'theme'}
               onValueChange={(value) => updateThemeParam(['content', 'testimonials', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -100,8 +100,8 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
               </SelectContent>
             </Select>
           </div>
-          
-          {(themeParams?.content?.testimonials?.colorMode || 'custom') === 'custom' && (
+
+          {(themeParams?.content?.testimonials?.colorMode || 'theme') === 'custom' && (
             <>
               <div>
                 <label className="block text-sm font-medium mb-2">Màu nền</label>
@@ -119,7 +119,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Màu chữ</label>
                 <div className="flex items-center space-x-3">
@@ -136,7 +136,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
                   />
                 </div>
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium mb-2">Màu chính</label>
                 <div className="flex items-center space-x-3">
@@ -155,8 +155,8 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
               </div>
             </>
           )}
-          
-          {(themeParams?.content?.testimonials?.colorMode || 'custom') === 'theme' && (
+
+          {(themeParams?.content?.testimonials?.colorMode || 'theme') === 'theme' && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
                 Sử dụng màu từ chủ đề chính: <strong>{themeParams.colors?.primary || '#8B4513'}</strong>, <strong>{themeParams.colors?.accent || '#F4A460'}</strong>
@@ -191,7 +191,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="titleWeight">Độ đậm tiêu đề</Label>
             <Select
@@ -212,7 +212,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="titleFont">Font tiêu đề</Label>
             <Select
@@ -236,7 +236,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleSize">Kích thước phụ đề</Label>
             <Select
@@ -254,7 +254,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleWeight">Độ đậm phụ đề</Label>
             <Select
@@ -275,7 +275,7 @@ const TestimonialsTab = ({ themeParams, updateThemeParam }: TestimonialsTabProps
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleFont">Font phụ đề</Label>
             <Select

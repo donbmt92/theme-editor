@@ -21,7 +21,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
   const hero = themeParams.content?.hero || {}
   const benefits = hero.benefits || []
   const stats = hero.stats || []
-  
+
   // Type-safe access to hero properties with proper typing
   const heroContent = hero as typeof hero & {
     colorMode?: 'theme' | 'custom'
@@ -81,7 +81,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               placeholder="Tiêu đề chính của hero section"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="subtitle">Tiêu đề phụ</Label>
             <Input
@@ -91,7 +91,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               placeholder="Tiêu đề phụ hoặc slogan"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="description">Mô tả</Label>
             <Textarea
@@ -108,7 +108,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
       {/* CTA Buttons */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Nút Call-to-Action</h3>
-        
+
         {/* CTA Typography Settings */}
         <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
           <div>
@@ -128,7 +128,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="ctaWeight">Độ đậm CTA</Label>
             <Select
@@ -149,7 +149,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="ctaFont">Font CTA</Label>
             <Select
@@ -174,7 +174,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
             </Select>
           </div>
         </div>
-        
+
         <div className="space-y-4">
           <div>
             <Label htmlFor="ctaText">Nút chính</Label>
@@ -185,7 +185,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               placeholder="Ví dụ: Bắt đầu ngay"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="ctaSecondaryText">Nút phụ</Label>
             <Input
@@ -212,7 +212,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               aspectRatio="16:9"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="image">Ảnh chính</Label>
             <ImageUpload
@@ -233,7 +233,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={heroContent.colorMode || 'custom'}
+              value={heroContent.colorMode || 'theme'}
               onValueChange={(value) => updateThemeParam(['content', 'hero', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -245,7 +245,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           {heroContent.colorMode === 'custom' && (
             <>
               <div>
@@ -264,7 +264,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="textColor">Màu chữ</Label>
                 <div className="flex items-center space-x-3">
@@ -281,7 +281,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="primaryColor">Màu chính</Label>
                 <div className="flex items-center space-x-3">
@@ -298,7 +298,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="overlayColor">Màu overlay</Label>
                 <div className="flex items-center space-x-3">
@@ -315,7 +315,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="overlayOpacity">Độ mờ overlay</Label>
                 <div className="flex items-center space-x-3">
@@ -332,7 +332,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </div>
             </>
           )}
-          
+
           {heroContent.colorMode === 'theme' && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
@@ -369,11 +369,11 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
             <p className="text-xs text-gray-500 mt-1">
-              Kích thước hiện tại: <strong>{hero.titleSize || 'xl'}</strong> 
+              Kích thước hiện tại: <strong>{hero.titleSize || 'xl'}</strong>
               {hero.titleSize === 'xl' && ' (Khuyến nghị cho tiêu đề chính)'}
             </p>
           </div>
-          
+
           <div>
             <Label htmlFor="titleWeight">Độ đậm tiêu đề</Label>
             <Select
@@ -397,7 +397,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               Độ đậm hiện tại: <strong>{hero.titleWeight || 'semibold'}</strong>
             </p>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleSize">Kích thước tiêu đề phụ</Label>
             <Select
@@ -420,7 +420,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               Kích thước hiện tại: <strong>{hero.subtitleSize || 'lg'}</strong>
             </p>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionSize">Kích thước mô tả</Label>
             <Select
@@ -442,7 +442,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               Kích thước hiện tại: <strong>{hero.descriptionSize || 'base'}</strong>
             </p>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleWeight">Độ đậm tiêu đề phụ</Label>
             <Select
@@ -493,7 +493,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleFont">Font tiêu đề phụ</Label>
             <Select
@@ -517,7 +517,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionFont">Font mô tả</Label>
             <Select
@@ -541,7 +541,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="ctaFont">Font CTA</Label>
             <Select
@@ -571,7 +571,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
       {/* Lợi ích */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Lợi ích</h3>
-        
+
         {/* Benefits Typography Settings */}
         <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
           <div>
@@ -592,7 +592,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="benefitsWeight">Độ đậm lợi ích</Label>
             <Select
@@ -613,7 +613,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="benefitsFont">Font lợi ích</Label>
             <Select
@@ -698,7 +698,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </div>
             </div>
           ))}
-          
+
           <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
             <div className="flex-1">
               <Label className="text-sm text-gray-600 mb-1 block">Icon mới</Label>
@@ -750,7 +750,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
       {/* Thống kê */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Thống kê</h3>
-        
+
         {/* Stats Typography Settings */}
         <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
           <div>
@@ -770,7 +770,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="statsWeight">Độ đậm thống kê</Label>
             <Select
@@ -791,7 +791,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="statsFont">Font thống kê</Label>
             <Select
@@ -851,7 +851,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               </Button>
             </div>
           ))}
-          
+
           <div className="flex items-center space-x-3">
             <Input
               value={newStat.number}

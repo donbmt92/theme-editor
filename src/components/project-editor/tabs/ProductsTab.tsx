@@ -57,9 +57,9 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
 
   const addProduct = () => {
     if (newProduct.name && newProduct.description) {
-      const updatedProducts = [...productsItems, { 
-        id: `product-${Date.now()}`, 
-        ...newProduct 
+      const updatedProducts = [...productsItems, {
+        id: `product-${Date.now()}`,
+        ...newProduct
       }]
       updateThemeParam(['content', 'products', 'items'], updatedProducts)
       setNewProduct({ name: '', description: '', price: '', category: '', image: '' })
@@ -73,9 +73,9 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
 
   const addService = () => {
     if (newService.name && newService.description) {
-      const updatedServices = [...services, { 
-        id: `service-${Date.now()}`, 
-        ...newService 
+      const updatedServices = [...services, {
+        id: `service-${Date.now()}`,
+        ...newService
       }]
       updateThemeParam(['content', 'products', 'services'], updatedServices)
       setNewService({ name: '', description: '', icon: 'Package', cta: '', features: [''] })
@@ -137,7 +137,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
               placeholder="Giải Pháp Xuất Nhập Khẩu Toàn Diện"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="description">Mô tả</Label>
             <Textarea
@@ -158,7 +158,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={products.colorMode || 'custom'}
+              value={products.colorMode || 'theme'}
               onValueChange={(value) => updateThemeParam(['content', 'products', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -170,7 +170,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           {products.colorMode === 'custom' && (
             <>
               <div>
@@ -189,7 +189,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="textColor">Màu chữ</Label>
                 <div className="flex items-center space-x-3">
@@ -206,7 +206,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="primaryColor">Màu chính</Label>
                 <div className="flex items-center space-x-3">
@@ -250,7 +250,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="titleWeight">Độ đậm tiêu đề</Label>
             <Select
@@ -271,7 +271,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionSize">Kích thước mô tả</Label>
             <Select
@@ -289,7 +289,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionWeight">Độ đậm mô tả</Label>
             <Select
@@ -331,7 +331,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
                   <Label htmlFor={`product-name-${index}`}>Tên sản phẩm</Label>
@@ -346,7 +346,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                     placeholder="Tên sản phẩm"
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor={`product-category-${index}`}>Danh mục</Label>
                   <Input
@@ -361,7 +361,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div className="mb-3">
                 <Label htmlFor={`product-description-${index}`}>Mô tả</Label>
                 <Textarea
@@ -376,7 +376,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   rows={2}
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label htmlFor={`product-price-${index}`}>Giá</Label>
@@ -391,7 +391,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                     placeholder="Giá sản phẩm"
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor={`product-image-${index}`}>Hình ảnh</Label>
                   <ImageUpload
@@ -405,14 +405,14 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   />
                 </div>
               </div>
-              
+
               {/* Preview hình ảnh */}
               {product.image && (
                 <div className="mt-3">
                   <Label>Xem trước hình ảnh</Label>
                   <div className="mt-2">
-                    <img 
-                      src={product.image} 
+                    <img
+                      src={product.image}
                       alt={product.name}
                       className="w-32 h-32 object-cover rounded-lg border border-gray-200"
                     />
@@ -421,7 +421,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
               )}
             </div>
           ))}
-          
+
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
             <h4 className="font-medium mb-3">Thêm sản phẩm mới</h4>
             <div className="grid grid-cols-2 gap-3 mb-3">
@@ -434,7 +434,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   placeholder="Tên sản phẩm mới"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="new-product-category">Danh mục</Label>
                 <Input
@@ -445,7 +445,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                 />
               </div>
             </div>
-            
+
             <div className="mb-3">
               <Label htmlFor="new-product-description">Mô tả</Label>
               <Textarea
@@ -456,7 +456,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                 rows={2}
               />
             </div>
-            
+
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
                 <Label htmlFor="new-product-price">Giá</Label>
@@ -467,7 +467,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   placeholder="Giá sản phẩm"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="new-product-image">Hình ảnh</Label>
                 <ImageUpload
@@ -477,14 +477,14 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                 />
               </div>
             </div>
-            
+
             {/* Preview hình ảnh cho sản phẩm mới */}
             {newProduct.image && (
               <div className="mb-3">
                 <Label>Xem trước hình ảnh</Label>
                 <div className="mt-2">
-                  <img 
-                    src={newProduct.image} 
+                  <img
+                    src={newProduct.image}
                     alt="Preview"
                     className="w-32 h-32 object-cover rounded-lg border border-gray-200"
                   />
@@ -521,7 +521,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-3 gap-3 mb-3">
                 <div>
                   <Label htmlFor={`service-icon-${index}`}>Icon</Label>
@@ -549,7 +549,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="col-span-2">
                   <Label htmlFor={`service-name-${index}`}>Tên dịch vụ</Label>
                   <Input
@@ -564,7 +564,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   />
                 </div>
               </div>
-              
+
               <div className="mb-3">
                 <Label htmlFor={`service-description-${index}`}>Mô tả</Label>
                 <Textarea
@@ -579,7 +579,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   rows={2}
                 />
               </div>
-              
+
               <div className="mb-3">
                 <Label htmlFor={`service-cta-${index}`}>Nút CTA</Label>
                 <Input
@@ -593,7 +593,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   placeholder="Văn bản nút CTA"
                 />
               </div>
-              
+
               <div>
                 <Label>Tính năng dịch vụ</Label>
                 <div className="space-y-2 mt-2">
@@ -628,7 +628,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
               </div>
             </div>
           ))}
-          
+
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
             <h4 className="font-medium mb-3">Thêm dịch vụ mới</h4>
             <div className="grid grid-cols-3 gap-3 mb-3">
@@ -654,7 +654,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="col-span-2">
                 <Label htmlFor="new-service-name">Tên dịch vụ</Label>
                 <Input
@@ -665,7 +665,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                 />
               </div>
             </div>
-            
+
             <div className="mb-3">
               <Label htmlFor="new-service-description">Mô tả</Label>
               <Textarea
@@ -676,7 +676,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                 rows={2}
               />
             </div>
-            
+
             <div className="mb-3">
               <Label>Tính năng dịch vụ</Label>
               <div className="space-y-2 mt-2">
@@ -716,7 +716,7 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
                 </Button>
               </div>
             </div>
-            
+
             <Button onClick={addService} size="sm" className="w-full">
               <Plus className="w-4 h-4 mr-1" />
               Thêm dịch vụ

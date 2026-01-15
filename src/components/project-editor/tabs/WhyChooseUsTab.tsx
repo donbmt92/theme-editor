@@ -64,9 +64,9 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
 
   const addStrength = () => {
     if (newStrength.title && newStrength.description) {
-      const updatedStrengths = [...strengths, { 
-        id: `strength-${Date.now()}`, 
-        ...newStrength 
+      const updatedStrengths = [...strengths, {
+        id: `strength-${Date.now()}`,
+        ...newStrength
       }]
       updateThemeParam(['content', 'whyChooseUs', 'strengths'], updatedStrengths)
       setNewStrength({ title: '', description: '', icon: 'Users', highlight: '' })
@@ -144,7 +144,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               placeholder="Tại Sao Chọn VietCoffee Export?"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="subtitle">Phụ đề</Label>
             <Textarea
@@ -165,7 +165,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={whyChooseUs.colorMode || 'custom'}
+              value={whyChooseUs.colorMode || 'theme'}
               onValueChange={(value) => updateThemeParam(['content', 'whyChooseUs', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -177,8 +177,8 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               </SelectContent>
             </Select>
           </div>
-          
-          {(whyChooseUs.colorMode || 'custom') === 'custom' && (
+
+          {(whyChooseUs.colorMode || 'theme') === 'custom' && (
             <>
               <div>
                 <Label htmlFor="backgroundColor">Màu nền section</Label>
@@ -196,7 +196,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="textColor">Màu chữ</Label>
                 <div className="flex items-center space-x-3">
@@ -213,7 +213,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="primaryColor">Màu chính</Label>
                 <div className="flex items-center space-x-3">
@@ -232,8 +232,8 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               </div>
             </>
           )}
-          
-          {(whyChooseUs.colorMode || 'custom') === 'theme' && (
+
+          {(whyChooseUs.colorMode || 'theme') === 'theme' && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
                 Sử dụng màu từ chủ đề chính: <strong>{themeParams.colors?.primary || '#8B4513'}</strong>, <strong>{themeParams.colors?.accent || '#F4A460'}</strong>
@@ -268,7 +268,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="titleWeight">Độ đậm tiêu đề</Label>
             <Select
@@ -289,7 +289,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="titleFont">Font tiêu đề</Label>
             <Select
@@ -313,7 +313,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleSize">Kích thước phụ đề</Label>
             <Select
@@ -331,7 +331,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleWeight">Độ đậm phụ đề</Label>
             <Select
@@ -352,7 +352,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="subtitleFont">Font phụ đề</Label>
             <Select
@@ -400,7 +400,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-3 gap-3 mb-3">
                 <div>
                   <Label htmlFor={`strength-icon-${index}`}>Icon</Label>
@@ -434,7 +434,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="col-span-2">
                   <Label htmlFor={`strength-title-${index}`}>Tiêu đề</Label>
                   <Input
@@ -449,7 +449,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                   />
                 </div>
               </div>
-              
+
               <div className="mb-3">
                 <Label htmlFor={`strength-description-${index}`}>Mô tả</Label>
                 <Textarea
@@ -464,7 +464,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                   rows={2}
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor={`strength-highlight-${index}`}>Highlight</Label>
                 <Input
@@ -480,7 +480,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               </div>
             </div>
           ))}
-          
+
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
             <h4 className="font-medium mb-3">Thêm điểm mạnh mới</h4>
             <div className="grid grid-cols-3 gap-3 mb-3">
@@ -512,7 +512,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="col-span-2">
                 <Label htmlFor="new-strength-title">Tiêu đề</Label>
                 <Input
@@ -523,7 +523,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                 />
               </div>
             </div>
-            
+
             <div className="mb-3">
               <Label htmlFor="new-strength-description">Mô tả</Label>
               <Textarea
@@ -534,7 +534,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                 rows={2}
               />
             </div>
-            
+
             <div className="mb-3">
               <Label htmlFor="new-strength-highlight">Highlight</Label>
               <Input
@@ -544,7 +544,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
                 placeholder="Điểm nổi bật (hiển thị trong badge)"
               />
             </div>
-            
+
             <Button onClick={addStrength} size="sm" className="w-full">
               <Plus className="w-4 h-4 mr-1" />
               Thêm điểm mạnh
@@ -566,7 +566,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               placeholder="Sứ Mệnh Của Chúng Tôi"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="missionDescription">Mô tả sứ mệnh</Label>
             <Textarea
@@ -577,7 +577,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               rows={3}
             />
           </div>
-          
+
           <div>
             <Label>Giá trị cốt lõi</Label>
             <div className="space-y-2 mt-2">
@@ -632,7 +632,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               placeholder="Tầm Nhìn Của Chúng Tôi"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="visionDescription">Mô tả tầm nhìn</Label>
             <Textarea
@@ -643,7 +643,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               rows={3}
             />
           </div>
-          
+
           <div>
             <Label>Mục tiêu 2025</Label>
             <div className="space-y-2 mt-2">
@@ -698,7 +698,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               placeholder="Sẵn Sàng Bắt Đầu Hành Trình Nhập Khẩu Cà Phê?"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="ctaDescription">Mô tả CTA</Label>
             <Textarea
@@ -709,7 +709,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               rows={3}
             />
           </div>
-          
+
           <div>
             <Label htmlFor="ctaButtonText">Nút CTA chính</Label>
             <Input
@@ -719,7 +719,7 @@ const WhyChooseUsTab = ({ themeParams, updateThemeParam }: WhyChooseUsTabProps) 
               placeholder="Đặt Lịch Tư Vấn Miễn Phí"
             />
           </div>
-          
+
           {/* <div>
             <Label htmlFor="ctaSecondaryButtonText">Nút CTA phụ</Label>
             <Input

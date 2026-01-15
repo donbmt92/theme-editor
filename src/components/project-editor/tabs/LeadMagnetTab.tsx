@@ -24,9 +24,9 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
 
   const addFeature = () => {
     if (newFeature.title && newFeature.description) {
-      const updatedFeatures = [...guideFeatures, { 
-        id: `feature-${Date.now()}`, 
-        ...newFeature 
+      const updatedFeatures = [...guideFeatures, {
+        id: `feature-${Date.now()}`,
+        ...newFeature
       }]
       updateThemeParam(['content', 'leadMagnet', 'guideFeatures'], updatedFeatures)
       setNewFeature({ title: '', description: '', icon: 'FileText' })
@@ -40,9 +40,9 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
 
   const addTrustIndicator = () => {
     if (newTrustIndicator.number && newTrustIndicator.label) {
-      const updatedIndicators = [...trustIndicators, { 
-        id: `indicator-${Date.now()}`, 
-        ...newTrustIndicator 
+      const updatedIndicators = [...trustIndicators, {
+        id: `indicator-${Date.now()}`,
+        ...newTrustIndicator
       }]
       updateThemeParam(['content', 'leadMagnet', 'trustIndicators'], updatedIndicators)
       setNewTrustIndicator({ number: '', label: '' })
@@ -81,7 +81,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               placeholder="Free Resource"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="title">Tiêu đề chính</Label>
             <Input
@@ -91,7 +91,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               placeholder="Unlock Your Import/Export Success"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="description">Mô tả</Label>
             <Textarea
@@ -118,7 +118,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               placeholder="Complete Import Guide"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="guideSubtitle">Phụ đề tài liệu</Label>
             <Input
@@ -138,7 +138,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
           <div>
             <Label htmlFor="colorMode">Chế độ màu</Label>
             <Select
-              value={leadMagnet.colorMode || 'custom'}
+              value={leadMagnet.colorMode || 'theme'}
               onValueChange={(value) => updateThemeParam(['content', 'leadMagnet', 'colorMode'], value)}
             >
               <SelectTrigger>
@@ -150,7 +150,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               </SelectContent>
             </Select>
           </div>
-          
+
           {leadMagnet.colorMode === 'custom' && (
             <>
               <div>
@@ -169,7 +169,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="textColor">Màu chữ</Label>
                 <div className="flex items-center space-x-3">
@@ -186,7 +186,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                   />
                 </div>
               </div>
-              
+
               <div>
                 <Label htmlFor="primaryColor">Màu chính</Label>
                 <div className="flex items-center space-x-3">
@@ -205,7 +205,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               </div>
             </>
           )}
-          
+
           {leadMagnet.colorMode === 'theme' && (
             <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
               <p className="text-sm text-blue-800">
@@ -241,7 +241,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="titleWeight">Độ đậm tiêu đề</Label>
             <Select
@@ -262,7 +262,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionSize">Kích thước mô tả</Label>
             <Select
@@ -280,7 +280,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
             <Label htmlFor="descriptionWeight">Độ đậm mô tả</Label>
             <Select
@@ -324,7 +324,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
-                
+
                 <div className="grid grid-cols-3 gap-3 mb-3">
                   <div>
                     <Label htmlFor={`feature-icon-${index}`}>Icon</Label>
@@ -349,7 +349,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div className="col-span-2">
                     <Label htmlFor={`feature-title-${index}`}>Tiêu đề</Label>
                     <Input
@@ -364,7 +364,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <Label htmlFor={`feature-description-${index}`}>Mô tả</Label>
                   <Textarea
@@ -382,7 +382,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               </div>
             )
           })}
-          
+
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
             <h4 className="font-medium mb-3">Thêm tính năng mới</h4>
             <div className="grid grid-cols-3 gap-3 mb-3">
@@ -405,7 +405,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="col-span-2">
                 <Label htmlFor="new-feature-title">Tiêu đề</Label>
                 <Input
@@ -416,7 +416,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                 />
               </div>
             </div>
-            
+
             <div className="mb-3">
               <Label htmlFor="new-feature-description">Mô tả</Label>
               <Textarea
@@ -427,7 +427,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                 rows={2}
               />
             </div>
-            
+
             <Button onClick={addFeature} size="sm" className="w-full">
               <Plus className="w-4 h-4 mr-1" />
               Thêm tính năng
@@ -453,7 +453,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <Label htmlFor={`indicator-number-${index}`}>Số liệu</Label>
@@ -468,7 +468,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                     placeholder="5,000+"
                   />
                 </div>
-                
+
                 <div>
                   <Label htmlFor={`indicator-label-${index}`}>Nhãn</Label>
                   <Input
@@ -485,7 +485,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               </div>
             </div>
           ))}
-          
+
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
             <h4 className="font-medium mb-3">Thêm chỉ số mới</h4>
             <div className="grid grid-cols-2 gap-3 mb-3">
@@ -498,7 +498,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                   placeholder="5,000+"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="new-indicator-label">Nhãn</Label>
                 <Input
@@ -509,7 +509,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
                 />
               </div>
             </div>
-            
+
             <Button onClick={addTrustIndicator} size="sm" className="w-full">
               <Plus className="w-4 h-4 mr-1" />
               Thêm chỉ số
@@ -531,7 +531,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               placeholder="Download Your Free Guide"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="formDescription">Mô tả form</Label>
             <Textarea
@@ -542,7 +542,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               rows={2}
             />
           </div>
-          
+
           <div>
             <Label htmlFor="downloadUrl">File tài liệu (PDF)</Label>
             <FileUpload
@@ -552,7 +552,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               allowedHint="Chỉ chấp nhận file PDF, tối đa 20MB"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="buttonText">Nút submit</Label>
             <Input
@@ -562,7 +562,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               placeholder="Download Free Guide Now"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="privacyText">Văn bản bảo mật</Label>
             <Textarea
@@ -589,7 +589,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               placeholder="100% Secure"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="noSpamText">Văn bản không spam</Label>
             <Input
@@ -599,7 +599,7 @@ const LeadMagnetTab = ({ themeParams, updateThemeParam }: LeadMagnetTabProps) =>
               placeholder="No Spam"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="instantText">Văn bản tức thì</Label>
             <Input

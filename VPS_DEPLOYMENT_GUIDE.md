@@ -114,7 +114,7 @@ sudo systemctl enable postgresql
 # Tạo database và user
 sudo -u postgres psql
 CREATE DATABASE theme_editor;
-CREATE USER deploy WITH PASSWORD 'your_secure_password';
+CREATE USER deploy WITH PASSWORD 'Hackconcat36';
 GRANT ALL PRIVILEGES ON DATABASE theme_editor TO deploy;
 \q
 ```
@@ -125,12 +125,15 @@ GRANT ALL PRIVILEGES ON DATABASE theme_editor TO deploy;
 
 ### **1. Clone repository:**
 ```bash
-# Chuyển về home directory
-cd /home/deploy
+# Cấp quyền cho thư mục /var/www/
+sudo chown -R $USER:$USER /var/www/
+
+# Chuyển về thư mục deploy
+cd /var/www/
 
 # Clone repo
 git clone https://github.com/donbmt92/theme-editor.git
-cd theme-editor/theme-editor
+cd theme-editor
 
 # Cài đặt dependencies
 npm install
@@ -148,10 +151,10 @@ nano .env
 #### **Nội dung .env:**
 ```env
 # Database
-DATABASE_URL="postgresql://deploy:your_secure_password@localhost:5432/theme_editor"
+DATABASE_URL="postgresql://deploy:Hackconcat36@localhost:5432/theme_editor"
 
 # Next Auth
-NEXTAUTH_URL="https://yourdomain.com"
+NEXTAUTH_URL="https://geekgolfers.com"
 NEXTAUTH_SECRET="your_very_long_random_secret_key_here"
 
 # Google AI
@@ -195,23 +198,23 @@ module.exports = {
     name: 'theme-editor',
     script: 'npm',
     args: 'start',
-    cwd: '/home/deploy/theme-editor/theme-editor',
+    cwd: '/var/www/theme-editor',
     instances: 'max',
     exec_mode: 'cluster',
     env: {
       NODE_ENV: 'production',
-      PORT: 3000
+      PORT: 3033
     },
-    error_file: '/home/deploy/logs/theme-editor-error.log',
-    out_file: '/home/deploy/logs/theme-editor-out.log',
-    log_file: '/home/deploy/logs/theme-editor.log',
+    error_file: '/var/www/logs/theme-editor-error.log',
+    out_file: '/var/www/logs/theme-editor-out.log',
+    log_file: '/var/www/logs/theme-editor.log',
     time: true
   }]
 }
 EOF
 
 # Tạo thư mục logs
-mkdir -p /home/deploy/logs
+mkdir -p /var/www/logs
 
 # Start với PM2
 pm2 start ecosystem.config.js
@@ -229,11 +232,77 @@ pm2 save
 sudo nano /etc/nginx/sites-available/theme-editor
 ```
 
-#### **Nội dung config:**
+#### **Nội dung config (CHƯA CÓ SSL):**
 ```nginx
+# Rate Limiting Zone (đặt ngoài server block)
+limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+
 server {
     listen 80;
-    server_name yourdomain.com www.yourdomain.com;
+    server_name geekgolfers.com www.geekgolfers.com;
+
+    # Security Headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header X-Content-Type-Options "nosniff" always;
+
+    # Gzip Compression
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_proxied expired no-cache no-store private must-revalidate auth;
+    gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml+rss application/javascript;
+    
+    location / {
+        proxy_pass http://localhost:3033;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 86400;
+    }
+
+    # API Rate Limiting
+    location /api/ {
+        limit_req zone=api burst=20 nodelay;
+        proxy_pass http://localhost:3033;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Static Files Caching
+    location /_next/static/ {
+        proxy_pass http://localhost:3033;
+        proxy_cache_valid 200 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Error Pages
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /var/www/html;
+    }
+}
+```
+
+#### **Nội dung config (SAU KHI CÀI SSL):**
+```nginx
+# Rate Limiting Zone
+limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
+
+server {
+    listen 80;
+    server_name geekgolfers.com www.geekgolfers.com;
 
     # Redirect HTTP to HTTPS
     return 301 https://$server_name$request_uri;
@@ -241,11 +310,11 @@ server {
 
 server {
     listen 443 ssl http2;
-    server_name yourdomain.com www.yourdomain.com;
+    server_name geekgolfers.com www.geekgolfers.com;
 
     # SSL Configuration
-    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/geekgolfers.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/geekgolfers.com/privkey.pem;
     
     # SSL Security
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -267,12 +336,9 @@ server {
     gzip_min_length 1024;
     gzip_proxied expired no-cache no-store private must-revalidate auth;
     gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml+rss application/javascript;
-
-    # Rate Limiting
-    limit_req_zone $binary_remote_addr zone=api:10m rate=10r/s;
     
     location / {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3033;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -287,7 +353,7 @@ server {
     # API Rate Limiting
     location /api/ {
         limit_req zone=api burst=20 nodelay;
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3033;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -300,7 +366,7 @@ server {
 
     # Static Files Caching
     location /_next/static/ {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:3033;
         proxy_cache_valid 200 1y;
         add_header Cache-Control "public, immutable";
     }
@@ -347,7 +413,7 @@ sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo systemctl stop nginx
 
 # Tạo certificate
-sudo certbot certonly --standalone -d yourdomain.com -d www.yourdomain.com
+sudo certbot certonly --standalone -d geekgolfers.com -d www.geekgolfers.com
 
 # Start lại Nginx
 sudo systemctl start nginx
@@ -372,9 +438,9 @@ sudo crontab -e
 ### **1. Backup Script:**
 ```bash
 # Tạo backup script
-cat > /home/deploy/backup_db.sh << 'EOF'
+cat > /var/www/backup_db.sh << 'EOF'
 #!/bin/bash
-BACKUP_DIR="/home/deploy/backups"
+BACKUP_DIR="/var/www/backups"
 DATE=$(date +%Y%m%d_%H%M%S)
 BACKUP_FILE="theme_editor_backup_$DATE.sql"
 
@@ -388,7 +454,7 @@ find $BACKUP_DIR -name "theme_editor_backup_*.sql" -type f -mtime +7 -delete
 echo "Database backup completed: $BACKUP_FILE"
 EOF
 
-chmod +x /home/deploy/backup_db.sh
+chmod +x /var/www/backup_db.sh
 ```
 
 ### **2. Crontab cho backup tự động:**
@@ -397,7 +463,7 @@ chmod +x /home/deploy/backup_db.sh
 crontab -e
 
 # Backup hàng ngày lúc 2h sáng
-0 2 * * * /home/deploy/backup_db.sh >> /home/deploy/logs/backup.log 2>&1
+0 2 * * * /var/www/backup_db.sh >> /var/www/logs/backup.log 2>&1
 ```
 
 ---
@@ -413,7 +479,7 @@ pm2 list
 pm2 monit
 
 # Logs
-pm2 logs theme-editor
+pm2 logs theme-editor --lines 100
 
 # Restart app
 pm2 restart theme-editor
@@ -439,14 +505,14 @@ free -h
 sudo nano /etc/logrotate.d/theme-editor
 
 # Nội dung:
-/home/deploy/logs/*.log {
+/var/www/logs/*.log {
     daily
     missingok
     rotate 14
     compress
     delaycompress
     notifempty
-    create 0644 deploy deploy
+    create 0644 $USER $USER
     postrotate
         pm2 reload theme-editor > /dev/null
     endscript
@@ -459,11 +525,11 @@ sudo nano /etc/logrotate.d/theme-editor
 
 ### **1. Complete Backup Script:**
 ```bash
-cat > /home/deploy/full_backup.sh << 'EOF'
+cat > /var/www/full_backup.sh << 'EOF'
 #!/bin/bash
-BACKUP_DIR="/home/deploy/backups/full"
+BACKUP_DIR="/var/www/backups/full"
 DATE=$(date +%Y%m%d_%H%M%S)
-APP_DIR="/home/deploy/theme-editor"
+APP_DIR="/var/www/theme-editor"
 
 mkdir -p $BACKUP_DIR
 
@@ -471,7 +537,7 @@ mkdir -p $BACKUP_DIR
 pg_dump -h localhost -U deploy -d theme_editor > $BACKUP_DIR/db_$DATE.sql
 
 # Application backup
-tar -czf $BACKUP_DIR/app_$DATE.tar.gz -C /home/deploy theme-editor
+tar -czf $BACKUP_DIR/app_$DATE.tar.gz -C /var/www theme-editor
 
 # Config backup
 tar -czf $BACKUP_DIR/config_$DATE.tar.gz /etc/nginx/sites-available/theme-editor
@@ -479,14 +545,14 @@ tar -czf $BACKUP_DIR/config_$DATE.tar.gz /etc/nginx/sites-available/theme-editor
 echo "Full backup completed: $DATE"
 EOF
 
-chmod +x /home/deploy/full_backup.sh
+chmod +x /var/www/full_backup.sh
 ```
 
 ### **2. Deployment Script:**
 ```bash
-cat > /home/deploy/deploy.sh << 'EOF'
+cat > /var/www/deploy.sh << 'EOF'
 #!/bin/bash
-APP_DIR="/home/deploy/theme-editor/theme-editor"
+APP_DIR="/var/www/theme-editor"
 
 echo "Starting deployment..."
 
@@ -514,14 +580,14 @@ pm2 reload theme-editor
 echo "Deployment completed!"
 EOF
 
-chmod +x /home/deploy/deploy.sh
+chmod +x /var/www/deploy.sh
 ```
 
 ### **3. Health Check Script:**
 ```bash
-cat > /home/deploy/health_check.sh << 'EOF'
+cat > /var/www/health_check.sh << 'EOF'
 #!/bin/bash
-HEALTH_URL="https://yourdomain.com/api/health"
+HEALTH_URL="https://geekgolfers.com/api/health"
 
 if curl -f -s $HEALTH_URL > /dev/null; then
     echo "$(date): Application is healthy"
@@ -531,12 +597,12 @@ else
 fi
 EOF
 
-chmod +x /home/deploy/health_check.sh
+chmod +x /var/www/health_check.sh
 
 # Crontab cho health check (mỗi 5 phút)
 crontab -e
 # Thêm:
-*/5 * * * * /home/deploy/health_check.sh >> /home/deploy/logs/health.log 2>&1
+*/5 * * * * /var/www/health_check.sh >> /var/www/logs/health.log 2>&1
 ```
 
 ---
@@ -591,7 +657,7 @@ sudo certbot certificates
 sudo certbot renew
 
 # Test SSL
-openssl s_client -connect yourdomain.com:443
+openssl s_client -connect geekgolfers.com:443
 ```
 
 ---
@@ -662,7 +728,7 @@ cat ~/.ssh/id_rsa.pub | ssh deploy@your-vps-ip 'mkdir -p ~/.ssh && cat >> ~/.ssh
 Nếu gặp vấn đề, vui lòng:
 1. Check logs trước: `pm2 logs theme-editor`
 2. Check system resources: `htop`, `df -h`
-3. Test connectivity: `curl -I https://yourdomain.com`
+3. Test connectivity: `curl -I https://geekgolfers.com`
 4. Contact: your-support-email@domain.com
 
 ---
