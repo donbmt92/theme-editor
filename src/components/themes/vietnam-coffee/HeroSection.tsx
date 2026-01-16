@@ -87,10 +87,10 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
         guideText: "Complete Import-Export Guide",
         stats: {
           orders: "Successful Orders",
-          experience: "Years Experience", 
+          experience: "Years Experience",
           partners: "US Partners"
         },
-        
+
       };
     } else {
       return {
@@ -102,7 +102,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           { icon: "📞", text: "Hỗ trợ 24/7" },
         ],
         defaultTitle: "Cà Phê Việt Nam",
-        defaultSubtitle: "Chất Lượng Quốc Tế", 
+        defaultSubtitle: "Chất Lượng Quốc Tế",
         defaultDescription: "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
         guideText: "Hướng dẫn XNK từ A-Z",
         stats: {
@@ -110,7 +110,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           experience: "Năm kinh nghiệm",
           partners: "Đối tác Mỹ"
         },
-       
+
       };
     }
   };
@@ -209,7 +209,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
     if (content.image && content.image.startsWith('/uploads/')) {
       return content.image;
     }
-    
+
     // Sau đó mới đến Unsplash
     if (content.unsplashImageUrl) return content.unsplashImageUrl;
     if (unsplashImageUrl) return unsplashImageUrl;
@@ -253,8 +253,8 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
       fontWeight: theme.typography?.fontWeight || "400",
     };
 
-    const primaryColor = content.colorMode === 'custom' && content.primaryColor 
-      ? content.primaryColor 
+    const primaryColor = content.colorMode === 'custom' && content.primaryColor
+      ? content.primaryColor
       : theme.colors.primary;
 
     if (variant === "primary") {
@@ -285,161 +285,83 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
   };
 
 
-  // Get title size
-  const getTitleSize = () => {
-    const size = content.titleSize || theme.typography?.headingSize || '2xl';
+  // Helper function to map heading size to classes
+  const getHeadingClasses = (size: string) => {
     switch (size) {
-      case "sm":
-        return "text-2xl md:text-4xl";
-      case "base":
-        return "text-3xl md:text-5xl";
-      case "lg":
-        return "text-4xl md:text-6xl";
-      case "xl":
-        return "text-5xl md:text-7xl";
-      case "2xl":
-        return "text-6xl md:text-8xl";
-      case "3xl":
-        return "text-7xl md:text-9xl";
-      default:
-        return "text-4xl md:text-6xl";
+      case "sm": return "text-xl md:text-3xl";
+      case "base": return "text-2xl md:text-4xl";
+      case "lg": return "text-3xl md:text-5xl";
+      case "xl": return "text-4xl md:text-6xl";
+      case "2xl": return "text-5xl md:text-7xl";
+      case "3xl": return "text-6xl md:text-8xl";
+      default: return "text-2xl md:text-4xl";
     }
   };
+
+  // Helper function to map body size to classes
+  const getBodyClasses = (size: string) => {
+    switch (size) {
+      case "xs": return "text-sm";
+      case "sm": return "text-base";
+      case "lg": return "text-lg";
+      case "xl": return "text-xl";
+      case "base": default: return "text-base";
+    }
+  };
+
+  // Helper function to map font weight names to classes
+  const getWeightClasses = (weight: string) => {
+    switch (weight) {
+      case "light": return "font-light";
+      case "normal": return "font-normal";
+      case "medium": return "font-medium";
+      case "semibold": return "font-semibold";
+      case "bold": return "font-bold";
+      case "extrabold": return "font-extrabold";
+      case "black": return "font-black";
+      default: return "font-normal";
+    }
+  };
+
+  // Helper function to map font family to classes
+  const getFontClasses = (font: string) => {
+    switch (font) {
+      case "poppins": return "font-poppins";
+      case "roboto": return "font-roboto";
+      case "open-sans": return "font-open-sans";
+      case "montserrat": return "font-montserrat";
+      case "lato": return "font-lato";
+      case "nunito": return "font-nunito";
+      case "raleway": return "font-raleway";
+      case "playfair-display": return "font-playfair-display";
+      case "merriweather": return "font-merriweather";
+      case "inter": default: return "font-inter";
+    }
+  };
+
+  // Get title size
+  const getTitleSize = () => getHeadingClasses(theme.typography?.headingSize || '2xl');
 
   // Get subtitle size
-  const getSubtitleSize = () => {
-    const size = content.subtitleSize || theme.typography?.headingSize || '2xl';
-    switch (size) {
-      case "sm":
-        return "text-xl md:text-3xl";
-      case "base":
-        return "text-2xl md:text-4xl";
-      case "lg":
-        return "text-3xl md:text-5xl";
-      case "xl":
-        return "text-4xl md:text-6xl";
-      case "2xl":
-        return "text-5xl md:text-7xl";
-      case "3xl":
-        return "text-6xl md:text-8xl";
-      default:
-        return "text-2xl md:text-4xl";
-    }
-  };
+  const getSubtitleSize = () => getHeadingClasses(theme.typography?.headingSize || '2xl');
 
   // Get description size
-  const getDescriptionSize = () => {
-    const size = content.descriptionSize || theme.typography?.bodySize || 'base';
-    switch (size) {
-      case "xs":
-        return "text-base";
-      case "sm":
-        return "text-lg";
-      case "lg":
-        return "text-xl";
-      case "xl":
-        return "text-2xl";
-      case "base":
-      default:
-        return "text-xl";
-    }
-  };
+  const getDescriptionSize = () => getBodyClasses(theme.typography?.bodySize || 'base');
 
   // Get benefits size
-  const getBenefitsSize = () => {
-    const size = content.benefitsSize || theme.typography?.bodySize || 'base';
-    switch (size) {
-      case "xs":
-        return "text-sm";
-      case "sm":
-        return "text-base";
-      case "lg":
-        return "text-lg";
-      case "xl":
-        return "text-xl";
-      case "base":
-      default:
-        return "text-base";
-    }
-  };
+  const getBenefitsSize = () => getBodyClasses(theme.typography?.bodySize || 'base');
 
   // Get CTA size
-  const getCTASize = () => {
-    const size = content.ctaSize || 'base';
-    switch (size) {
-      case "sm":
-        return "text-sm";
-      case "lg":
-        return "text-lg";
-      case "xl":
-        return "text-xl";
-      case "base":
-      default:
-        return "text-base";
-    }
-  };
+  const getCTASize = () => getBodyClasses(theme.typography?.bodySize || 'base');
 
   // Get stats size
-  const getStatsSize = () => {
-    const size = content.statsSize || 'base';
-    switch (size) {
-      case "sm":
-        return "text-2xl";
-      case "lg":
-        return "text-4xl";
-      case "xl":
-        return "text-5xl";
-      case "base":
-      default:
-        return "text-3xl";
-    }
-  };
+  const getStatsSize = () => getHeadingClasses(theme.typography?.headingSize || '2xl');
 
   // Get title weight
-  const getTitleWeight = () => {
-    const weight = content.titleWeight || theme.typography?.fontWeight || 'bold';
-    switch (weight) {
-      case "light":
-        return "font-light";
-      case "normal":
-        return "font-normal";
-      case "medium":
-        return "font-medium";
-      case "semibold":
-        return "font-semibold";
-      case "bold":
-        return "font-bold";
-      case "extrabold":
-        return "font-extrabold";
-      case "black":
-        return "font-black";
-      default:
-        return "font-bold";
-    }
-  };
+  const getTitleWeight = () => getWeightClasses(theme.typography?.fontWeight || 'bold');
 
   // Get subtitle weight
-  const getSubtitleWeight = () => {
-    const weight = content.subtitleWeight || theme.typography?.fontWeight || 'bold';
-    switch (weight) {
-      case "light":
-        return "font-light";
-      case "normal":
-        return "font-normal";
-      case "medium":
-        return "font-medium";
-      case "semibold":
-        return "font-semibold";
-      case "bold":
-        return "font-bold";
-      case "extrabold":
-        return "font-extrabold";
-      case "black":
-        return "font-black";
-      default:
-        return "font-bold";
-    }
-  };
+  const getSubtitleWeight = () => getWeightClasses(theme.typography?.fontWeight || 'bold');
 
   // Get description weight
   const getDescriptionWeight = () => {
@@ -534,182 +456,26 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
   };
 
   // Get title font
-  const getTitleFont = () => {
-    const font = content.titleFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case "inter":
-        return "font-inter";
-      case "poppins":
-        return "font-poppins";
-      case "roboto":
-        return "font-roboto";
-      case "open-sans":
-        return "font-open-sans";
-      case "montserrat":
-        return "font-montserrat";
-      case "lato":
-        return "font-lato";
-      case "nunito":
-        return "font-nunito";
-      case "raleway":
-        return "font-raleway";
-      case "playfair-display":
-        return "font-playfair-display";
-      case "merriweather":
-        return "font-merriweather";
-      default:
-        return "font-inter";
-    }
-  };
+  const getTitleFont = () => getFontClasses(theme.typography?.fontFamily || 'inter');
 
   // Get subtitle font
-  const getSubtitleFont = () => {
-    const font = content.subtitleFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case "inter":
-        return "font-inter";
-      case "poppins":
-        return "font-poppins";
-      case "roboto":
-        return "font-roboto";
-      case "open-sans":
-        return "font-open-sans";
-      case "montserrat":
-        return "font-montserrat";
-      case "lato":
-        return "font-lato";
-      case "nunito":
-        return "font-nunito";
-      case "raleway":
-        return "font-raleway";
-      case "playfair-display":
-        return "font-playfair-display";
-      case "merriweather":
-        return "font-merriweather";
-      default:
-        return "font-inter";
-    }
-  };
+  const getSubtitleFont = () => getFontClasses(theme.typography?.fontFamily || 'inter');
 
   // Get description font
-  const getDescriptionFont = () => {
-    const font = content.descriptionFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case "inter":
-        return "font-inter";
-      case "poppins":
-        return "font-poppins";
-      case "roboto":
-        return "font-roboto";
-      case "open-sans":
-        return "font-open-sans";
-      case "montserrat":
-        return "font-montserrat";
-      case "lato":
-        return "font-lato";
-      case "nunito":
-        return "font-nunito";
-      case "raleway":
-        return "font-raleway";
-      case "playfair-display":
-        return "font-playfair-display";
-      case "merriweather":
-        return "font-merriweather";
-      default:
-        return "font-inter";
-    }
-  };
+  const getDescriptionFont = () => getFontClasses(theme.typography?.fontFamily || 'inter');
 
   // Get benefits font
-  const getBenefitsFont = () => {
-    const font = content.benefitsFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case "inter":
-        return "font-inter";
-      case "poppins":
-        return "font-poppins";
-      case "roboto":
-        return "font-roboto";
-      case "open-sans":
-        return "font-open-sans";
-      case "montserrat":
-        return "font-montserrat";
-      case "lato":
-        return "font-lato";
-      case "nunito":
-        return "font-nunito";
-      case "raleway":
-        return "font-raleway";
-      case "playfair-display":
-        return "font-playfair-display";
-      case "merriweather":
-        return "font-merriweather";
-      default:
-        return "font-inter";
-    }
-  };
+  const getBenefitsFont = () => getFontClasses(theme.typography?.fontFamily || 'inter');
 
   // Get CTA font
-  const getCTAFont = () => {
-    const font = content.ctaFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case "inter":
-        return "font-inter";
-      case "poppins":
-        return "font-poppins";
-      case "roboto":
-        return "font-roboto";
-      case "open-sans":
-        return "font-open-sans";
-      case "montserrat":
-        return "font-montserrat";
-      case "lato":
-        return "font-lato";
-      case "nunito":
-        return "font-nunito";
-      case "raleway":
-        return "font-raleway";
-      case "playfair-display":
-        return "font-playfair-display";
-      case "merriweather":
-        return "font-merriweather";
-      default:
-        return "font-inter";
-    }
-  };
+  const getCTAFont = () => getFontClasses(theme.typography?.fontFamily || 'inter');
 
   // Get stats font
-  const getStatsFont = () => {
-    const font = content.statsFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case "inter":
-        return "font-inter";
-      case "poppins":
-        return "font-poppins";
-      case "roboto":
-        return "font-roboto";
-      case "open-sans":
-        return "font-open-sans";
-      case "montserrat":
-        return "font-montserrat";
-      case "lato":
-        return "font-lato";
-      case "nunito":
-        return "font-nunito";
-      case "raleway":
-        return "font-raleway";
-      case "playfair-display":
-        return "font-playfair-display";
-      case "merriweather":
-        return "font-merriweather";
-      default:
-        return "font-inter";
-    }
-  };
+  const getStatsFont = () => getFontClasses(theme.typography?.fontFamily || 'inter');
 
   // Get benefits from content or use localized default
   const benefits = content.benefits || localizedText.benefits;
-  
+
   // Get stats from content or use localized default
   const stats = content.stats || [
     { number: "500+", label: localizedText.stats.orders },
@@ -722,8 +488,8 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
       id="home"
       className="relative min-h-screen flex items-center"
       style={{
-        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
-          ? content.backgroundColor 
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor
+          ? content.backgroundColor
           : theme.sections?.hero?.backgroundColor || theme.colors.background,
         ...getTypographyStyles()
       }}
@@ -737,8 +503,8 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
               <h1
                 className={cn("leading-tight", getTitleSize(), getTitleWeight(), getTitleFont())}
                 style={{
-                  color: content.colorMode === 'custom' && content.textColor 
-                    ? content.textColor 
+                  color: content.colorMode === 'custom' && content.textColor
+                    ? content.textColor
                     : theme.sections?.hero?.textColor || theme.colors.text || '#FFFFFF',
                   lineHeight: theme.typography?.lineHeight || '1.2'
                 }}
@@ -759,8 +525,8 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
               <p
                 className={cn("leading-relaxed", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
                 style={{
-                  color: content.colorMode === 'custom' && content.textColor 
-                    ? `${content.textColor}E6` 
+                  color: content.colorMode === 'custom' && content.textColor
+                    ? `${content.textColor}E6`
                     : `${theme.colors.text || '#000000'}E6`,
                   lineHeight: theme.typography?.lineHeight || "1.6",
                 }}
@@ -780,18 +546,18 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                     // Lucide icons or fallback
                     <CheckCircle
                       className="h-5 w-5"
-                      style={{ 
-                        color: content.colorMode === 'custom' && content.primaryColor 
-                          ? content.primaryColor 
-                          : theme.colors.accent 
+                      style={{
+                        color: content.colorMode === 'custom' && content.primaryColor
+                          ? content.primaryColor
+                          : theme.colors.accent
                       }}
                     />
                   )}
                   <span
                     className={cn(getBenefitsSize(), getBenefitsWeight(), getBenefitsFont())}
                     style={{
-                      color: content.colorMode === 'custom' && content.textColor 
-                        ? content.textColor 
+                      color: content.colorMode === 'custom' && content.textColor
+                        ? content.textColor
                         : theme.colors.text || "#FFFFFF",
                     }}
                   >
@@ -837,17 +603,21 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                 <div key={index} className="text-center">
                   <div
                     className={cn("mb-1", getStatsSize(), getStatsWeight(), getStatsFont())}
-                    style={{ color: content.colorMode === 'custom' && content.primaryColor 
-                      ? content.primaryColor 
-                      : theme.colors.accent }}
+                    style={{
+                      color: content.colorMode === 'custom' && content.primaryColor
+                        ? content.primaryColor
+                        : theme.colors.accent
+                    }}
                   >
                     {stat.number}
                   </div>
                   <div
                     className="text-sm"
-                    style={{ color: content.colorMode === 'custom' && content.textColor 
-                      ? `${content.textColor}CC` 
-                      : `${theme.colors.text || "#000000"}CC` }}
+                    style={{
+                      color: content.colorMode === 'custom' && content.textColor
+                        ? `${content.textColor}CC`
+                        : `${theme.colors.text || "#000000"}CC`
+                    }}
                   >
                     {stat.label}
                   </div>

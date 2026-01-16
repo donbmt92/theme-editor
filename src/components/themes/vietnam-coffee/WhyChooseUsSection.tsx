@@ -101,6 +101,37 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
     FileText,
   };
 
+  // Helpers for weight mapping
+  const weightToClasses = (weight?: string, fallback: string = 'font-normal') => {
+    switch (weight) {
+      case 'light': return 'font-light'
+      case 'normal': return 'font-normal'
+      case 'medium': return 'font-medium'
+      case 'semibold': return 'font-semibold'
+      case 'bold': return 'font-bold'
+      case 'extrabold': return 'font-extrabold'
+      case 'black': return 'font-black'
+      default: return fallback
+    }
+  }
+
+  // Helpers for font mapping
+  const fontToClasses = (font?: string, fallback: string = 'font-inter') => {
+    switch (font) {
+      case 'inter': return 'font-inter'
+      case 'poppins': return 'font-poppins'
+      case 'roboto': return 'font-roboto'
+      case 'open-sans': return 'font-open-sans'
+      case 'montserrat': return 'font-montserrat'
+      case 'lato': return 'font-lato'
+      case 'nunito': return 'font-nunito'
+      case 'raleway': return 'font-raleway'
+      case 'playfair-display': return 'font-playfair-display'
+      case 'merriweather': return 'font-merriweather'
+      default: return fallback
+    }
+  }
+
   const normalizeIconName = (name: string) => {
     if (!name) return name;
     // Hỗ trợ cả dạng có hậu tố "Icon" (vd: ArrowUpRightIcon)
@@ -201,147 +232,51 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
     }
   }
 
-  // Get title size from content
+  // Get title size from global theme
   const getTitleSize = () => {
-    const size = content.titleSize || theme.typography?.headingSize || '2xl';
+    const size = theme.typography?.headingSize || '2xl';
     switch (size) {
-      case 'sm':
-        return 'text-2xl md:text-3xl';
-      case 'base':
-        return 'text-3xl md:text-4xl';
-      case 'lg':
-        return 'text-4xl md:text-5xl';
-      case 'xl':
-        return 'text-5xl md:text-6xl';
-      case '2xl':
-        return 'text-6xl md:text-7xl';
-      case '3xl':
-        return 'text-7xl md:text-8xl';
-      default:
-        return 'text-4xl md:text-5xl';
+      case 'sm': return 'text-2xl md:text-3xl';
+      case 'base': return 'text-3xl md:text-4xl';
+      case 'lg': return 'text-4xl md:text-5xl';
+      case 'xl': return 'text-5xl md:text-6xl';
+      case '2xl': return 'text-6xl md:text-7xl';
+      case '3xl': return 'text-7xl md:text-8xl';
+      default: return 'text-4xl md:text-5xl';
     }
   };
 
-  // Get title weight from content
+  // Get title weight from global theme
   const getTitleWeight = () => {
-    const weight = content.titleWeight || theme.typography?.fontWeight || 'bold';
-    switch (weight) {
-      case 'light':
-        return 'font-light';
-      case 'normal':
-        return 'font-normal';
-      case 'medium':
-        return 'font-medium';
-      case 'semibold':
-        return 'font-semibold';
-      case 'bold':
-        return 'font-bold';
-      case 'extrabold':
-        return 'font-extrabold';
-      case 'black':
-        return 'font-black';
-      default:
-        return 'font-bold';
-    }
+    return weightToClasses(theme.typography?.fontWeight, 'font-bold')
   };
 
-  // Get title font from content
+  // Get title font from global theme
   const getTitleFont = () => {
-    const font = content.titleFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case 'inter':
-        return 'font-inter';
-      case 'poppins':
-        return 'font-poppins';
-      case 'roboto':
-        return 'font-roboto';
-      case 'open-sans':
-        return 'font-open-sans';
-      case 'montserrat':
-        return 'font-montserrat';
-      case 'lato':
-        return 'font-lato';
-      case 'nunito':
-        return 'font-nunito';
-      case 'raleway':
-        return 'font-raleway';
-      case 'playfair-display':
-        return 'font-playfair-display';
-      case 'merriweather':
-        return 'font-merriweather';
-      default:
-        return 'font-inter';
-    }
+    return fontToClasses(theme.typography?.fontFamily)
   };
 
-  // Get subtitle size from content
+  // Get subtitle size from global theme
   const getSubtitleSize = () => {
-    const size = content.subtitleSize || theme.typography?.bodySize || 'base';
+    const size = theme.typography?.bodySize || 'base';
     switch (size) {
-      case 'xs':
-        return 'text-base';
-      case 'sm':
-        return 'text-lg';
-      case 'lg':
-        return 'text-xl';
-      case 'xl':
-        return 'text-2xl';
+      case 'xs': return 'text-base';
+      case 'sm': return 'text-lg';
+      case 'lg': return 'text-xl';
+      case 'xl': return 'text-2xl';
       case 'base':
-      default:
-        return 'text-xl';
+      default: return 'text-xl';
     }
   };
 
-  // Get subtitle weight from content
+  // Get subtitle weight from global theme
   const getSubtitleWeight = () => {
-    const weight = content.subtitleWeight || theme.typography?.fontWeight || 'normal';
-    switch (weight) {
-      case 'light':
-        return 'font-light';
-      case 'normal':
-        return 'font-normal';
-      case 'medium':
-        return 'font-medium';
-      case 'semibold':
-        return 'font-semibold';
-      case 'bold':
-        return 'font-bold';
-      case 'extrabold':
-        return 'font-extrabold';
-      case 'black':
-        return 'font-black';
-      default:
-        return 'font-normal';
-    }
+    return weightToClasses(theme.typography?.fontWeight, 'font-normal')
   };
 
-  // Get subtitle font from content
+  // Get subtitle font from global theme
   const getSubtitleFont = () => {
-    const font = content.subtitleFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case 'inter':
-        return 'font-inter';
-      case 'poppins':
-        return 'font-poppins';
-      case 'roboto':
-        return 'font-roboto';
-      case 'open-sans':
-        return 'font-open-sans';
-      case 'montserrat':
-        return 'font-montserrat';
-      case 'lato':
-        return 'font-lato';
-      case 'nunito':
-        return 'font-nunito';
-      case 'raleway':
-        return 'font-raleway';
-      case 'playfair-display':
-        return 'font-playfair-display';
-      case 'merriweather':
-        return 'font-merriweather';
-      default:
-        return 'font-inter';
-    }
+    return fontToClasses(theme.typography?.fontFamily)
   };
 
   // Get button styles
@@ -390,16 +325,16 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
   };
 
   return (
-    <section 
+    <section
       className="py-20"
       style={{
-        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
-          ? content.backgroundColor 
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor
+          ? content.backgroundColor
           : theme.sections?.whyChooseUs?.backgroundColor || theme.colors.background || '#FFFFFF',
         ...getTypographyStyles()
       }}
     >
-      <div 
+      <div
         className="container mx-auto px-4"
         style={{
           maxWidth: theme.layout?.containerWidth || '1200px',
@@ -410,11 +345,11 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
         {((content.title && content.title.trim()) || (content.subtitle && content.subtitle.trim())) && (
           <div className="text-center mb-16">
             {(content.title && content.title.trim()) && (
-              <h2 
+              <h2
                 className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
-                style={{ 
-                  color: content.colorMode === 'custom' && content.textColor 
-                    ? content.textColor 
+                style={{
+                  color: content.colorMode === 'custom' && content.textColor
+                    ? content.textColor
                     : theme.colors?.text || '#2D3748',
                 }}
               >
@@ -422,11 +357,11 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
               </h2>
             )}
             {(content.subtitle && content.subtitle.trim()) && (
-              <p 
+              <p
                 className={cn("max-w-3xl mx-auto", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
-                style={{ 
-                  color: content.colorMode === 'custom' && content.textColor 
-                    ? `${content.textColor}E6` 
+                style={{
+                  color: content.colorMode === 'custom' && content.textColor
+                    ? `${content.textColor}E6`
                     : theme.colors?.muted || '#718096'
                 }}
               >
@@ -440,19 +375,19 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
         {strengths && strengths.length > 0 && (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
             {strengths.map((strength, index) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className={cn("shadow-card hover:shadow-elegant transition-all duration-300 border-border/50 hover:border-primary/30", getBorderRadiusClass())}
-                style={{ 
+                style={{
                   fontFamily: theme.typography?.fontFamily || 'Inter',
                   fontSize: theme.typography?.fontSize || '16px'
                 }}
               >
                 <CardContent className="p-8">
                   <div className="mb-6">
-                    <div 
+                    <div
                       className={cn("h-14 w-14 rounded-xl flex items-center justify-center mb-4", getBorderRadiusClass())}
-                      style={{ 
+                      style={{
                         background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
                       }}
                     >
@@ -466,9 +401,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                       })()}
                     </div>
                     {(strength.title && strength.title.trim()) && (
-                      <h3 
+                      <h3
                         className={cn("text-xl font-bold mb-3")}
-                        style={{ 
+                        style={{
                           color: content.textColor || theme.colors?.text || '#2D3748',
                           fontWeight: theme.typography?.fontWeight || '700'
                         }}
@@ -477,9 +412,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                       </h3>
                     )}
                     {(strength.description && strength.description.trim()) && (
-                      <p 
+                      <p
                         className="mb-4 leading-relaxed"
-                        style={{ 
+                        style={{
                           color: content.textColor || theme.colors?.muted || '#718096'
                         }}
                       >
@@ -487,9 +422,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                       </p>
                     )}
                     {(strength.highlight && strength.highlight.trim()) && (
-                      <div 
+                      <div
                         className={cn("inline-flex items-center px-3 py-1 rounded-full text-sm font-medium", getBorderRadiusClass())}
-                        style={{ 
+                        style={{
                           backgroundColor: `${theme.colors.primary}10`,
                           color: theme.colors.primary
                         }}
@@ -510,9 +445,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
           <div className="grid lg:grid-cols-2 gap-12 mb-16">
             {/* Mission - chỉ hiển thị khi có title */}
             {(mission.title && mission.title.trim()) && (
-              <Card 
+              <Card
                 className={cn("shadow-elegant", getBorderRadiusClass())}
-                style={{ 
+                style={{
                   borderColor: `${theme.colors.primary}20`,
                   fontFamily: theme.typography?.fontFamily || 'Inter',
                   fontSize: theme.typography?.fontSize || '16px'
@@ -520,15 +455,15 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
               >
                 <CardContent className="p-8">
                   <div className="flex items-center mb-6">
-                    <div 
+                    <div
                       className={cn("h-12 w-12 rounded-lg flex items-center justify-center mr-4", getBorderRadiusClass())}
                       style={{ backgroundColor: theme.colors.primary }}
                     >
                       <Shield className="h-6 w-6 text-white" />
                     </div>
-                    <h3 
+                    <h3
                       className={cn("text-2xl font-bold")}
-                      style={{ 
+                      style={{
                         color: content.textColor || theme.colors?.text || '#2D3748',
                         fontWeight: theme.typography?.fontWeight || '700'
                       }}
@@ -537,9 +472,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                     </h3>
                   </div>
                   {(mission.description && mission.description.trim()) && (
-                    <p 
+                    <p
                       className="mb-6 leading-relaxed"
-                      style={{ 
+                      style={{
                         color: content.textColor || theme.colors?.muted || '#718096'
                       }}
                     >
@@ -548,9 +483,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                   )}
                   {(mission.values && mission.values.length > 0) && (
                     <div className="space-y-3">
-                      <h4 
+                      <h4
                         className="font-bold"
-                        style={{ 
+                        style={{
                           color: content.textColor || theme.colors?.text || '#2D3748',
                           fontWeight: theme.typography?.fontWeight || '700'
                         }}
@@ -560,11 +495,11 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                       <div className="space-y-2">
                         {mission.values.map((value: string, index: number) => (
                           <div key={index} className="flex items-center">
-                            <div 
+                            <div
                               className={cn("h-2 w-2 rounded-full mr-3", getBorderRadiusClass())}
                               style={{ backgroundColor: theme.colors.primary }}
                             ></div>
-                            <span 
+                            <span
                               style={{ color: content.textColor || theme.colors?.muted || '#718096' }}
                             >
                               {value}
@@ -580,9 +515,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
 
             {/* Vision - chỉ hiển thị khi có title */}
             {(vision.title && vision.title.trim()) && (
-              <Card 
+              <Card
                 className={cn("shadow-elegant", getBorderRadiusClass())}
-                style={{ 
+                style={{
                   borderColor: `${theme.colors.accent}20`,
                   fontFamily: theme.typography?.fontFamily || 'Inter',
                   fontSize: theme.typography?.fontSize || '16px'
@@ -590,15 +525,15 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
               >
                 <CardContent className="p-8">
                   <div className="flex items-center mb-6">
-                    <div 
+                    <div
                       className={cn("h-12 w-12 rounded-lg flex items-center justify-center mr-4", getBorderRadiusClass())}
                       style={{ backgroundColor: theme.colors.accent }}
                     >
                       <TrendingUp className="h-6 w-6 text-white" />
                     </div>
-                    <h3 
+                    <h3
                       className={cn("text-2xl font-bold")}
-                      style={{ 
+                      style={{
                         color: content.textColor || theme.colors?.text || '#2D3748',
                         fontWeight: theme.typography?.fontWeight || '700'
                       }}
@@ -607,9 +542,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                     </h3>
                   </div>
                   {(vision.description && vision.description.trim()) && (
-                    <p 
+                    <p
                       className="mb-6 leading-relaxed"
-                      style={{ 
+                      style={{
                         color: content.textColor || theme.colors?.muted || '#718096'
                       }}
                     >
@@ -618,9 +553,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                   )}
                   {(vision.goals && vision.goals.length > 0) && (
                     <div className="space-y-3">
-                      <h4 
+                      <h4
                         className="font-bold"
-                        style={{ 
+                        style={{
                           color: content.textColor || theme.colors?.text || '#2D3748',
                           fontWeight: theme.typography?.fontWeight || '700'
                         }}
@@ -630,11 +565,11 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                       <div className="space-y-2">
                         {vision.goals.map((goal: string, index: number) => (
                           <div key={index} className="flex items-center">
-                            <div 
+                            <div
                               className={cn("h-2 w-2 rounded-full mr-3", getBorderRadiusClass())}
                               style={{ backgroundColor: theme.colors.accent }}
                             ></div>
-                            <span 
+                            <span
                               style={{ color: content.textColor || theme.colors?.muted || '#718096' }}
                             >
                               {goal}
@@ -652,17 +587,17 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
 
         {/* CTA Section - chỉ hiển thị khi có title */}
         {(ctaData.title && ctaData.title.trim()) && (
-          <Card 
+          <Card
             className={cn("border-0 shadow-elegant", getBorderRadiusClass())}
-            style={{ 
+            style={{
               background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
               color: '#FFFFFF'
             }}
           >
             <CardContent className="p-12 text-center">
-              <h3 
+              <h3
                 className={cn("text-3xl font-bold mb-4")}
-                style={{ 
+                style={{
                   color: '#FFFFFF',
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
@@ -670,7 +605,7 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                 {ctaData.title}
               </h3>
               {(ctaData.description && ctaData.description.trim()) && (
-                <p 
+                <p
                   className={cn("text-xl mb-8 opacity-90 max-w-2xl mx-auto")}
                   style={{ color: '#FFFFFF' }}
                 >
@@ -678,9 +613,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                 </p>
               )}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  variant="secondary" 
+                <Button
+                  size="lg"
+                  variant="secondary"
                   className="bg-white text-primary hover:bg-white/90"
                   style={getButtonStyles('secondary')}
                 >
@@ -688,9 +623,9 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 {(ctaData.secondaryButtonText && ctaData.secondaryButtonText.trim()) && (
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
+                  <Button
+                    size="lg"
+                    variant="outline"
                     className="border-white text-white hover:bg-white hover:text-primary"
                     style={getButtonStyles('outline')}
                   >

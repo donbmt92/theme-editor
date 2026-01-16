@@ -56,6 +56,37 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
 
   const localizedText = getLocalizedText();
 
+  // Helpers for weight mapping
+  const weightToClasses = (weight?: string, fallback: string = 'font-normal') => {
+    switch (weight) {
+      case 'light': return 'font-light'
+      case 'normal': return 'font-normal'
+      case 'medium': return 'font-medium'
+      case 'semibold': return 'font-semibold'
+      case 'bold': return 'font-bold'
+      case 'extrabold': return 'font-extrabold'
+      case 'black': return 'font-black'
+      default: return fallback
+    }
+  }
+
+  // Helpers for font mapping
+  const fontToClasses = (font?: string, fallback: string = 'font-inter') => {
+    switch (font) {
+      case 'inter': return 'font-inter'
+      case 'poppins': return 'font-poppins'
+      case 'roboto': return 'font-roboto'
+      case 'open-sans': return 'font-open-sans'
+      case 'montserrat': return 'font-montserrat'
+      case 'lato': return 'font-lato'
+      case 'nunito': return 'font-nunito'
+      case 'raleway': return 'font-raleway'
+      case 'playfair-display': return 'font-playfair-display'
+      case 'merriweather': return 'font-merriweather'
+      default: return fallback
+    }
+  }
+
   // Default testimonials data
   const defaultTestimonials: Testimonial[] = [
     {
@@ -117,9 +148,9 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
       return testimonial;
     });
   }
-  
 
-  
+
+
   // Handle stats data - convert string values to objects if needed
   let stats = content.stats || defaultStats;
   if (stats && Array.isArray(stats)) {
@@ -158,147 +189,51 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
     }
   };
 
-  // Get title size from content
+  // Get title size from global theme
   const getTitleSize = () => {
-    const size = content.titleSize || theme.typography?.headingSize || '2xl';
+    const size = theme.typography?.headingSize || '2xl';
     switch (size) {
-      case 'sm':
-        return 'text-2xl md:text-3xl';
-      case 'base':
-        return 'text-3xl md:text-4xl';
-      case 'lg':
-        return 'text-4xl md:text-5xl';
-      case 'xl':
-        return 'text-5xl md:text-6xl';
-      case '2xl':
-        return 'text-6xl md:text-7xl';
-      case '3xl':
-        return 'text-7xl md:text-8xl';
-      default:
-        return 'text-4xl md:text-5xl';
+      case 'sm': return 'text-2xl md:text-3xl';
+      case 'base': return 'text-3xl md:text-4xl';
+      case 'lg': return 'text-4xl md:text-5xl';
+      case 'xl': return 'text-5xl md:text-6xl';
+      case '2xl': return 'text-6xl md:text-7xl';
+      case '3xl': return 'text-7xl md:text-8xl';
+      default: return 'text-4xl md:text-5xl';
     }
   };
 
-  // Get title weight from content
+  // Get title weight from global theme
   const getTitleWeight = () => {
-    const weight = content.titleWeight || theme.typography?.fontWeight || 'bold';
-    switch (weight) {
-      case 'light':
-        return 'font-light';
-      case 'normal':
-        return 'font-normal';
-      case 'medium':
-        return 'font-medium';
-      case 'semibold':
-        return 'font-semibold';
-      case 'bold':
-        return 'font-bold';
-      case 'extrabold':
-        return 'font-extrabold';
-      case 'black':
-        return 'font-black';
-      default:
-        return 'font-bold';
-    }
+    return weightToClasses(theme.typography?.fontWeight, 'font-bold')
   };
 
-  // Get title font from content
+  // Get title font from global theme
   const getTitleFont = () => {
-    const font = content.titleFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case 'inter':
-        return 'font-inter';
-      case 'poppins':
-        return 'font-poppins';
-      case 'roboto':
-        return 'font-roboto';
-      case 'open-sans':
-        return 'font-open-sans';
-      case 'montserrat':
-        return 'font-montserrat';
-      case 'lato':
-        return 'font-lato';
-      case 'nunito':
-        return 'font-nunito';
-      case 'raleway':
-        return 'font-raleway';
-      case 'playfair-display':
-        return 'font-playfair-display';
-      case 'merriweather':
-        return 'font-merriweather';
-      default:
-        return 'font-inter';
-    }
+    return fontToClasses(theme.typography?.fontFamily)
   };
 
-  // Get subtitle size from content
+  // Get subtitle size from global theme
   const getSubtitleSize = () => {
-    const size = content.subtitleSize || theme.typography?.bodySize || 'base';
+    const size = theme.typography?.bodySize || 'base';
     switch (size) {
-      case 'xs':
-        return 'text-base';
-      case 'sm':
-        return 'text-lg';
-      case 'lg':
-        return 'text-xl';
-      case 'xl':
-        return 'text-2xl';
+      case 'xs': return 'text-base';
+      case 'sm': return 'text-lg';
+      case 'lg': return 'text-xl';
+      case 'xl': return 'text-2xl';
       case 'base':
-      default:
-        return 'text-xl';
+      default: return 'text-xl';
     }
   };
 
-  // Get subtitle weight from content
+  // Get subtitle weight from global theme
   const getSubtitleWeight = () => {
-    const weight = content.subtitleWeight || theme.typography?.fontWeight || 'normal';
-    switch (weight) {
-      case 'light':
-        return 'font-light';
-      case 'normal':
-        return 'font-normal';
-      case 'medium':
-        return 'font-medium';
-      case 'semibold':
-        return 'font-semibold';
-      case 'bold':
-        return 'font-bold';
-      case 'extrabold':
-        return 'font-extrabold';
-      case 'black':
-        return 'font-black';
-      default:
-        return 'font-normal';
-    }
+    return weightToClasses(theme.typography?.fontWeight, 'font-normal')
   };
 
-  // Get subtitle font from content
+  // Get subtitle font from global theme
   const getSubtitleFont = () => {
-    const font = content.subtitleFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case 'inter':
-        return 'font-inter';
-      case 'poppins':
-        return 'font-poppins';
-      case 'roboto':
-        return 'font-roboto';
-      case 'open-sans':
-        return 'font-open-sans';
-      case 'montserrat':
-        return 'font-montserrat';
-      case 'lato':
-        return 'font-lato';
-      case 'nunito':
-        return 'font-nunito';
-      case 'raleway':
-        return 'font-raleway';
-      case 'playfair-display':
-        return 'font-playfair-display';
-      case 'merriweather':
-        return 'font-merriweather';
-      default:
-        return 'font-inter';
-    }
+    return fontToClasses(theme.typography?.fontFamily)
   };
 
   // Client logos data
@@ -315,11 +250,11 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
     <section
       className="py-20"
       style={{
-        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
-          ? content.backgroundColor 
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor
+          ? content.backgroundColor
           : theme.sections?.testimonials?.backgroundColor || theme.colors.background || "#F8F9FA",
-        color: content.colorMode === 'custom' && content.textColor 
-          ? content.textColor 
+        color: content.colorMode === 'custom' && content.textColor
+          ? content.textColor
           : theme.sections?.testimonials?.textColor || theme.colors.text || "#2D3748",
         ...getTypographyStyles(),
       }}
@@ -337,8 +272,8 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
               <h2
                 className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
                 style={{
-                  color: content.colorMode === 'custom' && content.textColor 
-                    ? content.textColor 
+                  color: content.colorMode === 'custom' && content.textColor
+                    ? content.textColor
                     : theme.colors?.text || "#2D3748",
                 }}
               >
@@ -349,8 +284,8 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
               <p
                 className={cn("max-w-3xl mx-auto", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
                 style={{
-                  color: content.colorMode === 'custom' && content.textColor 
-                    ? `${content.textColor}E6` 
+                  color: content.colorMode === 'custom' && content.textColor
+                    ? `${content.textColor}E6`
                     : theme.colors?.muted || "#718096",
                 }}
               >
@@ -374,8 +309,8 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
               >
                 <CardContent className="p-8">
                   <div className="mb-6">
-                    <Quote 
-                      className="h-8 w-8 mb-4" 
+                    <Quote
+                      className="h-8 w-8 mb-4"
                       style={{ color: theme.colors?.primary || "#8B4513" }}
                     />
                     <div className="flex mb-4">
@@ -398,18 +333,18 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
                       </p>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center">
                     <img
-                      src={testimonial.image && testimonial.image.startsWith('/uploads/') 
-                        ? testimonial.image 
+                      src={testimonial.image && testimonial.image.startsWith('/uploads/')
+                        ? testimonial.image
                         : testimonial.image || `https://images.unsplash.com/photo-1494790108755-2616b612b977?w=400&h=400&fit=crop&crop=face`}
                       alt={testimonial.name}
                       className="w-12 h-12 rounded-full mr-4 object-cover"
                     />
                     <div>
                       {(testimonial.name && testimonial.name.trim()) && (
-                        <div 
+                        <div
                           className="font-semibold"
                           style={{ color: content.textColor || theme.colors?.text || "#2D3748" }}
                         >
@@ -417,7 +352,7 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
                         </div>
                       )}
                       {(testimonial.title && testimonial.title.trim()) && (
-                        <div 
+                        <div
                           className="text-sm"
                           style={{ color: content.textColor || theme.colors?.muted || "#718096" }}
                         >
@@ -425,7 +360,7 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
                         </div>
                       )}
                       {(testimonial.company && testimonial.company.trim()) && (
-                        <div 
+                        <div
                           className="text-sm font-medium"
                           style={{ color: theme.colors?.primary || "#8B4513" }}
                         >
@@ -473,15 +408,15 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
 
         {/* Key Metrics - chỉ hiển thị khi có stats */}
         {stats && stats.length > 0 && (
-          <Card 
+          <Card
             className={cn("border-0 shadow-elegant", getBorderRadiusClass())}
-            style={{ 
+            style={{
               background: `linear-gradient(135deg, ${theme.colors?.primary || "#8B4513"}, ${theme.colors?.accent || "#CD853F"})`,
               color: "#FFFFFF"
             }}
           >
             <CardContent className="p-12">
-              <h3 
+              <h3
                 className={cn("text-3xl font-bold text-center mb-12")}
                 style={{ color: "#FFFFFF" }}
               >
@@ -491,7 +426,7 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
                 {stats.map((stat, index) => (
                   <div key={index} className="text-center">
                     {(stat.number && stat.number.trim()) && (
-                      <div 
+                      <div
                         className={cn("text-4xl font-bold mb-2")}
                         style={{ color: "#FFFFFF" }}
                       >
@@ -499,7 +434,7 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
                       </div>
                     )}
                     {(stat.label && stat.label.trim()) && (
-                      <div 
+                      <div
                         className={cn("text-xl font-semibold mb-1 opacity-90")}
                         style={{ color: "#FFFFFF" }}
                       >
@@ -507,7 +442,7 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
                       </div>
                     )}
                     {(stat.sublabel && stat.sublabel.trim()) && (
-                      <div 
+                      <div
                         className={cn("text-sm opacity-75")}
                         style={{ color: "#FFFFFF" }}
                       >

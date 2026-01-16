@@ -134,10 +134,10 @@ const Footer = ({ theme, content }: FooterProps) => {
   // Get typography styles
   const getTypographyStyles = () => {
     return {
-      fontFamily: content.fontFamily || theme.typography?.fontFamily || 'Inter',
-      fontSize: content.fontSize || theme.typography?.fontSize || '16px',
-      lineHeight: content.lineHeight || theme.typography?.lineHeight || '1.6',
-      fontWeight: content.fontWeight || theme.typography?.fontWeight || '400',
+      fontFamily: theme.typography?.fontFamily || 'Inter',
+      fontSize: theme.typography?.fontSize || '16px',
+      lineHeight: theme.typography?.lineHeight || '1.6',
+      fontWeight: theme.typography?.fontWeight || '400',
     }
   }
 
@@ -204,20 +204,20 @@ const Footer = ({ theme, content }: FooterProps) => {
   const socialLinks = content.socialLinks || defaultSocialLinks;
 
   return (
-    <footer 
+    <footer
       id="contact"
       className="bg-secondary text-secondary-foreground"
-      style={{ 
-        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
-          ? content.backgroundColor 
+      style={{
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor
+          ? content.backgroundColor
           : theme.sections?.footer?.backgroundColor || theme.colors.secondary || '#1F2937',
-        color: content.colorMode === 'custom' && content.textColor 
-          ? content.textColor 
+        color: content.colorMode === 'custom' && content.textColor
+          ? content.textColor
           : theme.sections?.footer?.textColor || theme.colors.text || '#F9FAFB',
         ...getTypographyStyles()
       }}
     >
-      <div 
+      <div
         className="container mx-auto px-4"
         style={{
           maxWidth: theme.layout?.containerWidth || '1200px',
@@ -230,16 +230,16 @@ const Footer = ({ theme, content }: FooterProps) => {
             {/* Company Info */}
             <div className="lg:col-span-1">
               <div className="flex items-center space-x-2 mb-6">
-                <div 
+                <div
                   className={cn("h-8 w-8 rounded-full", getBorderRadiusClass())}
-                  style={{ 
+                  style={{
                     background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
                   }}
                 ></div>
                 {(content.companyName && content.companyName.trim()) && (
-                  <span 
+                  <span
                     className="text-xl font-bold"
-                    style={{ 
+                    style={{
                       color: content.textColor || theme.colors.text || '#F9FAFB',
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
@@ -249,9 +249,9 @@ const Footer = ({ theme, content }: FooterProps) => {
                 )}
               </div>
               {(content.description && content.description.trim()) && (
-                <p 
+                <p
                   className="mb-6 leading-relaxed"
-                  style={{ 
+                  style={{
                     color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
                     fontSize: theme.typography?.fontSize || '16px',
                     lineHeight: theme.typography?.lineHeight || '1.6'
@@ -260,29 +260,29 @@ const Footer = ({ theme, content }: FooterProps) => {
                   {content.description}
                 </p>
               )}
-              
+
               {/* Contact Info - chỉ hiển thị khi có contact info */}
               {content.contact && (
                 <div className="space-y-4">
                   {(content.contact.address && content.contact.address.trim()) && (
                     <div className="flex items-start space-x-3">
-                      <MapPin 
-                        className="h-5 w-5 mt-0.5" 
+                      <MapPin
+                        className="h-5 w-5 mt-0.5"
                         style={{ color: theme.colors.primary }}
                       />
                       <div>
-                        <div 
+                        <div
                           className="font-medium"
-                          style={{ 
+                          style={{
                             color: content.textColor || theme.colors.text || '#F9FAFB',
                             fontWeight: theme.typography?.fontWeight || '500'
                           }}
                         >
                           {localizedText.vietnamOffice}
                         </div>
-                        <div 
+                        <div
                           className="text-sm"
-                          style={{ 
+                          style={{
                             color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
                             fontSize: theme.typography?.fontSize || '16px'
                           }}
@@ -294,23 +294,23 @@ const Footer = ({ theme, content }: FooterProps) => {
                   )}
                   {(content.contact.phone && content.contact.phone.trim()) && (
                     <div className="flex items-center space-x-3">
-                      <Phone 
-                        className="h-5 w-5" 
+                      <Phone
+                        className="h-5 w-5"
                         style={{ color: theme.colors.primary }}
                       />
                       <div>
-                        <div 
+                        <div
                           className="font-medium"
-                          style={{ 
+                          style={{
                             color: content.textColor || theme.colors.text || '#F9FAFB',
                             fontWeight: theme.typography?.fontWeight || '500'
                           }}
                         >
                           {content.contact.phone}
                         </div>
-                        <div 
+                        <div
                           className="text-sm"
-                          style={{ 
+                          style={{
                             color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
                             fontSize: theme.typography?.fontSize || '16px'
                           }}
@@ -322,14 +322,14 @@ const Footer = ({ theme, content }: FooterProps) => {
                   )}
                   {(content.contact.email && content.contact.email.trim()) && (
                     <div className="flex items-center space-x-3">
-                      <Mail 
-                        className="h-5 w-5" 
+                      <Mail
+                        className="h-5 w-5"
                         style={{ color: theme.colors.primary }}
                       />
                       <div>
-                        <div 
+                        <div
                           className="font-medium"
-                          style={{ 
+                          style={{
                             color: content.textColor || theme.colors.text || '#F9FAFB',
                             fontWeight: theme.typography?.fontWeight || '500'
                           }}
@@ -341,13 +341,13 @@ const Footer = ({ theme, content }: FooterProps) => {
                   )}
                   {(content.contact.businessHours && content.contact.businessHours.trim()) && (
                     <div className="flex items-center space-x-3">
-                      <Clock 
-                        className="h-5 w-5" 
+                      <Clock
+                        className="h-5 w-5"
                         style={{ color: theme.colors.primary }}
                       />
-                      <div 
+                      <div
                         className="text-sm"
-                        style={{ 
+                        style={{
                           color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
                           fontSize: theme.typography?.fontSize || '16px'
                         }}
@@ -363,9 +363,9 @@ const Footer = ({ theme, content }: FooterProps) => {
             {/* Quick Links - chỉ hiển thị khi có links */}
             {quickLinks && quickLinks.length > 0 && (
               <div>
-                <h3 
+                <h3
                   className="text-lg font-bold mb-6"
-                  style={{ 
+                  style={{
                     color: content.textColor || theme.colors.text || '#F9FAFB',
                     fontWeight: theme.typography?.fontWeight || '700'
                   }}
@@ -378,7 +378,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                       <a
                         href={link.href}
                         className="hover:text-primary transition-colors"
-                        style={{ 
+                        style={{
                           color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
                           fontSize: theme.typography?.fontSize || '16px'
                         }}
@@ -394,9 +394,9 @@ const Footer = ({ theme, content }: FooterProps) => {
             {/* Resources - chỉ hiển thị khi có resources */}
             {resources && resources.length > 0 && (
               <div>
-                <h3 
+                <h3
                   className="text-lg font-bold mb-6"
-                  style={{ 
+                  style={{
                     color: content.textColor || theme.colors.text || '#F9FAFB',
                     fontWeight: theme.typography?.fontWeight || '700'
                   }}
@@ -409,7 +409,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                       <a
                         href={resource.href}
                         className="hover:text-primary transition-colors"
-                        style={{ 
+                        style={{
                           color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
                           fontSize: theme.typography?.fontSize || '16px'
                         }}
@@ -424,9 +424,9 @@ const Footer = ({ theme, content }: FooterProps) => {
 
             {/* Newsletter Signup */}
             <div>
-              <h3 
+              <h3
                 className="text-lg font-bold mb-6"
-                style={{ 
+                style={{
                   color: content.textColor || theme.colors.text || '#F9FAFB',
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
@@ -434,9 +434,9 @@ const Footer = ({ theme, content }: FooterProps) => {
                 {localizedText.connectTitle}
               </h3>
               {(content.newsletter?.description && content.newsletter.description.trim()) && (
-                <p 
+                <p
                   className="mb-4"
-                  style={{ 
+                  style={{
                     color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
@@ -449,7 +449,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   type="email"
                   placeholder={content.newsletter?.placeholder || localizedText.emailPlaceholder}
                   className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground placeholder:text-secondary-foreground/50"
-                  style={{ 
+                  style={{
                     backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
                     borderColor: `${content.textColor || theme.colors.text || '#F9FAFB'}20`,
                     color: content.textColor || theme.colors.text || '#F9FAFB',
@@ -458,14 +458,14 @@ const Footer = ({ theme, content }: FooterProps) => {
                     fontSize: theme.typography?.fontSize || '16px'
                   }}
                 />
-                <Button 
+                <Button
                   className="w-full"
                   style={getButtonStyles('primary')}
                 >
                   {content.newsletter?.buttonText || localizedText.subscribeButton}
                 </Button>
               </div>
-              
+
               {/* Social Links - chỉ hiển thị khi có social links */}
               {socialLinks && socialLinks.length > 0 && (
                 <div className="flex space-x-4 mt-6">
@@ -477,7 +477,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                         href={social.href}
                         aria-label={social.label}
                         className={cn("w-10 h-10 rounded-lg flex items-center justify-center transition-colors", getBorderRadiusClass())}
-                        style={{ 
+                        style={{
                           backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
                           color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`
                         }}
@@ -492,7 +492,7 @@ const Footer = ({ theme, content }: FooterProps) => {
           </div>
         </div>
 
-        <Separator 
+        <Separator
           className="bg-secondary-foreground/20"
           style={{ backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}20` }}
         />
@@ -500,16 +500,16 @@ const Footer = ({ theme, content }: FooterProps) => {
         {/* Bottom Footer */}
         <div className="py-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div 
+            <div
               className="text-sm"
-              style={{ 
+              style={{
                 color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
                 fontSize: theme.typography?.fontSize || '16px'
               }}
             >
               © 2025 {content.companyName || "VietCoffee Export"}. {localizedText.copyright}
             </div>
-            
+
             {/* <div className="flex flex-wrap gap-6">
               {legal.map((item, index) => (
                 <a

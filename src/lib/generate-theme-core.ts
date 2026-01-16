@@ -5,7 +5,7 @@ function extractPartialDataFromIncompleteJson(incompleteJson: string): any | nul
   try {
     // Try to extract key-value pairs from incomplete JSON
     const extractedData: any = {}
-    
+
     // Extract string values using regex
     const stringMatches = incompleteJson.match(/"([^"]+)":\s*"([^"]*)/g)
     if (stringMatches) {
@@ -16,7 +16,7 @@ function extractPartialDataFromIncompleteJson(incompleteJson: string): any | nul
         }
       })
     }
-    
+
     // Extract boolean values
     const booleanMatches = incompleteJson.match(/"([^"]+)":\s*(true|false)/g)
     if (booleanMatches) {
@@ -27,7 +27,7 @@ function extractPartialDataFromIncompleteJson(incompleteJson: string): any | nul
         }
       })
     }
-    
+
     // Extract number values
     const numberMatches = incompleteJson.match(/"([^"]+)":\s*(\d+)/g)
     if (numberMatches) {
@@ -38,12 +38,12 @@ function extractPartialDataFromIncompleteJson(incompleteJson: string): any | nul
         }
       })
     }
-    
+
     // If we extracted any data, return it
     if (Object.keys(extractedData).length > 0) {
       return extractedData
     }
-    
+
     return null
   } catch (error) {
     console.error('Error extracting partial data:', error)
@@ -81,11 +81,11 @@ interface ThemeData {
 // Fallback theme data generator
 function createFallbackThemeData(businessInfo: BusinessInfo) {
   console.log('🔄 Creating fallback theme data for:', businessInfo.companyName)
-  
+
   return {
     colors: {
       primary: "#007bff",
-      secondary: "#6c757d", 
+      secondary: "#6c757d",
       accent: "#28a745",
       background: "#FFFFFF",
       text: "#2D3748",
@@ -99,11 +99,11 @@ function createFallbackThemeData(businessInfo: BusinessInfo) {
         textColor: "#FFFFFF",
         logo: "/assets/logo.png",
         navigation: [
-          {"name": businessInfo.language === 'english' ? 'Home' : 'Trang chủ', "href": "#home"},
-          {"name": businessInfo.language === 'english' ? 'Products' : 'Sản phẩm', "href": "#products"},
-          {"name": businessInfo.language === 'english' ? 'Services' : 'Dịch vụ', "href": "#services"},
-          {"name": businessInfo.language === 'english' ? 'About Us' : 'Về chúng tôi', "href": "#about"},
-          {"name": businessInfo.language === 'english' ? 'Contact' : 'Liên hệ', "href": "#contact"}
+          { "name": businessInfo.language === 'english' ? 'Home' : 'Trang chủ', "href": "#home" },
+          { "name": businessInfo.language === 'english' ? 'Products' : 'Sản phẩm', "href": "#products" },
+          { "name": businessInfo.language === 'english' ? 'Services' : 'Dịch vụ', "href": "#services" },
+          { "name": businessInfo.language === 'english' ? 'About Us' : 'Về chúng tôi', "href": "#about" },
+          { "name": businessInfo.language === 'english' ? 'Contact' : 'Liên hệ', "href": "#contact" }
         ]
       },
       hero: {
@@ -125,14 +125,14 @@ function createFallbackThemeData(businessInfo: BusinessInfo) {
         statsSize: "lg",
         statsWeight: "bold",
         benefits: [
-          {"icon": "CheckCircle", "text": businessInfo.language === 'english' ? 'Quality Service' : 'Dịch vụ chất lượng'},
-          {"icon": "Shield", "text": businessInfo.language === 'english' ? 'Reliable' : 'Đáng tin cậy'},
-          {"icon": "Truck", "text": businessInfo.language === 'english' ? 'Fast Delivery' : 'Giao hàng nhanh'}
+          { "icon": "CheckCircle", "text": businessInfo.language === 'english' ? 'Quality Service' : 'Dịch vụ chất lượng' },
+          { "icon": "Shield", "text": businessInfo.language === 'english' ? 'Reliable' : 'Đáng tin cậy' },
+          { "icon": "Truck", "text": businessInfo.language === 'english' ? 'Fast Delivery' : 'Giao hàng nhanh' }
         ],
         stats: [
-          {"number": "100+", "label": businessInfo.language === 'english' ? 'Customers' : 'Khách hàng'},
-          {"number": "5+", "label": businessInfo.language === 'english' ? 'Years Experience' : 'Năm kinh nghiệm'},
-          {"number": "24/7", "label": businessInfo.language === 'english' ? 'Support' : 'Hỗ trợ'}
+          { "number": "100+", "label": businessInfo.language === 'english' ? 'Customers' : 'Khách hàng' },
+          { "number": "5+", "label": businessInfo.language === 'english' ? 'Years Experience' : 'Năm kinh nghiệm' },
+          { "number": "24/7", "label": businessInfo.language === 'english' ? 'Support' : 'Hỗ trợ' }
         ]
       },
       about: {
@@ -170,7 +170,7 @@ function createFallbackThemeData(businessInfo: BusinessInfo) {
             "icon": "AlertTriangle"
           },
           {
-            "id": "2", 
+            "id": "2",
             "title": businessInfo.language === 'english' ? 'Problem 2' : 'Vấn đề 2',
             "description": businessInfo.language === 'english' ? 'Description of problem 2' : 'Mô tả vấn đề 2',
             "icon": "Clock"
@@ -211,20 +211,20 @@ function createFallbackThemeData(businessInfo: BusinessInfo) {
         buttonText: businessInfo.language === 'english' ? 'Download Free Guide Now' : 'Tải về hướng dẫn miễn phí ngay',
         guideFeatures: [
           {
-            "icon": "FileText", 
-            "title": businessInfo.language === 'english' ? 'Complete Documentation' : 'Tài liệu đầy đủ', 
+            "icon": "FileText",
+            "title": businessInfo.language === 'english' ? 'Complete Documentation' : 'Tài liệu đầy đủ',
             "description": businessInfo.language === 'english' ? 'All necessary documents' : 'Mọi tài liệu cần thiết'
           },
           {
-            "icon": "TrendingUp", 
-            "title": businessInfo.language === 'english' ? 'Market Analysis' : 'Phân tích thị trường', 
+            "icon": "TrendingUp",
+            "title": businessInfo.language === 'english' ? 'Market Analysis' : 'Phân tích thị trường',
             "description": businessInfo.language === 'english' ? 'Current market data' : 'Dữ liệu thị trường hiện tại'
           }
         ],
         trustIndicators: [
-          {"number": "1,000+", "label": businessInfo.language === 'english' ? 'Downloads' : 'Lượt tải'},
-          {"number": "90%", "label": businessInfo.language === 'english' ? 'Success Rate' : 'Tỷ lệ thành công'},
-          {"number": "4.8/5", "label": businessInfo.language === 'english' ? 'User Rating' : 'Đánh giá người dùng'}
+          { "number": "1,000+", "label": businessInfo.language === 'english' ? 'Downloads' : 'Lượt tải' },
+          { "number": "90%", "label": businessInfo.language === 'english' ? 'Success Rate' : 'Tỷ lệ thành công' },
+          { "number": "4.8/5", "label": businessInfo.language === 'english' ? 'User Rating' : 'Đánh giá người dùng' }
         ]
       },
       testimonials: {
@@ -632,7 +632,7 @@ Hãy đảm bảo:
 - Tất cả các section đều có nội dung đầy đủ và phù hợp`
 
   const aiResult = await executeAIRequestWithRetry(prompt)
-  
+
   if (!aiResult.success) {
     // Handle specific error types with better messaging
     if (aiResult.error === 'QUOTA_EXCEEDED') {
@@ -659,10 +659,10 @@ Hãy đảm bảo:
     console.error('Raw response length:', (aiResult.text || '').length)
     console.error('Raw response preview (first 500 chars):', (aiResult.text || '').substring(0, 500))
     console.error('Raw response preview (last 500 chars):', (aiResult.text || '').substring(Math.max(0, (aiResult.text || '').length - 500)))
-    
+
     // Enhanced fallback: try multiple strategies to extract valid JSON
     const responseText = aiResult.text || ''
-    
+
     // Strategy 1: Try to find complete JSON object
     const jsonMatch = responseText.match(/\{[\s\S]*\}/)
     if (jsonMatch) {
@@ -675,18 +675,18 @@ Hãy đảm bảo:
         console.log("🔍 Strategy 2: Attempting to fix incomplete JSON...")
         try {
           let fixedJson = jsonMatch[0]
-          
+
           // Count opening and closing braces
           const openBraces = (fixedJson.match(/\{/g) || []).length
           const closeBraces = (fixedJson.match(/\}/g) || []).length
           const missingBraces = openBraces - closeBraces
-          
+
           if (missingBraces > 0) {
             // Add missing closing braces
             fixedJson += '}'.repeat(missingBraces)
             console.log(`🔧 Fixed JSON by adding ${missingBraces} missing closing braces`)
           }
-          
+
           generatedData = JSON.parse(fixedJson)
           console.log("✅ Parsed JSON after fixing missing braces")
         } catch {
@@ -694,34 +694,34 @@ Hãy đảm bảo:
           console.log("🔍 Strategy 3: Attempting to fix strings and arrays...")
           try {
             let fixedJson = jsonMatch[0]
-            
+
             // Fix unterminated strings by adding closing quotes
             const stringMatches = fixedJson.match(/"[^"]*$/g)
             if (stringMatches) {
               fixedJson = fixedJson.replace(/"[^"]*$/g, (match) => match + '"')
               console.log("🔧 Fixed unterminated string")
             }
-            
+
             // Fix unterminated arrays by adding closing brackets
             const openBrackets = (fixedJson.match(/\[/g) || []).length
             const closeBrackets = (fixedJson.match(/\]/g) || []).length
             const missingBrackets = openBrackets - closeBrackets
-            
+
             if (missingBrackets > 0) {
               fixedJson += ']'.repeat(missingBrackets)
               console.log(`🔧 Fixed JSON by adding ${missingBrackets} missing closing brackets`)
             }
-            
+
             // Re-count braces after fixing strings and arrays
             const finalOpenBraces = (fixedJson.match(/\{/g) || []).length
             const finalCloseBraces = (fixedJson.match(/\}/g) || []).length
             const finalMissingBraces = finalOpenBraces - finalCloseBraces
-            
+
             if (finalMissingBraces > 0) {
               fixedJson += '}'.repeat(finalMissingBraces)
               console.log(`🔧 Fixed JSON by adding ${finalMissingBraces} additional missing closing braces`)
             }
-            
+
             generatedData = JSON.parse(fixedJson)
             console.log("✅ Parsed JSON after comprehensive fixing")
           } catch {
@@ -780,10 +780,10 @@ export function prepareThemeParams(generatedData: ThemeData, currentTheme: any) 
     typography: currentTheme?.typography || {
       fontFamily: "Inter",
       fontSize: "16px",
-      headingSize: "xl",
-      bodySize: "base", 
+      headingSize: "lg",
+      bodySize: "base",
       lineHeight: "1.6",
-      fontWeight: "400"
+      fontWeight: "600"
     },
     layout: currentTheme?.layout || {
       containerWidth: "1200px",

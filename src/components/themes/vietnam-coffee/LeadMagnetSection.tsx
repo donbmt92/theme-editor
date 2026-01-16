@@ -58,22 +58,22 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     email: "",
     company: ""
   });
-  
+
   // Get project language from theme or default to vietnamese
   const projectLanguage = theme?.projectLanguage || 'vietnamese';
-  
+
   // Get localized text based on project language
   const getLocalizedText = () => {
     if (projectLanguage === 'english') {
       return {
         nameLabel: "Full Name *",
-        emailLabel: "Business Email *", 
+        emailLabel: "Business Email *",
         companyLabel: "Company Name (Optional)",
         namePlaceholder: "Enter your full name",
         emailPlaceholder: "your.email@company.com",
         companyPlaceholder: "Your company name",
         secureText: "100% Secure",
-        noSpamText: "No Spam", 
+        noSpamText: "No Spam",
         instantText: "Instant Download",
         privacyText: "By downloading, you agree to receive occasional emails about coffee export opportunities. Unsubscribe anytime.",
         badgeText: "Free Guide",
@@ -82,7 +82,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
       return {
         nameLabel: "Họ và tên *",
         emailLabel: "Email doanh nghiệp *",
-        companyLabel: "Tên công ty (Tùy chọn)", 
+        companyLabel: "Tên công ty (Tùy chọn)",
         namePlaceholder: "Nhập họ và tên đầy đủ",
         emailPlaceholder: "your.email@company.com",
         companyPlaceholder: "Tên công ty của bạn",
@@ -96,6 +96,37 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
   };
 
   const localizedText = getLocalizedText();
+
+  // Helpers for weight mapping
+  const weightToClasses = (weight?: string, fallback: string = 'font-normal') => {
+    switch (weight) {
+      case 'light': return 'font-light'
+      case 'normal': return 'font-normal'
+      case 'medium': return 'font-medium'
+      case 'semibold': return 'font-semibold'
+      case 'bold': return 'font-bold'
+      case 'extrabold': return 'font-extrabold'
+      case 'black': return 'font-black'
+      default: return fallback
+    }
+  }
+
+  // Helpers for font mapping
+  const fontToClasses = (font?: string, fallback: string = 'font-inter') => {
+    switch (font) {
+      case 'inter': return 'font-inter'
+      case 'poppins': return 'font-poppins'
+      case 'roboto': return 'font-roboto'
+      case 'open-sans': return 'font-open-sans'
+      case 'montserrat': return 'font-montserrat'
+      case 'lato': return 'font-lato'
+      case 'nunito': return 'font-nunito'
+      case 'raleway': return 'font-raleway'
+      case 'playfair-display': return 'font-playfair-display'
+      case 'merriweather': return 'font-merriweather'
+      default: return fallback
+    }
+  }
 
   // Get icon component by name
   const getIcon = (iconName?: string) => {
@@ -135,147 +166,51 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     }
   }
 
-  // Get title size from content
+  // Get title size from global theme
   const getTitleSize = () => {
-    const size = content.titleSize || theme.typography?.headingSize || '2xl';
+    const size = theme.typography?.headingSize || '2xl';
     switch (size) {
-      case 'sm':
-        return 'text-2xl md:text-3xl';
-      case 'base':
-        return 'text-3xl md:text-4xl';
-      case 'lg':
-        return 'text-4xl md:text-5xl';
-      case 'xl':
-        return 'text-5xl md:text-6xl';
-      case '2xl':
-        return 'text-6xl md:text-7xl';
-      case '3xl':
-        return 'text-7xl md:text-8xl';
-      default:
-        return 'text-4xl md:text-5xl';
+      case 'sm': return 'text-2xl md:text-3xl';
+      case 'base': return 'text-3xl md:text-4xl';
+      case 'lg': return 'text-4xl md:text-5xl';
+      case 'xl': return 'text-5xl md:text-6xl';
+      case '2xl': return 'text-6xl md:text-7xl';
+      case '3xl': return 'text-7xl md:text-8xl';
+      default: return 'text-4xl md:text-5xl';
     }
   };
 
-  // Get title weight from content
+  // Get title weight from global theme
   const getTitleWeight = () => {
-    const weight = content.titleWeight || theme.typography?.fontWeight || 'bold';
-    switch (weight) {
-      case 'light':
-        return 'font-light';
-      case 'normal':
-        return 'font-normal';
-      case 'medium':
-        return 'font-medium';
-      case 'semibold':
-        return 'font-semibold';
-      case 'bold':
-        return 'font-bold';
-      case 'extrabold':
-        return 'font-extrabold';
-      case 'black':
-        return 'font-black';
-      default:
-        return 'font-bold';
-    }
+    return weightToClasses(theme.typography?.fontWeight, 'font-bold')
   };
 
-  // Get title font from content
+  // Get title font from global theme
   const getTitleFont = () => {
-    const font = content.titleFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case 'inter':
-        return 'font-inter';
-      case 'poppins':
-        return 'font-poppins';
-      case 'roboto':
-        return 'font-roboto';
-      case 'open-sans':
-        return 'font-open-sans';
-      case 'montserrat':
-        return 'font-montserrat';
-      case 'lato':
-        return 'font-lato';
-      case 'nunito':
-        return 'font-nunito';
-      case 'raleway':
-        return 'font-raleway';
-      case 'playfair-display':
-        return 'font-playfair-display';
-      case 'merriweather':
-        return 'font-merriweather';
-      default:
-        return 'font-inter';
-    }
+    return fontToClasses(theme.typography?.fontFamily)
   };
 
-  // Get description size from content
+  // Get description size from global theme
   const getDescriptionSize = () => {
-    const size = content.descriptionSize || theme.typography?.bodySize || 'base';
+    const size = theme.typography?.bodySize || 'base';
     switch (size) {
-      case 'xs':
-        return 'text-base';
-      case 'sm':
-        return 'text-lg';
-      case 'lg':
-        return 'text-xl';
-      case 'xl':
-        return 'text-2xl';
+      case 'xs': return 'text-base';
+      case 'sm': return 'text-lg';
+      case 'lg': return 'text-xl';
+      case 'xl': return 'text-2xl';
       case 'base':
-      default:
-        return 'text-xl';
+      default: return 'text-xl';
     }
   };
 
-  // Get description weight from content
+  // Get description weight from global theme
   const getDescriptionWeight = () => {
-    const weight = content.descriptionWeight || theme.typography?.fontWeight || 'normal';
-    switch (weight) {
-      case 'light':
-        return 'font-light';
-      case 'normal':
-        return 'font-normal';
-      case 'medium':
-        return 'font-medium';
-      case 'semibold':
-        return 'font-semibold';
-      case 'bold':
-        return 'font-bold';
-      case 'extrabold':
-        return 'font-extrabold';
-      case 'black':
-        return 'font-black';
-      default:
-        return 'font-normal';
-    }
+    return weightToClasses(theme.typography?.fontWeight, 'font-normal')
   };
 
-  // Get description font from content
+  // Get description font from global theme
   const getDescriptionFont = () => {
-    const font = content.descriptionFont || theme.typography?.fontFamily || 'inter';
-    switch (font) {
-      case 'inter':
-        return 'font-inter';
-      case 'poppins':
-        return 'font-poppins';
-      case 'roboto':
-        return 'font-roboto';
-      case 'open-sans':
-        return 'font-open-sans';
-      case 'montserrat':
-        return 'font-montserrat';
-      case 'lato':
-        return 'font-lato';
-      case 'nunito':
-        return 'font-nunito';
-      case 'raleway':
-        return 'font-raleway';
-      case 'playfair-display':
-        return 'font-playfair-display';
-      case 'merriweather':
-        return 'font-merriweather';
-      default:
-        return 'font-inter';
-    }
+    return fontToClasses(theme.typography?.fontFamily)
   };
 
   // Get button styles
@@ -297,7 +232,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
   // Get heading size
   const getHeadingSize = (size: 'large' | 'medium' | 'small' = 'medium') => {
     const baseSize = theme.typography?.headingSize || '2xl'
-    
+
     if (size === 'large') {
       switch (baseSize) {
         case 'sm': return 'text-3xl md:text-4xl'
@@ -398,17 +333,17 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
   const trustIndicators = content.trustIndicators || defaultTrustIndicators;
 
   return (
-    <section 
-      id="guide" 
+    <section
+      id="guide"
       className="py-20"
-      style={{ 
-        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
-          ? content.backgroundColor 
+      style={{
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor
+          ? content.backgroundColor
           : theme.colors?.background || '#F8F9FA',
         ...getTypographyStyles()
       }}
     >
-      <div 
+      <div
         className="container mx-auto px-4"
         style={{
           maxWidth: theme.layout?.containerWidth || '1200px',
@@ -419,14 +354,14 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
           <div className="text-center mb-16">
             {/* Badge - chỉ hiển thị khi có nội dung */}
             {(content.badgeText && content.badgeText.trim()) && (
-              <div 
+              <div
                 className={cn("inline-flex items-center px-4 py-2 rounded-full mb-4", getBorderRadiusClass())}
-                style={{ 
-                  backgroundColor: content.colorMode === 'custom' && content.primaryColor 
-                    ? `${content.primaryColor}10` 
+                style={{
+                  backgroundColor: content.colorMode === 'custom' && content.primaryColor
+                    ? `${content.primaryColor}10`
                     : `${theme.colors.primary}10`,
-                  color: content.colorMode === 'custom' && content.primaryColor 
-                    ? content.primaryColor 
+                  color: content.colorMode === 'custom' && content.primaryColor
+                    ? content.primaryColor
                     : theme.colors.primary
                 }}
               >
@@ -434,28 +369,28 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                 <span className="font-medium">{content.badgeText}</span>
               </div>
             )}
-            
+
             {/* Title - chỉ hiển thị khi có nội dung */}
             {(content.title && content.title.trim()) && (
-              <h2 
+              <h2
                 className={cn("mb-4", getTitleSize(), getTitleWeight(), getTitleFont())}
-                style={{ 
-                  color: content.colorMode === 'custom' && content.textColor 
-                    ? content.textColor 
+                style={{
+                  color: content.colorMode === 'custom' && content.textColor
+                    ? content.textColor
                     : theme.colors.text,
                 }}
               >
                 {content.title}
               </h2>
             )}
-            
+
             {/* Description - chỉ hiển thị khi có nội dung */}
             {(content.description && content.description.trim()) && (
-              <p 
+              <p
                 className={cn("max-w-3xl mx-auto", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
-                style={{ 
-                  color: content.colorMode === 'custom' && content.textColor 
-                    ? `${content.textColor}E6` 
+                style={{
+                  color: content.colorMode === 'custom' && content.textColor
+                    ? `${content.textColor}E6`
                     : theme.colors.muted || '#718096',
                   lineHeight: theme.typography?.lineHeight || '1.6',
                 }}
@@ -468,9 +403,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Guide Preview */}
             <div>
-              <Card 
+              <Card
                 className={cn("shadow-elegant", getBorderRadiusClass())}
-                style={{ 
+                style={{
                   borderColor: `${theme.colors.primary}20`,
                   fontFamily: theme.typography?.fontFamily || 'Inter',
                   fontSize: theme.typography?.fontSize || '16px'
@@ -480,9 +415,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                   {/* Guide Header - chỉ hiển thị khi có guideTitle hoặc guideSubtitle */}
                   {((content.guideTitle && content.guideTitle.trim()) || (content.guideSubtitle && content.guideSubtitle.trim())) && (
                     <div className="flex items-center mb-6">
-                      <div 
+                      <div
                         className={cn("h-16 w-16 rounded-xl flex items-center justify-center mr-4", getBorderRadiusClass())}
-                        style={{ 
+                        style={{
                           background: content.colorMode === 'custom' && content.primaryColor
                             ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
                             : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
@@ -492,9 +427,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                       </div>
                       <div>
                         {(content.guideTitle && content.guideTitle.trim()) && (
-                          <h3 
+                          <h3
                             className={cn("font-bold", getHeadingSize('small'))}
-                            style={{ 
+                            style={{
                               color: content.textColor || theme.colors.text,
                               fontWeight: theme.typography?.fontWeight || '700'
                             }}
@@ -503,8 +438,8 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                           </h3>
                         )}
                         {(content.guideSubtitle && content.guideSubtitle.trim()) && (
-                          <p 
-                            style={{ 
+                          <p
+                            style={{
                               color: content.textColor || theme.colors.muted || '#718096',
                               fontSize: theme.typography?.fontSize || '16px'
                             }}
@@ -521,27 +456,27 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                       const IconComponent = getIcon(feature.icon);
                       return (
                         <div key={index} className="flex items-start space-x-4">
-                          <IconComponent 
-                            className="h-6 w-6 mt-1 flex-shrink-0" 
-                            style={{ 
-                              color: content.colorMode === 'custom' && content.primaryColor 
-                                ? content.primaryColor 
-                                : theme.colors.primary 
+                          <IconComponent
+                            className="h-6 w-6 mt-1 flex-shrink-0"
+                            style={{
+                              color: content.colorMode === 'custom' && content.primaryColor
+                                ? content.primaryColor
+                                : theme.colors.primary
                             }}
                           />
                           <div>
-                            <h4 
+                            <h4
                               className="font-semibold mb-1"
-                              style={{ 
+                              style={{
                                 color: content.textColor || theme.colors.text,
                                 fontWeight: theme.typography?.fontWeight || '600'
                               }}
                             >
                               {feature.title}
                             </h4>
-                            <p 
+                            <p
                               className="text-sm"
-                              style={{ 
+                              style={{
                                 color: content.textColor || theme.colors.muted || '#718096',
                                 fontSize: theme.typography?.fontSize || '16px',
                                 lineHeight: theme.typography?.lineHeight || '1.6'
@@ -557,28 +492,28 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
 
                   {/* Trust Indicators - chỉ hiển thị khi có trustIndicators */}
                   {trustIndicators && trustIndicators.length > 0 && (
-                    <div className="mt-8 pt-6 border-t" style={{ 
-                      borderColor: content.colorMode === 'custom' && content.primaryColor 
-                        ? content.primaryColor 
-                        : theme.colors.border || theme.colors.primary 
+                    <div className="mt-8 pt-6 border-t" style={{
+                      borderColor: content.colorMode === 'custom' && content.primaryColor
+                        ? content.primaryColor
+                        : theme.colors.border || theme.colors.primary
                     }}>
                       <div className="grid grid-cols-3 gap-4 text-center">
                         {trustIndicators.map((indicator, index) => (
                           <div key={index}>
-                            <div 
+                            <div
                               className="text-2xl font-bold"
-                              style={{ 
-                                color: content.colorMode === 'custom' && content.primaryColor 
-                                  ? content.primaryColor 
+                              style={{
+                                color: content.colorMode === 'custom' && content.primaryColor
+                                  ? content.primaryColor
                                   : theme.colors.primary,
                                 fontWeight: theme.typography?.fontWeight || '700'
                               }}
                             >
                               {indicator.number}
                             </div>
-                            <div 
+                            <div
                               className="text-sm"
-                              style={{ 
+                              style={{
                                 color: content.textColor || theme.colors.muted || '#718096',
                                 fontSize: theme.typography?.fontSize || '16px'
                               }}
@@ -596,9 +531,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
 
             {/* Sign-up Form */}
             <div>
-              <Card 
+              <Card
                 className={cn("shadow-elegant", getBorderRadiusClass())}
-                style={{ 
+                style={{
                   fontFamily: theme.typography?.fontFamily || 'Inter',
                   fontSize: theme.typography?.fontSize || '16px'
                 }}
@@ -608,9 +543,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                   {((content.formTitle && content.formTitle.trim()) || (content.formDescription && content.formDescription.trim())) && (
                     <div className="text-center mb-8">
                       {(content.formTitle && content.formTitle.trim()) && (
-                        <h3 
+                        <h3
                           className={cn("font-bold mb-2", getHeadingSize('small'))}
-                          style={{ 
+                          style={{
                             color: content.textColor || theme.colors.text,
                             fontWeight: theme.typography?.fontWeight || '700'
                           }}
@@ -619,8 +554,8 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         </h3>
                       )}
                       {(content.formDescription && content.formDescription.trim()) && (
-                        <p 
-                          style={{ 
+                        <p
+                          style={{
                             color: content.textColor || theme.colors.muted || '#718096',
                             fontSize: theme.typography?.fontSize || '16px',
                             lineHeight: theme.typography?.lineHeight || '1.6'
@@ -634,9 +569,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
 
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div>
-                      <Label 
-                        htmlFor="name" 
-                        style={{ 
+                      <Label
+                        htmlFor="name"
+                        style={{
                           color: content.textColor || theme.colors.text,
                           fontSize: theme.typography?.fontSize || '16px',
                           fontWeight: theme.typography?.fontWeight || '500'
@@ -652,7 +587,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="mt-2"
                         placeholder={localizedText.namePlaceholder}
-                        style={{ 
+                        style={{
                           fontFamily: theme.typography?.fontFamily || 'Inter',
                           fontSize: theme.typography?.fontSize || '16px'
                         }}
@@ -660,9 +595,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                     </div>
 
                     <div>
-                      <Label 
+                      <Label
                         htmlFor="email"
-                        style={{ 
+                        style={{
                           color: content.textColor || theme.colors.text,
                           fontSize: theme.typography?.fontSize || '16px',
                           fontWeight: theme.typography?.fontWeight || '500'
@@ -678,7 +613,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="mt-2"
                         placeholder={localizedText.emailPlaceholder}
-                        style={{ 
+                        style={{
                           fontFamily: theme.typography?.fontFamily || 'Inter',
                           fontSize: theme.typography?.fontSize || '16px'
                         }}
@@ -686,9 +621,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                     </div>
 
                     <div>
-                      <Label 
+                      <Label
                         htmlFor="company"
-                        style={{ 
+                        style={{
                           color: content.textColor || theme.colors.text,
                           fontSize: theme.typography?.fontSize || '16px',
                           fontWeight: theme.typography?.fontWeight || '500'
@@ -703,7 +638,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                         onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                         className="mt-2"
                         placeholder={localizedText.companyPlaceholder}
-                        style={{ 
+                        style={{
                           fontFamily: theme.typography?.fontFamily || 'Inter',
                           fontSize: theme.typography?.fontSize || '16px'
                         }}
@@ -712,9 +647,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
 
                     {/* Button - chỉ hiển thị khi có buttonText */}
                     {(content.buttonText && content.buttonText.trim()) && (
-                      <Button 
-                        type="submit" 
-                        size="lg" 
+                      <Button
+                        type="submit"
+                        size="lg"
                         className="w-full hover:scale-105 hover:shadow-xl transition-all duration-300"
                         style={getButtonStyles()}
                       >
@@ -725,9 +660,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
 
                     {/* Privacy Text - chỉ hiển thị khi có privacyText */}
                     {(content.privacyText && content.privacyText.trim()) && (
-                      <p 
+                      <p
                         className="text-xs text-center"
-                        style={{ 
+                        style={{
                           color: content.textColor || theme.colors.muted || '#718096',
                           fontSize: theme.typography?.fontSize || '16px'
                         }}
@@ -738,54 +673,54 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                   </form>
 
                   {/* Additional Trust Elements - chỉ hiển thị khi có ít nhất một trust element */}
-                  {((content.secureText && content.secureText.trim()) || 
-                    (content.noSpamText && content.noSpamText.trim()) || 
+                  {((content.secureText && content.secureText.trim()) ||
+                    (content.noSpamText && content.noSpamText.trim()) ||
                     (content.instantText && content.instantText.trim())) && (
-                    <div className="mt-8 pt-6 border-t" style={{ 
-                      borderColor: content.colorMode === 'custom' && content.primaryColor 
-                        ? content.primaryColor 
-                        : theme.colors.border || theme.colors.primary 
-                    }}>
-                      <div className="flex items-center justify-center space-x-6 text-sm">
-                        {(content.secureText && content.secureText.trim()) && (
-                          <div 
-                            className="flex items-center"
-                            style={{ 
-                              color: content.textColor || theme.colors.muted || '#718096',
-                              fontSize: theme.typography?.fontSize || '16px'
-                            }}
-                          >
-                            <Shield className="h-4 w-4 mr-1" />
-                            <span>{content.secureText}</span>
-                          </div>
-                        )}
-                        {(content.noSpamText && content.noSpamText.trim()) && (
-                          <div 
-                            className="flex items-center"
-                            style={{ 
-                              color: content.textColor || theme.colors.muted || '#718096',
-                              fontSize: theme.typography?.fontSize || '16px'
-                            }}
-                          >
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            <span>{content.noSpamText}</span>
-                          </div>
-                        )}
-                        {(content.instantText && content.instantText.trim()) && (
-                          <div 
-                            className="flex items-center"
-                            style={{ 
-                              color: content.textColor || theme.colors.muted || '#718096',
-                              fontSize: theme.typography?.fontSize || '16px'
-                            }}
-                          >
-                            <Download className="h-4 w-4 mr-1" />
-                            <span>{content.instantText}</span>
-                          </div>
-                        )}
+                      <div className="mt-8 pt-6 border-t" style={{
+                        borderColor: content.colorMode === 'custom' && content.primaryColor
+                          ? content.primaryColor
+                          : theme.colors.border || theme.colors.primary
+                      }}>
+                        <div className="flex items-center justify-center space-x-6 text-sm">
+                          {(content.secureText && content.secureText.trim()) && (
+                            <div
+                              className="flex items-center"
+                              style={{
+                                color: content.textColor || theme.colors.muted || '#718096',
+                                fontSize: theme.typography?.fontSize || '16px'
+                              }}
+                            >
+                              <Shield className="h-4 w-4 mr-1" />
+                              <span>{content.secureText}</span>
+                            </div>
+                          )}
+                          {(content.noSpamText && content.noSpamText.trim()) && (
+                            <div
+                              className="flex items-center"
+                              style={{
+                                color: content.textColor || theme.colors.muted || '#718096',
+                                fontSize: theme.typography?.fontSize || '16px'
+                              }}
+                            >
+                              <CheckCircle className="h-4 w-4 mr-1" />
+                              <span>{content.noSpamText}</span>
+                            </div>
+                          )}
+                          {(content.instantText && content.instantText.trim()) && (
+                            <div
+                              className="flex items-center"
+                              style={{
+                                color: content.textColor || theme.colors.muted || '#718096',
+                                fontSize: theme.typography?.fontSize || '16px'
+                              }}
+                            >
+                              <Download className="h-4 w-4 mr-1" />
+                              <span>{content.instantText}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                 </CardContent>
               </Card>
             </div>

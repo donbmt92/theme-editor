@@ -337,7 +337,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
   // Get heading size
   const getHeadingSize = (size: 'large' | 'medium' | 'small' = 'medium') => {
     const baseSize = theme.typography?.headingSize || '2xl'
-    
+
     if (size === 'large') {
       switch (baseSize) {
         case 'sm': return 'text-3xl md:text-4xl'
@@ -388,22 +388,8 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
     }
   }
 
-  // Helpers for size mapping
-  const sizeToClasses = (size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl', fallback: string = 'text-base') => {
-    switch (size) {
-      case 'xs': return 'text-xs md:text-sm'
-      case 'sm': return 'text-sm md:text-base'
-      case 'base': return 'text-base md:text-lg'
-      case 'lg': return 'text-lg md:text-xl'
-      case 'xl': return 'text-xl md:text-2xl'
-      case '2xl': return 'text-2xl md:text-3xl'
-      case '3xl': return 'text-3xl md:text-4xl'
-      default: return fallback
-    }
-  }
-
   // Helpers for weight mapping
-  const weightToClasses = (weight?: 'light' | 'normal' | 'medium' | 'semibold' | 'bold' | 'extrabold' | 'black', fallback: string = 'font-normal') => {
+  const weightToClasses = (weight?: string, fallback: string = 'font-normal') => {
     switch (weight) {
       case 'light': return 'font-light'
       case 'normal': return 'font-normal'
@@ -417,7 +403,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
   }
 
   // Helpers for font mapping
-  const fontToClasses = (font?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather', fallback: string = 'font-inter') => {
+  const fontToClasses = (font?: string, fallback: string = 'font-inter') => {
     switch (font) {
       case 'inter': return 'font-inter'
       case 'poppins': return 'font-poppins'
@@ -434,35 +420,36 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
   }
 
   // Derived classes for About Section
-  const aboutTitleClasses = cn(sizeToClasses(content.about?.titleSize, getHeadingSize('large')), weightToClasses(content.about?.titleWeight, 'font-bold'), fontToClasses(content.about?.titleFont))
-  const aboutDescClasses = cn(sizeToClasses(content.about?.descriptionSize, getBodySize()), weightToClasses(content.about?.descriptionWeight, 'font-normal'), fontToClasses(content.about?.descriptionFont))
+  // Derived classes for About Section
+  const aboutTitleClasses = cn(getHeadingSize('large'), weightToClasses(theme.typography?.fontWeight, 'font-bold'), fontToClasses(theme.typography?.fontFamily));
+  const aboutDescClasses = cn(getBodySize(), weightToClasses(theme.typography?.fontWeight, 'font-normal'), fontToClasses(theme.typography?.fontFamily));
 
   // Derived classes for Problems
-  const problemsTitleClasses = cn(sizeToClasses(content.problems?.titleSize, getHeadingSize('medium')), weightToClasses(content.problems?.titleWeight, 'font-bold'), fontToClasses(content.problems?.titleFont))
-  const problemsItemTitleClasses = cn(weightToClasses(content.problems?.itemTitleWeight, 'font-semibold'), fontToClasses(content.problems?.itemTitleFont))
-  const problemsItemDescClasses = cn(sizeToClasses(content.problems?.itemDescriptionSize, 'text-base md:text-lg'), fontToClasses(content.problems?.itemDescriptionFont))
+  const problemsTitleClasses = cn(getHeadingSize('medium'), weightToClasses(theme.typography?.fontWeight, 'font-bold'), fontToClasses(theme.typography?.fontFamily));
+  const problemsItemTitleClasses = cn(getHeadingSize('small'), weightToClasses(theme.typography?.fontWeight, 'font-semibold'), fontToClasses(theme.typography?.fontFamily));
+  const problemsItemDescClasses = cn(getBodySize(), fontToClasses(theme.typography?.fontFamily));
 
   // Derived classes for Solutions
-  const solutionsTitleClasses = cn(sizeToClasses(content.solutions?.titleSize, getHeadingSize('medium')), weightToClasses(content.solutions?.titleWeight, 'font-bold'), fontToClasses(content.solutions?.titleFont))
-  const solutionsDescClasses = cn(sizeToClasses(content.solutions?.descriptionSize, getBodySize()), weightToClasses(content.solutions?.descriptionWeight, 'font-normal'), fontToClasses(content.solutions?.descriptionFont))
-  const solutionsItemTitleClasses = cn(weightToClasses(content.solutions?.itemTitleWeight, 'font-semibold'), fontToClasses(content.solutions?.itemTitleFont))
-  const solutionsBenefitClasses = cn(weightToClasses(content.solutions?.itemBenefitWeight, 'font-medium'), fontToClasses(content.solutions?.itemBenefitFont))
+  const solutionsTitleClasses = cn(getHeadingSize('medium'), weightToClasses(theme.typography?.fontWeight, 'font-bold'), fontToClasses(theme.typography?.fontFamily));
+  const solutionsDescClasses = cn(getBodySize(), weightToClasses(theme.typography?.fontWeight, 'font-normal'), fontToClasses(theme.typography?.fontFamily));
+  const solutionsItemTitleClasses = cn(getHeadingSize('small'), weightToClasses(theme.typography?.fontWeight, 'font-semibold'), fontToClasses(theme.typography?.fontFamily));
+  const solutionsBenefitClasses = cn(weightToClasses(theme.typography?.fontWeight, 'font-medium'), fontToClasses(theme.typography?.fontFamily));
 
 
   const problems = content.problems?.items || localizedText.defaultProblems;
   const solutions = content.solutions?.items || localizedText.defaultSolutions;
 
   return (
-    <section 
+    <section
       className="py-20"
-      style={{ 
-        backgroundColor: content.problems?.colorMode === 'custom' && content.problems?.backgroundColor 
-          ? content.problems.backgroundColor 
+      style={{
+        backgroundColor: content.problems?.colorMode === 'custom' && content.problems?.backgroundColor
+          ? content.problems.backgroundColor
           : theme.sections?.problems?.backgroundColor || theme.colors.background || '#F8F9FA',
         ...getTypographyStyles()
       }}
     >
-      <div 
+      <div
         className="container mx-auto px-4"
         style={{
           maxWidth: theme.layout?.containerWidth || '1200px',
@@ -471,18 +458,18 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
       >
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 
+          <h2
             className={cn("font-bold mb-4", aboutTitleClasses)}
-            style={{ 
+            style={{
               color: content.about?.textColor || content.problems?.textColor || theme.sections?.problems?.textColor || theme.colors.text,
               fontWeight: theme.typography?.fontWeight || '700'
             }}
           >
             {content.about?.title || localizedText.defaultAboutTitle}
           </h2>
-          <p 
+          <p
             className={cn("max-w-3xl mx-auto", aboutDescClasses)}
-            style={{ 
+            style={{
               color: content.about?.textColor || content.problems?.textColor || theme.sections?.problems?.textColor || theme.colors.muted || '#718096',
               lineHeight: theme.typography?.lineHeight || '1.6'
             }}
@@ -495,13 +482,13 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
           {/* Problems */}
           <div>
             <div className="flex items-center mb-8">
-              <AlertTriangle 
-                className="h-8 w-8 mr-3" 
+              <AlertTriangle
+                className="h-8 w-8 mr-3"
                 style={{ color: theme.colors.destructive || '#E53E3E' }}
               />
-              <h3 
+              <h3
                 className={problemsTitleClasses}
-                style={{ 
+                style={{
                   color: content.problems?.textColor || theme.colors.text,
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
@@ -513,10 +500,10 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
               {problems.map((problem, index) => {
                 const IconComponent = getIcon(problem.icon);
                 return (
-                  <Card 
-                    key={problem.id || index} 
+                  <Card
+                    key={problem.id || index}
                     className={cn("border-destructive/20 hover:border-destructive/40 transition-colors", getBorderRadiusClass())}
-                    style={{ 
+                    style={{
                       borderColor: `${theme.colors.destructive || '#E53E3E'}20`,
                       fontFamily: theme.typography?.fontFamily || 'Inter',
                       fontSize: theme.typography?.fontSize || '16px'
@@ -524,23 +511,23 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   >
                     <CardContent className="p-6">
                       <div className="flex items-start space-x-4">
-                        <IconComponent 
-                          className="h-6 w-6 mt-1 flex-shrink-0" 
+                        <IconComponent
+                          className="h-6 w-6 mt-1 flex-shrink-0"
                           style={{ color: theme.colors.destructive || '#E53E3E' }}
                         />
                         <div>
-                          <h4 
+                          <h4
                             className={cn("mb-2", problemsItemTitleClasses)}
-                            style={{ 
+                            style={{
                               color: content.problems?.textColor || theme.colors.text,
                               fontWeight: theme.typography?.fontWeight || '600'
                             }}
                           >
                             {problem.title}
                           </h4>
-                          <p 
+                          <p
                             className={problemsItemDescClasses}
-                            style={{ 
+                            style={{
                               color: content.problems?.textColor || theme.colors.muted || '#718096',
                               fontSize: theme.typography?.fontSize || '16px',
                               lineHeight: theme.typography?.lineHeight || '1.6'
@@ -560,13 +547,13 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
           {/* Solutions */}
           <div>
             <div className="flex items-center mb-8">
-              <CheckCircle 
-                className="h-8 w-8 mr-3" 
+              <CheckCircle
+                className="h-8 w-8 mr-3"
                 style={{ color: theme.colors.accent || '#28A745' }}
               />
-              <h3 
+              <h3
                 className={solutionsTitleClasses}
-                style={{ 
+                style={{
                   color: content.solutions?.textColor || theme.colors.text,
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
@@ -578,10 +565,10 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
               {solutions.map((solution, index) => {
                 const IconComponent = getIcon(solution.icon);
                 return (
-                  <Card 
-                    key={solution.id || index} 
+                  <Card
+                    key={solution.id || index}
                     className={cn("border-success-green/20 hover:border-success-green/40 transition-colors shadow-card", getBorderRadiusClass())}
-                    style={{ 
+                    style={{
                       borderColor: `${theme.colors.accent || '#28A745'}20`,
                       fontFamily: theme.typography?.fontFamily || 'Inter',
                       fontSize: theme.typography?.fontSize || '16px'
@@ -589,23 +576,23 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   >
                     <CardContent className="p-6">
                       <div className="flex items-start space-x-4">
-                        <IconComponent 
-                          className="h-6 w-6 mt-1 flex-shrink-0" 
-                          style={{ color:  '#28A745' }}
+                        <IconComponent
+                          className="h-6 w-6 mt-1 flex-shrink-0"
+                          style={{ color: '#28A745' }}
                         />
                         <div className="flex-1">
-                          <h4 
+                          <h4
                             className={cn("mb-2", solutionsItemTitleClasses)}
-                            style={{ 
+                            style={{
                               color: content.solutions?.textColor || theme.colors.text,
                               fontWeight: theme.typography?.fontWeight || '600'
                             }}
                           >
                             {solution.title}
                           </h4>
-                          <p 
+                          <p
                             className={cn("mb-3", solutionsDescClasses)}
-                            style={{ 
+                            style={{
                               color: content.solutions?.textColor || theme.colors.muted || '#718096',
                               fontSize: theme.typography?.fontSize || '16px',
                               lineHeight: theme.typography?.lineHeight || '1.6'
@@ -613,16 +600,16 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                           >
                             {solution.description}
                           </p>
-                          <div 
+                          <div
                             className={cn("inline-flex items-center px-3 py-1", getBorderRadiusClass(), solutionsBenefitClasses)}
-                            style={{ 
+                            style={{
                               backgroundColor: `${theme.colors.accent || '#28A745'}10`,
                               color: theme.colors.primary || '#28A745',
                               fontSize: theme.typography?.fontSize || '16px'
                             }}
                           >
-                            <CheckCircle className="h-4 w-4 mr-1" 
-                            style={{  color:  theme.colors.primary || '#28A745' }}
+                            <CheckCircle className="h-4 w-4 mr-1"
+                              style={{ color: theme.colors.primary || '#28A745' }}
                             />
                             {solution.benefit}
                           </div>
@@ -638,9 +625,9 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
 
         {/* USP Section */}
         <div className="mt-20 text-center">
-          <Card 
+          <Card
             className={cn("max-w-4xl mx-auto border-0 shadow-elegant", getBorderRadiusClass())}
-            style={{ 
+            style={{
               background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
               color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
               fontFamily: theme.typography?.fontFamily || 'Inter',
@@ -648,18 +635,18 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
             }}
           >
             <CardContent className="p-12">
-              <h3 
+              <h3
                 className={cn("font-bold mb-4", getHeadingSize('medium'))}
-                style={{ 
+                style={{
                   color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
                 {content.problems?.cta?.title || content.solutions?.cta?.title || localizedText.defaultCtaTitle}
               </h3>
-              <p 
+              <p
                 className={cn("mb-8 opacity-90", getBodySize())}
-                style={{ 
+                style={{
                   color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                   lineHeight: theme.typography?.lineHeight || '1.6'
                 }}
@@ -668,18 +655,18 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
               </p>
               <div className="grid md:grid-cols-3 gap-8 mb-8">
                 <div className="text-center">
-                  <div 
+                  <div
                     className="text-4xl font-bold mb-2"
-                    style={{ 
+                    style={{
                       color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
                     {content.problems?.cta?.stats?.stat1?.value || content.solutions?.cta?.stats?.stat1?.value || '15+'}
                   </div>
-                  <div 
+                  <div
                     className="opacity-90"
-                    style={{ 
+                    style={{
                       color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
@@ -688,18 +675,18 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div 
+                  <div
                     className="text-4xl font-bold mb-2"
-                    style={{ 
+                    style={{
                       color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
                     {content.problems?.cta?.stats?.stat2?.value || content.solutions?.cta?.stats?.stat2?.value || '500+'}
                   </div>
-                  <div 
+                  <div
                     className="opacity-90"
-                    style={{ 
+                    style={{
                       color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
@@ -708,18 +695,18 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div 
+                  <div
                     className="text-4xl font-bold mb-2"
-                    style={{ 
+                    style={{
                       color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
                     {content.problems?.cta?.stats?.stat3?.value || content.solutions?.cta?.stats?.stat3?.value || '99.8%'}
                   </div>
-                  <div 
+                  <div
                     className="opacity-90"
-                    style={{ 
+                    style={{
                       color: content.problems?.cta?.textColor || content.solutions?.cta?.textColor || '#FFFFFF',
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
@@ -728,8 +715,8 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   </div>
                 </div>
               </div>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 variant="secondary"
                 className="bg-white text-primary hover:bg-white/90"
                 style={getButtonStyles()}
