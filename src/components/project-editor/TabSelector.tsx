@@ -1,4 +1,4 @@
-import { FileText, Palette, Type, Layout } from "lucide-react";
+import { FileText, Palette, Type, Layout, FileCode } from "lucide-react";
 
 export type TabType =
   | "header"
@@ -13,7 +13,8 @@ export type TabType =
   | "footer"
   | "colors"
   | "typography"
-  | "layout";
+  | "layout"
+  | "json";
 
 interface TabSelectorProps {
   activeTab: TabType;
@@ -35,6 +36,9 @@ const TabSelector = ({ activeTab, onTabChange }: TabSelectorProps) => {
     { id: "colors" as TabType, label: "Màu sắc", icon: Palette },
     { id: "typography" as TabType, label: "Chữ", icon: Type },
     { id: "layout" as TabType, label: "Bố cục", icon: Layout },
+    ...(process.env.NODE_ENV === "development"
+      ? [{ id: "json" as TabType, label: "JSON", icon: FileCode }]
+      : []),
   ];
 
   return (
@@ -45,11 +49,10 @@ const TabSelector = ({ activeTab, onTabChange }: TabSelectorProps) => {
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
-            className={`flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-              activeTab === tab.id
+            className={`flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${activeTab === tab.id
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
-            }`}
+              }`}
           >
             <Icon size={16} className="mr-2" />
             {tab.label}

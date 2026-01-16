@@ -12,6 +12,7 @@ import ProductsTab from './tabs/ProductsTab'
 import WhyChooseUsTab from './tabs/WhyChooseUsTab'
 import TestimonialsTab from './tabs/TestimonialsTab'
 import FooterTab from './tabs/FooterTab'
+import JSONTab from './tabs/JSONTab'
 import { ThemeParams } from '@/types'
 
 interface TabContentProps {
@@ -25,43 +26,46 @@ const TabContent = ({ activeTab, themeParams, updateThemeParam }: TabContentProp
   switch (activeTab) {
     case 'colors':
       return <ColorsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'typography':
       return <TypographyTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'layout':
       return <LayoutTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'header':
       return <HeaderTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'about':
       return <AboutTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'hero':
       return <HeroTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'problems':
       return <ProblemsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'solutions':
       return <SolutionsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'leadMagnet':
       return <LeadMagnetTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'products':
       return <ProductsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'whyChooseUs':
       return <WhyChooseUsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'testimonials':
       return <TestimonialsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
     case 'footer':
       return <FooterTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
-    
+
+    case 'json':
+      return <JSONTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
+
     default:
       return (
         <div className="space-y-6">
