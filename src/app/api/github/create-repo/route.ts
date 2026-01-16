@@ -52,8 +52,12 @@ export async function POST(request: NextRequest) {
 
         const github = getGitHubAPI()
 
-        // Generate unique repo name
-        const repoName = `${projectName}-${userId.slice(0, 8)}`.toLowerCase().replace(/\s+/g, '-')
+        // Generate consistent repo name (no timestamp for update support)
+        const repoName = projectName
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '')
+            .substring(0, 100) // GitHub max repo name length
 
         const repo = await github.createRepoWithFiles(
             {

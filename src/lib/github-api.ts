@@ -31,6 +31,24 @@ export class GitHubAPI {
     }
 
     /**
+     * Check if repository already exists
+     */
+    async checkRepoExists(repoName: string): Promise<boolean> {
+        try {
+            await this.octokit.repos.get({
+                owner: this.owner,
+                repo: repoName,
+            })
+            return true
+        } catch (error: any) {
+            if (error.status === 404) {
+                return false
+            }
+            throw error
+        }
+    }
+
+    /**
      * Create a new GitHub repository
      */
     async createRepo(options: CreateRepoOptions): Promise<GitHubRepoResponse> {
@@ -91,15 +109,26 @@ export class GitHubAPI {
             // Create blobs for all files
             console.log('📦 [GITHUB] Creating blobs...')
             const blobs = await Promise.all(
-                Object.entries(options.files).map(async ([path, content]) => {
+                Object.entries(options.files).map(async ([filePath, content]) => {
+                    let encodedContent: string
+
+                    // Images from public/uploads are already base64-encoded
+                    if (filePath.startsWith('public/uploads/')) {
+                        encodedContent = content // Already base64
+                        console.log(`🖼️  [GITHUB] Binary file: ${filePath}`)
+                    } else {
+                        // Text files: encode to base64
+                        encodedContent = Buffer.from(content).toString('base64')
+                    }
+
                     const { data: blob } = await this.octokit.git.createBlob({
                         owner,
                         repo,
-                        content: Buffer.from(content).toString('base64'),
+                        content: encodedContent,
                         encoding: 'base64',
                     })
                     return {
-                        path,
+                        path: filePath,
                         mode: '100644' as const,
                         type: 'blob' as const,
                         sha: blob.sha,
@@ -144,20 +173,43 @@ export class GitHubAPI {
 
     /**
      * Create repo and push files in one operation
+     * If repo exists, updates files instead of creating new repo
      */
     async createRepoWithFiles(
         repoOptions: CreateRepoOptions,
         files: Record<string, string>,
-        commitMessage: string = 'Initial commit from Theme Editor'
+        commitMessage: string = 'Update from Theme Editor'
     ): Promise<GitHubRepoResponse> {
-        // Create repo
+        // Check if repo already exists
+        const exists = await this.checkRepoExists(repoOptions.name)
+
+        if (exists) {
+            console.log('📝 [GITHUB] Repository already exists, updating files...')
+            const repoFullName = `${this.owner}/${repoOptions.name}`
+
+            // Update files with new commit
+            await this.pushFiles({
+                repoFullName,
+                files,
+                commitMessage,
+            })
+
+            return {
+                repoUrl: `https://github.com/${repoFullName}`,
+                repoFullName,
+                defaultBranch: 'main',
+            }
+        }
+
+        console.log('🆕 [GITHUB] Creating new repository...')
+        // Create new repo
         const repo = await this.createRepo(repoOptions)
 
-        // Push files
+        // Push initial files
         await this.pushFiles({
             repoFullName: repo.repoFullName,
             files,
-            commitMessage,
+            commitMessage: 'Initial commit from Theme Editor',
         })
 
         return repo

@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import AIContentGenerator from '@/components/ui/ai-content-generator'
-import DeployProjectDialog from '@/components/ui/export-project-dialog'
+import ReactExportDialog from '@/components/ui/react-export-dialog'
 import { useUndoRedo } from '@/hooks/use-undo-redo'
 import { ThemeParams } from '@/types'
 import {
@@ -59,7 +59,7 @@ interface ProjectData {
 const createDefaultThemeParams = (): ThemeParams => ({
   colors: {
     primary: "#8B4513",
-    secondary: "#D2691E", 
+    secondary: "#D2691E",
     accent: "#F4A460",
     background: "#FFFFFF",
     text: "#2D3748"
@@ -442,7 +442,7 @@ const ProjectEditor = () => {
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true)
   const [showAIDialog, setShowAIDialog] = useState(false)
   const [showDeployDialog, setShowDeployDialog] = useState(false)
-  
+
   // Undo/Redo functionality
   const {
     state: themeParamsWithHistory,
@@ -459,22 +459,22 @@ const ProjectEditor = () => {
       console.log('Loading project data for:', projectId)
       const response = await fetch(`/api/projects/${projectId}`)
       const data = await response.json()
-      
+
       if (data.success) {
         console.log('Project loaded successfully:', data.project)
         setProject(data.project)
-        
+
         // Use latest version or create default params
         const latestVersion = data.project.versions[0]
         let params: ThemeParams
-        
+
         if (latestVersion && latestVersion.snapshot) {
           console.log('Using latest version snapshot:', latestVersion)
           params = latestVersion.snapshot as ThemeParams
         } else if (data.project.theme.defaultParams) {
           try {
-            const parsedParams = typeof data.project.theme.defaultParams === 'string' 
-              ? JSON.parse(data.project.theme.defaultParams) 
+            const parsedParams = typeof data.project.theme.defaultParams === 'string'
+              ? JSON.parse(data.project.theme.defaultParams)
               : data.project.theme.defaultParams
             params = { ...createDefaultThemeParams(), ...parsedParams }
           } catch {
@@ -483,14 +483,14 @@ const ProjectEditor = () => {
         } else {
           params = createDefaultThemeParams()
         }
-        
+
         // Deep merge with default params to ensure all required properties exist
         const defaultParams = createDefaultThemeParams()
-        
+
         params = {
           ...defaultParams,
           ...params,
-          colors: { 
+          colors: {
             ...defaultParams.colors,
             ...params.colors
           },
@@ -504,40 +504,40 @@ const ProjectEditor = () => {
             header: { ...defaultParams.content?.header, ...params.content?.header },
             hero: { ...defaultParams.content?.hero, ...params.content?.hero },
             about: { ...defaultParams.content?.about, ...params.content?.about },
-            problems: { 
-              ...defaultParams.content?.problems, 
+            problems: {
+              ...defaultParams.content?.problems,
               ...params.content?.problems,
               items: params.content?.problems?.items || defaultParams.content?.problems?.items
             },
-            solutions: { 
-              ...defaultParams.content?.solutions, 
+            solutions: {
+              ...defaultParams.content?.solutions,
               ...params.content?.solutions,
               items: params.content?.solutions?.items || defaultParams.content?.solutions?.items
             },
-            products: { 
-              ...defaultParams.content?.products, 
+            products: {
+              ...defaultParams.content?.products,
               ...params.content?.products,
               items: params.content?.products?.items || defaultParams.content?.products?.items
             },
             cta: { ...defaultParams.content?.cta, ...params.content?.cta },
-            testimonials: { 
-              ...defaultParams.content?.testimonials, 
+            testimonials: {
+              ...defaultParams.content?.testimonials,
               ...params.content?.testimonials,
               testimonials: params.content?.testimonials?.testimonials || defaultParams.content?.testimonials?.testimonials,
               partners: params.content?.testimonials?.partners || defaultParams.content?.testimonials?.partners,
               stats: params.content?.testimonials?.stats || defaultParams.content?.testimonials?.stats
             },
-            footer: { 
-              ...defaultParams.content?.footer, 
+            footer: {
+              ...defaultParams.content?.footer,
               ...params.content?.footer,
-              contact: { 
-                ...defaultParams.content?.footer?.contact, 
-                ...params.content?.footer?.contact 
+              contact: {
+                ...defaultParams.content?.footer?.contact,
+                ...params.content?.footer?.contact
               }
             }
           }
         }
-        
+
         console.log('Final merged params:', params)
         setThemeParams(params)
         updateThemeParamsWithHistory(params)
@@ -564,7 +564,7 @@ const ProjectEditor = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search)
     const updatedParam = urlParams.get('updated')
-    
+
     if (updatedParam && projectId) {
       console.log('Detected update parameter, reloading project data...')
       // Remove the query param from URL
@@ -619,7 +619,7 @@ const ProjectEditor = () => {
 
     const newParams = { ...themeParams }
     let current: Record<string, unknown> = newParams as Record<string, unknown>
-    
+
     for (let i = 0; i < path.length - 1; i++) {
       if (!current[path[i]]) {
         if (!isNaN(Number(path[i]))) {
@@ -628,29 +628,29 @@ const ProjectEditor = () => {
           current[path[i]] = {}
         }
       }
-      
+
       // Handle case where array element might be a string instead of object
       if (!isNaN(Number(path[i])) && Array.isArray(current[path[i]])) {
         const arrayIndex = Number(path[i])
         const array = current[path[i]] as unknown[]
-        
+
         // If the element at this index is a string, convert it to an object
         if (typeof array[arrayIndex] === 'string') {
           array[arrayIndex] = { name: array[arrayIndex] as string }
         }
-        
+
         // If the element doesn't exist, create a default object
         if (array[arrayIndex] === undefined) {
           array[arrayIndex] = { name: '' }
         }
-        
+
         // Set current to the array element (object) instead of the array itself
         current = array[arrayIndex] as Record<string, unknown>
       } else {
         current = current[path[i]] as Record<string, unknown>
       }
     }
-    
+
     current[path[path.length - 1]] = value
     setThemeParams(newParams)
     updateThemeParamsWithHistory(newParams)
@@ -658,10 +658,10 @@ const ProjectEditor = () => {
 
   const saveProject = async () => {
     if (!themeParams) return
-    
+
     setIsSaving(true)
     setSaveMessage('')
-    
+
     try {
       const response = await fetch(`/api/projects/${projectId}`, {
         method: 'PUT',
@@ -670,9 +670,9 @@ const ProjectEditor = () => {
         },
         body: JSON.stringify({ themeParams })
       })
-      
+
       const data = await response.json()
-      
+
       if (data.success) {
         setSaveMessage('✅ Project đã được lưu thành công!')
         setTimeout(() => setSaveMessage(''), 15000)
@@ -757,13 +757,14 @@ const ProjectEditor = () => {
         projectId={projectId}
       />
 
-      {/* Deploy Project Dialog */}
-      <DeployProjectDialog
+      {/* React Export Dialog - GitHub & Vercel */}
+      <ReactExportDialog
         open={showDeployDialog}
         onOpenChange={setShowDeployDialog}
         themeParams={themeParams}
         projectId={projectId}
         projectName={project?.name || 'My Project'}
+        themeName={project?.theme?.name || 'vietnam-coffee'}
       />
     </div>
   )

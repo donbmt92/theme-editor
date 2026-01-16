@@ -15,6 +15,24 @@ export interface ExportReactProjectOptions {
 }
 
 /**
+ * Find all uploaded image URLs in theme params
+ */
+function findUploadedImages(themeParams: ThemeParams): string[] {
+  const images: string[] = []
+
+  function scanForImages(obj: any) {
+    if (typeof obj === 'string' && obj.startsWith('/uploads/')) {
+      images.push(obj)
+    } else if (typeof obj === 'object' && obj !== null) {
+      Object.values(obj).forEach(scanForImages)
+    }
+  }
+
+  scanForImages(themeParams)
+  return [...new Set(images)] // Remove duplicates
+}
+
+/**
  * Generate complete Next.js project structure from theme components
  */
 export async function generateReactProject(
@@ -110,6 +128,30 @@ export async function generateReactProject(
 
   // 13. Generate environment example
   files['.env.example'] = generateEnvExample()
+
+  // 14. Generate SEO files
+  files['public/robots.txt'] = generateRobotsTxt()
+  files['src/app/sitemap.ts'] = generateSitemap()
+  files['src/components/StructuredData.tsx'] = generateStructuredData()
+
+  // 15. Copy uploaded images
+  const uploadedImages = findUploadedImages(themeParams)
+  if (uploadedImages.length > 0) {
+    console.log(`📸 [EXPORT] Found ${uploadedImages.length} uploaded images`)
+
+    for (const imageUrl of uploadedImages) {
+      const fileName = path.basename(imageUrl)
+      const imagePath = path.join(process.cwd(), 'public', 'uploads', fileName)
+
+      try {
+        const imageBuffer = await fs.readFile(imagePath)
+        files[`public/uploads/${fileName}`] = imageBuffer.toString('base64')
+        console.log(`✅ [EXPORT] Copied image: ${fileName}`)
+      } catch (error) {
+        console.warn(`⚠️ [EXPORT] Image not found: ${imageUrl}`)
+      }
+    }
+  }
 
   return files
 }
@@ -258,11 +300,16 @@ export default config
 }
 
 /**
- * Generate src/app/layout.tsx
+ * Generate src/app/layout.tsx with comprehensive SEO
  */
 function generateLayoutFile(projectName: string, themeParams: ThemeParams): string {
   const title = themeParams.content?.meta?.title || projectName
   const description = themeParams.content?.meta?.description || `${projectName} - Built with Theme Editor`
+  const keywords = themeParams.content?.meta?.keywords || ''
+
+  // Find first uploaded image for OG image
+  const uploadedImages = findUploadedImages(themeParams)
+  const ogImage = uploadedImages[0] || '/placeholder.jpg'
 
   return `import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -273,6 +320,54 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: '${title}',
   description: '${description}',
+  keywords: '${keywords}',
+  authors: [{ name: '${projectName}' }],
+  creator: '${projectName}',
+  publisher: '${projectName}',
+  
+  // Open Graph
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
+    siteName: '${projectName}',
+    title: '${title}',
+    description: '${description}',
+    images: [
+      {
+        url: '${ogImage}',
+        width: 1200,
+        height: 630,
+        alt: '${title}',
+      },
+    ],
+  },
+  
+  // Twitter
+  twitter: {
+    card: 'summary_large_image',
+    title: '${title}',
+    description: '${description}',
+    images: ['${ogImage}'],
+  },
+  
+  // Additional
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  
+  verification: {
+    // google: 'your-google-verification-code',
+    // yandex: 'your-yandex-verification-code',
+  },
 }
 
 export default function RootLayout({
@@ -293,8 +388,11 @@ export default function RootLayout({
  * Generate src/app/page.tsx
  */
 function generatePageFile(themeName: string, themeParams: ThemeParams): string {
+  // Always use vietnam-coffee theme (normalized)
+  const normalizedThemeName = 'vietnam-coffee'
+
   // Convert theme name to component name (vietnam-coffee -> VietnamCoffeeTheme)
-  const componentName = themeName
+  const componentName = normalizedThemeName
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join('') + 'Theme'
@@ -354,7 +452,13 @@ async function copyThemeComponents(themeName: string): Promise<ProjectFiles> {
   const files: ProjectFiles = {}
 
   try {
-    const themePath = path.join(process.cwd(), 'src', 'components', 'themes', themeName)
+    // Normalize theme name - currently we only support vietnam-coffee theme
+    // Map any theme name to vietnam-coffee folder
+    const normalizedThemeName = 'vietnam-coffee'
+
+    console.log(`📦 [EXPORT] Copying theme: ${themeName} -> ${normalizedThemeName}`)
+
+    const themePath = path.join(process.cwd(), 'src', 'components', 'themes', normalizedThemeName)
     const themeFiles = await fs.readdir(themePath)
 
     // Read all component files
@@ -362,12 +466,12 @@ async function copyThemeComponents(themeName: string): Promise<ProjectFiles> {
       if (file.endsWith('.tsx') || file.endsWith('.ts')) {
         const filePath = path.join(themePath, file)
         const content = await fs.readFile(filePath, 'utf-8')
-        files[`src/components/themes/${themeName}/${file}`] = content
+        files[`src/components/themes/${normalizedThemeName}/${file}`] = content
       }
     }
 
     // Also copy the main theme component
-    const mainThemeFile = themeName
+    const mainThemeFile = normalizedThemeName
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join('') + 'Theme.tsx'
@@ -485,5 +589,79 @@ next-env.d.ts
 function generateEnvExample(): string {
   return `# Add your environment variables here
 # NEXT_PUBLIC_API_URL=https://api.example.com
+`
+}
+
+/**
+ * Generate robots.txt for SEO
+ */
+function generateRobotsTxt(): string {
+  return `# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://yoursite.vercel.app/sitemap.xml
+`
+}
+
+/**
+ * Generate sitemap.ts for SEO
+ */
+function generateSitemap(): string {
+  return `import { MetadataRoute } from 'next'
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    {
+      url: 'https://yoursite.vercel.app',
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 1,
+    },
+  ]
+}
+`
+}
+
+/**
+ * Generate StructuredData component for JSON-LD
+ */
+function generateStructuredData(): string {
+  return `interface StructuredDataProps {
+  data: {
+    businessName: string
+    description: string
+    logo?: string
+    address?: string
+    phone?: string
+    email?: string
+  }
+}
+
+export default function StructuredData({ data }: StructuredDataProps) {
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    name: data.businessName,
+    description: data.description,
+    ...(data.logo && { logo: data.logo }),
+    ...(data.address && {
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: data.address,
+      },
+    }),
+    ...(data.phone && { telephone: data.phone }),
+    ...(data.email && { email: data.email }),
+  }
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+    />
+  )
+}
 `
 }

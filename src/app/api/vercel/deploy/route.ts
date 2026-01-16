@@ -16,13 +16,24 @@ export async function POST(request: NextRequest) {
         }
 
         console.log('🚀 [VERCEL] Starting Vercel deployment...')
-        console.log('📋 [VERCEL] Config:', { repoFullName, projectName })
+
+        // Sanitize project name for Vercel (remove Vietnamese & special chars)
+        const sanitizedProjectName = projectName
+            .normalize('NFD') // Decompose Vietnamese chars
+            .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+            .toLowerCase()
+            .replace(/[^a-z0-9._-]/g, '-') // Replace invalid chars with dash
+            .replace(/--+/g, '-') // Remove multiple dashes
+            .replace(/^-|-$/g, '') // Remove leading/trailing dashes
+            .substring(0, 100) // Max 100 chars
+
+        console.log('📋 [VERCEL] Config:', { repoFullName, projectName, sanitizedProjectName })
 
         const vercel = getVercelAPI()
 
         const deployment = await vercel.deployFromGitHub({
             repoFullName,
-            projectName,
+            projectName: sanitizedProjectName,
         })
 
         console.log('✅ [VERCEL] Deployment completed successfully')
