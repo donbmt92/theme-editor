@@ -388,7 +388,19 @@ const UserTemplatesPageContent = () => {
                         Tạo Project
                       </Button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent
+                      disableClose={true}
+                      onInteractOutside={(e) => {
+                        console.log('onInteractOutside - isCreating:', isCreating)
+                        // Chặn đóng dialog khi click bên ngoài
+                        e.preventDefault()
+                      }}
+                      onEscapeKeyDown={(e) => {
+                        console.log('onEscapeKeyDown - isCreating:', isCreating)
+                        // Chặn đóng dialog khi nhấn ESC
+                        e.preventDefault()
+                      }}
+                    >
                       <DialogHeader>
                         <DialogTitle>Tạo Project từ &quot;{selectedTheme?.name || theme.name}&quot;</DialogTitle>
                       </DialogHeader>
@@ -406,6 +418,7 @@ const UserTemplatesPageContent = () => {
                                 createProject()
                               }
                             }}
+                            disabled={isCreating}
                           />
                         </div>
                         <div className="flex space-x-2">
