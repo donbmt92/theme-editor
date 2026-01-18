@@ -10,13 +10,13 @@ export const maxDuration = 120 // 2 minutes (optimized for parallel processing)
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
-  
+
   try {
     // Enhanced rate limiting for high-volume traffic
     const clientIP = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown'
     const userAgent = request.headers.get('user-agent') || 'unknown'
     const identifier = `${clientIP}:${userAgent}` // More specific identification
-    
+
     // Check queue health first
     const queueStats = getQueueStats()
     if (!isQueueHealthy()) {
@@ -35,22 +35,41 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Tiered rate limiting - determine user tier (future feature)
-    const userTier = 'free' // Default to free tier
-    const rateLimit = checkTieredRateLimit(identifier, userTier as any)
-    
+    // Tiered rate limiting - get user tier from session/database
+    let userTier: 'FREE' | 'STANDARD' | 'PRO' = 'FREE'
+
+    // TODO: Get user from session when auth is implemented
+    // For now, try to get from request or default to FREE
+    try {
+      const body = await request.clone().json()
+      const userEmail = body.userEmail // Optional: client can pass email
+
+      if (userEmail) {
+        const user = await (await import('@/lib/prisma')).prisma.user.findUnique({
+          where: { email: userEmail },
+          select: { tier: true }
+        })
+        userTier = user?.tier || 'FREE'
+      }
+    } catch {
+      // No user info, default to FREE tier
+      userTier = 'FREE'
+    }
+
+    const rateLimit = checkTieredRateLimit(identifier, userTier)
+
     if (!rateLimit.allowed) {
       const resetTime = new Date(rateLimit.resetTime).toISOString()
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Bạn đã vượt quá giới hạn yêu cầu. Vui lòng thử lại sau.',
           errorType: 'RATE_LIMIT_EXCEEDED',
           resetTime,
           retryAfter: rateLimit.retryAfter,
           tier: userTier
         },
-        { 
+        {
           status: 429,
           headers: {
             'Retry-After': rateLimit.retryAfter?.toString() || '60',
@@ -70,7 +89,7 @@ export async function POST(request: NextRequest) {
     const cachedResponse = getCachedResponse(cacheKey)
     if (cachedResponse) {
       console.log('🚀 Returning cached AI response')
-      
+
       // Add performance metrics to cached response
       const cachedWithMetrics = {
         ...cachedResponse,
@@ -79,7 +98,7 @@ export async function POST(request: NextRequest) {
         servedAt: new Date().toISOString(),
         queueStats: getQueueStats()
       }
-      
+
       return NextResponse.json(cachedWithMetrics)
     }
 
@@ -94,23 +113,23 @@ export async function POST(request: NextRequest) {
     // Queue the AI generation task
     const taskId = `generate-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     const priority = calculatePriority(businessInfo)
-    
+
     console.log(`📋 Queuing AI generation task: ${taskId} (Priority: ${priority.toFixed(3)})`)
-    
+
     // Non-blocking async enqueue for maximum parallelism
     console.log(`🚀 Enqueueing task ${taskId} for async processing...`)
-    
+
     const taskResult = await aiGenerationQueue.enqueue(
       taskId,
       async () => {
         try {
           console.log(`🔄 [ASYNC] Starting non-blocking AI generation for task: ${taskId}`)
-          
+
           // Async theme generation (doesn't block other requests)
           console.log(`⚡ [NON-BLOCKING] Generating theme content in parallel...`)
           const result = await Promise.race([
             generateThemeContent(businessInfo),
-            new Promise((_, reject) => 
+            new Promise((_, reject) =>
               setTimeout(() => reject(new Error('Generation timeout')), 120000)
             )
           ]) as {
@@ -119,12 +138,12 @@ export async function POST(request: NextRequest) {
             responseTime: number
           }
           console.log(`✅ [ASYNC] Theme content generated successfully`)
-          
+
           // Async parameter preparation
           console.log(`⚙️  [PARALLEL] Preparing theme parameters async...`)
           const themeParams = prepareThemeParams(result.generatedData, currentTheme)
           console.log(`✅ [ASYNC] Theme parameters prepared successfully`)
-          
+
           return {
             themeParams,
             generatedData: result.generatedData,
@@ -141,8 +160,8 @@ export async function POST(request: NextRequest) {
 
     if (!taskResult.success) {
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: taskResult.error,
           errorType: 'TASK_FAILED',
           taskId
@@ -156,7 +175,7 @@ export async function POST(request: NextRequest) {
 
     // Enhanced caching with business context - increased TTL for high volume traffic
     setBusinessCachedResponse(businessInfo, taskResult.data, 30 * 60 * 1000) // 30 minutes TTL for better cache hit rate
-    
+
     const response = {
       success: true,
       themeParams,
@@ -178,7 +197,7 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Theme generation error:', error)
-    
+
     let errorMessage = 'Có lỗi xảy ra khi tạo nội dung'
     if (error instanceof Error) {
       if (error.message.includes('API key')) {
@@ -191,8 +210,8 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: errorMessage,
         errorType: 'GENERATION_ERROR',
         responseTime: Date.now() - startTime,

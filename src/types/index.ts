@@ -250,7 +250,7 @@ export interface ThemeContent {
     customHeadScripts?: string
     customBodyScripts?: string
   }
-  
+
   // Header
   header?: {
     logo?: string
@@ -275,7 +275,7 @@ export interface ThemeContent {
       icon?: string
     }>
   }
-  
+
   // Hero
   hero?: {
     title?: string
@@ -326,7 +326,7 @@ export interface ThemeContent {
       label: string
     }>
   }
-  
+
   // About
   about?: {
     title?: string
@@ -346,7 +346,7 @@ export interface ThemeContent {
       description: string
     }>
   }
-  
+
   // Problems
   problems?: {
     title?: string
@@ -395,7 +395,7 @@ export interface ThemeContent {
       }
     }
   }
-  
+
   // Solutions
   solutions?: {
     title?: string
@@ -447,7 +447,7 @@ export interface ThemeContent {
       }
     }
   }
-  
+
   // CTA
   cta?: {
     title?: string
@@ -458,7 +458,7 @@ export interface ThemeContent {
     textColor?: string
     image?: string
   }
-  
+
   // Products
   products?: {
     title?: string
@@ -490,7 +490,7 @@ export interface ThemeContent {
       cta: string
     }>
   }
-  
+
   // Testimonials
   testimonials?: {
     title?: string
@@ -521,7 +521,7 @@ export interface ThemeContent {
       sublabel?: string
     }>
   }
-  
+
   // Footer
   footer?: {
     logo?: string
@@ -645,6 +645,245 @@ export interface ThemeContent {
       secondaryButtonText?: string
     }
   }
+
+
+  // Product Page Data Type (for individual product page)
+  productPageData?: {
+    enabled?: boolean
+    hero?: {
+      title?: string
+      subtitle?: string
+      usps?: string[]
+      images?: string[]
+      mainImage?: string
+    }
+    overview?: {
+      description?: string
+      highlights?: Array<{
+        icon: string
+        label: string
+        value: string
+      }>
+    }
+    features?: Array<{
+      icon: string
+      title: string
+      description: string
+    }>
+    specs?: {
+      specifications?: Array<{
+        label: string
+        value: string
+      }>
+      customizationOptions?: string[]
+      title?: string
+      subtitle?: string
+    }
+    applications?: {
+      title?: string
+      subtitle?: string
+      applications?: Array<{
+        icon: string
+        industry: string
+        description: string
+        image?: string
+      }>
+    }
+    certifications?: {
+      title?: string
+      subtitle?: string
+      certifications?: Array<{
+        name: string
+        description: string
+      }>
+      qcProcess?: Array<{
+        step: string
+        title: string
+        description: string
+      }>
+    }
+    oem?: {
+      title?: string
+      subtitle?: string
+      capabilities?: Array<{
+        icon: string
+        title: string
+        description: string
+      }>
+    }
+    packaging?: {
+      title?: string
+      subtitle?: string
+      packagingSpecs?: Array<{
+        label: string
+        value: string
+      }>
+      shippingMethods?: Array<{
+        icon: string
+        method: string
+        description: string
+      }>
+      incoterms?: string[]
+    }
+    whyChoose?: {
+      title?: string
+      subtitle?: string
+      metrics?: Array<{
+        icon: string
+        value: string
+        label: string
+      }>
+      strengths?: string[]
+      factoryImage?: string
+      testimonial?: {
+        quote: string
+        author: string
+        company: string
+        country: string
+      }
+    }
+    leadMagnet?: {
+      title?: string
+      subtitle?: string
+      benefits?: string[]
+    }
+    rfq?: {
+      title?: string
+      subtitle?: string
+      benefits?: Array<{
+        icon: string
+        text: string
+      }>
+    }
+    cta?: {
+      title?: string
+      subtitle?: string
+      buttonText?: string
+      benefits?: string[]
+    }
+  }
+
+  // Product Pages (PRO tier only) - Multiple product pages keyed by productId
+  productPages?: {
+    [productId: string]: {
+      enabled?: boolean  // Enable for production/export
+      showPreview?: boolean  // Show in editor preview
+      hero?: {
+        title?: string
+        subtitle?: string
+        usps?: string[]
+        images?: string[]
+        mainImage?: string
+      }
+      overview?: {
+        description?: string
+        highlights?: Array<{
+          icon: string
+          label: string
+          value: string
+        }>
+      }
+      features?: Array<{
+        icon: string
+        title: string
+        description: string
+      }>
+      specs?: {
+        specifications?: Array<{
+          label: string
+          value: string
+        }>
+        customizationOptions?: string[]
+        title?: string
+        subtitle?: string
+      }
+      applications?: {
+        title?: string
+        subtitle?: string
+        applications?: Array<{
+          icon: string
+          industry: string
+          description: string
+          image?: string
+        }>
+      }
+      certifications?: {
+        title?: string
+        subtitle?: string
+        certifications?: Array<{
+          name: string
+          description: string
+        }>
+        qcProcess?: Array<{
+          step: string
+          title: string
+          description: string
+        }>
+      }
+      oem?: {
+        title?: string
+        subtitle?: string
+        capabilities?: Array<{
+          icon: string
+          title: string
+          description: string
+        }>
+      }
+      packaging?: {
+        title?: string
+        subtitle?: string
+        packagingSpecs?: Array<{
+          label: string
+          value: string
+        }>
+        shippingMethods?: Array<{
+          icon: string
+          method: string
+          description: string
+        }>
+        incoterms?: string[]
+      }
+      whyChoose?: {
+        title?: string
+        subtitle?: string
+        metrics?: Array<{
+          icon: string
+          value: string
+          label: string
+        }>
+        strengths?: string[]
+        factoryImage?: string
+        testimonial?: {
+          quote: string
+          author: string
+          company: string
+          country: string
+        }
+      }
+      leadMagnet?: {
+        title?: string
+        subtitle?: string
+        benefits?: string[]
+      }
+      rfq?: {
+        title?: string
+        subtitle?: string
+        benefits?: Array<{
+          icon: string
+          text: string
+        }>
+      }
+      cta?: {
+        title?: string
+        subtitle?: string
+        buttonText?: string
+        benefits?: string[]
+      }
+    }
+  }
+
+  // Active product page ID (which product page is currently being viewed)
+  activeProductPageId?: string
 }
 
 export interface ThemeParams {

@@ -2,6 +2,13 @@
 import { ThemeParams } from '@/types'
 import path from 'path'
 import fs from 'fs/promises'
+import {
+  getEnabledProducts,
+  generateProductRoutes,
+  generateProductData,
+  generateProductsIndexPage,
+  generateProductSitemap
+} from './generate-product-pages'
 
 export interface ProjectFiles {
   [relativePath: string]: string
@@ -87,7 +94,9 @@ export async function generateReactProject(
     'input.tsx',
     'label.tsx',
     'separator.tsx',
-    'card.tsx'
+    'card.tsx',
+    'badge.tsx',
+    'textarea.tsx'
   ]
   for (const component of uiComponents) {
     const componentPath = path.join(process.cwd(), 'src', 'components', 'ui', component)
@@ -151,6 +160,61 @@ export async function generateReactProject(
         console.warn(`⚠️ [EXPORT] Image not found: ${imageUrl}`)
       }
     }
+  }
+
+  // 16. Export Product Pages (if enabled)
+  const enabledProducts = getEnabledProducts(themeParams)
+
+  if (enabledProducts.length > 0) {
+    console.log(`📦 [EXPORT] Found ${enabledProducts.length} enabled product pages`)
+
+    // 16a. Generate product data file
+    files['src/data/product-pages.json'] = generateProductData(themeParams)
+    console.log('✅ [EXPORT] Generated product data file')
+
+    // 16b. Generate product routes
+    const productRoutes = generateProductRoutes(enabledProducts)
+    Object.assign(files, productRoutes)
+    console.log(`✅ [EXPORT] Generated ${enabledProducts.length} product routes`)
+
+    // 16c. Generate products index page
+    files['src/app/products/page.tsx'] = generateProductsIndexPage(enabledProducts)
+    console.log('✅ [EXPORT] Generated products index page')
+
+    // 16d. Update sitemap with products
+    files['src/app/sitemap.ts'] = generateProductSitemap(enabledProducts)
+    console.log('✅ [EXPORT] Updated sitemap with product URLs')
+
+    // 16e. Copy product page components
+    try {
+      const productComponentsPath = path.join(process.cwd(), 'src', 'components', 'themes', 'vietnam-coffee-product')
+      const productFiles = await fs.readdir(productComponentsPath)
+
+      for (const file of productFiles) {
+        if (file.endsWith('.tsx') || file.endsWith('.ts')) {
+          const filePath = path.join(productComponentsPath, file)
+          const content = await fs.readFile(filePath, 'utf-8')
+          files[`src/components/product/${file}`] = content
+        }
+      }
+
+      console.log(`✅ [EXPORT] Copied ${productFiles.length} product components`)
+
+      // 16f. Copy ProductPage wrapper template
+      const productPageTemplatePath = path.join(process.cwd(), 'templates', 'ProductPage.tsx')
+      try {
+        const templateContent = await fs.readFile(productPageTemplatePath, 'utf-8')
+        files['src/components/product/ProductPage.tsx'] = templateContent
+        console.log('✅ [EXPORT] Added ProductPage wrapper')
+      } catch (err) {
+        console.warn('⚠️ [EXPORT] Could not find ProductPage template')
+      }
+
+    } catch (error) {
+      console.warn('⚠️ [EXPORT] Could not copy product components:', error)
+    }
+  } else {
+    console.log('ℹ️ [EXPORT] No enabled product pages found, skipping product export')
   }
 
   return files
@@ -480,7 +544,25 @@ async function copyThemeComponents(themeName: string): Promise<ProjectFiles> {
 
     try {
       const mainContent = await fs.readFile(mainThemePath, 'utf-8')
-      files[`src/components/themes/${mainThemeFile}`] = mainContent
+
+      // Fix ProductPage import path for exported project
+      const fixedContent = mainContent
+        .replace(
+          /import ProductPage from '\.\/vietnam-coffee-product\/ProductPage'/g,
+          "import ProductPage from '../product/ProductPage'"
+        )
+        // Fix ProductPage usage - change from theme/content props to productId
+        .replace(
+          /<ProductPage theme=\{theme\} content=\{finalContent\} \/>/g,
+          '<ProductPage productId={activeProductPageId} />'
+        )
+        // Change showPreview to enabled for production
+        .replace(
+          /const showProductPage = activeProductPage\?\. showPreview \|\| false/g,
+          'const showProductPage = activeProductPage?.enabled || false'
+        )
+
+      files[`src/components/themes/${mainThemeFile}`] = fixedContent
     } catch (err) {
       console.warn(`Warning: Could not find main theme file: ${mainThemePath}`)
     }

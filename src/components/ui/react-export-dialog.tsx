@@ -35,6 +35,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
 }) => {
     const { data: session } = useSession()
     const [description, setDescription] = useState('')
+    const [customDomain, setCustomDomain] = useState('')
     const [isExporting, setIsExporting] = useState(false)
     const [exportStatus, setExportStatus] = useState<'idle' | 'github' | 'vercel' | 'success' | 'error'>('idle')
     const [githubUrl, setGithubUrl] = useState('')
@@ -96,6 +97,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                 body: JSON.stringify({
                     repoFullName: githubData.github.repoFullName,
                     projectName: projectName.toLowerCase().replace(/\s+/g, '-'),
+                    customDomain: customDomain.trim() || undefined,
                 }),
             })
 
@@ -106,6 +108,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
             }
 
             setVercelUrl(vercelData.vercel.deploymentUrl)
+            addLog(vercelData.vercel)
             addLog(`✅ Deployed to Vercel: ${vercelData.vercel.deploymentUrl}`)
             addLog('🎉 Export completed successfully!')
 
@@ -123,6 +126,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
 
     const resetDialog = () => {
         setDescription('')
+        setCustomDomain('')
         setExportStatus('idle')
         setGithubUrl('')
         setVercelUrl('')
@@ -184,6 +188,22 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                                     rows={3}
                                 />
                             </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Custom Domain (Optional)
+                                </label>
+                                <Input
+                                    value={customDomain}
+                                    onChange={(e) => setCustomDomain(e.target.value)}
+                                    placeholder="e.g. my-awesome-project.com"
+                                />
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    Your Vercel project will be configured with this domain. You may need to configure DNS records separately.
+                                </p>
+                            </div>
+
+
 
                             <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
                                 <CardContent className="pt-6">
@@ -368,7 +388,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                     )}
                 </div>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     )
 }
 

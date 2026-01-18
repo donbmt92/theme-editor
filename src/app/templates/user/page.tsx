@@ -33,7 +33,7 @@ interface ThemeWithUnsplash extends ThemeData {
 const UserTemplatesPageContent = () => {
   const searchParams = useSearchParams()
   const preselectedThemeId = searchParams.get('themeId')
-  
+
   const [themes, setThemes] = useState<ThemeWithUnsplash[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedTheme, setSelectedTheme] = useState<ThemeWithUnsplash | null>(null)
@@ -57,7 +57,7 @@ const UserTemplatesPageContent = () => {
         },
         body: JSON.stringify({ themeName: theme.name })
       })
-      
+
       if (response.ok) {
         const data = await response.json()
         if (data.success && data.imageUrl) {
@@ -75,7 +75,7 @@ const UserTemplatesPageContent = () => {
       }
     } catch (error: unknown) {
       console.error('Network error fetching Unsplash image:', error)
-      
+
       // Handle specific network errors
       if (error instanceof Error) {
         if (error.name === 'TypeError' && error.message.includes('fetch')) {
@@ -89,71 +89,71 @@ const UserTemplatesPageContent = () => {
   }
 
   const loadThemes = useCallback(async () => {
-      try {
-        const response = await fetch('/api/themes')
-        const data = await response.json()
-        
-        if (data.success) {
-          const themesWithUnsplash = data.themes.map((theme: ThemeData) => ({
-            ...theme,
-            isLoadingImage: true
-          }))
-          setThemes(themesWithUnsplash)
-          
-          // Load Unsplash images for each theme
-          for (let i = 0; i < themesWithUnsplash.length; i++) {
-            const theme = themesWithUnsplash[i]
-            
-            try {
-              const unsplashImageUrl = await fetchUnsplashImage(theme)
-              
-              setThemes(prev => prev.map(t => 
-                t.id === theme.id 
-                  ? { ...t, unsplashImageUrl, isLoadingImage: false }
-                  : t
-              ))
-            } catch (error) {
-              console.error(`Failed to load image for theme ${theme.name}:`, error)
-              
-              // Still update the theme to remove loading state
-              setThemes(prev => prev.map(t => 
-                t.id === theme.id 
-                  ? { ...t, unsplashImageUrl: undefined, isLoadingImage: false }
-                  : t
-              ))
-            }
-          }
-          
-          // Tự động chọn theme đầu tiên và tạo project
-          if (themesWithUnsplash.length > 0) {
-            const firstTheme = themesWithUnsplash[0]
-            setSelectedTheme(firstTheme)
-            setProjectName('Website mới') // Tên mặc định
-            setShowCreateDialog(true) // Mở dialog tạo project ngay lập tức
-            
-            // Tự động tạo project sau 1 giây
-            setTimeout(() => {
-              createProject()
-            }, 1000)
+    try {
+      const response = await fetch('/api/themes')
+      const data = await response.json()
+
+      if (data.success) {
+        const themesWithUnsplash = data.themes.map((theme: ThemeData) => ({
+          ...theme,
+          isLoadingImage: true
+        }))
+        setThemes(themesWithUnsplash)
+
+        // Load Unsplash images for each theme
+        for (let i = 0; i < themesWithUnsplash.length; i++) {
+          const theme = themesWithUnsplash[i]
+
+          try {
+            const unsplashImageUrl = await fetchUnsplashImage(theme)
+
+            setThemes(prev => prev.map(t =>
+              t.id === theme.id
+                ? { ...t, unsplashImageUrl, isLoadingImage: false }
+                : t
+            ))
+          } catch (error) {
+            console.error(`Failed to load image for theme ${theme.name}:`, error)
+
+            // Still update the theme to remove loading state
+            setThemes(prev => prev.map(t =>
+              t.id === theme.id
+                ? { ...t, unsplashImageUrl: undefined, isLoadingImage: false }
+                : t
+            ))
           }
         }
-      } catch (error: unknown) {
-        console.error('Error loading themes:', error)
-        setError('Không thể tải danh sách themes. Vui lòng kiểm tra kết nối internet và thử lại.')
-        toast({
-          title: "Lỗi tải themes",
-          description: "Không thể tải danh sách themes. Vui lòng refresh trang.",
-          variant: "destructive"
-        })
-        
-        // If it's a critical error, trigger error boundary
-        if (error instanceof Error && (error.name === 'TypeError' || error.message?.includes('fetch'))) {
-          throwError(new Error('Network error loading themes'))
+
+        // Tự động chọn theme đầu tiên và tạo project
+        if (themesWithUnsplash.length > 0) {
+          const firstTheme = themesWithUnsplash[0]
+          setSelectedTheme(firstTheme)
+          setProjectName('Website mới') // Tên mặc định
+          setShowCreateDialog(true) // Mở dialog tạo project ngay lập tức
+
+          // Tự động tạo project sau 1 giây
+          setTimeout(() => {
+            createProject()
+          }, 1000)
         }
-              } finally {
-          setLoading(false)
-        }
-      }, [preselectedThemeId, toast, throwError])
+      }
+    } catch (error: unknown) {
+      console.error('Error loading themes:', error)
+      setError('Không thể tải danh sách themes. Vui lòng kiểm tra kết nối internet và thử lại.')
+      toast({
+        title: "Lỗi tải themes",
+        description: "Không thể tải danh sách themes. Vui lòng refresh trang.",
+        variant: "destructive"
+      })
+
+      // If it's a critical error, trigger error boundary
+      if (error instanceof Error && (error.name === 'TypeError' || error.message?.includes('fetch'))) {
+        throwError(new Error('Network error loading themes'))
+      }
+    } finally {
+      setLoading(false)
+    }
+  }, [preselectedThemeId, toast, throwError])
 
   useEffect(() => {
     loadThemes()
@@ -163,7 +163,7 @@ const UserTemplatesPageContent = () => {
     if (!selectedTheme) return
 
     setIsCreating(true)
-    
+
     try {
       const response = await fetch('/api/projects', {
         method: 'POST',
@@ -175,9 +175,9 @@ const UserTemplatesPageContent = () => {
           name: projectName.trim() || 'Website mới'
         })
       })
-      
+
       const data = await response.json()
-      
+
       if (data.success) {
         // Lưu project đã tạo và hiển thị popup AI
         setCreatedProject(data.project)
@@ -185,14 +185,14 @@ const UserTemplatesPageContent = () => {
         setShowCreateDialog(false)
         setProjectName('')
         setSelectedTheme(null)
-        
+
         // Hiển thị popup AI sau một chút để đảm bảo dialog đã đóng
         setIsShowingAI(true)
         setTimeout(() => {
           setShowAIGenerator(true)
           setIsShowingAI(false)
         }, 300)
-        
+
         // Thông báo cho người dùng
         toast({
           title: "Thành công!",
@@ -223,7 +223,7 @@ const UserTemplatesPageContent = () => {
 
     try {
       console.log('Updating project with AI data:', themeParams)
-      
+
       // Cập nhật project với nội dung AI đã tạo
       const response = await fetch(`/api/projects/${createdProject.id}`, {
         method: 'PUT',
@@ -236,7 +236,7 @@ const UserTemplatesPageContent = () => {
       })
 
       const data = await response.json()
-      
+
       if (data.success) {
         console.log('Project updated successfully, redirecting to editor...')
         toast({
@@ -245,7 +245,7 @@ const UserTemplatesPageContent = () => {
           variant: "default",
           duration: 2000
         })
-        
+
         // Chuyển đến project editor với query param để force reload
         setTimeout(() => {
           window.location.href = `/project/${createdProject.id}?updated=${Date.now()}`
@@ -339,15 +339,15 @@ const UserTemplatesPageContent = () => {
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
                   </div>
                 ) : theme.unsplashImageUrl ? (
-                  <Image 
-                    src={theme.unsplashImageUrl} 
+                  <Image
+                    src={theme.unsplashImageUrl}
                     alt={theme.name}
                     fill
                     className="object-cover"
                   />
                 ) : theme.previewUrl ? (
-                  <Image 
-                    src={theme.previewUrl} 
+                  <Image
+                    src={theme.previewUrl}
                     alt={theme.name}
                     fill
                     className="object-cover"
@@ -357,7 +357,7 @@ const UserTemplatesPageContent = () => {
                     <Eye size={48} />
                   </div>
                 )}
-                
+
                 {/* Unsplash Attribution Overlay */}
                 {theme.unsplashImageUrl && (
                   <div className="absolute bottom-1 right-1 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
@@ -377,7 +377,7 @@ const UserTemplatesPageContent = () => {
                 <div className="flex space-x-2">
                   <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
                     <DialogTrigger asChild>
-                      <Button 
+                      <Button
                         className="flex-1"
                         onClick={() => {
                           setSelectedTheme(theme)
@@ -409,7 +409,7 @@ const UserTemplatesPageContent = () => {
                           />
                         </div>
                         <div className="flex space-x-2">
-                          <Button 
+                          <Button
                             onClick={createProject}
                             disabled={!projectName.trim() || isCreating}
                             className="flex-1"

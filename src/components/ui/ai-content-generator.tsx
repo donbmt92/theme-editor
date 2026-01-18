@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogDescription,
-  DialogFooter 
+  DialogFooter
 } from './dialog'
 import { Button } from './button'
 import { Input } from './input'
@@ -56,7 +56,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
     tone: 'professional',
     language: 'vietnamese'
   })
-  
+
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState('')
   const [step, setStep] = useState<'form' | 'preview' | 'success'>('form')
@@ -81,7 +81,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
     setIsGenerating(true)
     setError('')
     setRetryAttempt(retryCount)
-    
+
     // Enhanced progress messages
     if (retryCount === 0) {
       setProgressMessage('🚀 Đang gửi yêu cầu đến AI...')
@@ -92,37 +92,37 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
     try {
       const requestData = { businessInfo, currentTheme }
       console.log(`🚀 [AI-GENERATOR] Sending request (attempt ${retryCount + 1}/${maxRetries + 1}):`, requestData)
-      
+
       // Update progress messages gradually
       const progressTimeouts: NodeJS.Timeout[] = []
       progressTimeouts.push(setTimeout(() => {
         setProgressMessage('🤖 AI đang phân tích thông tin doanh nghiệp của bạn...')
       }, 5000))
-      
+
       progressTimeouts.push(setTimeout(() => {
         setProgressMessage('✨ AI đang tạo nội dung và màu sắc phù hợp...')
       }, 15000))
-      
+
       progressTimeouts.push(setTimeout(() => {
         setProgressMessage('📝 AI đang hoàn thiện các section chi tiết...')
       }, 30000))
-      
+
       progressTimeouts.push(setTimeout(() => {
         setProgressMessage('⏳ Sắp xong rồi... AI đang kiểm tra và tối ưu nội dung...')
       }, 60000))
-      
+
       progressTimeouts.push(setTimeout(() => {
         setProgressMessage('🕐 AI vẫn đang xử lý... Đây là một request phức tạp, vui lòng kiên nhẫn...')
       }, 90000))
-      
+
       progressTimeouts.push(setTimeout(() => {
         setProgressMessage('⏰ Gần hoàn thành... AI đang tổng hợp tất cả nội dung...')
       }, 120000))
-      
+
       // Tăng timeout cho fetch request lên 180 giây (3 phút)
       const controller = new AbortController()
       const fetchTimeoutId = setTimeout(() => controller.abort(), 180000) // 180 seconds timeout
-      
+
       const response = await fetch('/api/generate-theme', {
         method: 'POST',
         headers: {
@@ -131,18 +131,18 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
         body: JSON.stringify(requestData),
         signal: controller.signal
       })
-      
+
       // Clear all timeouts
       clearTimeout(fetchTimeoutId)
       progressTimeouts.forEach(t => clearTimeout(t))
-      
+
       console.log('📡 [AI-GENERATOR] Response status:', response.status, response.statusText)
       setProgressMessage('📦 Đang xử lý và định dạng dữ liệu...')
 
       // Xử lý 504 Gateway Timeout với retry logic
       if (response.status === 504) {
         console.warn(`⏱️ [AI-GENERATOR] Gateway timeout (attempt ${retryCount + 1}/${maxRetries + 1})`)
-        
+
         if (retryCount < maxRetries) {
           // Exponential backoff: 3s, 6s, 12s
           const backoffDelay = Math.pow(2, retryCount) * 3000
@@ -151,7 +151,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
             `🔄 Đang thử lại lần ${retryCount + 2}/${maxRetries + 1} sau ${backoffDelay / 1000}s\n\n` +
             `💡 AI đang phân tích và tạo nội dung chi tiết cho doanh nghiệp của bạn. Vui lòng đợi thêm chút...`
           )
-          
+
           await new Promise(resolve => setTimeout(resolve, backoffDelay))
           return generateContent(retryCount + 1)
         } else {
@@ -178,7 +178,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
           statusText: response.statusText,
           errorText: errorText
         })
-        
+
         // Xử lý các lỗi khác với retry cho 503
         if (response.status === 503 && retryCount < maxRetries) {
           const backoffDelay = Math.pow(2, retryCount) * 2000
@@ -186,13 +186,13 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
           await new Promise(resolve => setTimeout(resolve, backoffDelay))
           return generateContent(retryCount + 1)
         }
-        
+
         throw new Error(`HTTP ${response.status}: ${response.statusText}\n\nChi tiết: ${errorText}`)
       }
 
       const result = await response.json()
       console.log('✅ [AI-GENERATOR] Response received:', result)
-      
+
       // Check if response has themeParams (success) or explicit success flag
       if (result.success || result.themeParams) {
         // Log cache info if available
@@ -203,7 +203,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
             cacheHit: result.cacheHit
           })
         }
-        
+
         setGeneratedContent(result.themeParams)
         setStep('preview')
       } else {
@@ -233,7 +233,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
         currentTheme: currentTheme,
         retryCount
       })
-      
+
       // Handle AbortError (client-side timeout)
       if (err instanceof Error && err.name === 'AbortError') {
         if (retryCount < maxRetries) {
@@ -289,7 +289,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
           console.error('Error saving language to project:', error)
         }
       }
-      
+
       onGenerate(generatedContent)
       setStep('success')
       setTimeout(() => {
@@ -307,8 +307,8 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
   }
 
   return (
-    <Dialog 
-      open={open} 
+    <Dialog
+      open={open}
       onOpenChange={(newOpen: boolean) => {
         // Nếu forceOpen = true và đang ở step form, không cho phép đóng
         if (forceOpen && step === 'form' && !newOpen) {
@@ -503,8 +503,8 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                   </div>
                   {!isGenerating && (
                     <div className="flex justify-center">
-                      <Button 
-                        variant="outline" 
+                      <Button
+                        variant="outline"
                         onClick={() => generateContent(0)}
                         disabled={isGenerating}
                         className="text-sm"
@@ -529,7 +529,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                   Vui lòng hoàn thành thông tin để tiếp tục
                 </div>
               )}
-              <Button 
+              <Button
                 onClick={() => generateContent(0)}
                 disabled={isGenerating || !businessInfo.companyName || !businessInfo.industry || !businessInfo.description}
                 className="bg-purple-600 hover:bg-purple-700"
@@ -571,7 +571,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                 <CardContent>
                   <div className="grid grid-cols-3 gap-3">
                     <div className="text-center">
-                      <div 
+                      <div
                         className="w-full h-16 rounded-lg border"
                         style={{ backgroundColor: generatedContent.colors.primary }}
                       ></div>
@@ -579,7 +579,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                       <p className="text-xs text-gray-600">{generatedContent.colors.primary}</p>
                     </div>
                     <div className="text-center">
-                      <div 
+                      <div
                         className="w-full h-16 rounded-lg border"
                         style={{ backgroundColor: generatedContent.colors.secondary }}
                       ></div>
@@ -587,7 +587,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                       <p className="text-xs text-gray-600">{generatedContent.colors.secondary}</p>
                     </div>
                     <div className="text-center">
-                      <div 
+                      <div
                         className="w-full h-16 rounded-lg border"
                         style={{ backgroundColor: generatedContent.colors.accent }}
                       ></div>
@@ -616,7 +616,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                     <p className="font-medium">Tiêu đề Hero:</p>
                     <p className="text-sm text-gray-600">{generatedContent.content?.hero?.title}</p>
                     <p className="text-xs text-blue-600">
-                      Kích thước: <strong>{generatedContent.content?.hero?.titleSize || 'xl'}</strong> 
+                      Kích thước: <strong>{generatedContent.content?.hero?.titleSize || 'xl'}</strong>
                       | Độ đậm: <strong>{generatedContent.content?.hero?.titleWeight || 'semibold'}</strong>
                     </p>
                   </div>
@@ -624,7 +624,7 @@ const AIContentGenerator: React.FC<AIContentGeneratorProps> = ({
                     <p className="font-medium">Tiêu đề phụ Hero:</p>
                     <p className="text-sm text-gray-600">{generatedContent.content?.hero?.subtitle}</p>
                     <p className="text-xs text-blue-600">
-                      Kích thước: <strong>{generatedContent.content?.hero?.subtitleSize || 'lg'}</strong> 
+                      Kích thước: <strong>{generatedContent.content?.hero?.subtitleSize || 'lg'}</strong>
                       | Độ đậm: <strong>{generatedContent.content?.hero?.subtitleWeight || 'medium'}</strong>
                     </p>
                   </div>

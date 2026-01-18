@@ -4,7 +4,7 @@ import { getVercelAPI } from '@/lib/vercel-api'
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
-        const { repoFullName, projectName } = body
+        const { repoFullName, projectName, customDomain } = body
 
         // Validate required fields
         if (!repoFullName || !projectName) {
@@ -27,13 +27,14 @@ export async function POST(request: NextRequest) {
             .replace(/^-|-$/g, '') // Remove leading/trailing dashes
             .substring(0, 100) // Max 100 chars
 
-        console.log('📋 [VERCEL] Config:', { repoFullName, projectName, sanitizedProjectName })
+        console.log('📋 [VERCEL] Config:', { repoFullName, projectName, sanitizedProjectName, customDomain })
 
         const vercel = getVercelAPI()
 
         const deployment = await vercel.deployFromGitHub({
             repoFullName,
             projectName: sanitizedProjectName,
+            customDomain, // Pass custom domain if provided
         })
 
         console.log('✅ [VERCEL] Deployment completed successfully')

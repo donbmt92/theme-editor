@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { updateUserTier } from '@/lib/update-user-tier'
 
 interface SepayWebhookPayload {
   gateway: string
@@ -20,7 +21,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.text()
     const authHeader = request.headers.get('authorization')
-    
+
     // Log để debug
     console.log('=== SEPAY WEBHOOK DEBUG ===')
     console.log('Headers:', {
@@ -29,7 +30,7 @@ export async function POST(request: NextRequest) {
       userAgent: request.headers.get('user-agent')
     })
     console.log('Raw body:', body)
-    
+
     // Verify Authorization header - Sepay format: "Apikey API_KEY"
     if (!authHeader || !authHeader.startsWith('Apikey ')) {
       console.error('Missing or invalid Authorization header - expected Apikey format')
@@ -41,13 +42,13 @@ export async function POST(request: NextRequest) {
 
     const apiKey = authHeader.replace('Apikey ', '')
     const expectedApiKey = process.env.SEPAY_API_KEY || 'H0N4ZD49WRMW5FBDIFYJOW7VP1LPQAQRKHQIN8DSJYCQSR76CFWXYXLKT2ETP2UU'
-    
+
     console.log('API Key check:', {
       received: apiKey,
       expected: expectedApiKey,
       match: apiKey === expectedApiKey
     })
-    
+
     if (apiKey !== expectedApiKey) {
       console.error('Invalid API key')
       return NextResponse.json(
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
     }
 
     const payload: SepayWebhookPayload = JSON.parse(body)
-    
+
     console.log('Received Sepay webhook:', payload)
 
     // Validate required fields
@@ -85,19 +86,19 @@ export async function POST(request: NextRequest) {
 
     if (!payment) {
       console.error('Payment not found:', payload.referenceCode)
-      
+
       // Log các payment gần đây để debug
       const recentPayments = await prisma.payment.findMany({
         take: 5,
         orderBy: { createdAt: 'desc' },
         select: { id: true, bankTxnId: true, amount: true, status: true, createdAt: true }
       })
-      
+
       console.log('Recent payments:', recentPayments)
-      
+
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'Payment not found',
           referenceCode: payload.referenceCode,
           recentPayments: recentPayments.map(p => ({
@@ -129,18 +130,12 @@ export async function POST(request: NextRequest) {
       }
     })
 
-    // Update user role based on payment amount (assuming plan pricing)
-    let userRole: 'USER' | 'ADMIN' = 'USER'
-    if (payload.transferAmount >= 599000) { // Pro plan
-      userRole = 'ADMIN'
-    }
-
-    await prisma.user.update({
-      where: { id: payment.userId },
-      data: { role: userRole }
-    })
+    // Auto-update user tier based on payment history
+    const { updateUserTier } = await import('@/lib/update-user-tier')
+    const newTier = await updateUserTier(payment.userId)
 
     console.log(`Payment ${payload.referenceCode} marked as PAID via ${payload.gateway}`)
+    console.log(`User tier updated: userId=${payment.userId}, tier=${newTier}`)
 
     // Send success response to Sepay
     return NextResponse.json({
@@ -148,6 +143,7 @@ export async function POST(request: NextRequest) {
       message: 'Webhook processed successfully',
       paymentId: payment.id,
       status: 'PAID',
+      userTier: newTier,
       gateway: payload.gateway,
       amount: payload.transferAmount
     })

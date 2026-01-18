@@ -13,6 +13,7 @@ model User {
   passwordHash String    @map("password_hash")
   name         String?
   role         UserRole  @default(USER)
+  tier         UserTier  @default(FREE)
   createdAt    DateTime  @default(now()) @map("created_at")
   updatedAt    DateTime  @updatedAt @map("updated_at")
   payments     Payment[]
@@ -109,6 +110,12 @@ model Export {
 enum UserRole {
   USER
   ADMIN
+}
+
+enum UserTier {
+  FREE
+  STANDARD
+  PRO
 }
 
 enum PaymentStatus {

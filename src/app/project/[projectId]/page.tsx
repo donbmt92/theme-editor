@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import AIContentGenerator from '@/components/ui/ai-content-generator'
 import ReactExportDialog from '@/components/ui/react-export-dialog'
 import { useUndoRedo } from '@/hooks/use-undo-redo'
@@ -432,6 +433,7 @@ const createDefaultThemeParams = (): ThemeParams => ({
 const ProjectEditor = () => {
   const params = useParams()
   const projectId = params.projectId as string
+  const { data: session } = useSession()
   const [project, setProject] = useState<ProjectData | null>(null)
   const [themeParams, setThemeParams] = useState<ThemeParams | null>(null)
   const [activeTab, setActiveTab] = useState<TabType>('colors')
@@ -741,6 +743,7 @@ const ProjectEditor = () => {
             themeParams={themeParams}
             onTabChange={setActiveTab}
             updateThemeParam={updateThemeParam}
+            userTier={session?.user?.tier}
           />
 
           {/* Right Panel - Preview */}

@@ -9,6 +9,7 @@ import ProblemsTab from './tabs/ProblemsTab'
 import SolutionsTab from './tabs/SolutionsTab'
 import LeadMagnetTab from './tabs/LeadMagnetTab'
 import ProductsTab from './tabs/ProductsTab'
+import ProductPageTab from './tabs/ProductPageTab'
 import WhyChooseUsTab from './tabs/WhyChooseUsTab'
 import TestimonialsTab from './tabs/TestimonialsTab'
 import FooterTab from './tabs/FooterTab'
@@ -19,9 +20,10 @@ interface TabContentProps {
   activeTab: TabType
   themeParams: ThemeParams
   updateThemeParam: (path: string[], value: string | number | unknown) => void
+  userTier?: 'FREE' | 'STANDARD' | 'PRO'
 }
 
-const TabContent = ({ activeTab, themeParams, updateThemeParam }: TabContentProps) => {
+const TabContent = ({ activeTab, themeParams, updateThemeParam, userTier = 'FREE' }: TabContentProps) => {
   // Render tab content based on activeTab
   switch (activeTab) {
     case 'colors':
@@ -53,6 +55,9 @@ const TabContent = ({ activeTab, themeParams, updateThemeParam }: TabContentProp
 
     case 'products':
       return <ProductsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
+
+    case 'productPage':
+      return <ProductPageTab themeParams={themeParams} updateThemeParam={updateThemeParam} userTier={userTier} />
 
     case 'whyChooseUs':
       return <WhyChooseUsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />

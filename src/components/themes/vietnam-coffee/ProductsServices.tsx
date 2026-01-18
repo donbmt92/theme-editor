@@ -509,15 +509,82 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                       {item.price}
                     </div>
                   )}
+                  {item.id && (
+                    <Button
+                      size="lg"
+                      style={getButtonStyles('primary')}
+                      onClick={() => {
+                        // Helper to generate slug
+                        const toSlug = (text: string) => {
+                          return text
+                            .toString()
+                            .toLowerCase()
+                            .trim()
+                            .replace(/\s+/g, '-')
+                            .replace(/[^\w\-]+/g, '')
+                            .replace(/\-\-+/g, '-')
+                            .replace(/^-+/, '')
+                            .replace(/-+$/, '')
+                        }
+
+                        // Use name to generate slug if available, otherwise fallback to id
+                        const slug = item.name ? toSlug(item.name) : item.id
+                        window.location.href = `/products/${slug}`
+                      }}
+                    >
+                      View Details
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  )}
+
                 </div>
               </div>
             ))}
           </div>
         )}
 
+        {/* Product Page CTA - Only show if user has product page enabled (PRO tier) */}
+        {theme.content?.productPages && Object.keys(theme.content.productPages).length > 0 && (
+          <div className="mt-20 text-center">
+            <div
+              className={cn("p-12 border-2", getBorderRadiusClass())}
+              style={{
+                borderColor: `${theme.colors.primary}30`,
+                background: `linear-gradient(135deg, ${theme.colors.primary}08, ${theme.colors.accent}08)`
+              }}
+            >
+              <h3
+                className={cn("font-bold mb-4", getHeadingSize('medium'))}
+                style={{ color: theme.colors.text }}
+              >
+                Detailed Product Information
+              </h3>
+              <p
+                className={cn("mb-8 max-w-2xl mx-auto", getBodySize())}
+                style={{ color: theme.colors.muted || '#718096' }}
+              >
+                View our comprehensive product page with specifications, certifications, and export information
+              </p>
+              <Button
+                size="lg"
+                style={getButtonStyles('primary')}
+                onClick={() => {
+                  const productSection = document.getElementById('product-page')
+                  if (productSection) {
+                    productSection.scrollIntoView({ behavior: 'smooth' })
+                  }
+                }}
+              >
+                View Product Page
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        )}
+
       </div>
-    </section>
+    </section >
   );
 };
 
-export default ProductsServices; 
+export default ProductsServices;

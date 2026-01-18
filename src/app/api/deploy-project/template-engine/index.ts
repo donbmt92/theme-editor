@@ -9,25 +9,26 @@ export class TemplateEngine {
    * Generate file content based on file info and parameters
    */
   static async generateFileContent(
-    fileInfo: any, 
-    themeParams: any, 
-    projectName: string, 
-    description: string, 
-    serverType?: string, 
-    domain?: string, 
+    fileInfo: any,
+    themeParams: any,
+    projectName: string,
+    description: string,
+    serverType?: string,
+    domain?: string,
     timestamp?: number
   ): Promise<string> {
     const { generateStaticCss, generateStaticJs, generateSitemapFile, generateRobotsTxtFile, generateManifestFile, generateStaticReadme } = await import('./static-files')
     const { generateDeployScript } = await import('./deploy-scripts')
-    const { 
-      generateStaticHeader, 
-      generateStaticHeroSection, 
+    const {
+      generateStaticHeader,
+      generateStaticHeroSection,
       generateStaticLeadMagnetSection,
-      generateStaticProblemsSection, 
-      generateStaticProductsSection, 
+      generateStaticProblemsSection,
+      generateStaticProductsSection,
       generateStaticTestimonialsSection,
       generateStaticWhyChooseUsSection,
-      generateStaticFooter 
+      generateStaticFooter,
+      generateStaticProductPage
     } = await import('./html-templates')
 
     if (fileInfo.type === 'placeholder') {
@@ -59,7 +60,7 @@ export class TemplateEngine {
           return ''
       }
     }
-    
+
     return ''
   }
 
@@ -69,12 +70,12 @@ export class TemplateEngine {
   private static async generateMainHtml(projectName: string, description: string, themeParams: any): Promise<string> {
     const content = themeParams?.content || {}
     const colors = themeParams?.colors || {}
-    
+
     const metaTitle = content?.meta?.title || projectName
     const metaDescription = content?.meta?.description || description
     const metaKeywords = content?.meta?.keywords || 'business, website, professional'
     const companyName = content?.header?.title || projectName
-    
+
     // Generate all sections
     const headerSection = await this.generateHeaderSection(content, themeParams)
     const heroSection = await this.generateHeroSection(content, themeParams)
@@ -83,8 +84,9 @@ export class TemplateEngine {
     const productsSection = await this.generateProductsSection(content, themeParams)
     const whyChooseUsSection = await this.generateWhyChooseUsSection(content, themeParams)
     const testimonialsSection = await this.generateTestimonialsSection(content, themeParams)
+    const productPageSection = await this.generateProductPageSection(content, themeParams)
     const footerSection = await this.generateFooterSection(themeParams)
-    
+
     return `<!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -175,6 +177,9 @@ export class TemplateEngine {
         
         <!-- Testimonials Section -->
         ${testimonialsSection}
+        
+        <!-- Product Page Section (PRO tier only) -->
+        ${productPageSection}
     </main>
     
     <!-- Footer -->
@@ -229,5 +234,10 @@ export class TemplateEngine {
   private static async generateFooterSection(themeParams: any): Promise<string> {
     const { generateStaticFooter } = await import('./html-templates')
     return generateStaticFooter(themeParams)
+  }
+
+  private static async generateProductPageSection(content: any, themeParams: any): Promise<string> {
+    const { generateStaticProductPage } = await import('./html-templates')
+    return generateStaticProductPage({ content, themeParams })
   }
 }

@@ -24,7 +24,7 @@ export class VercelAPI {
     /**
    * Deploy a GitHub repository to Vercel
    */
-    async deployFromGitHub(options: DeployFromGitHubOptions): Promise<VercelDeploymentResponse> {
+    async deployFromGitHub(options: DeployFromGitHubOptions & { customDomain?: string }): Promise<VercelDeploymentResponse> {
         try {
             console.log('🚀 [VERCEL] Starting deployment from GitHub:', options.repoFullName)
 
@@ -96,6 +96,18 @@ export class VercelAPI {
                 }
             }
 
+            // Step 2.5: Add Custom Domain if provided
+            if (options.customDomain) {
+                console.log('🌐 [VERCEL] Adding custom domain:', options.customDomain)
+                try {
+                    await this.addDomainToProject(options.projectName, options.customDomain)
+                    console.log('✅ [VERCEL] Custom domain added successfully')
+                } catch (domainError: any) {
+                    console.warn('⚠️ [VERCEL] Failed to add custom domain:', domainError.message)
+                    // Don't fail the whole deployment if domain fails
+                }
+            }
+
             // Step 3: Trigger deployment using repoId
             console.log('🚀 [VERCEL] Triggering deployment...')
             const deploymentResponse = await fetch('https://api.vercel.com/v13/deployments', {
@@ -129,10 +141,15 @@ export class VercelAPI {
                 ? deployment.url
                 : `https://${deployment.url}`
 
+            // Use custom domain as primary if available, otherwise default
+            const finalUrl = options.customDomain
+                ? `https://${options.customDomain}`
+                : deploymentUrl
+
             const projectUrl = `https://vercel.com/${this.teamId || 'account'}/${project.name}`
 
             return {
-                deploymentUrl,
+                deploymentUrl: finalUrl,
                 projectUrl,
                 deploymentId: deployment.id,
             }
@@ -140,6 +157,96 @@ export class VercelAPI {
         } catch (error: any) {
             console.error('❌ [VERCEL] Error deploying:', error.message)
             throw new Error(`Failed to deploy to Vercel: ${error.message}`)
+        }
+    }
+
+    /**
+     * Add a domain to a Vercel project
+     */
+    async addDomainToProject(projectName: string, domain: string): Promise<void> {
+        try {
+            const response = await fetch(`https://api.vercel.com/v9/projects/${projectName}/domains`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json',
+                    ...(this.teamId && { 'X-Vercel-Team-Id': this.teamId }),
+                },
+                body: JSON.stringify({
+                    name: domain
+                }),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+
+                // Handle "Domain already in use" error
+                if (response.status === 409 && errorData.error?.code === 'domain_already_in_use') {
+                    console.log(`⚠️ [VERCEL] Domain ${domain} is already in use. Attempting to move...`)
+
+                    // Strategy: Get Domain Info to find owning project
+                    const domainInfo = await this.getDomainInfo(domain)
+                    if (domainInfo && domainInfo.projectId) {
+                        console.log(`🔍 [VERCEL] Found domain ${domain} on project ${domainInfo.projectId}. Removing...`)
+                        await this.removeDomainFromProject(domainInfo.projectId, domain)
+
+                        // Retry adding
+                        console.log(`🔄 [VERCEL] Retrying add domain ${domain} to ${projectName}...`)
+                        return this.addDomainToProject(projectName, domain)
+                    }
+                }
+
+                throw new Error(errorData.error?.message || 'Failed to add domain')
+            }
+
+            return await response.json()
+        } catch (error: any) {
+            console.error('❌ [VERCEL] Error adding domain:', error.message)
+            throw error
+        }
+    }
+
+    /**
+     * Remove a domain from a Vercel project
+     */
+    async removeDomainFromProject(projectIdOrName: string, domain: string): Promise<void> {
+        try {
+            const response = await fetch(`https://api.vercel.com/v9/projects/${projectIdOrName}/domains/${domain}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    ...(this.teamId && { 'X-Vercel-Team-Id': this.teamId }),
+                },
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json()
+                throw new Error(errorData.error?.message || 'Failed to remove domain')
+            }
+        } catch (error: any) {
+            console.error('❌ [VERCEL] Error removing domain:', error.message)
+            throw error
+        }
+    }
+
+    /**
+     * Get domain info to see which project it belongs to
+     */
+    async getDomainInfo(domain: string): Promise<any> {
+        try {
+            const response = await fetch(`https://api.vercel.com/v6/domains/${domain}`, {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    ...(this.teamId && { 'X-Vercel-Team-Id': this.teamId }),
+                },
+            })
+
+            if (response.ok) {
+                return await response.json()
+            }
+            return null
+        } catch (error) {
+            return null
         }
     }
 

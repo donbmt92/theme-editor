@@ -33,7 +33,7 @@ class RateLimiter {
       current.count = 1
       current.resetTime = now + config.windowMs
       this.store.set(identifier, current)
-      
+
       return {
         allowed: true,
         remaining: config.requests - 1,
@@ -97,27 +97,27 @@ class RateLimiter {
 }
 
 // Global instance for high-volume scenarios
-export const globalRateLimiter = new RateLimiter({ 
+export const globalRateLimiter = new RateLimiter({
   requests: 600, // Allow more requests initially
   windowMs: 60 * 1000 // 1 minute window
 })
 
 // Tiered rate limiting for different user types
 export const tierLimits = {
-  free: { requests: 10, windowMs: 60 * 1000 },      // 10 req/min
-  premium: { requests: 100, windowMs: 60 * 1000 },  // 100 req/min  
-  enterprise: { orders: 500, windowMs: 60 * 1000 }   // 500 req/min
+  FREE: { requests: 10, windowMs: 60 * 1000 },         // 10 req/min
+  STANDARD: { requests: 50, windowMs: 60 * 1000 },     // 50 req/min  
+  PRO: { requests: 200, windowMs: 60 * 1000 }          // 200 req/min
 } as const
 
 export function checkRateLimit(
-  identifier: string, 
-  requests?: number, 
+  identifier: string,
+  requests?: number,
   windowMinutes?: number
 ): RateLimitResult {
-  const limit = requests && windowMinutes ? 
-    { requests, windowMs: windowMinutes * 60 * 1000 } : 
+  const limit = requests && windowMinutes ?
+    { requests, windowMs: windowMinutes * 60 * 1000 } :
     undefined
-    
+
   return globalRateLimiter.check(identifier, limit)
 }
 
@@ -126,17 +126,9 @@ export function checkTieredRateLimit(
   tier: keyof typeof tierLimits
 ): RateLimitResult {
   const config = tierLimits[tier]
-  
-  // Handle different tier structures
-  let requests: number
-  if ('requests' in config) {
-    requests = config.requests
-  } else {
-    requests = config.orders // Handle enterprise tier
-  }
-  
+
   return globalRateLimiter.check(identifier, {
-    requests,
+    requests: config.requests,
     windowMs: config.windowMs
   })
 }
