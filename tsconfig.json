@@ -38,6 +38,7 @@
     "node_modules",
     "public/src/**",
     "product/**",
-    "templates/**"
+    "templates/**",
+    "scripts/**"
   ]
 }
