@@ -210,7 +210,7 @@ const Footer = ({ theme, content }: FooterProps) => {
       style={{
         backgroundColor: content.colorMode === 'custom' && content.backgroundColor
           ? content.backgroundColor
-          : theme.sections?.footer?.backgroundColor || theme.colors.secondary || '#1F2937',
+          : theme.sections?.footer?.backgroundColor || theme.colors.primary || '#1F2937',
         color: content.colorMode === 'custom' && content.textColor
           ? content.textColor
           : theme.sections?.footer?.textColor || theme.colors.text || '#F9FAFB',
@@ -233,7 +233,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                 <div
                   className={cn("h-8 w-8 rounded-full", getBorderRadiusClass())}
                   style={{
-                    background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`
+                    background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.accent})`
                   }}
                 ></div>
                 {(content.companyName && content.companyName.trim()) && (
@@ -268,7 +268,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                     <div className="flex items-start space-x-3">
                       <MapPin
                         className="h-5 w-5 mt-0.5"
-                        style={{ color: theme.colors.primary }}
+                        style={{ color: theme.colors.secondary }}
                       />
                       <div>
                         <div
@@ -296,7 +296,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                     <div className="flex items-center space-x-3">
                       <Phone
                         className="h-5 w-5"
-                        style={{ color: theme.colors.primary }}
+                        style={{ color: theme.colors.secondary }}
                       />
                       <div>
                         <div
@@ -324,7 +324,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                     <div className="flex items-center space-x-3">
                       <Mail
                         className="h-5 w-5"
-                        style={{ color: theme.colors.primary }}
+                        style={{ color: theme.colors.secondary }}
                       />
                       <div>
                         <div
@@ -343,7 +343,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                     <div className="flex items-center space-x-3">
                       <Clock
                         className="h-5 w-5"
-                        style={{ color: theme.colors.primary }}
+                        style={{ color: theme.colors.secondary }}
                       />
                       <div
                         className="text-sm"
