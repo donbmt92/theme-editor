@@ -6,11 +6,13 @@ const nextConfig: NextConfig = {
     PORT: '3080'
   },
   images: {
-    domains: ['images.unsplash.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
     unoptimized: true
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
   // Remove serverExternalPackages as it can cause issues with file system operations
   // serverExternalPackages: ['fs', 'path'],
