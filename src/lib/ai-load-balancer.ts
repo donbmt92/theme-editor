@@ -19,7 +19,7 @@ interface APIPerformanceMetrics {
 class AILoadBalancer {
   private apiKeys: APIKeyInfo[] = []
   private metrics = new Map<string, APIPerformanceMetrics>()
-  
+
   constructor() {
     this.initializeAPIKeys()
     this.startMetricsCleanup()
@@ -31,7 +31,7 @@ class AILoadBalancer {
     for (let i = 0; i < keyCount; i++) {
       const keyIndex = i === 0 ? '' : `_${i + 1}`
       const key = process.env[`GOOGLE_GEMINI_API_KEY${keyIndex}`]
-      
+
       if (key && key.trim()) {
         this.apiKeys.push({
           key,
@@ -68,14 +68,14 @@ class AILoadBalancer {
     // Filter out keys that have reached daily limits or high error rates
     const availableKeys = this.apiKeys.filter(keyInfo => {
       return keyInfo.errors < 10 && // Less than 10 errors
-             keyInfo.successRate > 0.7 && // Success rate above 70%
-             (Date.now() - keyInfo.lastUsed) > 1000 // Used more than 1 second ago
+        keyInfo.successRate > 0.7 && // Success rate above 70%
+        (Date.now() - keyInfo.lastUsed) > 1000 // Used more than 1 second ago
     })
 
     // Check if all keys are quota exceeded
     const quotaExceededKeys = this.apiKeys.filter(keyInfo => keyInfo.errors >= 999)
     console.log(`🔍 Key status check: ${quotaExceededKeys.length}/${this.apiKeys.length} keys quota exceeded`)
-    
+
     if (quotaExceededKeys.length === this.apiKeys.length) {
       console.log(`🚨 All ${this.apiKeys.length} API keys have exceeded quota limits!`)
       throw new Error('Tất cả API keys đều đã hết quota')
@@ -105,12 +105,12 @@ class AILoadBalancer {
 
     // Sort by score (highest first) and select best one
     scoredKeys.sort((a, b) => b.score - a.score)
-    
+
     const selectedKey = scoredKeys[0].key
     this.updateKeyUsage(selectedKey)
 
     console.log(`🎯 Selected API key: ${selectedKey.substring(0, 10)}... (Score: ${scoredKeys[0].score.toFixed(3)})`)
-    
+
     return selectedKey
   }
 
@@ -142,18 +142,18 @@ class AILoadBalancer {
   updateKeySuccess(key: string, responseTime: number): void {
     const keyInfo = this.apiKeys.find(k => k.key === key)
     const metrics = this.metrics.get(key)
-    
+
     if (keyInfo && metrics) {
       keyInfo.lastUsed = Date.now()
       keyInfo.usageToday++
-      keyInfo.successRate = (keyInfo.usageToday + keyInfo.errors) > 0 
+      keyInfo.successRate = (keyInfo.usageToday + keyInfo.errors) > 0
         ? (keyInfo.usageToday) / (keyInfo.usageToday + keyInfo.errors)
         : 1.0
 
       metrics.totalRequests++
       metrics.successfulRequests++
       metrics.lastUsed = Date.now()
-      
+
       // Update average response time (exponential moving average)
       const alpha = 0.1
       metrics.averageResponseTime = alpha * responseTime + (1 - alpha) * metrics.averageResponseTime
@@ -166,11 +166,11 @@ class AILoadBalancer {
   updateKeyError(key: string, error: string): void {
     const keyInfo = this.apiKeys.find(k => k.key === key)
     const metrics = this.metrics.get(key)
-    
+
     if (keyInfo && metrics) {
       keyInfo.errors++
       keyInfo.lastUsed = Date.now()
-      keyInfo.successRate = (keyInfo.usageToday + keyInfo.errors) > 0 
+      keyInfo.successRate = (keyInfo.usageToday + keyInfo.errors) > 0
         ? (keyInfo.usageToday) / (keyInfo.usageToday + keyInfo.errors)
         : 0
 
@@ -214,18 +214,18 @@ class AILoadBalancer {
           keyInfo.errors = 0
           keyInfo.successRate = 1.0
           keyInfo.resetTime = this.getNextMidnight()
-          
+
           if (wasQuotaExceeded) {
             quotaResetCount++
           }
         }
       }
-      
+
       if (quotaResetCount > 0) {
         console.log(`🔄 Reset quota for ${quotaResetCount} API keys (quota exceeded)`)
       }
-      console.log('🔄 Reset daily API key usage limits')
-    }, 60 * 1000) // Check every minute
+      console.log('🔄 Reset hourly API key usage limits')
+    }, 60 * 60 * 1000) // Check every hour
   }
 
   // Get all API keys
@@ -240,7 +240,7 @@ class AILoadBalancer {
     }
 
     // Get key info for available keys
-    const availableKeyInfos = this.apiKeys.filter(keyInfo => 
+    const availableKeyInfos = this.apiKeys.filter(keyInfo =>
       availableKeys.includes(keyInfo.key)
     )
 
@@ -253,12 +253,12 @@ class AILoadBalancer {
 
     // Sort by score (highest first) and select best one
     scoredKeys.sort((a, b) => b.score - a.score)
-    
+
     const selectedKey = scoredKeys[0].key
     this.updateKeyUsage(selectedKey)
 
     console.log(`🎯 Selected API key from available: ${selectedKey.substring(0, 10)}... (Score: ${scoredKeys[0].score.toFixed(3)})`)
-    
+
     return selectedKey
   }
 
@@ -275,7 +275,7 @@ class AILoadBalancer {
     }>
   } {
     const totalRequestsToday = this.apiKeys.reduce((sum, key) => sum + key.usageToday, 0)
-    const averageSuccessRate = this.apiKeys.length > 0 
+    const averageSuccessRate = this.apiKeys.length > 0
       ? this.apiKeys.reduce((sum, key) => sum + key.successRate, 0) / this.apiKeys.length
       : 0
 
