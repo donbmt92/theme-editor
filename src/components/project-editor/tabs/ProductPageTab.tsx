@@ -58,6 +58,14 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
     const currentProductPage = activeProductPageId ? productPages[activeProductPageId] : undefined
     const selectedProduct = products.find((p: any) => p.id === activeProductPageId)
 
+    // Debug log
+    console.log('[ProductPageTab] Current state:', {
+        activeProductPageId,
+        hasCurrentProductPage: !!currentProductPage,
+        currentProductPageKeys: currentProductPage ? Object.keys(currentProductPage) : [],
+        heroData: currentProductPage?.hero
+    })
+
     const handleGenerateProductPage = async () => {
         if (!activeProductPageId) {
             alert('Vui lòng chọn sản phẩm trước')
@@ -79,13 +87,17 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
 
             const data = await response.json()
 
+            console.log('Generated data:', data.productPageData)
+            console.log('Current themeParams.projectLanguage:', themeParams.projectLanguage)
+
             // Update product page for this specific productId
+            // Replace old data completely, but preserve enabled and showPreview settings
             const updatedProductPages = {
                 ...productPages,
                 [activeProductPageId]: {
-                    ...currentProductPage,
                     ...data.productPageData,
-                    enabled: true
+                    enabled: currentProductPage?.enabled ?? true,
+                    showPreview: currentProductPage?.showPreview ?? false
                 }
             }
 

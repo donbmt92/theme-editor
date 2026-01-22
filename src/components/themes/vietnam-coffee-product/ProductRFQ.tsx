@@ -6,13 +6,16 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Send, CheckCircle, Clock, Package, MessageSquare } from "lucide-react"
-import { ThemeParams } from "@/types"
+import { ThemeParams } from "@/types";
+import { getTranslation } from "@/lib/product-translations";
 
 interface ProductRFQProps {
-    theme: ThemeParams
+    theme: ThemeParams,
+    content: any
 }
 
-const ProductRFQ = ({ theme }: ProductRFQProps) => {
+const ProductRFQ = ({ theme, content }: ProductRFQProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const [formData, setFormData] = useState({
         name: "",
         company: "",
@@ -33,9 +36,9 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
     }
 
     const benefits = [
-        { icon: Package, text: "Free samples for qualified buyers" },
-        { icon: Clock, text: "Custom quotation within 12-24 hours" },
-        { icon: MessageSquare, text: "Direct communication with sales engineer" },
+        { icon: Package, text: t.freeSamplesQualified },
+        { icon: Clock, text: t.customQuotation12to24 },
+        { icon: MessageSquare, text: t.directSalesEngineer },
     ]
 
     return (
@@ -57,7 +60,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                                 fontFamily: theme.typography?.fontFamily || "Inter"
                             }}
                         >
-                            Get Free Sample & Customized Quotation
+                            {content?.title || t.requestQuotation}
                         </h2>
 
                         <p
@@ -67,7 +70,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                                 fontFamily: theme.typography?.fontFamily || "Inter"
                             }}
                         >
-                            Ready to discuss your project requirements? Our team provides personalized quotations based on your specific needs.
+                            {t.rfqDescription}
                         </p>
 
                         <ul className="space-y-4">
@@ -103,7 +106,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                                 }}
                             >
                                 <CheckCircle className="h-4 w-4" />
-                                Response guaranteed
+                                {t.responseGuaranteed}
                             </div>
                         </div>
                     </div>
@@ -117,13 +120,13 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                             className="text-xl font-semibold mb-6"
                             style={{ color: theme.colors?.text || "#1F2937" }}
                         >
-                            Request for Quotation
+                            {t.requestQuotation}
                         </h3>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="rfq-name">Name *</Label>
+                                    <Label htmlFor="rfq-name">{t.nameRequired}</Label>
                                     <Input
                                         id="rfq-name"
                                         placeholder="Your full name"
@@ -133,7 +136,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="rfq-company">Company *</Label>
+                                    <Label htmlFor="rfq-company">{t.companyRequired}</Label>
                                     <Input
                                         id="rfq-company"
                                         placeholder="Company name"
@@ -146,7 +149,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
 
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="rfq-email">Email *</Label>
+                                    <Label htmlFor="rfq-email">{t.emailRequired}</Label>
                                     <Input
                                         id="rfq-email"
                                         type="email"
@@ -157,7 +160,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="rfq-phone">WhatsApp / Phone</Label>
+                                    <Label htmlFor="rfq-phone">{t.whatsappPhone}</Label>
                                     <Input
                                         id="rfq-phone"
                                         placeholder="+1 234 567 890"
@@ -168,7 +171,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="rfq-quantity">Estimated Order Quantity</Label>
+                                <Label htmlFor="rfq-quantity">{t.estimatedOrderQuantity}</Label>
                                 <Input
                                     id="rfq-quantity"
                                     placeholder="e.g., 1,000 units / month"
@@ -178,7 +181,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                             </div>
 
                             <div className="space-y-2">
-                                <Label htmlFor="rfq-requirements">Custom Requirements (Optional)</Label>
+                                <Label htmlFor="rfq-requirements">{t.customRequirementsOptional}</Label>
                                 <Textarea
                                     id="rfq-requirements"
                                     placeholder="Describe any specific requirements, customizations, or questions..."
@@ -198,7 +201,7 @@ const ProductRFQ = ({ theme }: ProductRFQProps) => {
                                 }}
                             >
                                 <Send className="h-5 w-5 mr-2" />
-                                Submit RFQ
+                                {t.submitRFQ}
                             </Button>
 
                             <p

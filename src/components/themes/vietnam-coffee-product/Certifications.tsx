@@ -1,7 +1,8 @@
 "use client"
 
 import { Award, Search, ShieldCheck } from "lucide-react"
-import { ThemeParams } from "@/types"
+import { ThemeParams } from "@/types";
+import { getTranslation } from "@/lib/product-translations";
 
 interface Certification {
     name: string
@@ -27,6 +28,7 @@ interface CertificationsProps {
 }
 
 const Certifications = ({ theme, content }: CertificationsProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const certifications = content?.certifications || [
         { name: "ISO 9001:2015", description: "Quality Management System" },
         { name: "ISO 14001", description: "Environmental Management" },
@@ -69,12 +71,12 @@ const Certifications = ({ theme, content }: CertificationsProps) => {
                                 fontFamily: theme.typography?.fontFamily || "Inter"
                             }}
                         >
-                            {content?.title || "Certifications & Quality Control"}
+                            {content?.title || t.certificationsQualityControl}
                         </h2>
                         <p
                             style={{ color: `${theme.colors?.text || "#1F2937"}99` }}
                         >
-                            {content?.subtitle || "International standards and rigorous quality processes"}
+                            {content?.subtitle || t.certificationsSubtitle}
                         </p>
                     </div>
                 </div>
@@ -86,7 +88,7 @@ const Certifications = ({ theme, content }: CertificationsProps) => {
                             className="font-semibold text-lg mb-6"
                             style={{ color: theme.colors?.text || "#1F2937" }}
                         >
-                            International Certifications
+                            {t.internationalCertifications}
                         </h3>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             {certifications.map((cert, index) => (
@@ -133,7 +135,7 @@ const Certifications = ({ theme, content }: CertificationsProps) => {
                             />
                             <p className="text-sm">
                                 <span className="font-medium" style={{ color: theme.colors?.text }}>
-                                    Third-party inspection available:
+                                    {t.thirdPartyInspection}:
                                 </span>
                                 <span
                                     className="ml-1"
@@ -151,7 +153,7 @@ const Certifications = ({ theme, content }: CertificationsProps) => {
                             className="font-semibold text-lg mb-6"
                             style={{ color: theme.colors?.text || "#1F2937" }}
                         >
-                            Quality Control Process
+                            {t.qualityControlProcessTitle}
                         </h3>
                         <div className="space-y-4">
                             {qcProcess.map((item, index) => (

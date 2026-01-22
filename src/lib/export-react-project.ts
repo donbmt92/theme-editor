@@ -173,9 +173,10 @@ export async function generateReactProject(
     console.log('✅ [EXPORT] Generated product data file')
 
     // 16b. Generate product routes
-    const productRoutes = generateProductRoutes(enabledProducts)
+    const projectLanguage = themeParams.projectLanguage || 'vietnamese'
+    const productRoutes = generateProductRoutes(enabledProducts, projectLanguage)
     Object.assign(files, productRoutes)
-    console.log(`✅ [EXPORT] Generated ${enabledProducts.length} product routes`)
+    console.log(`✅ [EXPORT] Generated ${enabledProducts.length} product routes with language: ${projectLanguage}`)
 
     // 16c. Generate products index page
     files['src/app/products/page.tsx'] = generateProductsIndexPage(enabledProducts)
@@ -208,6 +209,16 @@ export async function generateReactProject(
         console.log('✅ [EXPORT] Added ProductPage wrapper')
       } catch (err) {
         console.warn('⚠️ [EXPORT] Could not find ProductPage template')
+      }
+
+      // 16g. Copy translations file for multilingual support
+      try {
+        const translationsPath = path.join(process.cwd(), 'product', 'src', 'lib', 'translations.ts')
+        const translationsContent = await fs.readFile(translationsPath, 'utf-8')
+        files['src/lib/translations.ts'] = translationsContent
+        console.log('✅ [EXPORT] Added multilingual translations')
+      } catch (err) {
+        console.warn('⚠️ [EXPORT] Could not find translations file')
       }
 
     } catch (error) {

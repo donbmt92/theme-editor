@@ -39,7 +39,10 @@ export function getEnabledProducts(themeParams: ThemeParams) {
 /**
  * Generate product page routes using slugs
  */
-export function generateProductRoutes(enabledProducts: Array<{ id: string; slug: string; data: any }>): ProjectFiles {
+export function generateProductRoutes(
+  enabledProducts: Array<{ id: string; slug: string; data: any }>,
+  projectLanguage: string = 'vietnamese'
+): ProjectFiles {
   const files: ProjectFiles = {}
 
   for (const product of enabledProducts) {
@@ -69,7 +72,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function ProductPage_${toPascalCase(slug)}() {
-  return <ProductPage slug="${slug}" />
+  return <ProductPage slug="${slug}" language="${projectLanguage}" />
 }
 `
   }

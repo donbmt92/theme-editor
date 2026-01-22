@@ -1,7 +1,8 @@
 "use client"
 
 import { Settings, CheckCircle } from "lucide-react"
-import { ThemeParams } from "@/types"
+import { ThemeParams } from "@/types";
+import { getTranslation } from "@/lib/product-translations";
 
 interface Specification {
     label: string
@@ -21,6 +22,7 @@ interface TechnicalSpecsProps {
 }
 
 const TechnicalSpecs = ({ theme, content }: TechnicalSpecsProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const specifications = content?.specifications || [
         { label: "Material", value: "Stainless Steel 304 / Aluminum 6061 / ABS Plastic" },
         { label: "Size / Dimensions", value: "L x W x H: 100mm x 50mm x 25mm" },
@@ -73,7 +75,7 @@ const TechnicalSpecs = ({ theme, content }: TechnicalSpecsProps) => {
                         <p
                             style={{ color: `${theme.colors?.text || "#1F2937"}99` }}
                         >
-                            {content?.subtitle || "Detailed product specifications and standards"}
+                            {content?.subtitle || t.technicalSpecsSubtitle}
                         </p>
                     </div>
                 </div>
@@ -136,7 +138,7 @@ const TechnicalSpecs = ({ theme, content }: TechnicalSpecsProps) => {
                                 className="font-semibold text-lg mb-4"
                                 style={{ color: theme.colors?.text || "#1F2937" }}
                             >
-                                Customization Options
+                                {t.customizationOptionsTitle}
                             </h3>
                             <ul className="space-y-3">
                                 {customizationOptions.map((item, index) => (

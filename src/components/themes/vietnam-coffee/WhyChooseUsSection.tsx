@@ -326,6 +326,7 @@ const WhyChooseUsSection = ({ theme, content }: WhyChooseUsSectionProps) => {
 
   return (
     <section
+      id="whyChooseUs"
       className="py-20"
       style={{
         backgroundColor: content.colorMode === 'custom' && content.backgroundColor

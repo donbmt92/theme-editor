@@ -441,11 +441,12 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
 
   return (
     <section
+      id="about"
       className="py-20"
       style={{
-        backgroundColor: content.problems?.colorMode === 'custom' && content.problems?.backgroundColor
-          ? content.problems.backgroundColor
-          : theme.sections?.problems?.backgroundColor || theme.colors.background || '#F8F9FA',
+        backgroundColor: content.about?.backgroundColor
+          ? content.about.backgroundColor
+          : theme.sections?.about?.backgroundColor || theme.colors.background || '#FFFFFF',
         ...getTypographyStyles()
       }}
     >

@@ -1,7 +1,8 @@
 "use client"
 
-import Image from "next/image"
-import { ThemeParams } from "@/types"
+import { Box, Package as PackageIcon } from "lucide-react";
+import { ThemeParams } from "@/types";
+import { getTranslation } from "@/lib/product-translations";
 import { getIconComponent } from "./iconHelper"
 
 interface Application {
@@ -23,6 +24,7 @@ interface ApplicationsProps {
 }
 
 const Applications = ({ theme, content }: ApplicationsProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
 
     const applications = content?.applications || [
         {
@@ -88,7 +90,7 @@ const Applications = ({ theme, content }: ApplicationsProps) => {
                             fontFamily: theme.typography?.fontFamily || "Inter"
                         }}
                     >
-                        {content?.subtitle || "Industries and applications where our products are successfully deployed"}
+                        {content?.subtitle || t.applicationsSubtitle}
                     </p>
                 </div>
 

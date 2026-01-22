@@ -9,7 +9,22 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Product is required' }, { status: 400 })
         }
 
-        const prompt = `Generate comprehensive B2B product page content in JSON format for the following product:
+        // Get language from themeParams, default to 'vietnamese'
+        const language = themeParams?.projectLanguage || 'vietnamese'
+
+        // Language-specific instructions
+        const languageInstructions: Record<string, string> = {
+            'vietnamese': 'Generate ALL content in Vietnamese language. Use professional Vietnamese business terminology.',
+            'english': 'Generate ALL content in English language. Use professional business terminology.',
+            'chinese': 'Generate ALL content in Chinese (Simplified) language. Use professional business terminology.',
+            'japanese': 'Generate ALL content in Japanese language. Use professional business terminology.',
+        }
+
+        const languageInstruction = languageInstructions[language] || languageInstructions['vietnamese']
+
+        const prompt = `${languageInstruction}
+
+Generate comprehensive B2B product page content in JSON format for the following product:
 
 Product Name: ${product.name}
 Category: ${product.category || 'General'}
@@ -74,6 +89,8 @@ Generate content for a professional B2B export product page with these 13 sectio
 14. **selectedProductId**: "${product.id}"
 
 IMPORTANT:
+- ${languageInstruction}
+- ALL text fields (titles, descriptions, labels, etc.) MUST be in ${language === 'vietnamese' ? 'Vietnamese' : language === 'english' ? 'English' : language === 'chinese' ? 'Chinese' : 'Japanese'} language
 - Use professional B2B export business language
 - Focus on international buyers (US, EU, Global markets)
 - Include realistic technical details based on product category
@@ -104,6 +121,7 @@ Return ONLY valid JSON with this exact structure. No markdown, no code blocks, j
         }
 
         const productPageData = JSON.parse(cleanedText)
+        console.log(productPageData);
 
         return NextResponse.json({
             success: true,

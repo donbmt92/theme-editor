@@ -732,7 +732,7 @@ const ProjectEditor = () => {
       {isPreviewMode ? (
         /* Preview Mode */
         <div className="h-screen overflow-auto">
-          <PreviewPanel themeParams={themeParams} projectLanguage={project?.language} />
+          <PreviewPanel themeParams={themeParams} activeTab={activeTab} />
         </div>
       ) : (
         /* Edit Mode */
@@ -747,7 +747,7 @@ const ProjectEditor = () => {
           />
 
           {/* Right Panel - Preview */}
-          <PreviewPanel themeParams={themeParams} projectLanguage={project?.language} />
+          <PreviewPanel themeParams={themeParams} activeTab={activeTab} />
         </div>
       )}
 

@@ -573,6 +573,18 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                 size="lg"
                 className={cn("group hover:scale-105 hover:shadow-xl transition-all duration-300", getCTASize(), getCTAWeight(), getCTAFont())}
                 style={getButtonStyles("primary")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  const el = document.getElementById('products');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  } else {
+                    const servicesEl = document.getElementById('services');
+                    if (servicesEl) {
+                      servicesEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }
+                }}
               >
                 {content.ctaText || localizedText.learnMore}
                 <ArrowRight

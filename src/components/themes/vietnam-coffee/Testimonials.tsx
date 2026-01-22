@@ -248,6 +248,7 @@ const Testimonials = ({ theme, content }: TestimonialsProps) => {
 
   return (
     <section
+      id="testimonials"
       className="py-20"
       style={{
         backgroundColor: content.colorMode === 'custom' && content.backgroundColor

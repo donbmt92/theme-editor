@@ -2,7 +2,8 @@
 
 import { Factory, Calendar, Users, Globe, Wrench, TrendingUp } from "lucide-react"
 import Image from "next/image"
-import { ThemeParams } from "@/types"
+import { ThemeParams } from "@/types";
+import { getTranslation } from "@/lib/product-translations";
 
 interface Metric {
     icon: string
@@ -30,6 +31,7 @@ interface WhyChooseUsProps {
 }
 
 const WhyChooseUs = ({ theme, content }: WhyChooseUsProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const getIcon = (iconName: string) => {
         const icons: Record<string, any> = {
             Calendar, Factory, Wrench, TrendingUp, Globe, Users
@@ -71,7 +73,7 @@ const WhyChooseUs = ({ theme, content }: WhyChooseUsProps) => {
                             fontFamily: theme.typography?.fontFamily || "Inter"
                         }}
                     >
-                        {content?.title || "Why Choose Us"}
+                        {content?.title || t.whyChooseUs}
                     </h2>
                     <p
                         className="text-lg"
@@ -80,7 +82,7 @@ const WhyChooseUs = ({ theme, content }: WhyChooseUsProps) => {
                             fontFamily: theme.typography?.fontFamily || "Inter"
                         }}
                     >
-                        {content?.subtitle || "Factory strength and capabilities that make us your reliable manufacturing partner"}
+                        {content?.subtitle || t.whyChooseUsSubtitle}
                     </p>
                 </div>
 
@@ -105,12 +107,12 @@ const WhyChooseUs = ({ theme, content }: WhyChooseUsProps) => {
                                 <p
                                     className="font-semibold text-lg text-white"
                                 >
-                                    Manufacturing Facility
+                                    {t.manufacturingFacility}
                                 </p>
                                 <p
                                     className="text-white/80 text-sm"
                                 >
-                                    Professional production base
+                                    {t.professionalProductionBase}
                                 </p>
                             </div>
                         </div>
@@ -152,7 +154,7 @@ const WhyChooseUs = ({ theme, content }: WhyChooseUsProps) => {
                             className="font-semibold text-xl"
                             style={{ color: theme.colors?.text || "#1F2937" }}
                         >
-                            Our Competitive Advantages
+                            {t.ourCompetitiveAdvantages}
                         </h3>
 
                         <ul className="space-y-4">

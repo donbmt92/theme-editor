@@ -144,31 +144,32 @@ const Header = ({ theme, content }: HeaderProps) => {
   }
 
   // Use navigation from content if available, otherwise fallback to default
-  const navigation = content.navigation && content.navigation.length > 0 
-    ? content.navigation 
+  const navigation = content.navigation && content.navigation.length > 0
+    ? content.navigation
     : [
-        { name: localizedText.home, href: "#home" },
-        { name: localizedText.about, href: "#about" },
-        { name: localizedText.products, href: "#products" },
-        { name: localizedText.resources, href: "#resources" },
-        { name: localizedText.contact, href: "#contact" }
-      ];
+      { name: localizedText.home, href: "#home" },
+      { name: localizedText.about, href: "#about" },
+      { name: localizedText.products, href: "#products" },
+      { name: localizedText.resources, href: "#resources" },
+      { name: localizedText.contact, href: "#contact" }
+    ];
 
   return (
-    <header 
+    <header
+      id="header"
       className="sticky top-0 z-50 w-full border-b transition-all duration-300"
-      style={{ 
-        backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
-          ? content.backgroundColor 
+      style={{
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor
+          ? content.backgroundColor
           : theme.sections?.header?.backgroundColor || theme.colors.secondary || '#FFFFFF',
-        borderColor: content.colorMode === 'custom' && content.primaryColor 
-          ? content.primaryColor 
+        borderColor: content.colorMode === 'custom' && content.primaryColor
+          ? content.primaryColor
           : theme.colors?.border || theme.colors?.primary,
         color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
         ...getTypographyStyles()
       }}
     >
-      <div 
+      <div
         className="px-4 py-4"
         style={{
           maxWidth: theme.layout?.containerWidth || '1200px',
@@ -180,20 +181,20 @@ const Header = ({ theme, content }: HeaderProps) => {
           <div className="flex items-center space-x-3">
             {content.logo ? (
               <div className={`relative ${getLogoSizeClasses()}`}>
-                <Image 
-                  src={content.logo} 
+                <Image
+                  src={content.logo}
                   alt="Logo"
                   fill
-                  sizes={content.logoSize === 'small' ? '32px' : 
-                         content.logoSize === 'large' ? '80px' : 
-                         content.logoSize === 'xlarge' ? '96px' : '64px'}
+                  sizes={content.logoSize === 'small' ? '32px' :
+                    content.logoSize === 'large' ? '80px' :
+                      content.logoSize === 'xlarge' ? '96px' : '64px'}
                   className={`object-contain ${getBorderRadiusClass()}`}
                   priority
                   quality={90}
                 />
               </div>
             ) : (
-              <div 
+              <div
                 className={`${getLogoSizeClasses()} flex items-center justify-center ${getBorderRadiusClass()}`}
                 style={{ backgroundColor: theme.colors.accent }}
               >
@@ -201,20 +202,20 @@ const Header = ({ theme, content }: HeaderProps) => {
               </div>
             )}
             <div>
-              <h1 
-                className="text-xl font-bold" 
-                style={{ 
+              <h1
+                className="text-xl font-bold"
+                style={{
                   color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                  fontSize: theme.typography?.headingSize === '2xl' ? '1.5rem' : 
-                           theme.typography?.headingSize === 'xl' ? '1.25rem' : '1.125rem',
+                  fontSize: theme.typography?.headingSize === '2xl' ? '1.5rem' :
+                    theme.typography?.headingSize === 'xl' ? '1.25rem' : '1.125rem',
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
                 {content.title || "Cà Phê Việt + Plus"}
               </h1>
-              <p 
-                className="text-xs opacity-80" 
-                style={{ 
+              <p
+                className="text-xs opacity-80"
+                style={{
                   color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
                   fontSize: theme.typography?.bodySize === 'sm' ? '0.875rem' : '0.75rem'
                 }}
@@ -232,7 +233,7 @@ const Header = ({ theme, content }: HeaderProps) => {
                   <NavigationMenuLink
                     href={item.href}
                     className="text-foreground hover:text-primary transition-colors font-medium"
-                    style={{ 
+                    style={{
                       color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
@@ -256,7 +257,7 @@ const Header = ({ theme, content }: HeaderProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-foreground hover:text-primary transition-colors"
-                    style={{ 
+                    style={{
                       color: content.textColor || theme.colors.text,
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
@@ -271,14 +272,14 @@ const Header = ({ theme, content }: HeaderProps) => {
                 ))}
               </div>
             )}
-            
+
             {/* Contact Button */}
-            <Button 
+            <Button
               size="sm"
-              style={{ 
-                backgroundColor: content.colorMode === 'custom' && content.primaryColor 
-                  ? content.primaryColor 
-                  : theme.colors.primary 
+              style={{
+                backgroundColor: content.colorMode === 'custom' && content.primaryColor
+                  ? content.primaryColor
+                  : theme.colors.primary
               }}
               className="hover:opacity-90 transition-colors"
             >
@@ -290,10 +291,10 @@ const Header = ({ theme, content }: HeaderProps) => {
           {/* Mobile Menu */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild className="md:hidden">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="icon"
-                style={{ 
+                style={{
                   color: content.textColor || theme.colors.text,
                   ...getTypographyStyles()
                 }}
@@ -301,16 +302,16 @@ const Header = ({ theme, content }: HeaderProps) => {
                 <Menu size={20} />
               </Button>
             </SheetTrigger>
-            <SheetContent 
-              side="right" 
+            <SheetContent
+              side="right"
               className="w-80"
-              style={{ 
-                backgroundColor: content.colorMode === 'custom' && content.backgroundColor 
-                  ? content.backgroundColor 
+              style={{
+                backgroundColor: content.colorMode === 'custom' && content.backgroundColor
+                  ? content.backgroundColor
                   : theme.sections?.header?.backgroundColor || theme.colors.secondary,
                 color: content.textColor || theme.sections?.header?.textColor || theme.colors.text,
-                borderColor: content.colorMode === 'custom' && content.primaryColor 
-                  ? content.primaryColor 
+                borderColor: content.colorMode === 'custom' && content.primaryColor
+                  ? content.primaryColor
                   : theme.colors?.border || theme.colors?.primary,
                 ...getTypographyStyles()
               }}
@@ -321,7 +322,7 @@ const Header = ({ theme, content }: HeaderProps) => {
                     key={item.name}
                     href={item.href}
                     className="block py-2 text-lg font-medium text-foreground hover:text-primary transition-colors"
-                    style={{ 
+                    style={{
                       color: content.textColor || theme.colors.text,
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
@@ -330,7 +331,7 @@ const Header = ({ theme, content }: HeaderProps) => {
                     {item.name}
                   </a>
                 ))}
-                <div 
+                <div
                   className="border-t pt-4 space-y-3"
                   style={{ borderColor: theme.colors?.border || theme.colors?.primary }}
                 >
@@ -344,7 +345,7 @@ const Header = ({ theme, content }: HeaderProps) => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-foreground hover:text-primary transition-colors"
-                          style={{ 
+                          style={{
                             color: content.textColor || theme.colors.text,
                             fontSize: theme.typography?.fontSize || '16px'
                           }}
@@ -359,10 +360,10 @@ const Header = ({ theme, content }: HeaderProps) => {
                       ))}
                     </div>
                   )}
-                  
-                  <Button 
+
+                  <Button
                     className="w-full"
-                    style={{...getButtonStyles('premium'), backgroundColor: theme.colors.primary}}
+                    style={{ ...getButtonStyles('premium'), backgroundColor: theme.colors.primary }}
                   >
                     <Phone size={16} />
                     {content.contactInfo?.phone || localizedText.freeConsultation}

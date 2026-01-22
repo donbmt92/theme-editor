@@ -311,7 +311,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
 
   return (
     <section
-      id="services"
+      id="products"
       className="py-20"
       style={{
         backgroundColor: content.colorMode === 'custom' && content.backgroundColor
@@ -422,7 +422,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
 
         {/* Products Grid - hiển thị tất cả sản phẩm theo kiểu chẵn lẻ */}
         {content.items && content.items.length > 0 && (
-          <div className="mt-20">
+          <div id="products" className="mt-20">
             {content.items.map((item, index) => (
               <div key={item.id || index} className={`grid lg:grid-cols-2 gap-12 items-center ${index > 0 ? 'mt-20' : ''}`}>
                 <div className={index % 2 === 0 ? 'order-1' : 'order-2'}>
@@ -544,7 +544,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
         )}
 
         {/* Product Page CTA - Only show if user has product page enabled (PRO tier) */}
-        {theme.content?.productPages && Object.keys(theme.content.productPages).length > 0 && (
+        {/* {theme.content?.productPages && Object.keys(theme.content.productPages).length > 0 && (
           <div className="mt-20 text-center">
             <div
               className={cn("p-12 border-2", getBorderRadiusClass())}
@@ -580,7 +580,7 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
               </Button>
             </div>
           </div>
-        )}
+        )} */}
 
       </div>
     </section >

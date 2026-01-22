@@ -205,7 +205,7 @@ const Footer = ({ theme, content }: FooterProps) => {
 
   return (
     <footer
-      id="contact"
+      id="footer"
       className="bg-secondary text-secondary-foreground"
       style={{
         backgroundColor: content.colorMode === 'custom' && content.backgroundColor

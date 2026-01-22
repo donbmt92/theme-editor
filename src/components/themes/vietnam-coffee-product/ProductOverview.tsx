@@ -2,6 +2,7 @@
 
 import { Factory, Globe, Package, Target } from "lucide-react"
 import { ThemeParams } from "@/types"
+import { getTranslation } from "@/lib/product-translations";
 
 interface QuickOverviewContent {
     description?: string
@@ -18,6 +19,7 @@ interface ProductOverviewProps {
 }
 
 const ProductOverview = ({ theme, content }: ProductOverviewProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const getIcon = (iconName: string) => {
         const icons: Record<string, any> = {
             Target, Factory, Globe, Package
@@ -50,7 +52,7 @@ const ProductOverview = ({ theme, content }: ProductOverviewProps) => {
                             fontFamily: theme.typography?.fontFamily || "Inter"
                         }}
                     >
-                        Product Overview
+                        {t.productOverview}
                     </h2>
                     <p
                         className="text-lg leading-relaxed mb-8"

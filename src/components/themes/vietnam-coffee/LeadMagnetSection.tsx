@@ -334,7 +334,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
 
   return (
     <section
-      id="guide"
+      id="leadMagnet"
       className="py-20"
       style={{
         backgroundColor: content.colorMode === 'custom' && content.backgroundColor

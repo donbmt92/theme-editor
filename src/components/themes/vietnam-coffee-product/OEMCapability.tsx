@@ -2,7 +2,8 @@
 
 import { Palette, Package, Tag, Pencil, Shield, FileCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { ThemeParams } from "@/types"
+import { ThemeParams } from "@/types";
+import { getTranslation } from "@/lib/product-translations";
 
 interface Capability {
     icon: string
@@ -22,6 +23,7 @@ interface OEMCapabilityProps {
 }
 
 const OEMCapability = ({ theme, content }: OEMCapabilityProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const getIcon = (iconName: string) => {
         const icons: Record<string, any> = {
             Palette, Package, Tag, Pencil, Shield, FileCheck
@@ -63,7 +65,7 @@ const OEMCapability = ({ theme, content }: OEMCapabilityProps) => {
                             fontFamily: theme.typography?.fontFamily || "Inter"
                         }}
                     >
-                        {content?.subtitle || "Comprehensive customization services to meet your specific brand and product requirements"}
+                        {content?.subtitle || t.oemCapabilitySubtitle}
                     </p>
                 </div>
 

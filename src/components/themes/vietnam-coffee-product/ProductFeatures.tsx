@@ -1,6 +1,7 @@
 "use client"
 
-import { ThemeParams } from "@/types"
+import { ThemeParams } from "@/types";
+import { getTranslation } from "@/lib/product-translations";
 import { getIconComponent } from "./iconHelper"
 
 interface Feature {
@@ -21,6 +22,7 @@ interface ProductFeaturesProps {
 }
 
 const ProductFeatures = ({ theme, content }: ProductFeaturesProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
 
     const features = content?.features || [
         {
@@ -71,7 +73,7 @@ const ProductFeatures = ({ theme, content }: ProductFeaturesProps) => {
                             fontFamily: theme.typography?.fontFamily || "Inter"
                         }}
                     >
-                        {content?.title || "Product Features & Advantages"}
+                        {content?.title || t.featuresAdvantages}
                     </h2>
                     <p
                         className="text-lg"
@@ -80,7 +82,7 @@ const ProductFeatures = ({ theme, content }: ProductFeaturesProps) => {
                             fontFamily: theme.typography?.fontFamily || "Inter"
                         }}
                     >
-                        {content?.subtitle || "Key manufacturing and quality advantages that set our products apart"}
+                        {content?.subtitle || t.productFeaturesSubtitle}
                     </p>
                 </div>
 

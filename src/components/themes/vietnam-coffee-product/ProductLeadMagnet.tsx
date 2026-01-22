@@ -6,12 +6,27 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Download, CheckCircle, FileText } from "lucide-react"
 import { ThemeParams } from "@/types"
+import { getTranslation } from "@/lib/product-translations";
 
 interface ProductLeadMagnetProps {
-    theme: ThemeParams
+    theme: ThemeParams;
+    content?: {
+        title?: string;
+        description?: string;
+        benefits?: string[];
+        formTitle?: string;
+        nameLabel?: string;
+        emailLabel?: string;
+        companyLabel?: string;
+        countryLabel?: string;
+        downloadButtonText?: string;
+        privacyText?: string;
+        freeDownloadBadge?: string;
+    };
 }
 
-const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
+const ProductLeadMagnet = ({ theme, content }: ProductLeadMagnetProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -30,10 +45,10 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
     }
 
     const benefits = [
-        "Complete product specifications",
-        "Technical datasheets & drawings",
-        "Factory capability overview",
-        "Price indication & MOQ details",
+        t.completeProductSpecs,
+        t.technicalDatasheets,
+        t.factoryCapabilityOverview,
+        t.priceIndicationMOQ,
     ]
 
     return (
@@ -64,7 +79,7 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
                             }}
                         >
                             <FileText className="h-4 w-4" />
-                            Free Download
+                            {content?.freeDownloadBadge || t.freeDownload}
                         </div>
 
                         <h2
@@ -74,7 +89,7 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
                                 fontFamily: theme.typography?.fontFamily || "Inter"
                             }}
                         >
-                            Download Free Product Catalog & Technical Datasheet
+                            {content?.title || t.downloadCatalog}
                         </h2>
 
                         <p
@@ -84,7 +99,7 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
                                 fontFamily: theme.typography?.fontFamily || "Inter"
                             }}
                         >
-                            Get instant access to our complete product catalog with detailed specifications, technical drawings, and factory capabilities.
+                            {t.leadMagnetDescription}
                         </p>
 
                         <ul className="space-y-3">
@@ -113,13 +128,13 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
                             className="text-xl font-semibold mb-6"
                             style={{ color: theme.colors?.text || "#1F2937" }}
                         >
-                            Get Instant Access
+                            {t.getInstantAccess}
                         </h3>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="catalog-name">Name *</Label>
+                                    <Label htmlFor="catalog-name">{t.nameRequired}</Label>
                                     <Input
                                         id="catalog-name"
                                         placeholder="Your full name"
@@ -129,7 +144,7 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="catalog-email">Email *</Label>
+                                    <Label htmlFor="catalog-email">{t.emailRequired}</Label>
                                     <Input
                                         id="catalog-email"
                                         type="email"
@@ -143,7 +158,7 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
 
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="catalog-company">Company</Label>
+                                    <Label htmlFor="catalog-company">{t.company}</Label>
                                     <Input
                                         id="catalog-company"
                                         placeholder="Company name"
@@ -152,7 +167,7 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label htmlFor="catalog-country">Country</Label>
+                                    <Label htmlFor="catalog-country">{t.country}</Label>
                                     <Input
                                         id="catalog-country"
                                         placeholder="Your country"
@@ -172,7 +187,7 @@ const ProductLeadMagnet = ({ theme }: ProductLeadMagnetProps) => {
                                 }}
                             >
                                 <Download className="h-5 w-5 mr-2" />
-                                Download Free Catalog
+                                {t.downloadNow}
                             </Button>
 
                             <p

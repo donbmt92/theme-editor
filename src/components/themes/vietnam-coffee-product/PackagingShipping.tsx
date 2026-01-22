@@ -1,7 +1,8 @@
 "use client"
 
 import { Package, Truck, Ship, Plane } from "lucide-react"
-import { ThemeParams } from "@/types"
+import { ThemeParams } from "@/types";
+import { getTranslation } from "@/lib/product-translations";
 
 interface PackagingSpec {
     label: string
@@ -28,6 +29,7 @@ interface PackagingShippingProps {
 }
 
 const PackagingShipping = ({ theme, content }: PackagingShippingProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const getIcon = (iconName: string) => {
         const icons: Record<string, any> = {
             Ship, Plane, Truck, Package
@@ -79,12 +81,12 @@ const PackagingShipping = ({ theme, content }: PackagingShippingProps) => {
                                 fontFamily: theme.typography?.fontFamily || "Inter"
                             }}
                         >
-                            {content?.title || "Packaging & Shipping"}
+                            {content?.title || t.packagingShippingTitle}
                         </h2>
                         <p
                             style={{ color: `${theme.colors?.text || "#1F2937"}99` }}
                         >
-                            {content?.subtitle || "Safe packaging and flexible delivery options"}
+                            {content?.subtitle || t.packagingShippingSubtitle}
                         </p>
                     </div>
                 </div>
@@ -96,7 +98,7 @@ const PackagingShipping = ({ theme, content }: PackagingShippingProps) => {
                             className="font-semibold text-lg mb-4"
                             style={{ color: theme.colors?.text || "#1F2937" }}
                         >
-                            Packaging Details
+                            {t.packagingDetails}
                         </h3>
                         <table className="w-full">
                             <thead>
@@ -108,13 +110,13 @@ const PackagingShipping = ({ theme, content }: PackagingShippingProps) => {
                                         className="text-left p-3 font-semibold"
                                         style={{ color: theme.colors?.text || "#1F2937" }}
                                     >
-                                        Item
+                                        {t.itemLabel}
                                     </th>
                                     <th
                                         className="text-left p-3 font-semibold"
                                         style={{ color: theme.colors?.text || "#1F2937" }}
                                     >
-                                        Details
+                                        {t.detailsLabel}
                                     </th>
                                 </tr>
                             </thead>
@@ -153,7 +155,7 @@ const PackagingShipping = ({ theme, content }: PackagingShippingProps) => {
                                 className="font-semibold text-lg mb-4"
                                 style={{ color: theme.colors?.text || "#1F2937" }}
                             >
-                                Shipping Methods
+                                {t.shippingMethodsTitle}
                             </h3>
                             <div className="space-y-4">
                                 {shippingMethods.map((item, index) => {
@@ -197,7 +199,7 @@ const PackagingShipping = ({ theme, content }: PackagingShippingProps) => {
                                 className="font-semibold text-lg mb-4"
                                 style={{ color: theme.colors?.text || "#1F2937" }}
                             >
-                                Supported Incoterms
+                                {t.supportedIncotermsTitle}
                             </h3>
                             <div className="flex flex-wrap gap-2">
                                 {incoterms.map((term, index) => (

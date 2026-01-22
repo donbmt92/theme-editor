@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { CheckCircle, Download, FileText } from "lucide-react"
 import Image from "next/image"
 import { ThemeParams } from "@/types"
+import { getTranslation } from "@/lib/product-translations"
 
 interface ProductHeroContent {
     title?: string
@@ -22,6 +23,7 @@ interface ProductHeroProps {
 }
 
 const ProductHero = ({ theme, content }: ProductHeroProps) => {
+    const t = getTranslation(theme?.projectLanguage as any || 'vietnamese');
     const usps = content?.usps || [
         "ISO 9001:2015 Certified Manufacturing",
         "MOQ as low as 500 units",
@@ -114,7 +116,7 @@ const ProductHero = ({ theme, content }: ProductHeroProps) => {
                                 }}
                             >
                                 <FileText className="h-5 w-5 mr-2" />
-                                Request a Quote
+                                {t.requestQuote}
                             </Button>
                             <Button
                                 variant="outline"
@@ -125,7 +127,7 @@ const ProductHero = ({ theme, content }: ProductHeroProps) => {
                                 }}
                             >
                                 <Download className="h-5 w-5 mr-2" />
-                                Get Free Catalog
+                                {t.getFreeCatalog}
                             </Button>
                         </div>
                     </div>
