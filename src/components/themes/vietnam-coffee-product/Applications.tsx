@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image";
 import { Box, Package as PackageIcon } from "lucide-react";
 import { ThemeParams } from "@/types";
 import { getTranslation } from "@/lib/product-translations";

@@ -47,7 +47,7 @@ export default function ProductPage({ theme, content }: ProductPageProps) {
             <PackagingShipping theme={theme} content={productPageContent.packaging} />
             <WhyChooseUs theme={theme} content={productPageContent.whyChoose} />
             <ProductLeadMagnet theme={theme} />
-            <ProductRFQ theme={theme} />
+            <ProductRFQ theme={theme} content={productPageContent.rfq} />
             <ProductCTA theme={theme} content={productPageContent.cta} />
             <StickyCTA theme={theme} />
         </div>

@@ -37,7 +37,7 @@ export class TemplateEngine {
     } else if (fileInfo.type === 'template') {
       switch (fileInfo.template) {
         case 'html':
-          return this.generateMainHtml(projectName, description, themeParams)
+          return this.generateMainHtml(projectName, description, themeParams, projectId)
         case 'css':
           return generateStaticCss(themeParams)
         case 'js':
@@ -68,7 +68,7 @@ export class TemplateEngine {
   /**
    * Generate main HTML file
    */
-  private static async generateMainHtml(projectName: string, description: string, themeParams: any): Promise<string> {
+  private static async generateMainHtml(projectName: string, description: string, themeParams: any, projectId?: string): Promise<string> {
     const content = themeParams?.content || {}
     const colors = themeParams?.colors || {}
 
