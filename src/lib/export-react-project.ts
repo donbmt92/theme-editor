@@ -452,6 +452,17 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: \`
+              window.ENV = {
+                NEXT_PUBLIC_API_URL: \${JSON.stringify(process.env.NEXT_PUBLIC_API_URL || '')}
+              };
+            \`,
+          }}
+        />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )
@@ -602,6 +613,15 @@ First, install dependencies:
 npm install
 \`\`\`
 
+Then, configure your environment variables:
+
+\`\`\`bash
+cp .env.example .env.local
+\`\`\`
+
+Edit \`.env.local\` and set:
+- \`NEXT_PUBLIC_API_URL\` - Your central Theme Editor server URL (e.g., https://geekgolfers.com)
+
 Then, run the development server:
 
 \`\`\`bash
@@ -610,6 +630,16 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Lead Submission
+
+This site includes a lead capture form. All submissions are sent to your central Theme Editor server at:
+
+\`\`\`
+[NEXT_PUBLIC_API_URL]/api/leads
+\`\`\`
+
+Make sure to configure \`NEXT_PUBLIC_API_URL\` in your deployment environment variables.
+
 ## Build for Production
 
 \`\`\`bash
@@ -617,18 +647,12 @@ npm run build
 npm start
 \`\`\`
 
-## Deploy
+## Deploy to Vercel
 
-You can deploy this Next.js app to Vercel with one click:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/YOUR_REPO)
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs)
-- [Learn Next.js](https://nextjs.org/learn)
+1. Push your code to GitHub
+2. Import to Vercel
+3. **Important**: Set environment variable \`NEXT_PUBLIC_API_URL=https://geekgolfers.com\`
+4. Deploy
 
 ## Customize
 
@@ -680,8 +704,13 @@ next-env.d.ts
  * Generate .env.example
  */
 function generateEnvExample(): string {
-  return `# Add your environment variables here
-# NEXT_PUBLIC_API_URL=https://api.example.com
+  return `# Environment Variables for Deployed Site
+
+# API URL for lead submission (Point to your central Theme Editor server)
+NEXT_PUBLIC_API_URL=https://geekgolfers.com
+
+# Add other environment variables here as needed
+# NEXT_PUBLIC_ANALYTICS_ID=your-analytics-id
 `
 }
 

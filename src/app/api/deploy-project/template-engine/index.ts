@@ -15,7 +15,8 @@ export class TemplateEngine {
     description: string,
     serverType?: string,
     domain?: string,
-    timestamp?: number
+    timestamp?: number,
+    projectId?: string
   ): Promise<string> {
     const { generateStaticCss, generateStaticJs, generateSitemapFile, generateRobotsTxtFile, generateManifestFile, generateStaticReadme } = await import('./static-files')
     const { generateDeployScript } = await import('./deploy-scripts')
@@ -79,7 +80,7 @@ export class TemplateEngine {
     // Generate all sections
     const headerSection = await this.generateHeaderSection(content, themeParams)
     const heroSection = await this.generateHeroSection(content, themeParams)
-    const leadMagnetSection = await this.generateLeadMagnetSection(content, themeParams)
+    const leadMagnetSection = await this.generateLeadMagnetSection(content, themeParams, projectId)
     const problemsSection = await this.generateProblemsSection(content, themeParams)
     const productsSection = await this.generateProductsSection(content, themeParams)
     const whyChooseUsSection = await this.generateWhyChooseUsSection(content, themeParams)
@@ -210,9 +211,9 @@ export class TemplateEngine {
     return generateStaticProblemsSection({ content: content?.problems, colors: themeParams?.colors, themeParams })
   }
 
-  private static async generateLeadMagnetSection(content: any, themeParams: any): Promise<string> {
+  private static async generateLeadMagnetSection(content: any, themeParams: any, projectId?: string): Promise<string> {
     const { generateStaticLeadMagnetSection } = await import('./html-templates')
-    return generateStaticLeadMagnetSection({ content: content?.leadMagnet, colors: themeParams?.colors, themeParams })
+    return generateStaticLeadMagnetSection({ content: content?.leadMagnet, colors: themeParams?.colors, themeParams, projectId })
   }
 
 

@@ -285,8 +285,12 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
-    console.log('Form submitted:', formData);
+    // In Editor/Preview mode, we simulate the submission
+    // Real submission happens in the exported site via scripts.js
+
+    // Show toast or alert
+    alert(`Form submitted! (Simulation)\nName: ${formData.name}\nEmail: ${formData.email}\n\nNote: Real submission works in the exported site.`);
+
     // Auto-download guide if available
     if (content.downloadUrl) {
       const link = document.createElement('a');

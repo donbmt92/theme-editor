@@ -95,6 +95,7 @@ export interface LeadMagnetParams {
   content: any
   colors?: any
   themeParams: ThemeParams
+  projectId?: string
 }
 
 export interface WhyChooseUsParams {

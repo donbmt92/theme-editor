@@ -1,18 +1,18 @@
 import path from 'path'
 import fs from 'fs/promises'
-import { 
-  DeployProcessorParams, 
-  DeployResult, 
-  DeployProgress, 
-  FileManifestItem 
+import {
+  DeployProcessorParams,
+  DeployResult,
+  DeployProgress,
+  FileManifestItem
 } from './types'
 import { VPS_CONFIG, FILE_PATHS } from './constants'
 import { TemplateEngine } from './template-engine'
-import { 
-  createDirectoriesBatch, 
+import {
+  createDirectoriesBatch,
   writeFilesInChunks,
   generateUniqueProjectName,
-  generateUniqueDomain 
+  generateUniqueDomain
 } from './utils/file-utils'
 import { sanitizeDomain } from './utils/file-utils'
 
@@ -93,12 +93,12 @@ export class DeployProcessor {
    * Generate file manifest without loading content into memory
    */
   private async generateFileManifest(): Promise<FileManifestItem[]> {
-    const { 
-      projectName, 
-      description, 
-      includeAssets, 
-      generateDeployScript, 
-      serverType, 
+    const {
+      projectName,
+      description,
+      includeAssets,
+      generateDeployScript,
+      serverType,
       domain,
       themeParams
     } = this.params.deployData
@@ -116,7 +116,7 @@ export class DeployProcessor {
     if (includeAssets) {
       // Add real images from theme content
       await this.addImageAssetsToManifest(manifest, themeParams)
-      
+
       // Add placeholder images if no real images found
       if (!this.hasRealImages(manifest)) {
         manifest.push(
@@ -185,12 +185,12 @@ export class DeployProcessor {
    * Generate content for a specific file
    */
   private async generateFileContent(
-    fileInfo: FileManifestItem, 
-    themeParams: any, 
-    projectName: string, 
-    description: string, 
-    serverType?: string, 
-    domain?: string, 
+    fileInfo: FileManifestItem,
+    themeParams: any,
+    projectName: string,
+    description: string,
+    serverType?: string,
+    domain?: string,
     timestamp?: number
   ): Promise<string> {
     return TemplateEngine.generateFileContent(
@@ -200,7 +200,8 @@ export class DeployProcessor {
       description,
       serverType,
       domain,
-      timestamp
+      timestamp,
+      this.params.projectId // Pass projectId
     )
   }
 
@@ -224,7 +225,7 @@ export class DeployProcessor {
       vpsSpecs: VPS_CONFIG.VPS_SPECS,
       optimized: true
     }
-    
+
     await fs.writeFile(metadataPath, JSON.stringify(metadata, null, 2))
   }
 
@@ -233,7 +234,7 @@ export class DeployProcessor {
    */
   private async addImageAssetsToManifest(manifest: FileManifestItem[], themeParams: any): Promise<void> {
     const content = themeParams?.content || {}
-    
+
     // Hero images
     if (content?.hero) {
       await this.addImageToManifest(manifest, content.hero.backgroundImage, 'assets/images/hero-bg.jpg')
@@ -241,12 +242,12 @@ export class DeployProcessor {
       await this.addImageToManifest(manifest, content.hero.image, 'assets/images/hero-alt.jpg')
       await this.addImageToManifest(manifest, content.hero.unsplashImageUrl, 'assets/images/hero-unsplash.jpg')
     }
-    
+
     // Header logo
     if (content?.header?.logo) {
       await this.addImageToManifest(manifest, content.header.logo, 'assets/images/logo.png')
     }
-    
+
     // Product images
     if (content?.products?.items) {
       for (let i = 0; i < content.products.items.length; i++) {
@@ -263,14 +264,14 @@ export class DeployProcessor {
    */
   private async addImageToManifest(manifest: FileManifestItem[], imageUrl: string | undefined, targetPath: string): Promise<void> {
     if (!imageUrl) return
-    
+
     // Check if it's an upload file
     if (imageUrl.startsWith('/uploads/')) {
       // Sử dụng UPLOAD_DIR từ environment thay vì hardcode
       const uploadDir = process.env.UPLOAD_DIR || '/var/www/uploads'
       const fileName = imageUrl.replace('/uploads/', '')
       const sourcePath = path.join(uploadDir, fileName)
-      
+
       try {
         await fs.access(sourcePath)
         manifest.push({

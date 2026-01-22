@@ -100,11 +100,22 @@ model Export {
   projectVersionId String         @map("project_version_id")
   repoUrl          String?        @map("repo_url")
   zipPath          String?        @map("zip_path")
-  buildStatus      BuildStatus    @default(PENDING) @map("build_status")
   createdAt        DateTime       @default(now()) @map("created_at")
   projectVersion   ProjectVersion @relation(fields: [projectVersionId], references: [id], onDelete: Cascade)
 
   @@map("exports")
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  projectId String?  @map("project_id") // Optional to allow leads from generic sources or track specific project
+  name      String
+  email     String
+  company   String?
+  status    String   @default("NEW") // NEW, CONTACTED, CONVERTED
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("leads")
 }
 
 enum UserRole {

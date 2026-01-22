@@ -37,7 +37,7 @@ interface LeadMagnetContent {
 /**
  * Generate static Lead Magnet section HTML
  */
-export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMagnetParams): string {
+export function generateStaticLeadMagnetSection({ content, themeParams, projectId }: LeadMagnetParams): string {
   // Get project language from themeParams
   const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
 
@@ -281,18 +281,23 @@ export function generateStaticLeadMagnetSection({ content, themeParams }: LeadMa
                 <p style="color: ${textColor}CC; margin: 0;">${c.formDescription || localizedText.formDescription}</p>
               </div>
 
-              <div style="display: grid; grid-template-columns: 1fr; gap: 0.75rem;">
-                <input placeholder="${localizedText.formPlaceholders.name}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
-                <input placeholder="${localizedText.formPlaceholders.email}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
-                <input placeholder="${localizedText.formPlaceholders.company}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
-                <button style="
+              <form id="leadMagnetForm" style="display: grid; grid-template-columns: 1fr; gap: 0.75rem;">
+                ${content?.projectId ? `<input type="hidden" id="leadProjectId" value="${content.projectId}" />` : ''}
+                <!-- If projectId passed via params -->
+                ${projectId ? `<input type="hidden" id="leadProjectIdParam" value="${projectId}" />` : ''}
+                
+                <input id="leadName" required placeholder="${localizedText.formPlaceholders.name}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
+                <input id="leadEmail" type="email" required placeholder="${localizedText.formPlaceholders.email}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
+                <input id="leadCompany" placeholder="${localizedText.formPlaceholders.company}" style="padding: 0.75rem 1rem; border: 1px solid ${themeParams?.colors?.border || '#E2E8F0'}; border-radius: ${radius}; font-family: ${typography.fontFamily}; font-size: ${typography.fontSize};" />
+                <button type="submit" style="
                   background: linear-gradient(135deg, ${primary}, ${accent}); color: #FFFFFF; border: none; padding: 0.875rem 1.25rem; border-radius: ${themeParams?.components?.button?.rounded ? '9999px' : radius};
                   font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
                 " onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"><span style="margin-right: 0.5rem; vertical-align: middle;">${renderLucideIcon('Download', 18, '#FFFFFF')}</span>${c.buttonText || localizedText.buttonText}</button>
                 <p style="color: ${textColor}99; font-size: 0.8rem; text-align: center; margin: 0.5rem 0 0 0;">
                   ${c.privacyText || localizedText.privacyText}
                 </p>
-              </div>
+                <div id="formMessage" style="display: none; text-align: center; margin-top: 0.5rem; font-size: 0.9rem;"></div>
+              </form>
 
               <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid ${themeParams?.colors?.border || '#E2E8F0'};">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 1.25rem; color: ${textColor}B3; font-size: 0.9rem;">
