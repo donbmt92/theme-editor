@@ -61,22 +61,18 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
     }
 
     // Get the latest snapshot content
-    // Note: Adjust logic if you store live content differently than the version snapshot
     const latestVersion = siteData.versions[0];
     const content = latestVersion ? latestVersion.snapshot : {};
 
     // Render based on Theme Name
-    // You might want to create a ThemeRegistry map instead of switch/if-else if you have many themes
     if (siteData.theme.name === "vietnam-coffee") {
         // Provide a way to pass content. Since VietnamCoffeeTheme likely expects specific props,
         // you might need to adapt 'content' (which is JSON) to the props it expects.
-        // Assuming 'content' structure matches the component's props or you have a mapper.
 
-        // For now, passing 'content' as 'initialContent' or spreading it if it matches
         return (
             <VietnamCoffeeTheme
-                content={content as any} // Cast specific type if available
-            // language={siteData.language} // Pass language if supported
+                content={content as any}
+                theme={siteData.theme.defaultParams as any}
             />
         );
     }
