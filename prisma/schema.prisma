@@ -54,15 +54,15 @@ model Theme {
 }
 
 model Project {
-  id        String           @id @default(cuid())
-  userId    String           @map("user_id")
-  themeId   String           @map("theme_id")
-  name      String
-  language  String           @default("vietnamese")
-  
+  id       String @id @default(cuid())
+  userId   String @map("user_id")
+  themeId  String @map("theme_id")
+  name     String
+  language String @default("vietnamese")
+
   // Multi-tenancy fields
-  customDomain String?       @unique @map("custom_domain") // e.g., shopgiay.com
-  subdomain    String?       @unique // e.g., shopgiay (will be accessed via shopgiay.toolbmt.com)
+  customDomain String? @unique @map("custom_domain") // e.g., shopgiay.com
+  subdomain    String? @unique // e.g., shopgiay (will be accessed via shopgiay.geekgolfers.com)
 
   status    ProjectStatus    @default(EDITING)
   createdAt DateTime         @default(now()) @map("created_at")

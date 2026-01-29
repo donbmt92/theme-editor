@@ -19,7 +19,7 @@ async function getSiteData(domain: string) {
         }
     });
 
-    // 2. If not found, try to find by subdomain (e.g. shopgiay.toolbmt.com)
+    // 2. If not found, try to find by subdomain (e.g. shopgiay.geekgolfers.com)
     if (!project) {
         project = await prisma.project.findFirst({
             where: { subdomain: domain.split('.')[0] },
