@@ -24,7 +24,7 @@ interface TabSelectorProps {
 }
 
 const TabSelector = ({ activeTab, onTabChange, userTier = "FREE" }: TabSelectorProps) => {
-  console.log("userTier", userTier);
+  // console.log("userTier", userTier);
   const tabs = [
     { id: "header" as TabType, label: "Header", icon: FileText },
     { id: "about" as TabType, label: "Giới thiệu", icon: FileText },

@@ -10,7 +10,7 @@
         "subtitle": "Premium Export Coffee",
         "backgroundColor": "#D2691E",
         "textColor": "#2D3748",
-        "logo": "/assets/logo.png",
+        "logo": "https://placehold.co/150x50?text=Logo",
         "navigation": [
           {
             "name": "Trang chủ",
@@ -40,7 +40,7 @@
         "description": "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
         "ctaText": "Tìm hiểu thêm",
         "ctaSecondaryText": "Liên hệ ngay",
-        "image": "/assets/hero-coffee.jpg",
+        "image": "https://placehold.co/600x400?text=Hero+Image",
         "benefits": [
           {
             "icon": "CheckCircle",
@@ -73,7 +73,7 @@
       "about": {
         "title": "Về Chúng Tôi",
         "description": "Với hơn 20 năm kinh nghiệm trong ngành cà phê, chúng tôi tự hào là đối tác tin cậy của các nhà nhập khẩu quốc tế. Chúng tôi cam kết mang đến những hạt cà phê chất lượng nhất từ vùng đất Tây Nguyên.",
-        "image": "/assets/about-coffee.jpg",
+        "image": "https://placehold.co/600x400?text=About+Image",
         "features": [
           {
             "icon": "Award",
@@ -167,7 +167,7 @@
         "buttonSecondaryText": "Tải tài liệu mẫu",
         "backgroundColor": "#8B4513",
         "textColor": "#FFFFFF",
-        "image": "/assets/cta-coffee.jpg"
+        "image": "https://placehold.co/600x400?text=CTA+Image"
       },
       "leadMagnet": {
         "title": "Mở khóa thành công xuất nhập khẩu",
@@ -228,7 +228,7 @@
             "description": "Cà phê Robusta Việt Nam với hương vị đậm đà, hàm lượng caffeine cao, phù hợp cho espresso",
             "price": "2.50 USD/kg",
             "category": "Robusta",
-            "image": "/assets/robusta-coffee.jpg",
+            "image": "https://placehold.co/300x200?text=Robusta",
             "features": [
               "Hàm lượng caffeine cao",
               "Hương vị đậm đà",
@@ -241,7 +241,7 @@
             "description": "Cà phê Arabica Tây Nguyên với hương vị tinh tế, chua nhẹ, hương hoa quả đặc trưng",
             "price": "4.20 USD/kg",
             "category": "Arabica",
-            "image": "/assets/arabica-coffee.jpg",
+            "image": "https://placehold.co/300x200?text=Arabica",
             "features": [
               "Hương vị tinh tế",
               "Chua nhẹ tự nhiên",
@@ -254,7 +254,7 @@
             "description": "Cà phê chồn cao cấp với hương vị độc đáo, được chế biến tự nhiên qua hệ tiêu hóa của chồn",
             "price": "150 USD/kg",
             "category": "Premium",
-            "image": "/assets/weasel-coffee.jpg",
+            "image": "https://placehold.co/300x200?text=Weasel",
             "features": [
               "Hương vị độc đáo",
               "Chế biến tự nhiên",
@@ -597,13 +597,13 @@
       }
     ],
     "imageAssets": [
-      "/assets/hero-coffee.jpg",
-      "/assets/about-coffee.jpg",
-      "/assets/robusta-coffee.jpg",
-      "/assets/arabica-coffee.jpg",
-      "/assets/weasel-coffee.jpg",
-      "/assets/cta-coffee.jpg",
-      "/assets/logo.png"
+      "https://placehold.co/600x400?text=Hero+Image",
+      "https://placehold.co/600x400?text=About+Image",
+      "https://placehold.co/300x200?text=Robusta",
+      "https://placehold.co/300x200?text=Arabica",
+      "https://placehold.co/300x200?text=Weasel",
+      "https://placehold.co/600x400?text=CTA+Image",
+      "https://placehold.co/150x50?text=Logo"
     ],
     "icons": [
       "CheckCircle",

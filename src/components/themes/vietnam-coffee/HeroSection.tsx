@@ -15,6 +15,7 @@ interface HeroContent {
   subtitle?: string;
   description?: string;
   ctaText?: string;
+  ctaSecondaryText?: string;
   image?: string;
   backgroundImage?: string;
   backgroundColor?: string;
@@ -605,7 +606,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                 }}
               >
                 <Download size={20} className="mr-2" />
-                {localizedText.guideText}
+                {content.ctaSecondaryText || localizedText.guideText}
               </Button>
             </div>
 
@@ -653,21 +654,14 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                   />
                 </div>
               ) : (
-                <div
-                  className="w-full h-[600px] flex items-center justify-center"
-                  style={{ backgroundColor: theme.colors.accent + "20" }}
-                >
-                  <div className="text-center">
-                    <div
-                      className="text-6xl mb-4"
-                      style={{ color: theme.colors.accent }}
-                    >
-                      ☕
-                    </div>
-                    <p className="text-lg" style={{ color: theme.colors.text }}>
-                      Cà phê Việt Nam
-                    </p>
-                  </div>
+                <div className="relative w-full h-[600px]">
+                  <Image
+                    src="https://placehold.co/1920x1080?text=Hero+Image"
+                    alt="Hero Placeholder"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
                 </div>
               )}
             </Card>

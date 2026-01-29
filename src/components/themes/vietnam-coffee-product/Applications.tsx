@@ -32,37 +32,37 @@ const Applications = ({ theme, content }: ApplicationsProps) => {
             icon: "Car",
             industry: "Automotive Industry",
             description: "Automotive assembly, engine components, interior parts",
-            image: "/placeholder-product.jpg",
+            image: "https://placehold.co/600x400?text=Automotive",
         },
         {
             icon: "Cpu",
             industry: "Electronics Manufacturing",
             description: "PCB assemblies, enclosures, heat sinks, connectors",
-            image: "/placeholder-product.jpg",
+            image: "https://placehold.co/600x400?text=Electronics",
         },
         {
             icon: "Building2",
             industry: "Construction & Building",
             description: "Structural components, fixtures, hardware systems",
-            image: "/placeholder-product.jpg",
+            image: "https://placehold.co/600x400?text=Construction",
         },
         {
             icon: "HardHat",
             industry: "Industrial Equipment",
             description: "Machine parts, tools, industrial automation components",
-            image: "/placeholder-product.jpg",
+            image: "https://placehold.co/600x400?text=Industrial",
         },
         {
             icon: "Plane",
             industry: "Aerospace Applications",
             description: "Precision parts meeting aerospace quality standards",
-            image: "/placeholder-product.jpg",
+            image: "https://placehold.co/600x400?text=Aerospace",
         },
         {
             icon: "Ship",
             industry: "Marine & Offshore",
             description: "Corrosion-resistant components for marine environments",
-            image: "/placeholder-product.jpg",
+            image: "https://placehold.co/600x400?text=Marine",
         },
     ]
 

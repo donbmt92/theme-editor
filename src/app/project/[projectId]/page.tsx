@@ -458,12 +458,12 @@ const ProjectEditor = () => {
   // Load project data function
   const loadProject = async () => {
     try {
-      console.log('Loading project data for:', projectId)
+      // console.log('Loading project data for:', projectId)
       const response = await fetch(`/api/projects/${projectId}`)
       const data = await response.json()
 
       if (data.success) {
-        console.log('Project loaded successfully:', data.project)
+        // console.log('Project loaded successfully:', data.project)
         setProject(data.project)
 
         // Use latest version or create default params
@@ -471,7 +471,7 @@ const ProjectEditor = () => {
         let params: ThemeParams
 
         if (latestVersion && latestVersion.snapshot) {
-          console.log('Using latest version snapshot:', latestVersion)
+          // console.log('Using latest version snapshot:', latestVersion)
           params = latestVersion.snapshot as ThemeParams
         } else if (data.project.theme.defaultParams) {
           try {
@@ -540,7 +540,7 @@ const ProjectEditor = () => {
           }
         }
 
-        console.log('Final merged params:', params)
+        // console.log('Final merged params:', params)
         setThemeParams(params)
         updateThemeParamsWithHistory(params)
       }
@@ -720,7 +720,10 @@ const ProjectEditor = () => {
         onTogglePreview={() => setIsPreviewMode(!isPreviewMode)}
         onSave={saveProject}
         onShowAI={() => setShowAIDialog(true)}
-        onShowDeploy={() => setShowDeployDialog(true)}
+        onShowDeploy={async () => {
+          await saveProject()
+          setShowDeployDialog(true)
+        }}
         onUndo={undo}
         onRedo={redo}
         themeParams={themeParams}

@@ -49,7 +49,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
       "subtitle": "${businessInfo.language === 'english' ? 'Short slogan suitable for the industry' : 'Slogan ngắn gọn phù hợp với ngành nghề'}",
       "backgroundColor": "#hex_color",
       "textColor": "#hex_color",
-      "logo": "/assets/logo.png",
+      "logo": "https://placehold.co/150x50?text=Logo",
       "navigation": [
         {"name": "${businessInfo.language === 'english' ? 'Home' : 'Trang chủ'}", "href": "#home"},
         {"name": "${businessInfo.language === 'english' ? 'Products' : 'Sản phẩm'}", "href": "#products"},
@@ -64,7 +64,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
       "description": "${businessInfo.language === 'english' ? 'Detailed description about core values and main benefits' : 'Mô tả chi tiết về giá trị cốt lõi và lợi ích chính'}",
       "ctaText": "${businessInfo.language === 'english' ? 'Main call to action' : 'Call to action chính'}",
       "ctaSecondaryText": "${businessInfo.language === 'english' ? 'Secondary call to action' : 'Call to action phụ'}",
-      "image": "/assets/hero-image.jpg",
+      "image": "https://placehold.co/600x400?text=Hero+Image",
       "titleSize": "xl",
       "subtitleSize": "lg",
       "descriptionSize": "base",

@@ -97,7 +97,7 @@ function createFallbackThemeData(businessInfo: BusinessInfo) {
         subtitle: businessInfo.language === 'english' ? 'Professional Solutions' : 'Giải pháp chuyên nghiệp',
         backgroundColor: "#007bff",
         textColor: "#FFFFFF",
-        logo: "/assets/logo.png",
+        logo: "https://placehold.co/150x50?text=Logo",
         navigation: [
           { "name": businessInfo.language === 'english' ? 'Home' : 'Trang chủ', "href": "#home" },
           { "name": businessInfo.language === 'english' ? 'Products' : 'Sản phẩm', "href": "#products" },
@@ -112,7 +112,7 @@ function createFallbackThemeData(businessInfo: BusinessInfo) {
         description: businessInfo.description || (businessInfo.language === 'english' ? 'We provide high-quality services' : 'Chúng tôi cung cấp dịch vụ chất lượng cao'),
         ctaText: businessInfo.language === 'english' ? 'Get Started' : 'Bắt đầu',
         ctaSecondaryText: businessInfo.language === 'english' ? 'Learn More' : 'Tìm hiểu thêm',
-        image: "/assets/hero-image.jpg",
+        image: "https://placehold.co/600x400?text=Hero+Image",
         titleSize: "xl",
         subtitleSize: "lg",
         descriptionSize: "base",
@@ -138,7 +138,7 @@ function createFallbackThemeData(businessInfo: BusinessInfo) {
       about: {
         title: businessInfo.language === 'english' ? 'About Us' : 'Về Chúng Tôi',
         description: businessInfo.description || (businessInfo.language === 'english' ? 'We are a professional company' : 'Chúng tôi là một công ty chuyên nghiệp'),
-        image: "/assets/about-image.jpg",
+        image: "https://placehold.co/600x400?text=About+Image",
         features: [
           {
             icon: "Award",
@@ -303,7 +303,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
       "subtitle": "${businessInfo.language === 'english' ? 'Short slogan suitable for the industry' : 'Slogan ngắn gọn phù hợp với ngành nghề'}",
       "backgroundColor": "#hex_color",
       "textColor": "#hex_color",
-      "logo": "/assets/logo.png",
+      "logo": "https://placehold.co/150x50?text=Logo",
       "navigation": [
         {"name": "${businessInfo.language === 'english' ? 'Home' : 'Trang chủ'}", "href": "#home"},
         {"name": "${businessInfo.language === 'english' ? 'Products' : 'Sản phẩm'}", "href": "#products"},
@@ -328,7 +328,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
       "description": "${businessInfo.language === 'english' ? 'Detailed description about core values and main benefits' : 'Mô tả chi tiết về giá trị cốt lõi và lợi ích chính'}",
       "ctaText": "${businessInfo.language === 'english' ? 'Main call to action' : 'Call to action chính'}",
       "ctaSecondaryText": "${businessInfo.language === 'english' ? 'Secondary call to action' : 'Call to action phụ'}",
-      "image": "/assets/hero-image.jpg",
+      "image": "https://placehold.co/600x400?text=Hero+Image",
       "titleSize": "xl",
       "subtitleSize": "lg", 
       "descriptionSize": "base",
@@ -354,7 +354,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
     "about": {
       "title": "${businessInfo.language === 'english' ? 'About Us' : 'Về Chúng Tôi'}",
       "description": "${businessInfo.language === 'english' ? 'Detailed description about the company, history, vision, mission' : 'Mô tả chi tiết về công ty, lịch sử, tầm nhìn, sứ mệnh'}",
-      "image": "/assets/about-image.jpg",
+      "image": "https://placehold.co/600x400?text=About+Image",
       "features": [
         {"icon": "Award", "title": "${businessInfo.language === 'english' ? 'Certification' : 'Chứng nhận'}", "description": "${businessInfo.language === 'english' ? 'Certification description' : 'Mô tả chứng nhận'}"},
         {"icon": "Globe", "title": "${businessInfo.language === 'english' ? 'Market' : 'Thị trường'}", "description": "${businessInfo.language === 'english' ? 'Market description' : 'Mô tả thị trường'}"},
@@ -373,7 +373,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
           "description": "${businessInfo.language === 'english' ? 'Detailed description of product/service 1' : 'Mô tả chi tiết sản phẩm/dịch vụ 1'}",
           "price": "${businessInfo.language === 'english' ? 'Price/Contact' : 'Giá/Liên hệ'}",
           "category": "${businessInfo.language === 'english' ? 'Category 1' : 'Danh mục 1'}",
-          "image": "/assets/product-1.jpg",
+          "image": "https://placehold.co/400x300?text=Product+1",
           "features": ["${businessInfo.language === 'english' ? 'Feature 1' : 'Tính năng 1'}", "${businessInfo.language === 'english' ? 'Feature 2' : 'Tính năng 2'}", "${businessInfo.language === 'english' ? 'Feature 3' : 'Tính năng 3'}"]
         },
         {
@@ -382,7 +382,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
           "description": "${businessInfo.language === 'english' ? 'Detailed description of product/service 2' : 'Mô tả chi tiết sản phẩm/dịch vụ 2'}",
           "price": "${businessInfo.language === 'english' ? 'Price/Contact' : 'Giá/Liên hệ'}", 
           "category": "${businessInfo.language === 'english' ? 'Category 2' : 'Danh mục 2'}",
-          "image": "/assets/product-2.jpg",
+          "image": "https://placehold.co/400x300?text=Product+2",
           "features": ["${businessInfo.language === 'english' ? 'Feature 1' : 'Tính năng 1'}", "${businessInfo.language === 'english' ? 'Feature 2' : 'Tính năng 2'}", "${businessInfo.language === 'english' ? 'Feature 3' : 'Tính năng 3'}"]
         },
         {
@@ -391,7 +391,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
           "description": "${businessInfo.language === 'english' ? 'Detailed description of product/service 3' : 'Mô tả chi tiết sản phẩm/dịch vụ 3'}",
           "price": "${businessInfo.language === 'english' ? 'Price/Contact' : 'Giá/Liên hệ'}",
           "category": "${businessInfo.language === 'english' ? 'Category 3' : 'Danh mục 3'}",
-          "image": "/assets/product-3.jpg",
+          "image": "https://placehold.co/400x300?text=Product+3",
           "features": ["${businessInfo.language === 'english' ? 'Feature 1' : 'Tính năng 1'}", "${businessInfo.language === 'english' ? 'Feature 2' : 'Tính năng 2'}", "${businessInfo.language === 'english' ? 'Feature 3' : 'Tính năng 3'}"]
         }
       ],
@@ -506,7 +506,7 @@ Trả về CHÍNH XÁC theo format JSON sau (không thêm markdown hoặc format
       "buttonSecondaryText": "${businessInfo.language === 'english' ? 'Download Sample Document' : 'Tải tài liệu mẫu'}",
       "backgroundColor": "#8B4513",
       "textColor": "#FFFFFF",
-      "image": "/assets/cta-image.jpg"
+      "image": "https://placehold.co/600x400?text=CTA+Image"
     },
     "leadMagnet": {
       "title": "${businessInfo.language === 'english' ? 'Unlock Success' : 'Mở Khóa Thành Công'}",

@@ -20,6 +20,7 @@ interface HeroContent {
   subtitle?: string;
   description?: string;
   ctaText?: string;
+  ctaSecondaryText?: string;
   image?: string;
   backgroundImage?: string;
   backgroundColor?: string;
@@ -60,8 +61,8 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
       subtitle: "Xuất khẩu cà phê chất lượng cao",
       description: "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
       ctaText: "Tìm hiểu thêm",
-      image: "/assets/hero-coffee.jpg",
-      backgroundImage: "/assets/hero-coffee.jpg",
+      image: "https://placehold.co/600x400?text=Hero+Image",
+      backgroundImage: "https://placehold.co/1920x1080?text=Hero+Background",
     },
     problems: {
       title: "Thách Thức Hiện Tại",
@@ -268,8 +269,8 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
           "MOQ as low as 500 units",
           "15+ years export experience to US, EU & Global markets"
         ],
-        images: ["/placeholder-product.jpg"],
-        mainImage: "/placeholder-product.jpg"
+        images: ["https://placehold.co/600x600?text=Product+Hero"],
+        mainImage: "https://placehold.co/600x600?text=Product+Hero"
       },
       overview: {
         description: "Professional product description focusing on core value proposition and suitability for international buyers.",

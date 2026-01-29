@@ -12,12 +12,12 @@ interface ProductImageProps {
   borderRadiusClass: string;
 }
 
-const ProductImage = ({ 
-  image, 
-  productName, 
-  index, 
-  primaryColor, 
-  borderRadiusClass 
+const ProductImage = ({
+  image,
+  productName,
+  index,
+  primaryColor,
+  borderRadiusClass
 }: ProductImageProps) => {
   const { imageUrl, isLoading } = useProductImage(image, productName);
 
@@ -38,7 +38,7 @@ const ProductImage = ({
             priority={index < 2}
             quality={85}
           />
-          
+
           {/* Unsplash Attribution */}
           {!image && (
             <div className="absolute bottom-1 right-1 bg-black bg-opacity-50 text-white text-xs px-1 py-0.5 rounded">
@@ -47,11 +47,12 @@ const ProductImage = ({
           )}
         </div>
       ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          <Coffee 
-            className="group-hover:scale-110 transition-transform duration-300" 
-            size={64}
-            style={{ color: primaryColor }}
+        <div className="relative w-full h-full">
+          <Image
+            src="https://placehold.co/400x300?text=Product+Image"
+            alt={productName || "Product"}
+            fill
+            className={`object-cover group-hover:scale-105 transition-transform duration-300 ${borderRadiusClass}`}
           />
         </div>
       )}

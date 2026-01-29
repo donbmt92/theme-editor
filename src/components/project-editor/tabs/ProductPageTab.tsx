@@ -59,12 +59,12 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
     const selectedProduct = products.find((p: any) => p.id === activeProductPageId)
 
     // Debug log
-    console.log('[ProductPageTab] Current state:', {
-        activeProductPageId,
-        hasCurrentProductPage: !!currentProductPage,
-        currentProductPageKeys: currentProductPage ? Object.keys(currentProductPage) : [],
-        heroData: currentProductPage?.hero
-    })
+    // console.log('[ProductPageTab] Current state:', {
+    //     activeProductPageId,
+    //     hasCurrentProductPage: !!currentProductPage,
+    //     currentProductPageKeys: currentProductPage ? Object.keys(currentProductPage) : [],
+    //     heroData: currentProductPage?.hero
+    // })
 
     const handleGenerateProductPage = async () => {
         if (!activeProductPageId) {
@@ -87,8 +87,8 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
 
             const data = await response.json()
 
-            console.log('Generated data:', data.productPageData)
-            console.log('Current themeParams.projectLanguage:', themeParams.projectLanguage)
+            // console.log('Generated data:', data.productPageData)
+            // console.log('Current themeParams.projectLanguage:', themeParams.projectLanguage)
 
             // Update product page for this specific productId
             // Replace old data completely, but preserve enabled and showPreview settings
@@ -96,13 +96,14 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                 ...productPages,
                 [activeProductPageId]: {
                     ...data.productPageData,
-                    enabled: currentProductPage?.enabled ?? true,
-                    showPreview: currentProductPage?.showPreview ?? false
+                    enabled: true,
+                    showPreview: true
                 }
             }
 
             updateThemeParam(['content', 'productPages'], updatedProductPages)
-            alert('Tạo nội dung thành công! Bật "Enable Product Page" để xem Preview 👉')
+            // alert('Tạo nội dung thành công! Bật "Enable Product Page" để xem Preview 👉')
+            console.log('Product page content generated successfully')
         } catch (error) {
             console.error('Generate error:', error)
             alert('Có lỗi xảy ra khi tạo nội dung')

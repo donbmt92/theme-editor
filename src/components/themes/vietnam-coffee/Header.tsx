@@ -194,11 +194,16 @@ const Header = ({ theme, content }: HeaderProps) => {
                 />
               </div>
             ) : (
-              <div
-                className={`${getLogoSizeClasses()} flex items-center justify-center ${getBorderRadiusClass()}`}
-                style={{ backgroundColor: theme.colors.accent }}
-              >
-                <Coffee className="text-white" size={getLogoIconSize()} />
+              <div className={`relative ${getLogoSizeClasses()}`}>
+                <Image
+                  src="https://placehold.co/150?text=Logo"
+                  alt="Logo Placeholder"
+                  fill
+                  sizes={content.logoSize === 'small' ? '32px' :
+                    content.logoSize === 'large' ? '80px' :
+                      content.logoSize === 'xlarge' ? '96px' : '64px'}
+                  className={`object-contain ${getBorderRadiusClass()}`}
+                />
               </div>
             )}
             <div>

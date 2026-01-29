@@ -444,22 +444,13 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                         />
                       </div>
                     ) : (
-                      <div
-                        className="w-full h-80 flex items-center justify-center"
-                        style={{ backgroundColor: `${theme.colors.primary}10` }}
-                      >
-                        <div className="text-center">
-                          <Coffee
-                            size={64}
-                            style={{ color: theme.colors.primary }}
-                            className="mb-4"
-                          />
-                          <p
-                            style={{ color: theme.colors.text }}
-                          >
-                            {item.name || "Sản phẩm"}
-                          </p>
-                        </div>
+                      <div className="relative w-full h-80">
+                        <Image
+                          src="https://placehold.co/600x400?text=Product+Image"
+                          alt={item.name || "Product"}
+                          fill
+                          className="object-cover"
+                        />
                       </div>
                     )}
                   </Card>

@@ -163,6 +163,13 @@ export async function generateReactProject(
   }
 
   // 16. Export Product Pages (if enabled)
+  const productPages = themeParams.content?.productPages || {}
+  console.log('🔍 [EXPORT] Checking product pages:', Object.keys(productPages).map(id => ({
+    id,
+    enabled: productPages[id]?.enabled,
+    hasHero: !!productPages[id]?.hero
+  })))
+
   const enabledProducts = getEnabledProducts(themeParams)
 
   if (enabledProducts.length > 0) {
@@ -213,12 +220,12 @@ export async function generateReactProject(
 
       // 16g. Copy translations file for multilingual support
       try {
-        const translationsPath = path.join(process.cwd(), 'product', 'src', 'lib', 'translations.ts')
+        const translationsPath = path.join(process.cwd(), 'src', 'lib', 'product-translations.ts')
         const translationsContent = await fs.readFile(translationsPath, 'utf-8')
-        files['src/lib/translations.ts'] = translationsContent
+        files['src/lib/product-translations.ts'] = translationsContent
         console.log('✅ [EXPORT] Added multilingual translations')
       } catch (err) {
-        console.warn('⚠️ [EXPORT] Could not find translations file')
+        console.warn('⚠️ [EXPORT] Could not find translations file:', err)
       }
 
     } catch (error) {
