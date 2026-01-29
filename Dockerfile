@@ -44,8 +44,8 @@ ENV NODE_ENV production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-# Install tsx for seeding
-RUN npm install -g tsx
+# Install dependencies for seeding (tsx and bcryptjs)
+RUN npm install tsx bcryptjs
 
 COPY --from=builder /app/public ./public
 
