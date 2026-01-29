@@ -37,6 +37,8 @@ const nextConfig: NextConfig = {
 
   // Server external packages (moved from experimental)
   serverExternalPackages: [],
+
+  output: 'standalone',
 };
 
 export default nextConfig;

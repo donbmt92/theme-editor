@@ -60,6 +60,10 @@ model Project {
   name      String
   language  String           @default("vietnamese")
   
+  // Multi-tenancy fields
+  customDomain String?       @unique @map("custom_domain") // e.g., shopgiay.com
+  subdomain    String?       @unique // e.g., shopgiay (will be accessed via shopgiay.toolbmt.com)
+
   status    ProjectStatus    @default(EDITING)
   createdAt DateTime         @default(now()) @map("created_at")
   updatedAt DateTime         @updatedAt @map("updated_at")
@@ -67,6 +71,8 @@ model Project {
   theme     Theme            @relation(fields: [themeId], references: [id])
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@index([customDomain])
+  @@index([subdomain])
   @@map("projects")
 }
 
