@@ -35,6 +35,10 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
 }) => {
     const { data: session } = useSession()
     const [description, setDescription] = useState('')
+    const [customDomain, setCustomDomain] = useState('')
+    const [dnsStatus, setDnsStatus] = useState<'idle' | 'checking' | 'verified' | 'unverified' | 'error'>('idle')
+    const [dnsMessage, setDnsMessage] = useState('')
+
     const [isDeploying, setIsDeploying] = useState(false)
     const [deployStatus, setDeployStatus] = useState<'idle' | 'deploying' | 'success' | 'error'>('idle')
     const [deployedUrl, setDeployedUrl] = useState('')
@@ -44,6 +48,33 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
     const addLog = (message: string) => {
         setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${message}`])
     }
+
+    const checkDomain = async () => {
+        if (!customDomain) return;
+
+        setDnsStatus('checking');
+        setDnsMessage('Checking DNS records...');
+
+        try {
+            const res = await fetch('/api/check-domain', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ domain: customDomain })
+            });
+            const data = await res.json();
+
+            if (data.ip) {
+                setDnsStatus('verified');
+                setDnsMessage('✅ Domain points to this server');
+            } else {
+                setDnsStatus('unverified');
+                setDnsMessage('⚠️ Domain does not point to this server yet. You can still deploy, but the site won\'t work until DNS propagates.');
+            }
+        } catch (err) {
+            setDnsStatus('error');
+            setDnsMessage('❌ Invalid domain or DNS check failed');
+        }
+    };
 
     const handleDeploy = async () => {
         if (!session?.user?.id) {
@@ -74,7 +105,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                 includeAssets: true,
                 createUserFolder: true,
                 generateDeployScript: true,
-                domain: window.location.hostname // Just as a placeholder or use actual if known
+                domain: customDomain.trim() || window.location.hostname // Use custom domain if provided
             }
 
             const response = await fetch('/api/deploy-project', {
@@ -92,8 +123,12 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
             addLog('✅ Version saved successfully')
             addLog(`📦 Created snapshot for project: ${projectName}`)
 
+            if (customDomain) {
+                addLog(`🌐 Configured domain: ${customDomain}`)
+            }
+
             // In a real multi-tenant setup, the URL is determined by the project's subdomain/custom domain
-            // For now, we'll try to guess it or use a placeholder. 
+            // For now, we'll try to guess it or use a placeholder.
             // Ideally, the API should return the live URL.
             // Let's assume standard format for now:
             const liveUrl = result.domain ? `http://${result.domain}` : '#'
@@ -121,6 +156,9 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
         setDeployedUrl('')
         setError('')
         setLogs([])
+        setCustomDomain('')
+        setDnsStatus('idle')
+        setDnsMessage('')
     }
 
     const handleClose = () => {
@@ -164,6 +202,38 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                                     disabled
                                     className="bg-muted"
                                 />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium mb-2">
+                                    Custom Domain (Optional)
+                                </label>
+                                <div className="flex gap-2">
+                                    <Input
+                                        value={customDomain}
+                                        onChange={(e) => {
+                                            setCustomDomain(e.target.value);
+                                            setDnsStatus('idle');
+                                            setDnsMessage('');
+                                        }}
+                                        placeholder="e.g. shopgiay.vn"
+                                        onBlur={checkDomain}
+                                    />
+                                    <Button
+                                        variant="outline"
+                                        onClick={checkDomain}
+                                        disabled={!customDomain || dnsStatus === 'checking'}
+                                    >
+                                        {dnsStatus === 'checking' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Check DNS'}
+                                    </Button>
+                                </div>
+                                {dnsMessage && (
+                                    <p className={`text-xs mt-1 ${dnsStatus === 'verified' ? 'text-green-600' :
+                                            dnsStatus === 'unverified' ? 'text-yellow-600' : 'text-red-500'
+                                        }`}>
+                                        {dnsMessage}
+                                    </p>
+                                )}
                             </div>
 
                             <div>

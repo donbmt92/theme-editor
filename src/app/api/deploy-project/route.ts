@@ -148,6 +148,33 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Update custom domain if provided
+    if (deployData.domain && deployData.domain !== 'localhost') {
+      try {
+        // Check if domain is already used by another project (excluding this one)
+        const existingProject = await prisma.project.findFirst({
+          where: {
+            customDomain: deployData.domain,
+            NOT: { id: projectId }
+          }
+        });
+
+        if (existingProject) {
+          console.warn(`⚠️ [DEPLOY] Domain ${deployData.domain} is already in use by project ${existingProject.id}`);
+          // You might want to return error here, or just ignore update
+          // For now, let's just log and skip update to avoid crash
+        } else {
+          await prisma.project.update({
+            where: { id: projectId },
+            data: { customDomain: deployData.domain }
+          });
+          console.log(`✅ [DEPLOY] Updated custom domain for project ${projectId} to ${deployData.domain}`);
+        }
+      } catch (err) {
+        console.error('⚠️ [DEPLOY] Failed to update custom domain:', err);
+      }
+    }
+
     // We need project language for correct template localization
     // If we deploy from Editor (themeParams present), we haven't fetched project settings yet
     if (deployData.themeParams && projectId) {
