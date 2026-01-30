@@ -1,8 +1,8 @@
 import { ThemeParams } from "../../types";
 
 export interface ProductPageParams {
-    content: any;
-    themeParams: ThemeParams;
+  content: any;
+  themeParams: ThemeParams;
 }
 
 /**
@@ -10,20 +10,49 @@ export interface ProductPageParams {
  * This is a simplified version - full implementation would include all 13 sections
  */
 export function generateStaticProductPage({
-    content,
-    themeParams,
+  content,
+  themeParams,
 }: ProductPageParams): string {
-    const productPage = content?.productPage;
+  const productPage = content?.productPage;
 
-    // Don't render if not enabled
-    if (!productPage?.enabled) {
-        return '';
+  // Don't render if not enabled
+  if (!productPage?.enabled) {
+    return '';
+  }
+
+  // Get project language from themeParams
+  const projectLanguage = themeParams?.projectLanguage || 'vietnamese';
+
+  // Get localized text based on project language
+  const getLocalizedText = () => {
+    if (projectLanguage === 'english') {
+      return {
+        defaultTitle: "[Product Name] Manufacturer & Exporter",
+        defaultSubtitle: "Professional supplier with years of manufacturing experience",
+        overviewTitle: "Product Overview",
+        templateTitle: "Complete Product Page Template",
+        templateDescription: "Includes 13 professional sections: Features, Technical Specs, Applications, Certifications, OEM/ODM, Packaging, Shipping, Why Choose Us, Lead Magnets, RFQ Form, and CTA",
+        proFeature: "Full template generation available for PRO tier users",
+        backToTop: "↑ Back to Top"
+      };
+    } else {
+      return {
+        defaultTitle: "Nhà sản xuất & Xuất khẩu [Tên sản phẩm]",
+        defaultSubtitle: "Nhà cung cấp chuyên nghiệp với nhiều năm kinh nghiệm sản xuất",
+        overviewTitle: "Tổng quan sản phẩm",
+        templateTitle: "Mẫu trang sản phẩm hoàn chỉnh",
+        templateDescription: "Bao gồm 13 phần chuyên nghiệp: Tính năng, Thông số kỹ thuật, Ứng dụng, Chứng nhận, OEM/ODM, Đóng gói, Vận chuyển, Tại sao chọn chúng tôi, Lead Magnets, Form yêu cầu báo giá, và CTA",
+        proFeature: "Tính năng tạo mẫu đầy đủ dành cho người dùng gói PRO",
+        backToTop: "↑ Về đầu trang"
+      };
     }
+  };
 
-    const hero = productPage?.hero || {};
-    const overview = productPage?.overview || {};
+  const localizedText = getLocalizedText();
+  const hero = productPage?.hero || {};
+  const overview = productPage?.overview || {};
 
-    return `<section id="product-page" style="
+  return `<section id="product-page" style="
     background-color: ${themeParams?.colors?.background || '#FFFFFF'};
     padding: 5rem 1rem;
   ">
@@ -40,14 +69,14 @@ export function generateStaticProductPage({
           margin-bottom: 1rem;
           font-family: ${themeParams?.typography?.fontFamily || 'Inter'};
         ">
-          ${hero?.title || '[Product Name] Manufacturer & Exporter'}
+          ${hero?.title || localizedText.defaultTitle}
         </h1>
         <p style="
           font-size: 1.25rem;
           color: ${themeParams?.colors?.muted || '#6B7280'};
           margin-bottom: 2rem;
         ">
-          ${hero?.subtitle || 'Professional supplier with years of manufacturing experience'}
+          ${hero?.subtitle || localizedText.defaultSubtitle}
         </p>
 
         <!-- USPs -->
@@ -87,7 +116,7 @@ export function generateStaticProductPage({
             font-weight: 600;
             color: ${themeParams?.colors?.text || '#1F2937'};
             margin-bottom: 1.5rem;
-          ">Product Overview</h2>
+          ">${overview?.title || localizedText.overviewTitle}</h2>
           <p style="
             font-size: 1.125rem;
             line-height: 1.75;
@@ -132,20 +161,18 @@ export function generateStaticProductPage({
           font-weight: 600;
           color: ${themeParams?.colors?.text};
           margin-bottom: 1rem;
-        ">Complete Product Page Template</h3>
+        ">${localizedText.templateTitle}</h3>
         <p style="
           color: ${themeParams?.colors?.muted};
           margin-bottom: 1.5rem;
         ">
-          Includes 13 professional sections: Features, Technical Specs, Applications, 
-          Certifications, OEM/ODM, Packaging, Shipping, Why Choose Us, Lead Magnets, 
-          RFQ Form, and CTA
+          ${localizedText.templateDescription}
         </p>
         <p style="
           font-size: 0.875rem;
           color: ${themeParams?.colors?.muted};
         ">
-          Full template generation available for PRO tier users
+          ${localizedText.proFeature}
         </p>
       </div>
 
@@ -161,12 +188,12 @@ export function generateStaticProductPage({
           font-weight: 600;
           transition: all 0.3s ease;
         ">
-          ↑ Back to Top
+          ${localizedText.backToTop}
         </a>
       </div>
     </div>
   </section>
-
+  
   <style>
     @media (max-width: 768px) {
       #product-page h1 {
