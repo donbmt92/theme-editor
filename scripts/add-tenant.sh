@@ -17,6 +17,14 @@ cat > /etc/nginx/sites-available/$DOMAIN <<EOF
 server {
     server_name $DOMAIN www.$DOMAIN;
 
+    # Serve uploaded files directly
+    location /uploads/ {
+        alias /var/www/theme-editor/public/uploads/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+    }
+
     location / {
         proxy_pass http://localhost:$APP_PORT;
         proxy_http_version 1.1;
