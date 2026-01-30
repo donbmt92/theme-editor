@@ -13,7 +13,7 @@ import { Button } from './button'
 import { Input } from './input'
 import { Textarea } from './textarea'
 import { Card, CardContent, CardHeader, CardTitle } from './card'
-import { Loader2, CheckCircle, AlertCircle, Github, ExternalLink } from 'lucide-react'
+import { Loader2, CheckCircle, AlertCircle, Server, ExternalLink, Rocket } from 'lucide-react'
 import { ThemeParams } from '@/types'
 
 interface ReactExportDialogProps {
@@ -35,11 +35,9 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
 }) => {
     const { data: session } = useSession()
     const [description, setDescription] = useState('')
-    const [customDomain, setCustomDomain] = useState('')
-    const [isExporting, setIsExporting] = useState(false)
-    const [exportStatus, setExportStatus] = useState<'idle' | 'github' | 'vercel' | 'success' | 'error'>('idle')
-    const [githubUrl, setGithubUrl] = useState('')
-    const [vercelUrl, setVercelUrl] = useState('')
+    const [isDeploying, setIsDeploying] = useState(false)
+    const [deployStatus, setDeployStatus] = useState<'idle' | 'deploying' | 'success' | 'error'>('idle')
+    const [deployedUrl, setDeployedUrl] = useState('')
     const [error, setError] = useState('')
     const [logs, setLogs] = useState<string[]>([])
 
@@ -47,95 +45,86 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
         setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${message}`])
     }
 
-    const handleExport = async () => {
+    const handleDeploy = async () => {
         if (!session?.user?.id) {
-            setError('You must be logged in to export')
+            setError('You must be logged in to deploy')
             return
         }
 
-        setIsExporting(true)
-        setExportStatus('github')
+        setIsDeploying(true)
+        setDeployStatus('deploying')
         setError('')
         setLogs([])
-        setGithubUrl('')
-        setVercelUrl('')
+        setDeployedUrl('')
 
         try {
-            // Step 1: Create GitHub repo
-            addLog('🚀 Creating GitHub repository...')
+            addLog('🚀 Starting deployment process...')
+            addLog('💾 Saving current editor state as new version...')
 
-            const githubResponse = await fetch('/api/github/create-repo', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    projectName: projectName.toLowerCase().replace(/\s+/g, '-'),
-                    description: description || `${projectName} - Built with Theme Editor`,
-                    themeName,
-                    themeParams,
-                    userId: session.user.id,
-                    isPrivate: false,
-                }),
-            })
-
-            const githubData = await githubResponse.json()
-
-            if (!githubData.success) {
-                throw new Error(githubData.error || 'Failed to create GitHub repository')
+            // Prepare deploy data
+            // We use serverType 'nginx' as default for the VPS setup
+            // exclude assets for now to speed up, or include if needed
+            const deployData = {
+                projectId,
+                userId: session.user.id,
+                projectName: projectName.replace(/\s+/g, '-').toLowerCase(),
+                description: description || `Deployed from Editor`,
+                themeParams: themeParams, // Send current editor state
+                serverType: 'nginx',
+                includeAssets: true,
+                createUserFolder: true,
+                generateDeployScript: true,
+                domain: window.location.hostname // Just as a placeholder or use actual if known
             }
 
-            setGithubUrl(githubData.github.repoUrl)
-            addLog(`✅ GitHub repository created: ${githubData.github.repoName}`)
-            addLog(`📦 Pushed ${githubData.fileCount} files`)
-
-            // Step 2: Deploy to Vercel
-            setExportStatus('vercel')
-            addLog('🚀 Deploying to Vercel...')
-
-            const vercelResponse = await fetch('/api/vercel/deploy', {
+            const response = await fetch('/api/deploy-project', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    repoFullName: githubData.github.repoFullName,
-                    projectName: projectName.toLowerCase().replace(/\s+/g, '-'),
-                    customDomain: customDomain.trim() || undefined,
-                }),
+                body: JSON.stringify(deployData),
             })
 
-            const vercelData = await vercelResponse.json()
+            const result = await response.json()
 
-            if (!vercelData.success) {
-                throw new Error(vercelData.error || 'Failed to deploy to Vercel')
+            if (!result.success) {
+                throw new Error(result.error || 'Deployment failed')
             }
 
-            setVercelUrl(vercelData.vercel.deploymentUrl)
-            addLog(vercelData.vercel)
-            addLog(`✅ Deployed to Vercel: ${vercelData.vercel.deploymentUrl}`)
-            addLog('🎉 Export completed successfully!')
+            addLog('✅ Version saved successfully')
+            addLog(`📦 Created snapshot for project: ${projectName}`)
 
-            setExportStatus('success')
+            // In a real multi-tenant setup, the URL is determined by the project's subdomain/custom domain
+            // For now, we'll try to guess it or use a placeholder. 
+            // Ideally, the API should return the live URL.
+            // Let's assume standard format for now:
+            const liveUrl = result.domain ? `http://${result.domain}` : '#'
+
+            setDeployedUrl(liveUrl)
+
+            addLog('♻️ Live server updated with new content')
+            addLog('🎉 Deployment successful!')
+
+            setDeployStatus('success')
 
         } catch (err: any) {
-            console.error('Export error:', err)
-            setError(err.message || 'Export failed')
-            setExportStatus('error')
+            console.error('Deploy error:', err)
+            setError(err.message || 'Deployment failed')
+            setDeployStatus('error')
             addLog(`❌ Error: ${err.message}`)
         } finally {
-            setIsExporting(false)
+            setIsDeploying(false)
         }
     }
 
     const resetDialog = () => {
         setDescription('')
-        setCustomDomain('')
-        setExportStatus('idle')
-        setGithubUrl('')
-        setVercelUrl('')
+        setDeployStatus('idle')
+        setDeployedUrl('')
         setError('')
         setLogs([])
     }
 
     const handleClose = () => {
-        if (!isExporting) {
+        if (!isDeploying) {
             resetDialog()
             onOpenChange(false)
         }
@@ -145,15 +134,15 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
         <Dialog open={open} onOpenChange={handleClose}>
             <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle>Export to GitHub & Vercel</DialogTitle>
+                    <DialogTitle>Deploy to Live Server</DialogTitle>
                     <DialogDescription>
-                        Export your project as a Next.js application, deploy to GitHub, and publish to Vercel
+                        Save your changes and update the live website immediately.
                     </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-6 py-4">
                     {/* Configuration */}
-                    {exportStatus === 'idle' && (
+                    {deployStatus === 'idle' && (
                         <div className="space-y-4">
                             <div>
                                 <label className="block text-sm font-medium mb-2">
@@ -179,61 +168,41 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
 
                             <div>
                                 <label className="block text-sm font-medium mb-2">
-                                    Description (Optional)
+                                    Version Note (Optional)
                                 </label>
                                 <Textarea
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    placeholder="Enter a description for your project..."
+                                    placeholder="Enter a note about this update (e.g. Changed hero image)..."
                                     rows={3}
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium mb-2">
-                                    Custom Domain (Optional)
-                                </label>
-                                <Input
-                                    value={customDomain}
-                                    onChange={(e) => setCustomDomain(e.target.value)}
-                                    placeholder="e.g. my-awesome-project.com"
-                                />
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    Your Vercel project will be configured with this domain. You may need to configure DNS records separately.
-                                </p>
-                            </div>
-
-
-
                             <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
                                 <CardContent className="pt-6">
                                     <p className="text-sm text-blue-800 dark:text-blue-200">
-                                        <strong>What will happen:</strong>
+                                        <strong>Ready to Go Live?</strong>
                                         <br />
-                                        1. Create a GitHub repository with your project code (34 files)
-                                        <br />
-                                        2. Deploy to Vercel and get a live website URL
-                                        <br />
-                                        3. Build time: ~1-2 minutes
+                                        This action will save a new version of your project and immediately update the content on your live website.
                                     </p>
                                 </CardContent>
                             </Card>
 
                             <Button
-                                onClick={handleExport}
-                                disabled={isExporting}
+                                onClick={handleDeploy}
+                                disabled={isDeploying}
                                 className="w-full"
                                 size="lg"
                             >
-                                {isExporting ? (
+                                {isDeploying ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                        Exporting...
+                                        Deploying...
                                     </>
                                 ) : (
                                     <>
-                                        <Github className="mr-2 h-4 w-4" />
-                                        Export to GitHub & Vercel
+                                        <Rocket className="mr-2 h-4 w-4" />
+                                        Deploy Now
                                     </>
                                 )}
                             </Button>
@@ -241,32 +210,24 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                     )}
 
                     {/* Progress */}
-                    {(exportStatus === 'github' || exportStatus === 'vercel') && (
+                    {deployStatus === 'deploying' && (
                         <div className="space-y-4">
                             <Card>
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2">
                                         <Loader2 className="h-5 w-5 animate-spin" />
-                                        {exportStatus === 'github' ? 'Creating GitHub Repository...' : 'Deploying to Vercel...'}
+                                        Updating Live Server...
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="space-y-2">
                                         <div className="flex items-center gap-2">
-                                            {exportStatus === 'github' ? (
-                                                <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-                                            ) : (
-                                                <CheckCircle className="h-4 w-4 text-green-500" />
-                                            )}
-                                            <span className="text-sm">GitHub Repository</span>
+                                            <CheckCircle className="h-4 w-4 text-green-500" />
+                                            <span className="text-sm">Saving Version</span>
                                         </div>
                                         <div className="flex items-center gap-2">
-                                            {exportStatus === 'vercel' ? (
-                                                <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
-                                            ) : (
-                                                <div className="h-4 w-4 rounded-full border-2 border-muted" />
-                                            )}
-                                            <span className="text-sm">Vercel Deployment</span>
+                                            <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+                                            <span className="text-sm">Processing Content</span>
                                         </div>
                                     </div>
                                 </CardContent>
@@ -275,7 +236,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                             {/* Logs */}
                             <Card>
                                 <CardHeader>
-                                    <CardTitle className="text-sm">Export Logs</CardTitle>
+                                    <CardTitle className="text-sm">Deployment Logs</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                     <div className="bg-black text-green-400 p-4 rounded-md font-mono text-xs max-h-48 overflow-y-auto">
@@ -289,76 +250,40 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                     )}
 
                     {/* Success */}
-                    {exportStatus === 'success' && (
+                    {deployStatus === 'success' && (
                         <div className="space-y-4">
                             <Card className="bg-green-50 dark:bg-green-950 border-green-200 dark:border-green-800">
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-200">
                                         <CheckCircle className="h-5 w-5" />
-                                        Export Successful!
+                                        Deployment Successful!
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium mb-2">GitHub Repository</label>
-                                        <div className="flex gap-2">
-                                            <Input value={githubUrl} readOnly className="flex-1" />
-                                            <Button
-                                                size="icon"
-                                                variant="outline"
-                                                onClick={() => window.open(githubUrl, '_blank')}
-                                            >
-                                                <ExternalLink className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm font-medium mb-2">Live Website</label>
-                                        <div className="flex gap-2">
-                                            <Input value={vercelUrl} readOnly className="flex-1" />
-                                            <Button
-                                                size="icon"
-                                                variant="outline"
-                                                onClick={() => window.open(vercelUrl, '_blank')}
-                                            >
-                                                <ExternalLink className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </div>
-
                                     <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-md">
                                         <p className="text-sm text-blue-800 dark:text-blue-200">
-                                            ⏳ <strong>Note:</strong> Vercel build takes 1-2 minutes.
-                                            The website will be live shortly!
+                                            🎉 Your changes are now live. Refresh your website to see the updates.
                                         </p>
                                     </div>
                                 </CardContent>
                             </Card>
 
                             <div className="flex gap-2">
-                                <Button onClick={handleClose} variant="outline" className="flex-1">
+                                <Button onClick={handleClose} variant="outline" className="w-full">
                                     Close
-                                </Button>
-                                <Button
-                                    onClick={() => window.open(vercelUrl, '_blank')}
-                                    className="flex-1"
-                                >
-                                    <ExternalLink className="mr-2 h-4 w-4" />
-                                    Open Website
                                 </Button>
                             </div>
                         </div>
                     )}
 
                     {/* Error */}
-                    {exportStatus === 'error' && (
+                    {deployStatus === 'error' && (
                         <div className="space-y-4">
                             <Card className="bg-red-50 dark:bg-red-950 border-red-200 dark:border-red-800">
                                 <CardHeader>
                                     <CardTitle className="flex items-center gap-2 text-red-800 dark:text-red-200">
                                         <AlertCircle className="h-5 w-5" />
-                                        Export Failed
+                                        Deployment Failed
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
