@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import fs from 'fs'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
@@ -169,6 +170,23 @@ export async function POST(request: NextRequest) {
             data: { customDomain: deployData.domain }
           });
           console.log(`✅ [DEPLOY] Updated custom domain for project ${projectId} to ${deployData.domain}`);
+
+          // Add to queue for host script to process (Nginx/SSL)
+          try {
+            const queueDir = '/app/queue';
+            const queueFile = `${queueDir}/pending_domains.txt`;
+
+            // Ensure directory exists (it should be mounted, but good to check)
+            if (!fs.existsSync(queueDir)) {
+              fs.mkdirSync(queueDir, { recursive: true });
+            }
+
+            // Append domain to file (one per line)
+            fs.appendFileSync(queueFile, `${deployData.domain}\n`);
+            console.log(`📝 [DEPLOY] Added ${deployData.domain} to pending queue`);
+          } catch (queueError) {
+            console.error('⚠️ [DEPLOY] Failed to write to queue file:', queueError);
+          }
         }
       } catch (err) {
         console.error('⚠️ [DEPLOY] Failed to update custom domain:', err);
