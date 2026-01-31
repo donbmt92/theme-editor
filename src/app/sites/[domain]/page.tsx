@@ -72,7 +72,25 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
 
     // Reconstruct Theme Params from VersionParam table
     // Start with default params
-    let themeParams = siteData.theme.defaultParams as Record<string, any>;
+    let themeParams = siteData.theme.defaultParams;
+
+    // Handle case where defaultParams is stored as a stringified JSON
+    if (typeof themeParams === 'string') {
+        try {
+            themeParams = JSON.parse(themeParams);
+        } catch (e) {
+            console.error('Failed to parse defaultParams:', e);
+            themeParams = {};
+        }
+    }
+
+    // Ensure it's an object
+    if (!themeParams || typeof themeParams !== 'object') {
+        themeParams = {};
+    }
+
+    // Cast to record for manipulation
+    themeParams = themeParams as Record<string, any>;
 
     // If we have saved params, override defaults
     if (latestVersion && latestVersion.params && latestVersion.params.length > 0) {
