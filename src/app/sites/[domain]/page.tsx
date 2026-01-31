@@ -15,6 +15,9 @@ async function getSiteData(domain: string) {
             versions: {
                 orderBy: { versionNumber: 'desc' },
                 take: 1,
+                include: {
+                    params: true // Fetch user customization params
+                }
             }
         }
     });
@@ -28,6 +31,9 @@ async function getSiteData(domain: string) {
                 versions: {
                     orderBy: { versionNumber: 'desc' },
                     take: 1,
+                    include: {
+                        params: true
+                    }
                 }
             }
         });
@@ -64,6 +70,40 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
     const latestVersion = siteData.versions[0];
     const content = latestVersion ? latestVersion.snapshot : {};
 
+    // Reconstruct Theme Params from VersionParam table
+    // Start with default params
+    let themeParams = siteData.theme.defaultParams as Record<string, any>;
+
+    // If we have saved params, override defaults
+    if (latestVersion && latestVersion.params && latestVersion.params.length > 0) {
+        // Reconstruct nested object from flattened params (e.g. "colors.primary" -> { colors: { primary: ... } })
+        // A simple approach for now:
+        // 1. Create a deep copy of defaults
+        themeParams = JSON.parse(JSON.stringify(themeParams));
+
+        // 2. Apply updates
+        latestVersion.params.forEach((param) => {
+            // Basic support for flat keys or simple nesting if your params are stored that way.
+            // Usually params are stored as keys like 'colors', 'typography' with JSON string values if complex,
+            // or dot notation.
+            // Based on your schema, VersionParam has paramKey and paramValue.
+            try {
+                // Check if value is JSON
+                const parsedValue = JSON.parse(param.paramValue);
+                themeParams[param.paramKey] = parsedValue;
+            } catch (e) {
+                // If simple string
+                themeParams[param.paramKey] = param.paramValue;
+            }
+        });
+    } else {
+        // Fallback: If no params saved, maybe use a safe default for secondary color to prevent crash
+        if (!themeParams.colors) themeParams.colors = {};
+        if (!themeParams.colors.secondary) themeParams.colors.secondary = "#000000"; // Safety net
+    }
+
+    // Render based on Theme Name or ID
+
     // Render based on Theme Name or ID
     // We support VietnamCoffeeTheme for all these variations for now
     const supportedThemes = [
@@ -85,7 +125,7 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
         return (
             <VietnamCoffeeTheme
                 content={content as any}
-                theme={siteData.theme.defaultParams as any}
+                theme={themeParams as any}
             />
         );
     }
