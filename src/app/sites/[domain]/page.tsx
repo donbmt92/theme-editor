@@ -65,7 +65,7 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
     const content = latestVersion ? latestVersion.snapshot : {};
 
     // Render based on Theme Name
-    if (siteData.theme.name === "vietnam-coffee") {
+    if (siteData.theme.name === "vietnam-coffee" || siteData.theme.name === "Corporate Professional") {
         // Provide a way to pass content. Since VietnamCoffeeTheme likely expects specific props,
         // you might need to adapt 'content' (which is JSON) to the props it expects.
 
