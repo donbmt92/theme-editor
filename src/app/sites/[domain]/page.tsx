@@ -90,14 +90,14 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
     }
 
     // Cast to record for manipulation
-    themeParams = themeParams as Record<string, any>;
+    let safeThemeParams = (themeParams || {}) as Record<string, any>;
 
     // If we have saved params, override defaults
     if (latestVersion && latestVersion.params && latestVersion.params.length > 0) {
         // Reconstruct nested object from flattened params (e.g. "colors.primary" -> { colors: { primary: ... } })
         // A simple approach for now:
         // 1. Create a deep copy of defaults
-        themeParams = JSON.parse(JSON.stringify(themeParams));
+        safeThemeParams = JSON.parse(JSON.stringify(safeThemeParams));
 
         // 2. Apply updates
         latestVersion.params.forEach((param) => {
@@ -108,16 +108,16 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
             try {
                 // Check if value is JSON
                 const parsedValue = JSON.parse(param.paramValue);
-                themeParams[param.paramKey] = parsedValue;
+                safeThemeParams[param.paramKey] = parsedValue;
             } catch (e) {
                 // If simple string
-                themeParams[param.paramKey] = param.paramValue;
+                safeThemeParams[param.paramKey] = param.paramValue;
             }
         });
     } else {
         // Fallback: If no params saved, maybe use a safe default for secondary color to prevent crash
-        if (!themeParams.colors) themeParams.colors = {};
-        if (!themeParams.colors.secondary) themeParams.colors.secondary = "#000000"; // Safety net
+        if (!safeThemeParams.colors) safeThemeParams.colors = {};
+        if (!safeThemeParams.colors.secondary) safeThemeParams.colors.secondary = "#000000"; // Safety net
     }
 
     // Render based on Theme Name or ID
@@ -143,7 +143,7 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
         return (
             <VietnamCoffeeTheme
                 content={content as any}
-                theme={themeParams as any}
+                theme={safeThemeParams as any}
             />
         );
     }
