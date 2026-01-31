@@ -64,8 +64,21 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
     const latestVersion = siteData.versions[0];
     const content = latestVersion ? latestVersion.snapshot : {};
 
-    // Render based on Theme Name
-    if (siteData.theme.name === "vietnam-coffee" || siteData.theme.name === "Corporate Professional") {
+    // Render based on Theme Name or ID
+    // We support VietnamCoffeeTheme for all these variations for now
+    const supportedThemes = [
+        "vietnam-coffee",
+        "vietnam-coffee-theme",
+        "Vietnam Coffee Export",
+        "corporate-theme",
+        "Corporate Professional",
+        "creative-theme",
+        "Creative Portfolio",
+        "minimalist-theme",
+        "Minimalist Clean"
+    ];
+
+    if (supportedThemes.includes(siteData.theme.name) || supportedThemes.includes(siteData.theme.id)) {
         // Provide a way to pass content. Since VietnamCoffeeTheme likely expects specific props,
         // you might need to adapt 'content' (which is JSON) to the props it expects.
 
