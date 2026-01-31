@@ -70,54 +70,51 @@ export default async function SiteHomePage({ params }: { params: { domain: strin
     const latestVersion = siteData.versions[0];
     const content = latestVersion ? latestVersion.snapshot : {};
 
-    // Reconstruct Theme Params from VersionParam table
-    // Start with default params
-    let themeParams = siteData.theme.defaultParams;
+    // Get theme params from snapshot (which contains the full deployed state)
+    // The snapshot contains both content AND themeParams merged together
+    let safeThemeParams: Record<string, any> = {};
 
-    // Handle case where defaultParams is stored as a stringified JSON
-    if (typeof themeParams === 'string') {
-        try {
-            themeParams = JSON.parse(themeParams);
-        } catch (e) {
-            console.error('Failed to parse defaultParams:', e);
-            themeParams = {};
-        }
-    }
+    if (latestVersion && latestVersion.snapshot) {
+        // The snapshot IS the themeParams object (saved by deploy-project route)
+        let snapshotData = latestVersion.snapshot;
 
-    // Ensure it's an object
-    if (!themeParams || typeof themeParams !== 'object') {
-        themeParams = {};
-    }
-
-    // Cast to record for manipulation
-    let safeThemeParams = (themeParams || {}) as Record<string, any>;
-
-    // If we have saved params, override defaults
-    if (latestVersion && latestVersion.params && latestVersion.params.length > 0) {
-        // Reconstruct nested object from flattened params (e.g. "colors.primary" -> { colors: { primary: ... } })
-        // A simple approach for now:
-        // 1. Create a deep copy of defaults
-        safeThemeParams = JSON.parse(JSON.stringify(safeThemeParams));
-
-        // 2. Apply updates
-        latestVersion.params.forEach((param) => {
-            // Basic support for flat keys or simple nesting if your params are stored that way.
-            // Usually params are stored as keys like 'colors', 'typography' with JSON string values if complex,
-            // or dot notation.
-            // Based on your schema, VersionParam has paramKey and paramValue.
+        // Handle if it's a string
+        if (typeof snapshotData === 'string') {
             try {
-                // Check if value is JSON
-                const parsedValue = JSON.parse(param.paramValue);
-                safeThemeParams[param.paramKey] = parsedValue;
+                snapshotData = JSON.parse(snapshotData);
             } catch (e) {
-                // If simple string
-                safeThemeParams[param.paramKey] = param.paramValue;
+                console.error('Failed to parse snapshot:', e);
+                snapshotData = {};
             }
-        });
+        }
+
+        // Use snapshot data as theme params
+        safeThemeParams = (snapshotData || {}) as Record<string, any>;
     } else {
-        // Fallback: If no params saved, maybe use a safe default for secondary color to prevent crash
-        if (!safeThemeParams.colors) safeThemeParams.colors = {};
-        if (!safeThemeParams.colors.secondary) safeThemeParams.colors.secondary = "#000000"; // Safety net
+        // Fallback to default params if no snapshot
+        let themeParams = siteData.theme.defaultParams;
+
+        if (typeof themeParams === 'string') {
+            try {
+                themeParams = JSON.parse(themeParams);
+            } catch (e) {
+                console.error('Failed to parse defaultParams:', e);
+                themeParams = {};
+            }
+        }
+
+        safeThemeParams = (themeParams || {}) as Record<string, any>;
+    }
+
+    // Safety net for missing colors
+    if (!safeThemeParams.colors) {
+        safeThemeParams.colors = {
+            primary: "#8B4513",
+            secondary: "#D2691E",
+            accent: "#FFD700",
+            background: "#F5F5DC",
+            text: "#2D3748"
+        };
     }
 
     // Render based on Theme Name or ID
