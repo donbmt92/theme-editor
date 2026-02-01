@@ -49,8 +49,8 @@ if [ $? -eq 0 ]; then
     # 4. Reload Nginx
     systemctl reload nginx
     
-    # 5. Request SSL
-    certbot --nginx -d $DOMAIN -d www.$DOMAIN
+    # 5. Request SSL (only for main domain, not www)
+    certbot --nginx -d $DOMAIN --non-interactive --agree-tos --redirect
     
     echo "Success! https://$DOMAIN should be active."
 else
