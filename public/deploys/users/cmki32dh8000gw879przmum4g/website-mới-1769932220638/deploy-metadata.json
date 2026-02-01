@@ -1,0 +1,15 @@
+{
+  "projectId": "cmkz7d2np0009hl6xxfsghih6",
+  "userId": "cmki32dh8000gw879przmum4g",
+  "projectName": "website-mới",
+  "deployTime": "2026-02-01T07:50:20.718Z",
+  "fileCount": 11,
+  "userFolderPath": "users/cmki32dh8000gw879przmum4g/website-mới-1769932220638/",
+  "deployScriptPath": "deploy-nginx.sh",
+  "serverType": "nginx",
+  "domain": "localhost",
+  "includeAssets": true,
+  "version": "2.0-vps-optimized",
+  "vpsSpecs": "4vCPU-16GB-200GB-NVMe",
+  "optimized": true
+}

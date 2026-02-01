@@ -22,6 +22,44 @@ services:
     networks:
       - app-network
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - app-network
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql://deploy:Hackconcat36@host.docker.internal:5432/theme_editor
+      - NEXTAUTH_URL=https://geekgolfers.com
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: npx tsx workers.ts
+    volumes:
+      - ./public/uploads:/app/public/uploads
+      - ./queue:/app/queue
+    depends_on:
+      - redis
+      - app
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  redis-data:

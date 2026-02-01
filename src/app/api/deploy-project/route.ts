@@ -3,35 +3,15 @@ import fs from 'fs'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { DeployProcessor } from './deploy-processor'
-import { initializeCleanupInterval } from './utils/cleanup'
+// import { DeployProcessor } from './deploy-processor' // No longer needed directly
 import { VPS_CONFIG } from './constants'
 import { DeployData } from './types'
-
-// Deploy queue management
-const deployQueue = new Map<string, Promise<unknown>>()
-
-// Background cleanup job
-let cleanupInterval: NodeJS.Timeout | null = null
-if (!cleanupInterval) {
-  cleanupInterval = initializeCleanupInterval()
-}
+import { deployQueue } from '@/lib/queue/queues'
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
 
   try {
-    // Rate limiting check
-    if (deployQueue.size >= VPS_CONFIG.MAX_CONCURRENT_DEPLOYS) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Server is busy. Too many deploys in progress. Please try again later.'
-        },
-        { status: 429 }
-      )
-    }
-
     // Authentication
     const session = await getServerSession(authOptions)
     if (!session?.user?.id) {
@@ -51,6 +31,9 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Check query params if we want to force rebuild, etc. 
+    // (Old logic didn't seem to use them extensively in the route, but passed them to processor)
 
     // Check if themeParams is provided in the request (from Editor)
     // If so, save it as a new version and use it
@@ -87,8 +70,6 @@ export async function POST(request: NextRequest) {
 
       } catch (err) {
         console.error('⚠️ [DEPLOY] Failed to auto-save version:', err);
-        // If save fails, we might still want to proceed with the provided params
-        // or fall back. Let's try to proceed with provided params.
         themeParams = deployData.themeParams;
       }
 
@@ -162,8 +143,6 @@ export async function POST(request: NextRequest) {
 
         if (existingProject) {
           console.warn(`⚠️ [DEPLOY] Domain ${deployData.domain} is already in use by project ${existingProject.id}`);
-          // You might want to return error here, or just ignore update
-          // For now, let's just log and skip update to avoid crash
         } else {
           await prisma.project.update({
             where: { id: projectId },
@@ -176,7 +155,7 @@ export async function POST(request: NextRequest) {
             const queueDir = '/app/queue';
             const queueFile = `${queueDir}/pending_domains.txt`;
 
-            // Ensure directory exists (it should be mounted, but good to check)
+            // Ensure directory exists
             if (!fs.existsSync(queueDir)) {
               fs.mkdirSync(queueDir, { recursive: true });
             }
@@ -194,7 +173,6 @@ export async function POST(request: NextRequest) {
     }
 
     // We need project language for correct template localization
-    // If we deploy from Editor (themeParams present), we haven't fetched project settings yet
     if (deployData.themeParams && projectId) {
       const proj = await prisma.project.findUnique({
         where: { id: projectId },
@@ -210,68 +188,43 @@ export async function POST(request: NextRequest) {
     }
 
     // Update deployData with loaded themeParams
-    const updatedDeployData: DeployData = {
+    const updatedDeployData = {
       ...deployData,
       themeParams: themeWithLanguage,
       userId: session.user.id
     }
 
-    // Check if this deploy is already in progress
-    const deployKey = `${userId}-${projectId}`
-    if (deployQueue.has(deployKey)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Deploy already in progress for this project'
-        },
-        { status: 409 }
-      )
-    }
+    // Add job to BullMQ queue
+    const job = await deployQueue.add(
+      "deploy-project",
+      updatedDeployData,
+      {
+        jobId: `deploy-${projectId}-${Date.now()}`,
+        priority: deployData.domain ? 1 : 5, // Higher priority for custom domains
+        removeOnComplete: true,
+      }
+    );
 
-    // Add to queue and start processing
-    const deployPromise = processDeploy(updatedDeployData, userId, projectId, startTime)
-    deployQueue.set(deployKey, deployPromise)
+    console.log(`✅ [API] Deploy job ${job.id} queued for ${deployData.projectName}`);
 
-    try {
-      const result = await deployPromise
-      deployQueue.delete(deployKey)
-      return NextResponse.json(result)
-    } catch (error) {
-      deployQueue.delete(deployKey)
-      throw error
-    }
+    return NextResponse.json({
+      success: true,
+      jobId: job.id,
+      message: "Deployment queued successfully",
+      estimatedTime: "2-5 minutes",
+    });
 
   } catch (error) {
     const totalTime = Date.now() - startTime
-    console.error('💥 [DEPLOY] Deploy failed after', totalTime, 'ms:', error)
+    console.error('💥 [DEPLOY] Deploy queue failed:', error)
 
     return NextResponse.json(
       {
         success: false,
-        error: 'Deploy failed',
+        error: 'Failed to queue deployment',
         details: error instanceof Error ? error.message : 'Unknown error',
-        deployTime: totalTime
       },
       { status: 500 }
     )
   }
-}
-
-/**
- * Process deployment using the DeployProcessor
- */
-async function processDeploy(
-  deployData: DeployData,
-  userId: string,
-  projectId: string,
-  startTime: number
-) {
-  const processor = new DeployProcessor({
-    deployData,
-    userId,
-    projectId,
-    startTime
-  })
-
-  return await processor.process()
 }
