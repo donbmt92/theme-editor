@@ -3,12 +3,13 @@ export interface DeployJobData {
     projectId: string;
     userId: string;
     projectName: string;
-    domain?: string;
+    description: string;
+    domain: string;
     themeParams: any;
-    createUserFolder?: boolean;
-    generateDeployScript?: boolean;
-    serverType?: string;
-    includeAssets?: boolean;
+    createUserFolder: boolean;
+    generateDeployScript: boolean;
+    serverType: 'nginx' | 'apache' | 'node' | 'docker';
+    includeAssets: boolean;
 }
 
 export interface DeployJobResult {
@@ -24,7 +25,7 @@ export interface DeployJobResult {
 // AI Generation Job
 export interface AIJobData {
     userId: string;
-    prompt: string;
+    businessInfo: any;
     type: "theme" | "product-page";
     model?: string;
 }

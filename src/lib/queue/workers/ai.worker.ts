@@ -15,10 +15,12 @@ export const aiWorker = new Worker<AIJobData, AIJobResult>(
             });
 
             // Your existing AI generation logic
-            const content = await generateThemeContent(
-                job.data.prompt,
-                job.data.type,
-            );
+            let content;
+            if (job.data.type === 'theme') {
+                content = await generateThemeContent(job.data.businessInfo);
+            } else {
+                throw new Error(`Unsupported AI generation type: ${job.data.type}`);
+            }
 
             await job.updateProgress({
                 percentage: 100,
