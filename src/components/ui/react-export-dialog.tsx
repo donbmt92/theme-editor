@@ -143,7 +143,10 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                         }
                     }
 
-                    if (statusData.state === 'completed') {
+                    // Check job state (API returns statusData.job.state)
+                    const jobState = statusData.job?.state || statusData.state;
+
+                    if (jobState === 'completed') {
                         clearInterval(pollInterval);
                         addLog('🎉 Version saved successfully!');
                         addLog('⚙️  Domain configuration in progress...');
@@ -157,9 +160,9 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                         setDeployedUrl(liveUrl);
                         setDeployStatus('success');
                         setIsDeploying(false);
-                    } else if (statusData.state === 'failed') {
+                    } else if (jobState === 'failed') {
                         clearInterval(pollInterval);
-                        throw new Error(statusData.failedReason || 'Deployment failed');
+                        throw new Error(statusData.job?.error || statusData.failedReason || 'Deployment failed');
                     }
                 } catch (pollErr) {
                     // Don't stop polling on transient network errors, but stop on max retries if implemented
