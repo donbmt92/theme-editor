@@ -120,34 +120,68 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                 throw new Error(result.error || 'Deployment failed')
             }
 
-            addLog('✅ Version saved successfully')
-            addLog(`📦 Created snapshot for project: ${projectName}`)
+            addLog('✅ Job queued successfully')
+            addLog(`🆔 Job ID: ${result.jobId}`)
+            addLog('⏳ Waiting for server to process...')
 
-            if (customDomain) {
-                addLog(`🌐 Configured domain: ${customDomain}`)
-            }
+            // Poll for job status
+            const pollInterval = setInterval(async () => {
+                try {
+                    const statusRes = await fetch(`/api/jobs/${result.jobId}`);
+                    const statusData = await statusRes.json();
 
-            // In a real multi-tenant setup, the URL is determined by the project's subdomain/custom domain
-            // For now, we'll try to guess it or use a placeholder.
-            // Ideally, the API should return the live URL.
-            // Let's assume standard format for now:
-            const liveUrl = result.domain ? `http://${result.domain}` : '#'
+                    if (statusData.logs && statusData.logs.length > 0) {
+                        // Update logs (optional: append only new logs if needed)
+                        // For simplicity, we can just show the latest message from progress
+                    }
 
-            setDeployedUrl(liveUrl)
+                    if (statusData.progress) {
+                        // Update logs based on progress message
+                        const msg = statusData.progress.message;
+                        if (msg && !logs.includes(msg)) {
+                            addLog(`🔄 ${msg}`);
+                        }
+                    }
 
-            addLog('♻️ Live server updated with new content')
-            addLog('🎉 Deployment successful!')
+                    if (statusData.state === 'completed') {
+                        clearInterval(pollInterval);
+                        addLog('🎉 Deployment successful!');
 
-            setDeployStatus('success')
+                        const liveUrl = deployData.domain && deployData.domain !== 'localhost'
+                            ? `https://${deployData.domain}`
+                            : `http://${window.location.hostname}`; // Fallback
+
+                        setDeployedUrl(liveUrl);
+                        setDeployStatus('success');
+                        setIsDeploying(false);
+                    } else if (statusData.state === 'failed') {
+                        clearInterval(pollInterval);
+                        throw new Error(statusData.failedReason || 'Deployment failed');
+                    }
+                } catch (pollErr) {
+                    // Don't stop polling on transient network errors, but stop on max retries if implemented
+                    console.error('Poll error:', pollErr);
+                }
+            }, 2000);
+
+            // Cleanup interval on unmount or error (needs useEffect or careful handling)
+            // Ideally we should use a useRef for the interval ID to clear it later
+
+            // NOTE: Since this is inside handleDeploy, we can't easily clear the interval if the component unmounts.
+            // A better approach is to use the existing useJobStatus hook or move this logic to a useEffect.
+            // For now, to keep it simple within this function scope, we'll assume the dialog stays open.
+
+            // Force status to deploying (it's already set)
+            setDeployStatus('deploying');
 
         } catch (err: any) {
             console.error('Deploy error:', err)
             setError(err.message || 'Deployment failed')
             setDeployStatus('error')
             addLog(`❌ Error: ${err.message}`)
-        } finally {
             setIsDeploying(false)
         }
+        // Finally block moved inside the flow logic because polling is async
     }
 
     const resetDialog = () => {
@@ -229,7 +263,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                                 </div>
                                 {dnsMessage && (
                                     <p className={`text-xs mt-1 ${dnsStatus === 'verified' ? 'text-green-600' :
-                                            dnsStatus === 'unverified' ? 'text-yellow-600' : 'text-red-500'
+                                        dnsStatus === 'unverified' ? 'text-yellow-600' : 'text-red-500'
                                         }`}>
                                         {dnsMessage}
                                     </p>

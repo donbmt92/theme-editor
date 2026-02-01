@@ -101,10 +101,40 @@ if [ \$? -eq 0 ]; then
     echo "🌐 Website của bạn có thể truy cập tại:"
     echo "   http://${domain}"
     echo ""
-    echo "📝 Bước tiếp theo:"
     echo "   1. Cập nhật DNS để trỏ ${domain} về server này"
-    echo "   2. Cài đặt SSL certificate với Let's Encrypt:"
-    echo "      sudo certbot --nginx -d ${domain} -d www.${domain}"
+    echo "   2. SSL sẽ được cài đặt tự động (nếu DNS đã trỏ đúng)"
+
+    # Tự động cài đặt SSL nếu có domain
+    if [ ! -z "${domain}" ] && [ "${domain}" != "localhost" ]; then
+        echo "🔒 Đang cấu hình SSL cho ${domain}..."
+        
+        # Kiểm tra certbot đã cài chưa
+        if ! command -v certbot &> /dev/null; then
+            echo "📦 Cài đặt Certbot..."
+            apt-get update
+            apt-get install -y certbot python3-certbot-nginx
+        fi
+
+        # Chạy certbot
+        # Sử dụng email admin mặc định hoặc tham số
+        ADMIN_EMAIL="admin@${domain}"
+        
+        echo "🔄 Chạy Certbot cho ${domain}..."
+        certbot --nginx \
+            -d ${domain} -d www.${domain} \
+            --non-interactive \
+            --agree-tos \
+            -m \$ADMIN_EMAIL \
+            --redirect \
+            --expand
+            
+        if [ \$? -eq 0 ]; then
+            echo "✅ SSL đã được cài đặt thành công!"
+        else
+            echo "⚠️  Cài đặt SSL thất bại. Vui lòng kiểm tra lại DNS và chạy thủ công:"
+            echo "   sudo certbot --nginx -d ${domain} -d www.${domain}"
+        fi
+    fi
 else
     echo "❌ Cấu hình Nginx có lỗi!"
     echo "🔍 Kiểm tra lỗi chi tiết:"
@@ -365,7 +395,7 @@ export function generateDeployScript(params: {
   timestamp?: number
 }): string {
   const { projectName, serverType, domain, timestamp } = params
-  
+
   switch (serverType) {
     case SERVER_TYPES.NGINX:
       return generateNginxDeployScript({ projectName, domain: domain || 'localhost' })
