@@ -1,7 +1,7 @@
 import { Worker, Job } from "bullmq";
 import { redisConnection } from "../config";
 import { DeployJobData, DeployJobResult, JobProgress } from "../types";
-import { DeployProcessor } from "@/app/api/deploy-project/deploy-processor";
+import { prisma } from "@/lib/prisma";
 
 export const deployWorker = new Worker<DeployJobData, DeployJobResult>(
     "deploy",
@@ -16,23 +16,42 @@ export const deployWorker = new Worker<DeployJobData, DeployJobResult>(
                 stage: "init",
             } as JobProgress);
 
-            // Create processor
-            const processor = new DeployProcessor({
-                deployData: job.data,
-                userId: job.data.userId,
-                projectId: job.data.projectId,
-                startTime: Date.now(),
-            });
+            const { projectId, userId, themeParams, projectName, description } = job.data;
 
-            // Hook into processor progress (if available) - For now, manually update stages
+            // Save version snapshot to database
             await job.updateProgress({
-                percentage: 20,
-                message: "Generating file manifest...",
-                stage: "manifest",
+                percentage: 30,
+                message: "Saving version snapshot...",
+                stage: "snapshot",
             } as JobProgress);
 
-            // Process deployment
-            const result = await processor.process();
+            const project = await prisma.project.findUnique({
+                where: { id: projectId },
+                include: {
+                    versions: {
+                        orderBy: { versionNumber: 'desc' },
+                        take: 1
+                    }
+                }
+            });
+
+            if (!project) {
+                throw new Error(`Project ${projectId} not found`);
+            }
+
+            const latestVersionNumber = project.versions[0]?.versionNumber || 0;
+            const newVersionNumber = latestVersionNumber + 1;
+
+            // Create new version with theme params as snapshot
+            const version = await prisma.projectVersion.create({
+                data: {
+                    projectId,
+                    versionNumber: newVersionNumber,
+                    snapshot: themeParams, // Store theme params as snapshot
+                }
+            });
+
+            console.log(`✅ [WORKER] Created version ${version.versionNumber} for project ${projectId}`);
 
             await job.updateProgress({
                 percentage: 100,
@@ -41,7 +60,14 @@ export const deployWorker = new Worker<DeployJobData, DeployJobResult>(
             } as JobProgress);
 
             console.log(`✅ [WORKER] Deploy job ${job.id} completed`);
-            return result;
+
+            return {
+                success: true,
+                projectId,
+                versionNumber: newVersionNumber,
+                domain: job.data.domain,
+                message: "Deployment successful. Domain will be configured shortly.",
+            };
         } catch (error: any) {
             console.error(`❌ [WORKER] Deploy job ${job.id} failed:`, error);
             throw error; // BullMQ will handle retries

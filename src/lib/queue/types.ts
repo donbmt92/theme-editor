@@ -15,10 +15,9 @@ export interface DeployJobData {
 export interface DeployJobResult {
     success: boolean;
     projectId: string;
-    projectName: string;
-    folderPath: string;
-    fileCount: number;
-    deployTime: number;
+    versionNumber: number;
+    domain?: string;
+    message?: string;
     error?: string;
 }
 

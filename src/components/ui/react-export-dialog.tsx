@@ -145,7 +145,10 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
 
                     if (statusData.state === 'completed') {
                         clearInterval(pollInterval);
-                        addLog('🎉 Deployment successful!');
+                        addLog('🎉 Version saved successfully!');
+                        addLog('⚙️  Domain configuration in progress...');
+                        addLog('🔒 SSL certificate will be provisioned automatically');
+                        addLog('⏱️  Your site will be live in 1-2 minutes');
 
                         const liveUrl = deployData.domain && deployData.domain !== 'localhost'
                             ? `https://${deployData.domain}`
