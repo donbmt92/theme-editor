@@ -201,7 +201,8 @@ export async function POST(request: NextRequest) {
       {
         jobId: `deploy-${projectId}-${Date.now()}`,
         priority: deployData.domain ? 1 : 5, // Higher priority for custom domains
-        removeOnComplete: true,
+        removeOnComplete: false, // Keep job for status polling
+        removeOnFail: false, // Keep failed jobs for debugging
       }
     );
 
