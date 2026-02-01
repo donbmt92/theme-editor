@@ -33,7 +33,7 @@ while IFS= read -r domain || [ -n "$domain" ]; do
         
         # Run add-tenant script (must be run as root/sudo)
         # Assuming this script itself is run via sudo cron
-        ./scripts/add-tenant.sh "$domain" >> "$LOG_FILE" 2>&1
+        /bin/bash ./scripts/add-tenant.sh "$domain" >> "$LOG_FILE" 2>&1
         
         if [ $? -eq 0 ]; then
             echo "[$(date)] Successfully added $domain" >> "$LOG_FILE"
