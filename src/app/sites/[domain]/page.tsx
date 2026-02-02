@@ -7,6 +7,8 @@ import VietnamCoffeeTheme from "@/components/themes/VietnamCoffeeTheme";
 
 // Helper function to get site data
 async function getSiteData(domain: string) {
+    console.log("🔍 [DEBUG] Current Request Domain:", domain);
+
     // 1. Try to find by custom domain (e.g. shopgiay.com)
     let project = await prisma.project.findFirst({
         where: { customDomain: domain },
@@ -23,10 +25,17 @@ async function getSiteData(domain: string) {
     });
     console.log("project", project?.name);
 
+    if (project) {
+        console.log("✅ [DEBUG] Found project by Custom Domain:", project.name, "(ID:", project.id, ")");
+    }
+
     // 2. If not found, try to find by subdomain (e.g. shopgiay.geekgolfers.com)
     if (!project) {
+        const subdomain = domain.split('.')[0];
+        console.log("ℹ️ [DEBUG] Custom domain not found. Trying subdomain:", subdomain);
+
         project = await prisma.project.findFirst({
-            where: { subdomain: domain.split('.')[0] },
+            where: { subdomain },
             include: {
                 theme: true,
                 versions: {
