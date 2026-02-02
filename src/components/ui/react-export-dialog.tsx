@@ -66,27 +66,72 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
     const checkDomain = async () => {
         if (!customDomain) return;
 
+        const trimmedDomain = customDomain.trim().toLowerCase();
+
+        // Check reserved domains
+        const reservedDomains = ['geekgolfers.com', 'www.geekgolfers.com', 'localhost'];
+        if (reservedDomains.includes(trimmedDomain)) {
+            setDnsStatus('error');
+            setDnsMessage('❌ This domain is reserved and cannot be used for deployment.');
+            return;
+        }
+
         setDnsStatus('checking');
-        setDnsMessage('Checking DNS records...');
+        setDnsMessage('Checking domain availability...');
 
         try {
+            // Check if domain is already used by another project
+            const checkRes = await fetch(`/api/check-domain-availability?domain=${encodeURIComponent(trimmedDomain)}&projectId=${projectId}`);
+            const checkData = await checkRes.json();
+
+            if (!checkData.available) {
+                setDnsStatus('error');
+                setDnsMessage(`❌ Domain already used by project: "${checkData.usedBy}"`);
+                return;
+            }
+
+            // Check DNS
             const res = await fetch('/api/check-domain', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ domain: customDomain })
+                body: JSON.stringify({ domain: trimmedDomain })
             });
             const data = await res.json();
 
             if (data.ip) {
                 setDnsStatus('verified');
-                setDnsMessage('✅ Domain points to this server');
+                setDnsMessage('✅ Domain is available and points to this server');
             } else {
                 setDnsStatus('unverified');
-                setDnsMessage('⚠️ Domain does not point to this server yet. You can still deploy, but the site won\'t work until DNS propagates.');
+                setDnsMessage('⚠️ Domain is available but DNS not configured yet. You can deploy, but site won\'t work until DNS propagates.');
             }
         } catch (err) {
             setDnsStatus('error');
-            setDnsMessage('❌ Invalid domain or DNS check failed');
+            setDnsMessage('❌ Failed to validate domain');
+        }
+    };
+
+    const removeDomain = async () => {
+        if (!confirm('Remove custom domain from this project? The site will no longer be accessible via this domain.')) {
+            return;
+        }
+
+        try {
+            const res = await fetch(`/api/projects/${projectId}/domain`, {
+                method: 'DELETE',
+            });
+
+            if (res.ok) {
+                setCustomDomain('');
+                setDnsStatus('idle');
+                setDnsMessage('');
+                alert('Domain removed successfully!');
+            } else {
+                alert('Failed to remove domain');
+            }
+        } catch (err) {
+            console.error('Failed to remove domain:', err);
+            alert('Failed to remove domain');
         }
     };
 
@@ -96,9 +141,25 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
             return
         }
 
-        if (!customDomain || customDomain.trim() === '') {
+        const trimmedDomain = customDomain.trim().toLowerCase();
+
+        if (!trimmedDomain) {
             setError('❌ Domain is required! Please enter a custom domain.')
             return
+        }
+
+        // Block reserved domains
+        const reservedDomains = ['geekgolfers.com', 'www.geekgolfers.com', 'localhost'];
+        if (reservedDomains.includes(trimmedDomain)) {
+            setError('❌ This domain is reserved and cannot be used for deployment.')
+            return
+        }
+
+        // Validate DNS status (optional warning, not blocking)
+        if (dnsStatus === 'error') {
+            if (!confirm('Domain validation failed. Continue anyway?')) {
+                return;
+            }
         }
 
         setIsDeploying(true)
@@ -265,7 +326,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
 
                             <div>
                                 <label className="block text-sm font-medium mb-2">
-                                    Custom Domain (Optional)
+                                    Custom Domain *
                                 </label>
                                 <div className="flex gap-2">
                                     <Input
@@ -277,14 +338,25 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
                                         }}
                                         placeholder="e.g. shopgiay.vn"
                                         onBlur={checkDomain}
+                                        required
                                     />
                                     <Button
                                         variant="outline"
                                         onClick={checkDomain}
                                         disabled={!customDomain || dnsStatus === 'checking'}
                                     >
-                                        {dnsStatus === 'checking' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Check DNS'}
+                                        {dnsStatus === 'checking' ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Validate'}
                                     </Button>
+                                    {customDomain && (
+                                        <Button
+                                            variant="destructive"
+                                            onClick={removeDomain}
+                                            size="icon"
+                                            title="Remove domain"
+                                        >
+                                            ✕
+                                        </Button>
+                                    )}
                                 </div>
                                 {dnsMessage && (
                                     <p className={`text-xs mt-1 ${dnsStatus === 'verified' ? 'text-green-600' :
