@@ -39,9 +39,10 @@ interface VietnamCoffeeThemeProps {
   theme: ThemeParams
   content?: Record<string, unknown>
   onContentUpdate?: (content: Record<string, unknown>) => void // Add callback for content updates
+  isEditorPreview?: boolean // Only show product page preview in editor, not on deployed site
 }
 
-export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: VietnamCoffeeThemeProps) {
+export default function VietnamCoffeeTheme({ theme, content, onContentUpdate, isEditorPreview = false }: VietnamCoffeeThemeProps) {
   // Load content from vietnam-coffee-project-2025-07-19.json structure
   const defaultContent = {
     header: {
@@ -380,10 +381,11 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate }: 
   // }
 
   // Check if Product Page preview is enabled in editor
+  // IMPORTANT: Only show product preview in editor mode, not on deployed sites
   const activeProductPageId = finalContent.activeProductPageId
   const productPages = finalContent.productPages || {}
   const activeProductPage = activeProductPageId ? productPages[activeProductPageId] : undefined
-  const showProductPage = activeProductPage?.showPreview || false
+  const showProductPage = isEditorPreview && activeProductPage?.showPreview || false
 
   if (showProductPage && activeProductPageId) {
     return <ProductPage theme={theme} content={finalContent} />

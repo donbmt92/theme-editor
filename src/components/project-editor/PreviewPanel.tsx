@@ -31,6 +31,7 @@ const PreviewPanel = ({ themeParams, activeTab }: PreviewPanelProps) => {
         <div className="min-h-full">
           <VietnamCoffeeTheme
             theme={themeParams}
+            isEditorPreview={true}
           />
         </div>
       </div>
