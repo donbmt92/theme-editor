@@ -21,9 +21,9 @@ async function getSiteData(domain: string) {
                     params: true // Fetch user customization params
                 }
             }
-        }
+        },
+        orderBy: { updatedAt: 'desc' } // Get most recent if duplicates
     });
-    console.log("project", project?.name);
 
     if (project) {
         console.log("✅ [DEBUG] Found project by Custom Domain:", project.name, "(ID:", project.id, ")");
@@ -52,8 +52,8 @@ async function getSiteData(domain: string) {
     return project;
 }
 
-export async function generateMetadata({ params }: { params: { domain: string } }): Promise<Metadata> {
-    const domain = params.domain;
+export async function generateMetadata({ params }: { params: Promise<{ domain: string }> }): Promise<Metadata> {
+    const { domain } = await params;
     const siteData = await getSiteData(domain);
 
     if (!siteData) {
@@ -68,8 +68,8 @@ export async function generateMetadata({ params }: { params: { domain: string } 
     };
 }
 
-export default async function SiteHomePage({ params }: { params: { domain: string } }) {
-    const domain = params.domain;
+export default async function SiteHomePage({ params }: { params: Promise<{ domain: string }> }) {
+    const { domain } = await params;
     const siteData = await getSiteData(domain);
 
     if (!siteData) {
