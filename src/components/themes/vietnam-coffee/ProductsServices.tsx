@@ -505,21 +505,23 @@ const ProductsServices = ({ theme, content }: ProductsServicesProps) => {
                       size="lg"
                       style={getButtonStyles('primary')}
                       onClick={() => {
-                        // Helper to generate slug
+                        // Helper to generate slug - must match /sites/[domain]/products/[slug]/page.tsx
                         const toSlug = (text: string) => {
                           return text
-                            .toString()
                             .toLowerCase()
-                            .trim()
-                            .replace(/\s+/g, '-')
-                            .replace(/[^\w\-]+/g, '')
-                            .replace(/\-\-+/g, '-')
-                            .replace(/^-+/, '')
-                            .replace(/-+$/, '')
+                            .normalize('NFD')
+                            .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+                            .replace(/đ/g, 'd')
+                            .replace(/Đ/g, 'd')
+                            .replace(/[^a-z0-9]+/g, '-')
+                            .replace(/(^-|-$)/g, '')
                         }
 
-                        // Use name to generate slug if available, otherwise fallback to id
-                        const slug = item.name ? toSlug(item.name) : item.id
+                        // Get hero.title from productPages if available (matches product route logic)
+                        // Otherwise fallback to item.name, then item.id
+                        const productPage = item.id ? (theme.content as any)?.productPages?.[item.id] : null
+                        const titleForSlug = productPage?.hero?.title || item.name || item.id || ''
+                        const slug = toSlug(titleForSlug)
                         window.location.href = `/products/${slug}`
                       }}
                     >
