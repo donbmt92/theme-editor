@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 import ProductPage from "@/components/themes/vietnam-coffee-product/ProductPage";
+import Header from "@/components/themes/vietnam-coffee/Header";
+import Footer from "@/components/themes/vietnam-coffee/Footer";
 
 // Helper to generate slug from title
 function toSlug(title: string): string {
@@ -115,21 +117,32 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
             text: "#2D3748"
         },
         typography: snapshot?.typography || {},
+        layout: snapshot?.layout || {},
+        components: snapshot?.components || {},
+        sections: snapshot?.sections || {},
         ...snapshot
     };
 
     // Build content structure that ProductPage expects
-    // ProductPage expects: { activeProductPageId, productPages }
     const contentForProductPage = {
         activeProductPageId: result.id,
         productPages: productPages
     };
 
-    // Render the product page component
+    // Get header and footer content from snapshot
+    const headerContent = snapshot?.content?.header || {};
+    const footerContent = snapshot?.content?.footer || {};
+
+    // Render the product page with header and footer
     return (
-        <ProductPage
-            theme={themeParams}
-            content={contentForProductPage}
-        />
+        <>
+            <Header theme={themeParams} content={headerContent} />
+            <ProductPage
+                theme={themeParams}
+                content={contentForProductPage}
+            />
+            <Footer theme={themeParams} content={footerContent} />
+        </>
     );
 }
+
