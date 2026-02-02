@@ -21,6 +21,7 @@ async function getSiteData(domain: string) {
             }
         }
     });
+    console.log("project", project);
 
     // 2. If not found, try to find by subdomain (e.g. shopgiay.geekgolfers.com)
     if (!project) {
