@@ -107,7 +107,7 @@ const OEMCapability = ({ theme, content }: OEMCapabilityProps) => {
                     )}
                 </div>
 
-                <div
+                {/* <div
                     className="mt-10 p-6 rounded-xl border"
                     style={{
                         backgroundColor: `${theme.colors?.accent || "#F59E0B"}10`,
@@ -141,7 +141,7 @@ const OEMCapability = ({ theme, content }: OEMCapabilityProps) => {
                             Start OEM Project
                         </Button>
                     </div>
-                </div>
+                </div> */}
             </div>
         </section>
     )

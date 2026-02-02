@@ -484,7 +484,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
           <div>
             <div className="flex items-center mb-8">
               <AlertTriangle
-                className="h-8 w-8 mr-3"
+                className="h-16 w-16 mr-3"
                 style={{ color: theme.colors.destructive || '#E53E3E' }}
               />
               <h3
@@ -549,7 +549,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
           <div>
             <div className="flex items-center mb-8">
               <CheckCircle
-                className="h-8 w-8 mr-3"
+                className="h-16 w-16 mr-3"
                 style={{ color: theme.colors.accent || '#28A745' }}
               />
               <h3

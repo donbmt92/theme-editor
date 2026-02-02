@@ -502,33 +502,37 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1
-                className={cn("leading-tight", getTitleSize(), getTitleWeight(), getTitleFont())}
+                className="text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
                 style={{
                   color: content.colorMode === 'custom' && content.textColor
                     ? content.textColor
                     : theme.sections?.hero?.textColor || theme.colors.text || '#FFFFFF',
-                  lineHeight: theme.typography?.lineHeight || '1.2'
+                  fontFamily: theme.typography?.fontFamily || "Inter",
                 }}
               >
                 {content.title || localizedText.defaultTitle}
-                <span
-                  className={cn("block text-transparent bg-clip-text", getSubtitleSize(), getSubtitleWeight(), getSubtitleFont())}
-                  style={{
-                    backgroundImage: content.colorMode === 'custom' && content.primaryColor
-                      ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
-                      : `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.primary})`,
-                  }}
-                >
-                  {content.subtitle || localizedText.defaultSubtitle}
-                </span>
               </h1>
 
+              <span
+                className={cn("block text-transparent bg-clip-text", "text-3xl",)}
+                style={{
+                  fontFamily: "Inter",
+                  backgroundImage: content.colorMode === 'custom' && content.primaryColor
+                    ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
+                    : `linear-gradient(135deg, ${theme.colors.accent}, ${theme.colors.primary})`,
+                  lineHeight: '1.25'
+                }}
+              >
+                {content.subtitle || localizedText.defaultSubtitle}
+              </span>
+
               <p
-                className={cn("leading-relaxed", getDescriptionSize(), getDescriptionWeight(), getDescriptionFont())}
+                className="text-lg max-w-xl"
                 style={{
                   color: content.colorMode === 'custom' && content.textColor
                     ? `${content.textColor}E6`
                     : `${theme.colors.text || '#000000'}E6`,
+                  fontFamily: theme.typography?.fontFamily || "Inter",
                   lineHeight: theme.typography?.lineHeight || "1.6",
                 }}
               >

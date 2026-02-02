@@ -63,13 +63,13 @@ const ProductHero = ({ theme, content }: ProductHeroProps) => {
                 <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[600px] py-8">
                     {/* Content Side */}
                     <div className="space-y-6">
-                        <Badge
+                        {/* <Badge
                             variant="secondary"
                             className="bg-amber-500/20 border-amber-500/30"
                             style={{ color: theme.colors?.accent || "#F59E0B" }}
                         >
                             Export Ready • OEM/ODM Available
-                        </Badge>
+                        </Badge> */}
 
                         <h1
                             className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight"

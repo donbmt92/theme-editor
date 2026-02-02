@@ -11,7 +11,7 @@ export async function GET(
   try {
     const { projectId } = await params
     const session = await getServerSession(authOptions)
-    
+
     if (!session?.user?.id) {
       logError(new Error('Unauthorized project access'), 'GET /api/projects/[projectId]', { projectId })
       return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
@@ -35,6 +35,8 @@ export async function GET(
           id: true,
           name: true,
           language: true,
+          customDomain: true,
+          subdomain: true,
           theme: {
             select: {
               id: true,
@@ -54,9 +56,9 @@ export async function GET(
     )
 
     if (!project) {
-      logError(new Error('Project not found'), 'GET /api/projects/[projectId]', { 
-        projectId, 
-        userId: session.user.id 
+      logError(new Error('Project not found'), 'GET /api/projects/[projectId]', {
+        projectId,
+        userId: session.user.id
       })
       return NextResponse.json(
         { success: false, error: 'Project không tồn tại hoặc bạn không có quyền truy cập' },
@@ -69,17 +71,17 @@ export async function GET(
       project
     })
   } catch (error) {
-    logError(error, 'GET /api/projects/[projectId]', { 
+    logError(error, 'GET /api/projects/[projectId]', {
       projectId: (await params).projectId,
-      userId: (await getServerSession(authOptions))?.user?.id 
+      userId: (await getServerSession(authOptions))?.user?.id
     })
-    
+
     const errorResponse = createErrorResponse(error, 'Có lỗi xảy ra khi tải project')
     const status = isDatabaseError(error) ? 503 : 500
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: getUserFriendlyMessage(error),
         type: errorResponse.type,
         ...(process.env.NODE_ENV === 'development' && { details: errorResponse.details })

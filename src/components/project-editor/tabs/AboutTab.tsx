@@ -27,7 +27,7 @@ const AboutTab = ({ themeParams, updateThemeParam }: AboutTabProps) => {
               placeholder="Giải Quyết Thách Thức Xuất Nhập Khẩu Thực Tế"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="description">Mô tả</Label>
             <Textarea
@@ -48,41 +48,41 @@ const AboutTab = ({ themeParams, updateThemeParam }: AboutTabProps) => {
           <div>
             <Label htmlFor="textColor">Màu chữ</Label>
             <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={themeParams.content?.about?.textColor || '#000000'}
-                  onChange={(e) => updateThemeParam(['content', 'about', 'textColor'], e.target.value)}
-                  className="w-12 h-10 rounded border border-gray-300"
-                />
-                <Input
-                  value={themeParams.content?.about?.textColor || '#000000'}
-                  onChange={(e) => updateThemeParam(['content', 'about', 'textColor'], e.target.value)}
-                  className="flex-1"
-                />
+              <input
+                type="color"
+                value={themeParams.content?.about?.textColor || '#000000'}
+                onChange={(e) => updateThemeParam(['content', 'about', 'textColor'], e.target.value)}
+                className="w-12 h-10 rounded border border-gray-300"
+              />
+              <Input
+                value={themeParams.content?.about?.textColor || '#000000'}
+                onChange={(e) => updateThemeParam(['content', 'about', 'textColor'], e.target.value)}
+                className="flex-1"
+              />
             </div>
           </div>
-          
+
           <div>
             <Label htmlFor="backgroundColor">Màu nền</Label>
             <div className="flex items-center space-x-3">
-                <input
-                  type="color"
-                  value={themeParams.content?.about?.backgroundColor || '#FFFFFF'}
-                  onChange={(e) => updateThemeParam(['content', 'about', 'backgroundColor'], e.target.value)}
-                  className="w-12 h-10 rounded border border-gray-300"
-                />
-                <Input
-                  value={themeParams.content?.about?.backgroundColor || '#FFFFFF'}
-                  onChange={(e) => updateThemeParam(['content', 'about', 'backgroundColor'], e.target.value)}
-                  className="flex-1"
-                />
+              <input
+                type="color"
+                value={themeParams.content?.about?.backgroundColor || '#FFFFFF'}
+                onChange={(e) => updateThemeParam(['content', 'about', 'backgroundColor'], e.target.value)}
+                className="w-12 h-10 rounded border border-gray-300"
+              />
+              <Input
+                value={themeParams.content?.about?.backgroundColor || '#FFFFFF'}
+                onChange={(e) => updateThemeParam(['content', 'about', 'backgroundColor'], e.target.value)}
+                className="flex-1"
+              />
             </div>
           </div>
         </div>
       </Card>
 
       {/* Typography */}
-      <Card className="p-6">
+      {/* <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Kiểu chữ</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -214,7 +214,7 @@ const AboutTab = ({ themeParams, updateThemeParam }: AboutTabProps) => {
             </Select>
           </div>
         </div>
-      </Card>
+      </Card> */}
     </div>
   )
 }

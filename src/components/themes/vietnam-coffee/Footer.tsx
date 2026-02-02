@@ -6,6 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Youtube } from "lucide-react";
 import { ThemeParams } from "@/types";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 interface FooterContent {
   companyName?: string;
@@ -203,6 +204,9 @@ const Footer = ({ theme, content }: FooterProps) => {
   const legal = content.legal || defaultLegal;
   const socialLinks = content.socialLinks || defaultSocialLinks;
 
+  // Get header logo from theme content
+  const headerLogo = theme.content?.header?.logo;
+
   return (
     <footer
       id="footer"
@@ -218,7 +222,7 @@ const Footer = ({ theme, content }: FooterProps) => {
       }}
     >
       <div
-        className="container mx-auto px-4"
+        className="container mx-auto px-4 relative z-10"
         style={{
           maxWidth: theme.layout?.containerWidth || '1200px',
           margin: '0 auto'
@@ -230,12 +234,25 @@ const Footer = ({ theme, content }: FooterProps) => {
             {/* Company Info */}
             <div className="lg:col-span-1">
               <div className="flex items-center space-x-2 mb-6">
-                <div
-                  className={cn("h-8 w-8 rounded-full", getBorderRadiusClass())}
-                  style={{
-                    background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.accent})`
-                  }}
-                ></div>
+                {headerLogo ? (
+                  <div className="relative w-12 h-12">
+                    <Image
+                      src={headerLogo}
+                      alt="Logo"
+                      fill
+                      sizes="48px"
+                      className={cn("object-contain", getBorderRadiusClass())}
+                      quality={90}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={cn("h-8 w-8 rounded-full", getBorderRadiusClass())}
+                    style={{
+                      background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.accent})`
+                    }}
+                  ></div>
+                )}
                 {(content.companyName && content.companyName.trim()) && (
                   <span
                     className="text-xl font-bold"
@@ -267,7 +284,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   {(content.contact.address && content.contact.address.trim()) && (
                     <div className="flex items-start space-x-3">
                       <MapPin
-                        className="h-5 w-5 mt-0.5"
+                        className="h-7 w-7 mt-0.5"
                         style={{ color: theme.colors.secondary }}
                       />
                       <div>
@@ -308,7 +325,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                         >
                           {content.contact.phone}
                         </div>
-                        <div
+                        {/* <div
                           className="text-sm"
                           style={{
                             color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
@@ -316,7 +333,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                           }}
                         >
                           {localizedText.usBusinessHours}
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   )}
@@ -342,7 +359,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   {(content.contact.businessHours && content.contact.businessHours.trim()) && (
                     <div className="flex items-center space-x-3">
                       <Clock
-                        className="h-5 w-5"
+                        className="h-7 w-7"
                         style={{ color: theme.colors.secondary }}
                       />
                       <div

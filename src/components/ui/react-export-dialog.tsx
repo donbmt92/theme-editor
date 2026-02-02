@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 import {
     Dialog,
@@ -38,6 +38,20 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
     const [customDomain, setCustomDomain] = useState('')
     const [dnsStatus, setDnsStatus] = useState<'idle' | 'checking' | 'verified' | 'unverified' | 'error'>('idle')
     const [dnsMessage, setDnsMessage] = useState('')
+
+    // Fetch existing domain when dialog opens
+    useEffect(() => {
+        if (open && projectId) {
+            fetch(`/api/projects/${projectId}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.project?.customDomain) {
+                        setCustomDomain(data.project.customDomain);
+                    }
+                })
+                .catch(err => console.error('Failed to fetch project domain:', err));
+        }
+    }, [open, projectId]);
 
     const [isDeploying, setIsDeploying] = useState(false)
     const [deployStatus, setDeployStatus] = useState<'idle' | 'deploying' | 'success' | 'error'>('idle')
@@ -79,6 +93,11 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
     const handleDeploy = async () => {
         if (!session?.user?.id) {
             setError('You must be logged in to deploy')
+            return
+        }
+
+        if (!customDomain || customDomain.trim() === '') {
+            setError('❌ Domain is required! Please enter a custom domain.')
             return
         }
 
