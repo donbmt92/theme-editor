@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 
 services:
   app:
@@ -17,8 +17,8 @@ services:
     ports:
       - "3033:3000"
     volumes:
-      - ${VOLUME_PATH:-.}/public/uploads:/app/public/uploads
-      - ${VOLUME_PATH:-.}/queue:/app/queue
+      - /var/www/theme-editor/public/uploads:/app/public/uploads
+      - /var/www/theme-editor/queue:/app/queue
     networks:
       - app-network
 
@@ -49,8 +49,8 @@ services:
       - "host.docker.internal:host-gateway"
     command: npx tsx workers.ts
     volumes:
-      - ${VOLUME_PATH:-.}/public/uploads:/app/public/uploads
-      - ${VOLUME_PATH:-.}/queue:/app/queue
+      - /var/www/theme-editor/public/uploads:/app/public/uploads
+      - /var/www/theme-editor/queue:/app/queue
     depends_on:
       - redis
       - app
