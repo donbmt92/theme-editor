@@ -69,7 +69,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
         const trimmedDomain = customDomain.trim().toLowerCase();
 
         // Check reserved domains
-        const reservedDomains = ['geekgolfers.com', 'www.geekgolfers.com', 'localhost'];
+        const reservedDomains = ['xnkvietnam.com', 'www.xnkvietnam.com', 'localhost'];
         if (reservedDomains.includes(trimmedDomain)) {
             setDnsStatus('error');
             setDnsMessage('❌ This domain is reserved and cannot be used for deployment.');
@@ -149,7 +149,7 @@ const ReactExportDialog: React.FC<ReactExportDialogProps> = ({
         }
 
         // Block reserved domains
-        const reservedDomains = ['geekgolfers.com', 'www.geekgolfers.com', 'localhost'];
+        const reservedDomains = ['xnkvietnam.com', 'www.xnkvietnam.com', 'localhost'];
         if (reservedDomains.includes(trimmedDomain)) {
             setError('❌ This domain is reserved and cannot be used for deployment.')
             return

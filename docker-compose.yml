@@ -8,7 +8,7 @@ services:
     restart: always
     environment:
       - DATABASE_URL=postgresql://deploy:Hackconcat36@host.docker.internal:5432/theme_editor
-      - NEXTAUTH_URL=https://geekgolfers.com
+      - NEXTAUTH_URL=https://xnkvietnam.com
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
     env_file:
       - .env
@@ -39,7 +39,7 @@ services:
     restart: always
     environment:
       - DATABASE_URL=postgresql://deploy:Hackconcat36@host.docker.internal:5432/theme_editor
-      - NEXTAUTH_URL=https://geekgolfers.com
+      - NEXTAUTH_URL=https://xnkvietnam.com
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
       - REDIS_HOST=redis
       - REDIS_PORT=6379

@@ -627,7 +627,7 @@ cp .env.example .env.local
 \`\`\`
 
 Edit \`.env.local\` and set:
-- \`NEXT_PUBLIC_API_URL\` - Your central Theme Editor server URL (e.g., https://geekgolfers.com)
+- \`NEXT_PUBLIC_API_URL\` - Your central Theme Editor server URL (e.g., https://xnkvietnam.com)
 
 Then, run the development server:
 
@@ -658,7 +658,7 @@ npm start
 
 1. Push your code to GitHub
 2. Import to Vercel
-3. **Important**: Set environment variable \`NEXT_PUBLIC_API_URL=https://geekgolfers.com\`
+3. **Important**: Set environment variable \`NEXT_PUBLIC_API_URL=https://xnkvietnam.com\`
 4. Deploy
 
 ## Customize
@@ -714,7 +714,7 @@ function generateEnvExample(): string {
   return `# Environment Variables for Deployed Site
 
 # API URL for lead submission (Point to your central Theme Editor server)
-NEXT_PUBLIC_API_URL=https://geekgolfers.com
+NEXT_PUBLIC_API_URL=https://xnkvietnam.com
 
 # Add other environment variables here as needed
 # NEXT_PUBLIC_ANALYTICS_ID=your-analytics-id

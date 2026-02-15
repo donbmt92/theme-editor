@@ -18,11 +18,11 @@ export const config = {
 export default function middleware(req: NextRequest) {
     const url = req.nextUrl;
 
-    // Get hostname (e.g. geekgolfers.com, shopgiay.com, localhost:3000)
+    // Get hostname (e.g. xnkvietnam.com, shopgiay.com, localhost:3000)
     let hostname = req.headers.get("host") || "";
 
     // Handle localhost for local development
-    // We can map localhost:3000 to geekgolfers.com for testing the main site logic
+    // We can map localhost:3000 to xnkvietnam.com for testing the main site logic
     // To test tenant sites locally, we might need to use hosts file or specific headers
     // For now, let's treat localhost as the main domain
     if (hostname.includes("localhost") || hostname.includes("127.0.0.1")) {
@@ -31,7 +31,7 @@ export default function middleware(req: NextRequest) {
 
         // Default to main domain
         if (!hostname.endsWith(".local")) {
-            hostname = "geekgolfers.com";
+            hostname = "xnkvietnam.com";
         }
     }
 
@@ -44,7 +44,7 @@ export default function middleware(req: NextRequest) {
         }`;
 
     // APP_DOMAIN: The domain of your main application
-    const APP_DOMAIN = "geekgolfers.com";
+    const APP_DOMAIN = "xnkvietnam.com";
 
     // CASE 1: Main Domain (Your SaaS landing page & Admin Dashboard)
     // If the hostname matches the main domain (or www subdomain)

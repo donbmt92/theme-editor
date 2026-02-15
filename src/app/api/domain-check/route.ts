@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Allow the main domain
-    if (domain === "geekgolfers.com" || domain === "www.geekgolfers.com" || domain.endsWith(".geekgolfers.com")) {
+    if (domain === "xnkvietnam.com" || domain === "www.xnkvietnam.com" || domain.endsWith(".xnkvietnam.com")) {
         return new NextResponse("Allowed", { status: 200 });
     }
 
