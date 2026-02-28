@@ -591,13 +591,15 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
                   }
                 }}
               >
+                <Download size={20} className="mr-2" />
+
                 {content.ctaText || localizedText.learnMore}
                 <ArrowRight
                   size={20}
                   className="ml-2 group-hover:translate-x-1 transition-transform"
                 />
               </Button>
-              <Button
+              {/* <Button
                 size="lg"
                 variant="outline"
                 className={cn("hover:bg-white hover:text-gray-900 transition-all duration-300", getCTASize(), getCTAWeight(), getCTAFont())}
@@ -611,7 +613,7 @@ const HeroSection = ({ theme, content, onContentUpdate }: HeroSectionProps) => {
               >
                 <Download size={20} className="mr-2" />
                 {content.ctaSecondaryText || localizedText.guideText}
-              </Button>
+              </Button> */}
             </div>
 
             {/* Trust Indicators */}

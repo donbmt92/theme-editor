@@ -122,7 +122,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
             />
           </div>
 
-          <div>
+          {/* <div>
             <Label htmlFor="ctaSecondaryText">Nút phụ</Label>
             <Input
               id="ctaSecondaryText"
@@ -130,7 +130,7 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
               onChange={(e) => updateThemeParam(['content', 'hero', 'ctaSecondaryText'], e.target.value)}
               placeholder="Ví dụ: Tìm hiểu thêm"
             />
-          </div>
+          </div> */}
         </div>
       </Card>
 
