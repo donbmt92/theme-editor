@@ -9,8 +9,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Product is required' }, { status: 400 })
         }
 
-        // Get language from themeParams, default to 'vietnamese'
-        const language = themeParams?.projectLanguage || 'vietnamese'
+        // Get language from themeParams, default to 'english' for B2B export
+        const language = themeParams?.projectLanguage || 'english'
 
         // Language-specific instructions
         const languageInstructions: Record<string, string> = {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
             'japanese': 'Generate ALL content in Japanese language. Use professional business terminology.',
         }
 
-        const languageInstruction = languageInstructions[language] || languageInstructions['vietnamese']
+        const languageInstruction = languageInstructions[language] || languageInstructions['english']
 
         const prompt = `${languageInstruction}
 

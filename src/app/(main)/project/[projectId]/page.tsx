@@ -575,6 +575,11 @@ const ProjectEditor = () => {
           }
         }
 
+        // Merge projectLanguage from project data into themeParams
+        if (data.project.language) {
+          params.projectLanguage = data.project.language
+        }
+
         // console.log('Final merged params:', params)
         setThemeParams(params)
         updateThemeParamsWithHistory(params)

@@ -68,7 +68,7 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
 
     const handleGenerateProductPage = async () => {
         if (!activeProductPageId) {
-            alert('Vui lòng chọn sản phẩm trước')
+            alert('Please select a product first')
             return
         }
 
@@ -106,7 +106,7 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
             console.log('Product page content generated successfully')
         } catch (error) {
             console.error('Generate error:', error)
-            alert('Có lỗi xảy ra khi tạo nội dung')
+            alert('An error occurred while generating content')
         } finally {
             setIsGenerating(false)
         }
@@ -118,11 +118,11 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
             <Card className="p-6 bg-gradient-to-br from-blue-50 to-purple-50 border-blue-200">
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-blue-600" />
-                    Chọn sản phẩm & Tạo nội dung với AI
+                    Select Product & Generate with AI
                 </h3>
                 <div className="space-y-4">
                     <div>
-                        <Label htmlFor="product-select">Chọn sản phẩm từ danh sách</Label>
+                        <Label htmlFor="product-select">Select a product from the list</Label>
                         <Select
                             value={activeProductPageId || ''}
                             onValueChange={(value) =>
@@ -130,12 +130,12 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                             }
                         >
                             <SelectTrigger>
-                                <SelectValue placeholder="-- Chọn sản phẩm --" />
+                                <SelectValue placeholder="-- Select a product --" />
                             </SelectTrigger>
                             <SelectContent>
                                 {products.length === 0 ? (
                                     <SelectItem value="none" disabled>
-                                        Chưa có sản phẩm nào. Vui lòng thêm ở tab Products
+                                        No products yet. Please add products in the Products tab
                                     </SelectItem>
                                 ) : (
                                     products.map((product: any) => (
@@ -150,7 +150,7 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
 
                     {selectedProduct && (
                         <div className="p-4 bg-white rounded-lg border border-blue-200">
-                            <p className="text-sm font-medium text-gray-700 mb-1">Sản phẩm đã chọn:</p>
+                            <p className="text-sm font-medium text-gray-700 mb-1">Selected product:</p>
                             <p className="font-semibold text-blue-900">{selectedProduct.name}</p>
                             <p className="text-sm text-gray-600 mt-1">{selectedProduct.description}</p>
                         </div>
@@ -163,11 +163,11 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                         size="lg"
                     >
                         <Sparkles className="w-4 h-4 mr-2" />
-                        {isGenerating ? 'Đang tạo...' : 'Tạo Product Page với AI 🚀'}
+                        {isGenerating ? 'Generating...' : 'Generate Product Page with AI 🚀'}
                     </Button>
 
                     <p className="text-xs text-gray-600 text-center">
-                        AI sẽ tự động tạo nội dung cho 13 sections dựa trên thông tin sản phẩm
+                        AI will automatically generate content for 13 sections based on your product information
                     </p>
                 </div>
             </Card>
