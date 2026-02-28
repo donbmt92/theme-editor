@@ -3,9 +3,11 @@ RUN apk add --no-cache libc6-compat openssl
 
 # Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-# libc6-compat and openssl are now in base layer
 WORKDIR /app
+
+# Clear any cached npm credentials to avoid "Access token expired" errors
+RUN npm cache clean --force && \
+  rm -f /root/.npmrc /home/*/.npmrc
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -22,10 +24,6 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# ENV NEXT_TELEMETRY_DISABLED 1
-
 # Generate Prisma Client
 RUN npx prisma generate
 
@@ -41,12 +39,13 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
-# ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-# Install dependencies for seeding (tsx and bcryptjs)
-RUN npm install tsx bcryptjs bullmq ioredis @google/generative-ai
+
+# Copy node_modules from deps stage for worker dependencies (tsx, bullmq, etc.)
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/package.json ./package.json
 
 COPY --from=builder /app/public ./public
 
@@ -55,7 +54,6 @@ RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
 # Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
