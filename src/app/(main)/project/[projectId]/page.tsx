@@ -214,7 +214,17 @@ const createDefaultThemeParams = (): ThemeParams => ({
         { id: "1", title: "Kết nối trực tiếp", description: "Mạng lưới đối tác...", benefit: "Tăng lợi nhuận 30-40%", icon: "Globe" },
         { id: "2", title: "Hỗ trợ toàn diện", description: "Từ chứng nhận...", benefit: "Tiết kiệm 80% thời gian", icon: "Shield" },
         { id: "3", title: "Quy trình tối ưu", description: "Hệ thống quản lý...", benefit: "Minh bạch 100%", icon: "Zap" }
-      ]
+      ],
+      cta: {
+        title: "Sẵn sàng áp dụng giải pháp?",
+        description: "Tư vấn miễn phí về quy trình xuất khẩu cà phê sang Mỹ",
+        buttonText: "Bắt đầu ngay hôm nay",
+        stats: {
+          stat1: { value: "15+", label: "Năm kinh nghiệm thị trường Mỹ" },
+          stat2: { value: "500+", label: "Lô hàng thành công" },
+          stat3: { value: "99.8%", label: "Giao hàng đúng hạn" }
+        }
+      }
     },
     cta: {
       title: "Sẵn sàng bắt đầu hành trình xuất khẩu?",
@@ -281,6 +291,10 @@ const createDefaultThemeParams = (): ThemeParams => ({
       description: "Chuyên cung cấp cà phê chất lượng cao cho thị trường quốc tế",
       backgroundColor: "#D2691E",
       textColor: "#F9FAFB",
+      copyright: "",
+      quickLinksTitle: "Liên Kết Nhanh",
+      resourcesTitle: "Tài Nguyên",
+      addressLabel: "Văn Phòng Việt Nam",
       contact: {
         phone: "+84 123 456 789",
         email: "info@capheviet.com",
@@ -311,7 +325,13 @@ const createDefaultThemeParams = (): ThemeParams => ({
         { icon: "Twitter", href: "#", label: "Twitter" },
         { icon: "Linkedin", href: "#", label: "LinkedIn" },
         { icon: "Youtube", href: "#", label: "YouTube" }
-      ]
+      ],
+      newsletter: {
+        title: "Kết Nối",
+        placeholder: "Nhập email của bạn",
+        buttonText: "Đăng Ký",
+        description: "Nhận cập nhật thị trường hàng tuần và mẹo nhập khẩu gửi đến hộp thư của bạn."
+      }
     },
     testimonials: {
       title: "Khách Hàng Nói Gì Về Chúng Tôi",
@@ -514,7 +534,18 @@ const ProjectEditor = () => {
             solutions: {
               ...defaultParams.content?.solutions,
               ...params.content?.solutions,
-              items: params.content?.solutions?.items || defaultParams.content?.solutions?.items
+              items: params.content?.solutions?.items || defaultParams.content?.solutions?.items,
+              cta: {
+                title: params.content?.solutions?.cta?.title || defaultParams.content?.solutions?.cta?.title || '',
+                description: params.content?.solutions?.cta?.description || defaultParams.content?.solutions?.cta?.description || '',
+                buttonText: params.content?.solutions?.cta?.buttonText || defaultParams.content?.solutions?.cta?.buttonText || '',
+                backgroundColor: params.content?.solutions?.cta?.backgroundColor || defaultParams.content?.solutions?.cta?.backgroundColor,
+                textColor: params.content?.solutions?.cta?.textColor || defaultParams.content?.solutions?.cta?.textColor,
+                stats: {
+                  ...defaultParams.content?.solutions?.cta?.stats,
+                  ...params.content?.solutions?.cta?.stats
+                }
+              }
             },
             products: {
               ...defaultParams.content?.products,
@@ -535,6 +566,10 @@ const ProjectEditor = () => {
               contact: {
                 ...defaultParams.content?.footer?.contact,
                 ...params.content?.footer?.contact
+              },
+              newsletter: {
+                ...defaultParams.content?.footer?.newsletter,
+                ...params.content?.footer?.newsletter
               }
             }
           }

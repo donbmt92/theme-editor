@@ -197,6 +197,16 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
               </p>
             </div>
           )}
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Copyright</label>
+            <Input
+              value={themeParams?.content?.footer?.copyright || ''}
+              onChange={(e) => updateThemeParam(['content', 'footer', 'copyright'], e.target.value)}
+              placeholder="© 2025 Tên Công Ty. Tất cả quyền được bảo lưu."
+            />
+            <p className="text-xs text-gray-500 mt-1">Để trống sẽ tự động tạo từ tên công ty</p>
+          </div>
         </div>
       </Card>
 
@@ -239,6 +249,15 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
               placeholder="Thứ 2-Thứ 6: 8AM-6PM (EST)"
             />
           </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Nhãn địa chỉ</label>
+            <Input
+              value={themeParams?.content?.footer?.addressLabel || ''}
+              onChange={(e) => updateThemeParam(['content', 'footer', 'addressLabel'], e.target.value)}
+              placeholder="Văn Phòng Việt Nam"
+            />
+            <p className="text-xs text-gray-500 mt-1">Nhãn hiển thị phía trên địa chỉ</p>
+          </div>
         </div>
       </Card>
 
@@ -257,6 +276,14 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
           </Button>
         </div>
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Tiêu đề section</label>
+            <Input
+              value={themeParams?.content?.footer?.quickLinksTitle || ''}
+              onChange={(e) => updateThemeParam(['content', 'footer', 'quickLinksTitle'], e.target.value)}
+              placeholder="Liên Kết Nhanh"
+            />
+          </div>
           {(themeParams?.content?.footer?.quickLinks || []).map((link, index) => (
             <div key={index} className="border rounded-lg p-4">
               <div className="flex items-center justify-between mb-3">
@@ -309,6 +336,14 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
           </Button>
         </div>
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Tiêu đề section</label>
+            <Input
+              value={themeParams?.content?.footer?.resourcesTitle || ''}
+              onChange={(e) => updateThemeParam(['content', 'footer', 'resourcesTitle'], e.target.value)}
+              placeholder="Tài Nguyên"
+            />
+          </div>
           {(themeParams?.content?.footer?.resources || []).map((resource, index) => (
             <div key={index} className="border rounded-lg p-4">
               <div className="flex items-center justify-between mb-3">
@@ -467,6 +502,15 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
       <Card className="p-4">
         <h3 className="text-lg font-semibold mb-4">Cài đặt Newsletter</h3>
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Tiêu đề section</label>
+            <Input
+              value={themeParams?.content?.footer?.newsletter?.title || ''}
+              onChange={(e) => updateThemeParam(['content', 'footer', 'newsletter', 'title'], e.target.value)}
+              placeholder="Kết Nối"
+            />
+            <p className="text-xs text-gray-500 mt-1">Tiêu đề hiển thị trên phần newsletter</p>
+          </div>
           <div>
             <label className="block text-sm font-medium mb-2">Placeholder email</label>
             <Input

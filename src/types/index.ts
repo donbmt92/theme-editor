@@ -536,6 +536,9 @@ export interface ThemeContent {
     fontFamily?: 'inter' | 'poppins' | 'roboto' | 'open-sans' | 'montserrat' | 'lato' | 'nunito' | 'raleway' | 'playfair-display' | 'merriweather'
     lineHeight?: 'tight' | 'normal' | 'relaxed' | 'loose'
     copyright?: string
+    quickLinksTitle?: string
+    resourcesTitle?: string
+    addressLabel?: string
     quickLinks?: Array<{
       name: string
       href: string

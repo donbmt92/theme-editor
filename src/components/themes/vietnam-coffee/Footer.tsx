@@ -19,6 +19,10 @@ interface FooterContent {
   fontWeight?: string;
   fontFamily?: string;
   lineHeight?: string;
+  copyright?: string;
+  quickLinksTitle?: string;
+  resourcesTitle?: string;
+  addressLabel?: string;
   contact?: {
     phone?: string;
     email?: string;
@@ -30,6 +34,7 @@ interface FooterContent {
   legal?: Array<{ name: string; href: string }>;
   socialLinks?: Array<{ icon: string; href: string; label: string }>;
   newsletter?: {
+    title?: string;
     placeholder?: string;
     buttonText?: string;
     description?: string;
@@ -295,7 +300,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                             fontWeight: theme.typography?.fontWeight || '500'
                           }}
                         >
-                          {localizedText.vietnamOffice}
+                          {content.addressLabel || localizedText.vietnamOffice}
                         </div>
                         <div
                           className="text-sm"
@@ -387,7 +392,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                     fontWeight: theme.typography?.fontWeight || '700'
                   }}
                 >
-                  {localizedText.quickLinksTitle}
+                  {content.quickLinksTitle || localizedText.quickLinksTitle}
                 </h3>
                 <ul className="space-y-3">
                   {quickLinks.map((link, index) => (
@@ -418,7 +423,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                     fontWeight: theme.typography?.fontWeight || '700'
                   }}
                 >
-                  {localizedText.resourcesTitle}
+                  {content.resourcesTitle || localizedText.resourcesTitle}
                 </h3>
                 <ul className="space-y-3">
                   {resources.map((resource, index) => (
@@ -448,7 +453,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {localizedText.connectTitle}
+                {content.newsletter?.title || localizedText.connectTitle}
               </h3>
               {(content.newsletter?.description && content.newsletter.description.trim()) && (
                 <p
@@ -524,7 +529,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                 fontSize: theme.typography?.fontSize || '16px'
               }}
             >
-              © 2025 {content.companyName || "VietCoffee Export"}. {localizedText.copyright}
+              {content.copyright || `© 2025 ${content.companyName || "VietCoffee Export"}. ${localizedText.copyright}`}
             </div>
 
             {/* <div className="flex flex-wrap gap-6">
