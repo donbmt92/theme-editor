@@ -52,11 +52,17 @@ const ProductHero = ({ theme, content }: ProductHeroProps) => {
                     }}
                 />
             ) : (
+                // <div className="absolute inset-0 opacity-30"
+                //     style={{
+                //         backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, ${theme.colors?.accent || "#8B4513"}20 10px, ${theme.colors?.accent || "#8B4513"}20 20px)`
+                //     }}
+                // />
                 <div className="absolute inset-0 opacity-30"
                     style={{
-                        backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 10px, ${theme.colors?.accent || "#8B4513"}20 10px, ${theme.colors?.accent || "#8B4513"}20 20px)`
+                        backgroundImage: ` ${theme.colors?.accent || "#8B4513"}20 10px, ${theme.colors?.accent || "#8B4513"}20 20px)`
                     }}
                 />
+
             )}
 
             <div className="container mx-auto px-4 relative z-10">
