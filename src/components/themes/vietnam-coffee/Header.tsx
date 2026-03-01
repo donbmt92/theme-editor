@@ -282,11 +282,14 @@ const Header = ({ theme, content }: HeaderProps) => {
             <Button
               size="sm"
               style={{
-                backgroundColor: content.colorMode === 'custom' && content.primaryColor
-                  ? content.primaryColor
-                  : theme.colors.primary
+                background: content.colorMode === 'custom' && content.primaryColor
+                  ? `linear-gradient(135deg, ${content.primaryColor}, ${content.primaryColor}80)`
+                  : `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`,
+                color: '#FFFFFF',
+                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                borderRadius: theme.components?.button?.rounded ? '9999px' : undefined,
               }}
-              className="hover:opacity-90 transition-colors"
+              className="hover:opacity-90 hover:scale-105 hover:shadow-xl transition-all duration-300"
             >
               <Phone size={16} />
               {content.contactInfo?.phone || localizedText.freeConsultation}
