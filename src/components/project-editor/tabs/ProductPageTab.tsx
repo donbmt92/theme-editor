@@ -20,7 +20,7 @@ import CertificationsSection from './product-page-sections/CertificationsSection
 import OEMSection from './product-page-sections/OEMSection'
 import PackagingSection from './product-page-sections/PackagingSection'
 import WhyChooseSection from './product-page-sections/WhyChooseSection'
-import { LeadMagnetSection, RFQSection, CTASection } from './product-page-sections/SimpleSections'
+import { RFQSection, CTASection } from './product-page-sections/SimpleSections'
 
 interface ProductPageTabProps {
     themeParams: ThemeParams
@@ -271,12 +271,6 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                         updateThemeParam={updateThemeParam}
                     />
 
-                    <LeadMagnetSection
-                        activeProductPageId={activeProductPageId}
-                        leadMagnet={currentProductPage.leadMagnet || {}}
-                        updateThemeParam={updateThemeParam}
-                    />
-
                     <RFQSection
                         activeProductPageId={activeProductPageId}
                         rfq={currentProductPage.rfq || {}}
@@ -307,7 +301,6 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                         <li>✓ OEM/ODM Capabilities</li>
                         <li>✓ Packaging & Shipping</li>
                         <li>✓ Why Choose Us</li>
-                        <li>✓ Catalog Download Form</li>
                         <li>✓ RFQ Form</li>
                         <li>✓ Call-to-Action</li>
                     </ul>

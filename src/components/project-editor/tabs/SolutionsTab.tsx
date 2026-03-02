@@ -318,7 +318,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
               id="ctaTitle"
               value={solutions.cta?.title || ''}
               onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'title'], e.target.value)}
-              placeholder="Sẵn sàng áp dụng giải pháp?"
+              placeholder={themeParams.projectLanguage === 'english' ? "Ready to apply the solution?" : "Sẵn sàng áp dụng giải pháp?"}
             />
           </div>
 
@@ -328,7 +328,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
               id="ctaDescription"
               value={solutions.cta?.description || ''}
               onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'description'], e.target.value)}
-              placeholder="Mô tả về lý do khách hàng nên áp dụng giải pháp của bạn"
+              placeholder={themeParams.projectLanguage === 'english' ? "Describe why customers should apply your solution" : "Mô tả về lý do khách hàng nên áp dụng giải pháp của bạn"}
               rows={3}
             />
           </div>
@@ -339,7 +339,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
               id="ctaButtonText"
               value={solutions.cta?.buttonText || ''}
               onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'buttonText'], e.target.value)}
-              placeholder="Bắt đầu ngay hôm nay"
+              placeholder={themeParams.projectLanguage === 'english' ? "Get Started Today" : "Bắt đầu ngay hôm nay"}
             />
           </div>
 
@@ -382,7 +382,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
                   id="stat1Label"
                   value={solutions.cta?.stats?.stat1?.label || ''}
                   onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat1', 'label'], e.target.value)}
-                  placeholder="Năm kinh nghiệm thị trường Mỹ"
+                  placeholder={themeParams.projectLanguage === 'english' ? "Years of Experience" : "Năm kinh nghiệm thị trường Mỹ"}
                 />
               </div>
               <div>
@@ -391,7 +391,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
                   id="stat2Label"
                   value={solutions.cta?.stats?.stat2?.label || ''}
                   onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat2', 'label'], e.target.value)}
-                  placeholder="Lô hàng thành công"
+                  placeholder={themeParams.projectLanguage === 'english' ? "Successful Shipments" : "Lô hàng thành công"}
                 />
               </div>
               <div>
@@ -400,7 +400,7 @@ const SolutionsTab = ({ themeParams, updateThemeParam }: SolutionsTabProps) => {
                   id="stat3Label"
                   value={solutions.cta?.stats?.stat3?.label || ''}
                   onChange={(e) => updateThemeParam(['content', 'solutions', 'cta', 'stats', 'stat3', 'label'], e.target.value)}
-                  placeholder="Giao hàng đúng hạn"
+                  placeholder={themeParams.projectLanguage === 'english' ? "On-Time Delivery" : "Giao hàng đúng hạn"}
                 />
               </div>
             </div>

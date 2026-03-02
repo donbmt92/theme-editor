@@ -17,7 +17,6 @@ export const SECTION_IDS = {
     OEM: 'product-oem-section',
     PACKAGING: 'product-packaging-section',
     WHY_CHOOSE: 'product-why-choose-section',
-    LEAD_MAGNET: 'product-lead-magnet-section',
     RFQ: 'product-rfq-section',
     CTA: 'product-cta-section',
 }

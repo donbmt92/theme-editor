@@ -12,7 +12,6 @@ import OEMCapability from './OEMCapability'
 import PackagingShipping from './PackagingShipping'
 import WhyChooseUs from './WhyChooseUs'
 import ProductRFQ from './ProductRFQ'
-import ProductLeadMagnet from './ProductLeadMagnet'
 import ProductCTA from './ProductCTA'
 import StickyCTA from './StickyCTA'
 
@@ -46,7 +45,6 @@ export default function ProductPage({ theme, content }: ProductPageProps) {
             <OEMCapability theme={theme} content={productPageContent.oem} />
             <PackagingShipping theme={theme} content={productPageContent.packaging} />
             <WhyChooseUs theme={theme} content={productPageContent.whyChoose} />
-            <ProductLeadMagnet theme={theme} />
             <ProductRFQ theme={theme} content={productPageContent.rfq} />
             <ProductCTA theme={theme} content={productPageContent.cta} />
             <StickyCTA theme={theme} />

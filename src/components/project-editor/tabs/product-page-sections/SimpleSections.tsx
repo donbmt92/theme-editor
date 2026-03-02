@@ -51,30 +51,7 @@ export function SimpleSection({ activeProductPageId, title, data, fields, basePa
     )
 }
 
-// Lead Magnet, RFQ, CTA sections use SimpleSection
-interface LeadMagnetSectionProps {
-    activeProductPageId: string
-    leadMagnet: any
-    updateThemeParam: (path: string[], value: unknown) => void
-}
-
-export function LeadMagnetSection({ activeProductPageId, leadMagnet, updateThemeParam }: LeadMagnetSectionProps) {
-    return (
-        <SimpleSection
-            activeProductPageId={activeProductPageId}
-            title="Lead Magnet (Catalog Download)"
-            data={leadMagnet}
-            fields={[
-                { key: 'title', label: 'Title' },
-                { key: 'subtitle', label: 'Subtitle', type: 'textarea' }
-            ]}
-            basePath={['content', 'productPages', activeProductPageId, 'leadMagnet']}
-            sectionId={SECTION_IDS.LEAD_MAGNET}
-            updateThemeParam={updateThemeParam}
-        />
-    )
-}
-
+// RFQ, CTA sections use SimpleSection
 interface RFQSectionProps {
     activeProductPageId: string
     rfq: any
@@ -89,7 +66,8 @@ export function RFQSection({ activeProductPageId, rfq, updateThemeParam }: RFQSe
             data={rfq}
             fields={[
                 { key: 'title', label: 'Title' },
-                { key: 'subtitle', label: 'Subtitle', type: 'textarea' }
+                { key: 'description', label: 'Description', type: 'textarea' },
+                { key: 'buttonText', label: 'Submit Button Text' }
             ]}
             basePath={['content', 'productPages', activeProductPageId, 'rfq']}
             sectionId={SECTION_IDS.RFQ}

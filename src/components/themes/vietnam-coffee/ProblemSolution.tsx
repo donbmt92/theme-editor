@@ -643,7 +643,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {content.problems?.cta?.title || content.solutions?.cta?.title || localizedText.defaultCtaTitle}
+                {content.problems?.cta?.title?.trim() || content.solutions?.cta?.title?.trim() || localizedText.defaultCtaTitle}
               </h3>
               <p
                 className={cn("mb-8 opacity-90", getBodySize())}
@@ -652,7 +652,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   lineHeight: theme.typography?.lineHeight || '1.6'
                 }}
               >
-                {content.problems?.cta?.description || content.solutions?.cta?.description || localizedText.defaultCtaDescription}
+                {content.problems?.cta?.description?.trim() || content.solutions?.cta?.description?.trim() || localizedText.defaultCtaDescription}
               </p>
               <div className="grid md:grid-cols-3 gap-8 mb-8">
                 <div className="text-center">
@@ -663,7 +663,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat1?.value || content.solutions?.cta?.stats?.stat1?.value || '15+'}
+                    {content.problems?.cta?.stats?.stat1?.value?.trim() || content.solutions?.cta?.stats?.stat1?.value?.trim() || '15+'}
                   </div>
                   <div
                     className="opacity-90"
@@ -672,7 +672,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat1?.label || content.solutions?.cta?.stats?.stat1?.label || localizedText.stats.experience}
+                    {content.problems?.cta?.stats?.stat1?.label?.trim() || content.solutions?.cta?.stats?.stat1?.label?.trim() || localizedText.stats.experience}
                   </div>
                 </div>
                 <div className="text-center">
@@ -683,7 +683,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat2?.value || content.solutions?.cta?.stats?.stat2?.value || '500+'}
+                    {content.problems?.cta?.stats?.stat2?.value?.trim() || content.solutions?.cta?.stats?.stat2?.value?.trim() || '500+'}
                   </div>
                   <div
                     className="opacity-90"
@@ -692,7 +692,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat2?.label || content.solutions?.cta?.stats?.stat2?.label || localizedText.stats.orders}
+                    {content.problems?.cta?.stats?.stat2?.label?.trim() || content.solutions?.cta?.stats?.stat2?.label?.trim() || localizedText.stats.orders}
                   </div>
                 </div>
                 <div className="text-center">
@@ -703,7 +703,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat3?.value || content.solutions?.cta?.stats?.stat3?.value || '99.8%'}
+                    {content.problems?.cta?.stats?.stat3?.value?.trim() || content.solutions?.cta?.stats?.stat3?.value?.trim() || '99.8%'}
                   </div>
                   <div
                     className="opacity-90"
@@ -712,7 +712,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat3?.label || content.solutions?.cta?.stats?.stat3?.label || localizedText.stats.delivery}
+                    {content.problems?.cta?.stats?.stat3?.label?.trim() || content.solutions?.cta?.stats?.stat3?.label?.trim() || localizedText.stats.delivery}
                   </div>
                 </div>
               </div>
@@ -722,7 +722,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                 className="bg-white text-primary hover:bg-white/90"
                 style={getButtonStyles()}
               >
-                {content.problems?.cta?.buttonText || content.solutions?.cta?.buttonText || localizedText.learnMore}
+                {content.problems?.cta?.buttonText?.trim() || content.solutions?.cta?.buttonText?.trim() || localizedText.learnMore}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </CardContent>

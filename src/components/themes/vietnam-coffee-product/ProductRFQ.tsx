@@ -5,9 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Send, CheckCircle, Clock, Package, MessageSquare } from "lucide-react"
+import { Send, CheckCircle, Clock, Package, MessageSquare, Loader2 } from "lucide-react"
 import { ThemeParams } from "@/types";
 import { getTranslation } from "@/lib/product-translations";
+import { toast } from "sonner";
 
 interface ProductRFQProps {
     theme: ThemeParams,
@@ -24,15 +25,51 @@ const ProductRFQ = ({ theme, content }: ProductRFQProps) => {
         quantity: "",
         requirements: "",
     })
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if (!formData.name.trim() || !formData.company.trim() || !formData.email.trim()) {
-            alert("Please fill in all required fields")
+            toast.error("Please fill in all required fields")
             return
         }
-        alert("Thank you! We'll contact you within 12-24 hours with a customized quotation.")
-        setFormData({ name: "", company: "", email: "", phone: "", quantity: "", requirements: "" })
+
+        setIsSubmitting(true);
+
+        // Map extra fields into company for the backend
+        const extraInfo = [];
+        if (formData.phone) extraInfo.push(`Phone: ${formData.phone}`);
+        if (formData.quantity) extraInfo.push(`Qty: ${formData.quantity}`);
+        if (formData.requirements) extraInfo.push(`Req: ${formData.requirements}`);
+
+        const companyStr = formData.company + (extraInfo.length > 0 ? ` | ${extraInfo.join(" | ")}` : "");
+
+        try {
+            const response = await fetch('/api/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    company: companyStr,
+                    projectId: (theme as any)?.projectId || (theme as any)?.id || undefined,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                toast.success("Thank you! We'll contact you within 12-24 hours with a customized quotation.");
+                setFormData({ name: "", company: "", email: "", phone: "", quantity: "", requirements: "" });
+            } else {
+                toast.error(data.error || "Có lỗi xảy ra khi gửi yêu cầu.");
+            }
+        } catch (error) {
+            console.error('Submission error:', error);
+            toast.error("Không thể kết nối đến máy chủ. Vui lòng thử lại sau.");
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     const benefits = [
@@ -70,7 +107,7 @@ const ProductRFQ = ({ theme, content }: ProductRFQProps) => {
                                 fontFamily: theme.typography?.fontFamily || "Inter"
                             }}
                         >
-                            {t.rfqDescription}
+                            {content?.description || content?.subtitle || t.rfqDescription}
                         </p>
 
                         <ul className="space-y-4">
@@ -194,14 +231,21 @@ const ProductRFQ = ({ theme, content }: ProductRFQProps) => {
                             <Button
                                 type="submit"
                                 size="lg"
+                                disabled={isSubmitting}
                                 className="w-full mt-4"
                                 style={{
                                     background: `linear-gradient(135deg, ${theme.colors?.accent || "#F59E0B"}, ${theme.colors?.accent || "#F59E0B"}CC)`,
-                                    color: theme.colors?.background || "#FFFFFF"
+                                    color: theme.colors?.background || "#FFFFFF",
+                                    opacity: isSubmitting ? 0.7 : 1,
+                                    pointerEvents: isSubmitting ? 'none' : 'auto' as any,
                                 }}
                             >
-                                <Send className="h-5 w-5 mr-2" />
-                                {t.submitRFQ}
+                                {isSubmitting ? (
+                                    <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                                ) : (
+                                    <Send className="h-5 w-5 mr-2" />
+                                )}
+                                {isSubmitting ? (t as any).submittingText || "Đang gửi..." : (content?.buttonText || t.submitRFQ)}
                             </Button>
 
                             <p

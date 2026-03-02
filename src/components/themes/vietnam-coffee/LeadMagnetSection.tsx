@@ -5,9 +5,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Download, BookOpen, CheckCircle, TrendingUp, Shield, FileText } from "lucide-react";
+import { Loader2, Download, BookOpen, CheckCircle, TrendingUp, Shield, FileText } from "lucide-react";
 import { ThemeParams } from "@/types";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface LeadMagnetContent {
   title?: string;
@@ -58,6 +59,7 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     email: "",
     company: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Get project language from theme or default to vietnamese
   const projectLanguage = theme?.projectLanguage || 'vietnamese';
@@ -77,6 +79,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
         instantText: "Instant Download",
         privacyText: "By downloading, you agree to receive occasional emails about coffee export opportunities. Unsubscribe anytime.",
         badgeText: "Free Guide",
+        successMessage: "Successfully registered! Your guide is ready.",
+        errorMessage: "An error occurred during registration. Please try again later.",
+        submittingText: "Submitting..."
       };
     } else {
       return {
@@ -91,6 +96,9 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
         instantText: "Tải về ngay",
         privacyText: "Bằng việc tải về, bạn đồng ý nhận email thỉnh thoảng về cơ hội xuất khẩu cà phê. Hủy đăng ký bất cứ lúc nào.",
         badgeText: "Hướng dẫn miễn phí",
+        successMessage: "Đăng ký thành công! Tài liệu của bạn đã sẵn sàng.",
+        errorMessage: "Có lỗi xảy ra khi đăng ký. Vui lòng thử lại sau.",
+        submittingText: "Đang gửi..."
       };
     }
   };
@@ -226,6 +234,8 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
       borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
       boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
       transition: 'all 0.3s ease',
+      opacity: isSubmitting ? 0.7 : 1,
+      pointerEvents: isSubmitting ? 'none' : 'auto' as any,
     }
   }
 
@@ -283,24 +293,48 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In Editor/Preview mode, we simulate the submission
-    // Real submission happens in the exported site via scripts.js
+    setIsSubmitting(true);
 
-    // Show toast or alert
-    alert(`Form submitted! (Simulation)\nName: ${formData.name}\nEmail: ${formData.email}\n\nNote: Real submission works in the exported site.`);
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          company: formData.company,
+          projectId: (theme as any)?.projectId || (theme as any)?.id || undefined, // Attempt to get project ID
+        }),
+      });
 
-    // Auto-download guide if available
-    if (content.downloadUrl) {
-      const link = document.createElement('a');
-      link.href = content.downloadUrl;
-      link.setAttribute('download', 'guide.pdf');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(localizedText.successMessage);
+
+        // Auto-download guide if available
+        if (content.downloadUrl) {
+          const link = document.createElement('a');
+          link.href = content.downloadUrl;
+          link.setAttribute('download', 'guide.pdf');
+          link.setAttribute('target', '_blank'); // Add target blank just in case cross origin
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
+
+        setFormData({ name: "", email: "", company: "" });
+      } else {
+        toast.error(data.error || localizedText.errorMessage);
+      }
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast.error(localizedText.errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
-    setFormData({ name: "", email: "", company: "" });
   };
 
   // Default features and trust indicators
@@ -654,11 +688,16 @@ const LeadMagnetSection = ({ theme, content }: LeadMagnetSectionProps) => {
                       <Button
                         type="submit"
                         size="lg"
+                        disabled={isSubmitting}
                         className="w-full hover:scale-105 hover:shadow-xl transition-all duration-300"
                         style={getButtonStyles()}
                       >
-                        <Download className="mr-2 h-5 w-5" />
-                        {content.buttonText}
+                        {isSubmitting ? (
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        ) : (
+                          <Download className="mr-2 h-5 w-5" />
+                        )}
+                        {isSubmitting ? localizedText.submittingText : content.buttonText}
                       </Button>
                     )}
 
