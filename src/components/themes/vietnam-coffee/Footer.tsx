@@ -1,12 +1,14 @@
 'use client'
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Youtube } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Youtube, Loader2 } from "lucide-react";
 import { ThemeParams } from "@/types";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { toast } from "sonner";
 
 interface FooterContent {
   companyName?: string;
@@ -49,6 +51,45 @@ interface FooterProps {
 const Footer = ({ theme, content }: FooterProps) => {
   // Get project language from theme or default to vietnamese
   const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim()) {
+      toast.error(projectLanguage === 'english' ? "Please enter your email" : "Vui lòng nhập email");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: "Newsletter Subscriber",
+          email: newsletterEmail,
+          company: "Newsletter",
+          projectId: (theme as any)?.projectId || (theme as any)?.id || undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(projectLanguage === 'english' ? "Subscribed successfully!" : "Đăng ký thành công!");
+        setNewsletterEmail("");
+      } else {
+        toast.error(data.error || (projectLanguage === 'english' ? "Subscription failed" : "Đăng ký thất bại"));
+      }
+    } catch (error) {
+      console.error('Newsletter submission error:', error);
+      toast.error(projectLanguage === 'english' ? "Could not connect to server" : "Không thể kết nối đến máy chủ");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   // Get localized text based on project language
   const getLocalizedText = () => {
@@ -357,7 +398,7 @@ const Footer = ({ theme, content }: FooterProps) => {
                           }}
                         >
                           {content.contact.email}
-                        </div>
+                        </ div>
                       </div>
                     </div>
                   )}
@@ -466,10 +507,13 @@ const Footer = ({ theme, content }: FooterProps) => {
                   {content.newsletter.description}
                 </p>
               )}
-              <div className="space-y-3">
+              <form onSubmit={handleNewsletterSubmit} className="space-y-3">
                 <Input
                   type="email"
                   placeholder={content.newsletter?.placeholder || localizedText.emailPlaceholder}
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  required
                   className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground placeholder:text-secondary-foreground/50"
                   style={{
                     backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
@@ -481,12 +525,22 @@ const Footer = ({ theme, content }: FooterProps) => {
                   }}
                 />
                 <Button
+                  type="submit"
                   className="w-full"
-                  style={getButtonStyles('primary')}
+                  disabled={isSubmitting}
+                  style={{
+                    ...getButtonStyles('primary'),
+                    opacity: isSubmitting ? 0.7 : 1,
+                  }}
                 >
-                  {content.newsletter?.buttonText || localizedText.subscribeButton}
+                  {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : null}
+                  {isSubmitting
+                    ? (projectLanguage === 'english' ? "Subscribing..." : "Đang đăng ký...")
+                    : (content.newsletter?.buttonText || localizedText.subscribeButton)}
                 </Button>
-              </div>
+              </form>
 
               {/* Social Links - chỉ hiển thị khi có social links */}
               {socialLinks && socialLinks.length > 0 && (
