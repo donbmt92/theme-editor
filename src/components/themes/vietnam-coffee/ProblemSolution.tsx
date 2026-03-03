@@ -134,9 +134,9 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
   // Get project language from theme or default to vietnamese
   const projectLanguage = theme?.projectLanguage || 'vietnamese';
 
-  // Get localized text based on project language
-  const getLocalizedText = () => {
-    if (projectLanguage === 'english') {
+  // Get localized text based on language
+  const getLocalizedText = (lang: string) => {
+    if (lang === 'english') {
       return {
         learnMore: "Learn More About Us",
         defaultAboutTitle: "Solving Real Import-Export Challenges",
@@ -281,7 +281,47 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
     }
   };
 
-  const localizedText = getLocalizedText();
+  const localizedText = getLocalizedText(projectLanguage);
+  const altLangText = getLocalizedText(projectLanguage === 'english' ? 'vietnamese' : 'english');
+
+  // Collect all known default/placeholder values from the OTHER language
+  // so we can detect when saved content is in the wrong language
+  const altLangDefaults = new Set([
+    altLangText.learnMore,
+    altLangText.defaultAboutTitle,
+    altLangText.defaultAboutDescription,
+    altLangText.defaultProblemsTitle,
+    altLangText.defaultSolutionsTitle,
+    altLangText.defaultCtaTitle,
+    altLangText.defaultCtaDescription,
+    altLangText.stats.experience,
+    altLangText.stats.orders,
+    altLangText.stats.delivery,
+    // Known editor placeholders (Vietnamese)
+    "Sẵn sàng áp dụng giải pháp?", "Tại sao chọn chúng tôi?",
+    "Tư vấn miễn phí về quy trình xuất khẩu cà phê sang Mỹ",
+    "Mô tả về lý do khách hàng nên áp dụng giải pháp của bạn",
+    "Mô tả về lý do khách hàng nên chọn bạn",
+    "Bắt đầu ngay hôm nay", "Tìm hiểu thêm",
+    "Năm kinh nghiệm",
+    // Known editor placeholders (English)
+    "Why Choose Us?", "Ready to apply the solution?",
+    "Describe why customers should choose you",
+    "Describe why customers should apply your solution",
+    "Get Started Today", "Learn More",
+    "Years of Experience", "Successful Shipments", "On-Time Delivery",
+  ]);
+
+  /**
+   * If saved value is empty OR matches a known default from the WRONG language,
+   * return the current language's default instead.
+   */
+  const resolveText = (value: string | undefined, currentDefault: string): string => {
+    const v = value?.trim();
+    if (!v) return currentDefault;
+    if (altLangDefaults.has(v)) return currentDefault;
+    return v;
+  };
 
   // Get icon component by name
   const getIcon = (iconName?: string) => {
@@ -466,7 +506,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
               fontWeight: theme.typography?.fontWeight || '700'
             }}
           >
-            {content.about?.title || localizedText.defaultAboutTitle}
+            {resolveText(content.about?.title, localizedText.defaultAboutTitle)}
           </h2>
           <p
             className={cn("max-w-3xl mx-auto", aboutDescClasses)}
@@ -475,7 +515,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
               lineHeight: theme.typography?.lineHeight || '1.6'
             }}
           >
-            {content.about?.description || localizedText.defaultAboutDescription}
+            {resolveText(content.about?.description, localizedText.defaultAboutDescription)}
           </p>
         </div>
 
@@ -494,7 +534,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {content.problems?.title || localizedText.defaultProblemsTitle}
+                {resolveText(content.problems?.title, localizedText.defaultProblemsTitle)}
               </h3>
             </div>
             <div className="space-y-6">
@@ -559,7 +599,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {content.solutions?.title || localizedText.defaultSolutionsTitle}
+                {resolveText(content.solutions?.title, localizedText.defaultSolutionsTitle)}
               </h3>
             </div>
             <div className="space-y-6">
@@ -643,7 +683,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   fontWeight: theme.typography?.fontWeight || '700'
                 }}
               >
-                {content.problems?.cta?.title?.trim() || content.solutions?.cta?.title?.trim() || localizedText.defaultCtaTitle}
+                {resolveText(content.problems?.cta?.title, localizedText.defaultCtaTitle) !== localizedText.defaultCtaTitle ? resolveText(content.problems?.cta?.title, localizedText.defaultCtaTitle) : resolveText(content.solutions?.cta?.title, localizedText.defaultCtaTitle)}
               </h3>
               <p
                 className={cn("mb-8 opacity-90", getBodySize())}
@@ -652,7 +692,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                   lineHeight: theme.typography?.lineHeight || '1.6'
                 }}
               >
-                {content.problems?.cta?.description?.trim() || content.solutions?.cta?.description?.trim() || localizedText.defaultCtaDescription}
+                {resolveText(content.problems?.cta?.description, localizedText.defaultCtaDescription) !== localizedText.defaultCtaDescription ? resolveText(content.problems?.cta?.description, localizedText.defaultCtaDescription) : resolveText(content.solutions?.cta?.description, localizedText.defaultCtaDescription)}
               </p>
               <div className="grid md:grid-cols-3 gap-8 mb-8">
                 <div className="text-center">
@@ -663,7 +703,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat1?.value?.trim() || content.solutions?.cta?.stats?.stat1?.value?.trim() || '15+'}
+                    {resolveText(content.problems?.cta?.stats?.stat1?.value, '15+') !== '15+' ? resolveText(content.problems?.cta?.stats?.stat1?.value, '15+') : resolveText(content.solutions?.cta?.stats?.stat1?.value, '15+')}
                   </div>
                   <div
                     className="opacity-90"
@@ -672,7 +712,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat1?.label?.trim() || content.solutions?.cta?.stats?.stat1?.label?.trim() || localizedText.stats.experience}
+                    {resolveText(content.problems?.cta?.stats?.stat1?.label, localizedText.stats.experience) !== localizedText.stats.experience ? resolveText(content.problems?.cta?.stats?.stat1?.label, localizedText.stats.experience) : resolveText(content.solutions?.cta?.stats?.stat1?.label, localizedText.stats.experience)}
                   </div>
                 </div>
                 <div className="text-center">
@@ -683,7 +723,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat2?.value?.trim() || content.solutions?.cta?.stats?.stat2?.value?.trim() || '500+'}
+                    {resolveText(content.problems?.cta?.stats?.stat2?.value, '500+') !== '500+' ? resolveText(content.problems?.cta?.stats?.stat2?.value, '500+') : resolveText(content.solutions?.cta?.stats?.stat2?.value, '500+')}
                   </div>
                   <div
                     className="opacity-90"
@@ -692,7 +732,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat2?.label?.trim() || content.solutions?.cta?.stats?.stat2?.label?.trim() || localizedText.stats.orders}
+                    {resolveText(content.problems?.cta?.stats?.stat2?.label, localizedText.stats.orders) !== localizedText.stats.orders ? resolveText(content.problems?.cta?.stats?.stat2?.label, localizedText.stats.orders) : resolveText(content.solutions?.cta?.stats?.stat2?.label, localizedText.stats.orders)}
                   </div>
                 </div>
                 <div className="text-center">
@@ -703,7 +743,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontWeight: theme.typography?.fontWeight || '700'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat3?.value?.trim() || content.solutions?.cta?.stats?.stat3?.value?.trim() || '99.8%'}
+                    {resolveText(content.problems?.cta?.stats?.stat3?.value, '99.8%') !== '99.8%' ? resolveText(content.problems?.cta?.stats?.stat3?.value, '99.8%') : resolveText(content.solutions?.cta?.stats?.stat3?.value, '99.8%')}
                   </div>
                   <div
                     className="opacity-90"
@@ -712,7 +752,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                       fontSize: theme.typography?.fontSize || '16px'
                     }}
                   >
-                    {content.problems?.cta?.stats?.stat3?.label?.trim() || content.solutions?.cta?.stats?.stat3?.label?.trim() || localizedText.stats.delivery}
+                    {resolveText(content.problems?.cta?.stats?.stat3?.label, localizedText.stats.delivery) !== localizedText.stats.delivery ? resolveText(content.problems?.cta?.stats?.stat3?.label, localizedText.stats.delivery) : resolveText(content.solutions?.cta?.stats?.stat3?.label, localizedText.stats.delivery)}
                   </div>
                 </div>
               </div>
@@ -722,7 +762,7 @@ const ProblemSolution = ({ theme, content }: ProblemSolutionProps) => {
                 className="bg-white text-primary hover:bg-white/90"
                 style={getButtonStyles()}
               >
-                {content.problems?.cta?.buttonText?.trim() || content.solutions?.cta?.buttonText?.trim() || localizedText.learnMore}
+                {resolveText(content.problems?.cta?.buttonText, localizedText.learnMore) !== localizedText.learnMore ? resolveText(content.problems?.cta?.buttonText, localizedText.learnMore) : resolveText(content.solutions?.cta?.buttonText, localizedText.learnMore)}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </CardContent>

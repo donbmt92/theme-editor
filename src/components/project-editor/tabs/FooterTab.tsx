@@ -321,66 +321,6 @@ const FooterTab = ({ themeParams, updateThemeParam }: FooterTabProps) => {
         </div>
       </Card>
 
-      {/* Resources */}
-      <Card className="p-4">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Tài nguyên</h3>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={addResource}
-            className="flex items-center gap-2"
-          >
-            <Plus size={16} />
-            Thêm tài nguyên
-          </Button>
-        </div>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Tiêu đề section</label>
-            <Input
-              value={themeParams?.content?.footer?.resourcesTitle || ''}
-              onChange={(e) => updateThemeParam(['content', 'footer', 'resourcesTitle'], e.target.value)}
-              placeholder="Tài Nguyên"
-            />
-          </div>
-          {(themeParams?.content?.footer?.resources || []).map((resource, index) => (
-            <div key={index} className="border rounded-lg p-4">
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="font-medium">Tài nguyên {index + 1}</h4>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={() => removeResource(index)}
-                  className="flex items-center gap-2"
-                >
-                  <Trash2 size={16} />
-                  Xóa
-                </Button>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Tên tài nguyên</label>
-                  <Input
-                    value={resource.name || ''}
-                    onChange={(e) => updateResource(index, 'name', e.target.value)}
-                    placeholder="Hướng Dẫn Xuất/Nhập Khẩu"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">URL</label>
-                  <Input
-                    value={resource.href || ''}
-                    onChange={(e) => updateResource(index, 'href', e.target.value)}
-                    placeholder="#guide"
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </Card>
-
       {/* Legal Links */}
       <Card className="p-4">
         <div className="flex items-center justify-between mb-4">
