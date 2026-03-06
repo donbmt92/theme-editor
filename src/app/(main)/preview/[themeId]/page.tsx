@@ -32,13 +32,13 @@ export default function ThemePreviewPage() {
           // Use latest version or default params
           const latestVersion = data.project.versions[0]
           let params: ThemeParams
-          
+
           if (latestVersion && latestVersion.snapshot) {
             params = latestVersion.snapshot as ThemeParams
           } else if (data.project.theme.defaultParams) {
             try {
-              const parsedParams = typeof data.project.theme.defaultParams === 'string' 
-                ? JSON.parse(data.project.theme.defaultParams) 
+              const parsedParams = typeof data.project.theme.defaultParams === 'string'
+                ? JSON.parse(data.project.theme.defaultParams)
                 : data.project.theme.defaultParams
               params = parsedParams
             } catch {
@@ -49,13 +49,13 @@ export default function ThemePreviewPage() {
             setError('Không tìm thấy dữ liệu theme')
             return
           }
-          
+
           // Merge projectLanguage into themeParams
           const themeWithLanguage = {
             ...params,
             projectLanguage: data.project.language || 'vietnamese'
           }
-          
+
           setTheme(themeWithLanguage)
         } else {
           setError('Không tìm thấy project')
@@ -77,9 +77,9 @@ export default function ThemePreviewPage() {
       if (response.ok) {
         const data = await response.json()
         if (data.theme.defaultParams) {
-          const themeParams = typeof data.theme.defaultParams === 'string' 
-      ? JSON.parse(data.theme.defaultParams) 
-      : data.theme.defaultParams
+          const themeParams = typeof data.theme.defaultParams === 'string'
+            ? JSON.parse(data.theme.defaultParams)
+            : data.theme.defaultParams
           setTheme(themeParams)
         }
       } else {
@@ -118,10 +118,7 @@ export default function ThemePreviewPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="h-full overflow-auto">
-        {/* Force desktop breakpoint for preview */}
-        <div className="min-w-[768px]">
-          <VietnamCoffeeTheme theme={theme} />
-        </div>
+        <VietnamCoffeeTheme theme={theme} />
       </div>
     </div>
   )

@@ -36,7 +36,7 @@ const ThemeEditor = () => {
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true)
   const [showAIDialog, setShowAIDialog] = useState(false)
   const [showExportDialog, setShowExportDialog] = useState(false)
-  
+
   // Undo/Redo functionality
   const {
     state: themeParamsWithHistory,
@@ -55,12 +55,12 @@ const ThemeEditor = () => {
       try {
         const response = await fetch(`/api/themes/${themeId}`)
         const data = await response.json()
-        
+
         if (data.success) {
           setTheme(data.theme)
           // defaultParams is already an object from Prisma, no need to parse
-          const params = typeof data.theme.defaultParams === 'string' 
-            ? JSON.parse(data.theme.defaultParams) 
+          const params = typeof data.theme.defaultParams === 'string'
+            ? JSON.parse(data.theme.defaultParams)
             : data.theme.defaultParams
           setThemeParams(params)
           updateThemeParamsWithHistory(params)
@@ -71,7 +71,7 @@ const ThemeEditor = () => {
         setLoading(false)
       }
     }
-    
+
     if (themeId) {
       loadTheme()
     }
@@ -106,7 +106,7 @@ const ThemeEditor = () => {
 
     const newParams = { ...themeParams }
     let current: Record<string, unknown> = newParams as Record<string, unknown>
-    
+
     for (let i = 0; i < path.length - 1; i++) {
       if (!current[path[i]]) {
         // If this is an array index, create an array
@@ -118,7 +118,7 @@ const ThemeEditor = () => {
       }
       current = current[path[i]] as Record<string, unknown>
     }
-    
+
     current[path[path.length - 1]] = value
     setThemeParams(newParams)
     updateThemeParamsWithHistory(newParams)
@@ -126,10 +126,10 @@ const ThemeEditor = () => {
 
   const saveTheme = async () => {
     if (!themeParams) return
-    
+
     setIsSaving(true)
     setSaveMessage('')
-    
+
     try {
       const response = await fetch(`/api/themes/${themeId}`, {
         method: 'PUT',
@@ -138,9 +138,9 @@ const ThemeEditor = () => {
         },
         body: JSON.stringify({ themeParams })
       })
-      
+
       const data = await response.json()
-      
+
       if (data.success) {
         setSaveMessage('✅ Theme đã được lưu thành công!')
         // Auto hide message after 3 seconds
@@ -192,8 +192,8 @@ const ThemeEditor = () => {
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               onClick={() => window.history.back()}
             >
               ← Quay lại
@@ -203,7 +203,7 @@ const ThemeEditor = () => {
               <p className="text-sm text-gray-600">{theme.description}</p>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-3">
             {/* Undo/Redo */}
             <div className="flex items-center space-x-1">
@@ -226,7 +226,7 @@ const ThemeEditor = () => {
                 <Redo size={16} />
               </Button>
             </div>
-            
+
             <Button
               variant="outline"
               size="sm"
@@ -268,11 +268,10 @@ const ThemeEditor = () => {
 
       {/* Save Message */}
       {saveMessage && (
-        <div className={`px-6 py-3 text-sm font-medium ${
-          saveMessage.includes('✅') 
-            ? 'bg-green-50 text-green-800 border-b border-green-200' 
+        <div className={`px-6 py-3 text-sm font-medium ${saveMessage.includes('✅')
+            ? 'bg-green-50 text-green-800 border-b border-green-200'
             : 'bg-red-50 text-red-800 border-b border-red-200'
-        }`}>
+          }`}>
           {saveMessage}
         </div>
       )}
@@ -292,48 +291,44 @@ const ThemeEditor = () => {
               <div className="flex space-x-1 mb-6 p-1 bg-gray-100 rounded-lg">
                 <button
                   onClick={() => setActiveTab('colors')}
-                  className={`flex-1 flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-                    activeTab === 'colors' 
-                      ? 'bg-white text-gray-900 shadow-sm' 
+                  className={`flex-1 flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${activeTab === 'colors'
+                      ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
-                  }`}
+                    }`}
                 >
                   <Palette size={16} className="mr-2" />
                   Màu sắc
                 </button>
                 <button
                   onClick={() => setActiveTab('typography')}
-                  className={`flex-1 flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-                    activeTab === 'typography' 
-                      ? 'bg-white text-gray-900 shadow-sm' 
+                  className={`flex-1 flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${activeTab === 'typography'
+                      ? 'bg-white text-gray-900 shadow-sm'
                       : 'text-gray-600 hover:text-gray-900'
-                  }`}
+                    }`}
                 >
                   <Type size={16} className="mr-2" />
                   Chữ
                 </button>
-                                 <button
-                   onClick={() => setActiveTab('layout')}
-                   className={`flex-1 flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-                     activeTab === 'layout' 
-                       ? 'bg-white text-gray-900 shadow-sm' 
-                       : 'text-gray-600 hover:text-gray-900'
-                   }`}
-                 >
-                   <Layout size={16} className="mr-2" />
-                   Bố cục
-                 </button>
-                 <button
-                   onClick={() => setActiveTab('content')}
-                   className={`flex-1 flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-                     activeTab === 'content' 
-                       ? 'bg-white text-gray-900 shadow-sm' 
-                       : 'text-gray-600 hover:text-gray-900'
-                   }`}
-                 >
-                   <FileText size={16} className="mr-2" />
-                   Nội dung
-                 </button>
+                <button
+                  onClick={() => setActiveTab('layout')}
+                  className={`flex-1 flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${activeTab === 'layout'
+                      ? 'bg-white text-gray-900 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                >
+                  <Layout size={16} className="mr-2" />
+                  Bố cục
+                </button>
+                <button
+                  onClick={() => setActiveTab('content')}
+                  className={`flex-1 flex items-center justify-center py-2 px-3 rounded-md text-sm font-medium transition-colors ${activeTab === 'content'
+                      ? 'bg-white text-gray-900 shadow-sm'
+                      : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                >
+                  <FileText size={16} className="mr-2" />
+                  Nội dung
+                </button>
               </div>
 
               {/* Colors Tab */}
@@ -1020,7 +1015,7 @@ const ThemeEditor = () => {
                           onChange={(e) => updateThemeParam(['content', 'testimonials', 'textColor'], e.target.value)}
                         />
                       </div>
-                      
+
                       {/* Testimonial 1 */}
                       <div className="border-t pt-4">
                         <h4 className="font-medium mb-3">Đánh giá 1</h4>

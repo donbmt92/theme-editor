@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Save, Download, Eye, Wand2, Undo, Redo, ExternalLink } from 'lucide-react'
+import { ArrowLeft, Save, Download, Eye, Wand2, Undo, Redo, ExternalLink, Smartphone } from 'lucide-react'
 import { ThemeParams } from '@/types'
 
 interface ProjectHeaderProps {
@@ -32,7 +32,7 @@ const ProjectHeader = ({
   canRedo,
   onBack,
   onTogglePreview,
-  onSave, 
+  onSave,
   onShowAI,
   onShowDeploy,
   onUndo,
@@ -43,8 +43,8 @@ const ProjectHeader = ({
     <div className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             onClick={onBack}
           >
             <ArrowLeft size={16} className="mr-2" />
@@ -55,7 +55,7 @@ const ProjectHeader = ({
             <p className="text-sm text-gray-600">Dựa trên theme: {themeName}</p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-3">
           {/* Undo/Redo */}
           <div className="flex items-center space-x-1">
@@ -78,7 +78,7 @@ const ProjectHeader = ({
               <Redo size={16} />
             </Button>
           </div>
-          
+
           <Button
             variant="outline"
             size="sm"
@@ -104,6 +104,26 @@ const ProjectHeader = ({
           >
             <ExternalLink size={16} className="mr-2" />
             Preview Tab Mới
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const width = 375
+              const height = 812
+              const left = (window.screen.width - width) / 2
+              const top = (window.screen.height - height) / 2
+              window.open(
+                `/preview/${themeId}?projectId=${projectId}`,
+                'mobile-preview',
+                `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+              )
+            }}
+            title="Preview trên điện thoại (375×812)"
+            className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200"
+          >
+            <Smartphone size={16} className="mr-2" />
+            Preview ĐT
           </Button>
           <Button
             variant="outline"
