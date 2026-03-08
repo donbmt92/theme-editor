@@ -215,7 +215,7 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                 </div>
 
                 {/* External Preview Buttons */}
-                <div className="flex gap-3 mt-4 pt-4 border-t">
+                <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t">
                     <Button
                         variant="outline"
                         size="sm"
@@ -236,9 +236,10 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                         }}
                         disabled={!activeProductPageId}
                         title="Mở tab mới"
+                        className="w-full text-xs sm:text-sm"
                     >
-                        <ExternalLink size={16} className="mr-2" />
-                        Preview Tab Mới
+                        <ExternalLink size={16} className="mr-1 sm:mr-2 shrink-0" />
+                        <span className="truncate">Preview Tab</span>
                     </Button>
 
                     <Button
@@ -270,10 +271,10 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                         }}
                         disabled={!activeProductPageId}
                         title="Preview trên điện thoại"
-                        className="bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800 border-blue-200"
+                        className="w-full bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800 border-blue-200 text-xs sm:text-sm"
                     >
-                        <Smartphone size={16} className="mr-2" />
-                        Preview ĐT
+                        <Smartphone size={16} className="mr-1 sm:mr-2 shrink-0" />
+                        <span className="truncate">Preview ĐT</span>
                     </Button>
                 </div>
             </Card>
