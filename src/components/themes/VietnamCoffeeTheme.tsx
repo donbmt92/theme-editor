@@ -385,7 +385,10 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate, is
   const activeProductPageId = finalContent.activeProductPageId
   const productPages = finalContent.productPages || {}
   const activeProductPage = activeProductPageId ? productPages[activeProductPageId] : undefined
-  const showProductPage = isEditorPreview && activeProductPage?.showPreview || false
+
+  // If we have an activeProductPageId and isEditorPreview is true, we should show the product page.
+  // We check for activeProductPage?.showPreview, but also if it's explicitly set by the preview page wrapper.
+  const showProductPage = isEditorPreview && activeProductPageId && (activeProductPage?.showPreview !== false)
 
   if (showProductPage && activeProductPageId) {
     return <ProductPage theme={theme} content={finalContent} />

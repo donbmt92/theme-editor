@@ -21,10 +21,9 @@ interface ProductPageProps {
 }
 
 export default function ProductPage({ theme, content }: ProductPageProps) {
-    // Get the active product page data
-    const activeProductPageId = content.activeProductPageId
-    const productPages = content.productPages || {}
-    const productPageContent = activeProductPageId ? productPages[activeProductPageId] : {}
+    const activeProductPageId = content?.activeProductPageId
+    const productPages = content?.productPages || {}
+    const productPageContent = (activeProductPageId ? productPages[activeProductPageId] : undefined) || {}
 
     // Helper to get consistent typography
     const getTypographyStyles = () => {

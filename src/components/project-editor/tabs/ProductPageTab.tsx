@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
 import { ThemeParams } from '@/types'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, ExternalLink, Smartphone } from 'lucide-react'
 import { useState } from 'react'
 import UpgradePrompt from '@/components/ui/upgrade-prompt'
 import { canAccessFeature } from '@/lib/tier-limits'
@@ -102,6 +102,28 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
             }
 
             updateThemeParam(['content', 'productPages'], updatedProductPages)
+
+            // Immediate save to prevent data loss if user switches tabs (which triggers a reload from db)
+            const pathname = window.location.pathname;
+            const projectId = pathname.startsWith('/project/')
+                ? pathname.split('/')[2]
+                : new URLSearchParams(window.location.search).get('projectId');
+
+            if (projectId) {
+                const newParamsToSave = {
+                    ...themeParams,
+                    content: {
+                        ...(themeParams.content || {}),
+                        productPages: updatedProductPages
+                    }
+                };
+                await fetch(`/api/projects/${projectId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ themeParams: newParamsToSave })
+                }).catch(err => console.error('Failed immediate save:', err));
+            }
+
             // alert('Tạo nội dung thành công! Bật "Enable Product Page" để xem Preview 👉')
             console.log('Product page content generated successfully')
         } catch (error) {
@@ -190,6 +212,69 @@ const ProductPageTab = ({ themeParams, updateThemeParam, userTier }: ProductPage
                         className="w-10 h-6"
                         disabled={!activeProductPageId}
                     />
+                </div>
+
+                {/* External Preview Buttons */}
+                <div className="flex gap-3 mt-4 pt-4 border-t">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                            if (!activeProductPageId) return;
+
+                            let projectId = new URLSearchParams(window.location.search).get('projectId') || '';
+                            let themeId = 'vietnam-coffee-theme';
+                            const pathname = window.location.pathname;
+
+                            if (pathname.startsWith('/project/')) {
+                                projectId = pathname.split('/')[2];
+                            } else if (pathname.startsWith('/editor/')) {
+                                themeId = pathname.split('/')[2];
+                            }
+
+                            window.open(`/preview/${themeId}?projectId=${projectId}&previewProductId=${activeProductPageId}`, '_blank');
+                        }}
+                        disabled={!activeProductPageId}
+                        title="Mở tab mới"
+                    >
+                        <ExternalLink size={16} className="mr-2" />
+                        Preview Tab Mới
+                    </Button>
+
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                            if (!activeProductPageId) return;
+
+                            let projectId = new URLSearchParams(window.location.search).get('projectId') || '';
+                            let themeId = 'vietnam-coffee-theme';
+                            const pathname = window.location.pathname;
+
+                            if (pathname.startsWith('/project/')) {
+                                projectId = pathname.split('/')[2];
+                            } else if (pathname.startsWith('/editor/')) {
+                                themeId = pathname.split('/')[2];
+                            }
+
+                            const width = 375;
+                            const height = 812;
+                            const left = (window.screen.width - width) / 2;
+                            const top = (window.screen.height - height) / 2;
+
+                            window.open(
+                                `/preview/${themeId}?projectId=${projectId}&previewProductId=${activeProductPageId}`,
+                                'mobile-preview',
+                                `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+                            );
+                        }}
+                        disabled={!activeProductPageId}
+                        title="Preview trên điện thoại"
+                        className="bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800 border-blue-200"
+                    >
+                        <Smartphone size={16} className="mr-2" />
+                        Preview ĐT
+                    </Button>
                 </div>
             </Card>
 

@@ -115,10 +115,33 @@ export default function ThemePreviewPage() {
     )
   }
 
+  // Check for product preview
+  const previewProductId = searchParams.get('previewProductId')
+
+  // Create a modified theme object if we are previewing a specific product
+  const renderTheme = { ...theme }
+  if (previewProductId && renderTheme.content) {
+    // Force active product page and showPreview true
+    renderTheme.content = {
+      ...renderTheme.content,
+      activeProductPageId: previewProductId,
+      productPages: {
+        ...(renderTheme.content.productPages as Record<string, any> || {}),
+        [previewProductId]: {
+          ...((renderTheme.content.productPages as Record<string, any>)?.[previewProductId] || {}),
+          showPreview: true
+        }
+      }
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="h-full overflow-auto">
-        <VietnamCoffeeTheme theme={theme} />
+        <VietnamCoffeeTheme
+          theme={renderTheme}
+          isEditorPreview={true}
+        />
       </div>
     </div>
   )
