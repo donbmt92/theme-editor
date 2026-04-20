@@ -1,0 +1,590 @@
+'use client'
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { MapPin, Phone, Mail, Clock, Facebook, Twitter, Linkedin, Youtube, Loader2 } from "lucide-react";
+import { ThemeParams } from "@/types";
+import { cn } from "@/lib/utils";
+import Image from "next/image";
+import { toast } from "sonner";
+
+interface FooterContent {
+  companyName?: string;
+  description?: string;
+  backgroundColor?: string;
+  textColor?: string;
+  colorMode?: 'theme' | 'custom';
+  primaryColor?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  fontFamily?: string;
+  lineHeight?: string;
+  copyright?: string;
+  quickLinksTitle?: string;
+  resourcesTitle?: string;
+  addressLabel?: string;
+  contact?: {
+    phone?: string;
+    email?: string;
+    address?: string;
+    businessHours?: string;
+  };
+  quickLinks?: Array<{ name: string; href: string }>;
+  resources?: Array<{ name: string; href: string }>;
+  legal?: Array<{ name: string; href: string }>;
+  socialLinks?: Array<{ icon: string; href: string; label: string }>;
+  newsletter?: {
+    title?: string;
+    placeholder?: string;
+    buttonText?: string;
+    description?: string;
+  };
+}
+
+interface FooterProps {
+  theme: ThemeParams;
+  content: FooterContent;
+}
+
+const Footer = ({ theme, content }: FooterProps) => {
+  // Get project language from theme or default to vietnamese
+  const projectLanguage = theme?.projectLanguage || 'vietnamese';
+
+  const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim()) {
+      toast.error(projectLanguage === 'english' ? "Please enter your email" : "Vui lòng nhập email");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: "Newsletter Subscriber",
+          email: newsletterEmail,
+          company: "Newsletter",
+          projectId: (theme as any)?.projectId || (theme as any)?.id || undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(projectLanguage === 'english' ? "Subscribed successfully!" : "Đăng ký thành công!");
+        setNewsletterEmail("");
+      } else {
+        toast.error(data.error || (projectLanguage === 'english' ? "Subscription failed" : "Đăng ký thất bại"));
+      }
+    } catch (error) {
+      console.error('Newsletter submission error:', error);
+      toast.error(projectLanguage === 'english' ? "Could not connect to server" : "Không thể kết nối đến máy chủ");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Get localized text based on language
+  const getLocalizedText = (lang: string) => {
+    if (lang === 'english') {
+      return {
+        quickLinks: [
+          { name: "About Us", href: "#about" },
+          { name: "Products", href: "#products" },
+          { name: "Export Services", href: "#services" },
+          { name: "Quality Assurance", href: "#quality" },
+          { name: "Contact", href: "#contact" }
+        ],
+        resources: [
+          { name: "Import/Export Guide", href: "#guide" },
+          { name: "Market Reports", href: "#reports" },
+          { name: "Documents", href: "#docs" },
+          { name: "FAQ", href: "#faq" }
+        ],
+        legal: [
+          { name: "Privacy Policy", href: "#privacy" },
+          { name: "Terms of Service", href: "#terms" },
+          { name: "Cookie Policy", href: "#cookies" },
+          { name: "Compliance", href: "#compliance" }
+        ],
+        // Additional localized text
+        companyDescription: "Your trusted partner for premium Vietnamese coffee exports to the US market. Quality, reliability and excellent service since 2009.",
+        vietnamOffice: "Vietnam Office",
+        usBusinessHours: "US Business Hours",
+        quickLinksTitle: "Quick Links",
+        resourcesTitle: "Resources",
+        connectTitle: "Connect",
+        newsletterDescription: "Get weekly market updates and import tips delivered to your inbox.",
+        emailPlaceholder: "Enter your email",
+        subscribeButton: "Subscribe",
+        copyright: "All rights reserved.",
+        businessHours: "Mon-Fri: 8AM-6PM (EST)"
+      };
+    } else {
+      return {
+        quickLinks: [
+          { name: "Về Chúng Tôi", href: "#about" },
+          { name: "Sản Phẩm", href: "#products" },
+          { name: "Dịch Vụ Xuất Khẩu", href: "#services" },
+          { name: "Đảm Bảo Chất Lượng", href: "#quality" },
+          { name: "Liên Hệ", href: "#contact" }
+        ],
+        resources: [
+          { name: "Hướng Dẫn Xuất/Nhập Khẩu", href: "#guide" },
+          { name: "Báo Cáo Thị Trường", href: "#reports" },
+          { name: "Tài Liệu", href: "#docs" },
+          { name: "FAQ", href: "#faq" }
+        ],
+        legal: [
+          { name: "Chính Sách Bảo Mật", href: "#privacy" },
+          { name: "Điều Khoản Dịch Vụ", href: "#terms" },
+          { name: "Chính Sách Cookie", href: "#cookies" },
+          { name: "Tuân Thủ", href: "#compliance" }
+        ],
+        // Additional localized text
+        companyDescription: "Đối tác tin cậy của bạn cho xuất khẩu cà phê Việt Nam cao cấp đến thị trường Mỹ. Chất lượng, độ tin cậy và dịch vụ xuất sắc từ năm 2009.",
+        vietnamOffice: "Văn Phòng Việt Nam",
+        usBusinessHours: "Giờ Làm Việc Mỹ",
+        quickLinksTitle: "Liên Kết Nhanh",
+        resourcesTitle: "Tài Nguyên",
+        connectTitle: "Kết Nối",
+        newsletterDescription: "Nhận cập nhật thị trường hàng tuần và mẹo nhập khẩu gửi đến hộp thư của bạn.",
+        emailPlaceholder: "Nhập email của bạn",
+        subscribeButton: "Đăng Ký",
+        copyright: "Tất cả quyền được bảo lưu.",
+        businessHours: "Thứ 2-Thứ 6: 8AM-6PM (EST)"
+      };
+    }
+  };
+
+  const localizedText = getLocalizedText(projectLanguage);
+  const altLangText = getLocalizedText(projectLanguage === 'english' ? 'vietnamese' : 'english');
+
+  // Collect known defaults from the OTHER language to detect language mismatches
+  const altLangDefaults = new Set([
+    altLangText.quickLinksTitle,
+    altLangText.resourcesTitle,
+    altLangText.connectTitle,
+    altLangText.vietnamOffice,
+    altLangText.subscribeButton,
+    altLangText.emailPlaceholder,
+    altLangText.companyDescription,
+    altLangText.newsletterDescription,
+    // Known editor placeholders
+    "Liên Kết Nhanh", "Tài Nguyên", "Kết Nối", "Văn Phòng Việt Nam", "Đăng Ký", "Nhập email của bạn",
+    "Quick Links", "Resources", "Connect", "Vietnam Office", "Subscribe", "Enter your email",
+  ]);
+
+  const resolveText = (value: string | undefined, currentDefault: string): string => {
+    const v = value?.trim();
+    if (!v) return currentDefault;
+    if (altLangDefaults.has(v)) return currentDefault;
+    return v;
+  };
+
+  // Default data
+  const defaultQuickLinks = localizedText.quickLinks;
+  const defaultResources = localizedText.resources;
+  const defaultLegal = localizedText.legal;
+
+  const defaultSocialLinks = [
+    { icon: "Facebook", href: "#", label: "Facebook" },
+    { icon: "Twitter", href: "#", label: "Twitter" },
+    { icon: "Linkedin", href: "#", label: "LinkedIn" },
+    { icon: "Youtube", href: "#", label: "YouTube" }
+  ];
+
+  // Get typography styles
+  const getTypographyStyles = () => {
+    return {
+      fontFamily: theme.typography?.fontFamily || 'Inter',
+      fontSize: theme.typography?.fontSize || '16px',
+      lineHeight: theme.typography?.lineHeight || '1.6',
+      fontWeight: theme.typography?.fontWeight || '400',
+    }
+  }
+
+  // Get border radius class
+  const getBorderRadiusClass = () => {
+    switch (theme.layout?.borderRadius) {
+      case 'none':
+        return 'rounded-none'
+      case 'small':
+        return 'rounded-sm'
+      case 'large':
+        return 'rounded-lg'
+      case 'medium':
+      default:
+        return 'rounded-md'
+    }
+  }
+
+  // Get button styles
+  const getButtonStyles = (variant: 'outline' | 'primary' = 'primary') => {
+    const baseStyles = {
+      fontFamily: theme.typography?.fontFamily || 'Inter',
+      fontSize: theme.typography?.fontSize || '16px',
+      fontWeight: theme.typography?.fontWeight || '400',
+    }
+
+    if (variant === 'outline') {
+      return {
+        ...baseStyles,
+        borderColor: theme.colors.primary,
+        color: theme.colors.primary,
+        borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
+      }
+    }
+
+    return {
+      ...baseStyles,
+      backgroundColor: theme.colors.primary,
+      color: '#FFFFFF',
+      borderRadius: theme.components?.button?.rounded ? '9999px' : getBorderRadiusClass().replace('rounded-', ''),
+    }
+  }
+
+  // Get social icon component
+  const getSocialIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'Facebook':
+        return Facebook;
+      case 'Twitter':
+        return Twitter;
+      case 'Linkedin':
+        return Linkedin;
+      case 'Youtube':
+        return Youtube;
+      default:
+        return Facebook;
+    }
+  }
+
+  // Use content or defaults
+  const quickLinks = content.quickLinks || defaultQuickLinks;
+  const resources = content.resources || defaultResources;
+  const legal = content.legal || defaultLegal;
+  const socialLinks = content.socialLinks || defaultSocialLinks;
+
+  // Get header logo from theme content
+  const headerLogo = theme.content?.header?.logo;
+
+  return (
+    <footer
+      id="footer"
+      className="bg-secondary text-secondary-foreground"
+      style={{
+        backgroundColor: content.colorMode === 'custom' && content.backgroundColor
+          ? content.backgroundColor
+          : theme.sections?.footer?.backgroundColor || theme.colors.primary || '#1F2937',
+        color: content.colorMode === 'custom' && content.textColor
+          ? content.textColor
+          : theme.sections?.footer?.textColor || theme.colors.text || '#F9FAFB',
+        ...getTypographyStyles()
+      }}
+    >
+      <div
+        className="container mx-auto px-4 relative z-10"
+        style={{
+          maxWidth: theme.layout?.containerWidth || '1200px',
+          margin: '0 auto'
+        }}
+      >
+        {/* Main Footer Content */}
+        <div className="py-16">
+          <div className="grid lg:grid-cols-4 gap-12">
+            {/* Company Info */}
+            <div className="lg:col-span-1">
+              <div className="flex items-center space-x-2 mb-6">
+                {headerLogo ? (
+                  <div className="relative w-12 h-12">
+                    <Image
+                      src={headerLogo}
+                      alt="Logo"
+                      fill
+                      sizes="48px"
+                      className={cn("object-contain", getBorderRadiusClass())}
+                      quality={90}
+                    />
+                  </div>
+                ) : (
+                  <div
+                    className={cn("h-8 w-8 rounded-full", getBorderRadiusClass())}
+                    style={{
+                      background: `linear-gradient(135deg, ${theme.colors.secondary}, ${theme.colors.accent})`
+                    }}
+                  ></div>
+                )}
+                {(content.companyName && content.companyName.trim()) && (
+                  <span
+                    className="text-xl font-bold"
+                    style={{
+                      color: content.textColor || theme.colors.text || '#F9FAFB',
+                      fontWeight: theme.typography?.fontWeight || '700'
+                    }}
+                  >
+                    {content.companyName}
+                  </span>
+                )}
+              </div>
+              {(content.description && content.description.trim()) && (
+                <p
+                  className="mb-6 leading-relaxed"
+                  style={{
+                    color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                    fontSize: theme.typography?.fontSize || '16px',
+                    lineHeight: theme.typography?.lineHeight || '1.6'
+                  }}
+                >
+                  {content.description}
+                </p>
+              )}
+            </div>
+
+            {/* Quick Links - chỉ hiển thị khi có links */}
+            {quickLinks && quickLinks.length > 0 && (
+              <div>
+                <h3
+                  className="text-lg font-bold mb-6"
+                  style={{
+                    color: content.textColor || theme.colors.text || '#F9FAFB',
+                    fontWeight: theme.typography?.fontWeight || '700'
+                  }}
+                >
+                  {resolveText(content.quickLinksTitle, localizedText.quickLinksTitle)}
+                </h3>
+                <ul className="space-y-3">
+                  {quickLinks.map((link, index) => (
+                    <li key={index}>
+                      <a
+                        href={link.href}
+                        className="hover:text-primary transition-colors"
+                        style={{
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {link.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Contact Info */}
+            {content.contact && (
+              <div>
+                <h3
+                  className="text-lg font-bold mb-6"
+                  style={{
+                    color: content.textColor || theme.colors.text || '#F9FAFB',
+                    fontWeight: theme.typography?.fontWeight || '700'
+                  }}
+                >
+                  {resolveText(content.addressLabel, localizedText.vietnamOffice)}
+                </h3>
+                <div className="space-y-4">
+                  {(content.contact.address && content.contact.address.trim()) && (
+                    <div className="flex items-start space-x-3">
+                      <MapPin
+                        className="h-5 w-5 mt-0.5 shrink-0"
+                        style={{ color: theme.colors.secondary }}
+                      />
+                      <div
+                        className="text-sm"
+                        style={{
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {content.contact.address}
+                      </div>
+                    </div>
+                  )}
+                  {(content.contact.phone && content.contact.phone.trim()) && (
+                    <div className="flex items-center space-x-3">
+                      <Phone
+                        className="h-5 w-5 shrink-0"
+                        style={{ color: theme.colors.secondary }}
+                      />
+                      <div
+                        className="text-sm"
+                        style={{
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {content.contact.phone}
+                      </div>
+                    </div>
+                  )}
+                  {(content.contact.email && content.contact.email.trim()) && (
+                    <div className="flex items-center space-x-3">
+                      <Mail
+                        className="h-5 w-5 shrink-0"
+                        style={{ color: theme.colors.secondary }}
+                      />
+                      <div
+                        className="text-sm"
+                        style={{
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {content.contact.email}
+                      </div>
+                    </div>
+                  )}
+                  {(content.contact.businessHours && content.contact.businessHours.trim()) && (
+                    <div className="flex items-center space-x-3">
+                      <Clock
+                        className="h-5 w-5 shrink-0"
+                        style={{ color: theme.colors.secondary }}
+                      />
+                      <div
+                        className="text-sm"
+                        style={{
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                          fontSize: theme.typography?.fontSize || '16px'
+                        }}
+                      >
+                        {content.contact.businessHours}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Newsletter Signup */}
+            <div>
+              <h3
+                className="text-lg font-bold mb-6"
+                style={{
+                  color: content.textColor || theme.colors.text || '#F9FAFB',
+                  fontWeight: theme.typography?.fontWeight || '700'
+                }}
+              >
+                {resolveText(content.newsletter?.title, localizedText.connectTitle)}
+              </h3>
+              {(content.newsletter?.description && content.newsletter.description.trim()) && (
+                <p
+                  className="mb-4"
+                  style={{
+                    color: `${content.textColor || theme.colors.text || '#F9FAFB'}80`,
+                    fontSize: theme.typography?.fontSize || '16px'
+                  }}
+                >
+                  {content.newsletter.description}
+                </p>
+              )}
+              <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+                <Input
+                  type="email"
+                  placeholder={content.newsletter?.placeholder || localizedText.emailPlaceholder}
+                  value={newsletterEmail}
+                  onChange={(e) => setNewsletterEmail(e.target.value)}
+                  required
+                  className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground placeholder:text-secondary-foreground/50"
+                  style={{
+                    backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
+                    borderColor: `${content.textColor || theme.colors.text || '#F9FAFB'}20`,
+                    color: content.textColor || theme.colors.text || '#F9FAFB',
+                    borderRadius: getBorderRadiusClass().replace('rounded-', ''),
+                    fontFamily: theme.typography?.fontFamily || 'Inter',
+                    fontSize: theme.typography?.fontSize || '16px'
+                  }}
+                />
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={isSubmitting}
+                  style={{
+                    ...getButtonStyles('primary'),
+                    opacity: isSubmitting ? 0.7 : 1,
+                  }}
+                >
+                  {isSubmitting ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : null}
+                  {isSubmitting
+                    ? (projectLanguage === 'english' ? "Subscribing..." : "Đang đăng ký...")
+                    : (content.newsletter?.buttonText || localizedText.subscribeButton)}
+                </Button>
+              </form>
+
+              {/* Social Links - chỉ hiển thị khi có social links */}
+              {socialLinks && socialLinks.length > 0 && (
+                <div className="flex space-x-4 mt-6">
+                  {socialLinks.map((social, index) => {
+                    const IconComponent = getSocialIcon(social.icon);
+                    return (
+                      <a
+                        key={index}
+                        href={social.href}
+                        aria-label={social.label}
+                        className={cn("w-10 h-10 rounded-lg flex items-center justify-center transition-colors", getBorderRadiusClass())}
+                        style={{
+                          backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}10`,
+                          color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`
+                        }}
+                      >
+                        <IconComponent className="h-5 w-5" />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <Separator
+          className="bg-secondary-foreground/20"
+          style={{ backgroundColor: `${content.textColor || theme.colors.text || '#F9FAFB'}20` }}
+        />
+
+        {/* Bottom Footer */}
+        <div className="py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div
+              className="text-sm"
+              style={{
+                color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                fontSize: theme.typography?.fontSize || '16px'
+              }}
+            >
+              {content.copyright || `© 2025 ${content.companyName || "VietCoffee Export"}. ${localizedText.copyright}`}
+            </div>
+
+            {/* <div className="flex flex-wrap gap-6">
+              {legal.map((item, index) => (
+                <a
+                  key={index}
+                  href={item.href}
+                  className="text-sm hover:text-primary transition-colors"
+                  style={{ 
+                    color: `${content.textColor || theme.colors.text || '#F9FAFB'}70`,
+                    fontSize: theme.typography?.fontSize || '16px'
+                  }}
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div> */}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer; 

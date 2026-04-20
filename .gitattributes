@@ -1,0 +1,29 @@
+# Đảm bảo mọi file text dùng LF
+* text=auto eol=lf
+
+# Cụ thể cho từng loại file thường dùng
+*.ts   text eol=lf
+*.tsx  text eol=lf
+*.js   text eol=lf
+*.jsx  text eol=lf
+*.css  text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.prisma text eol=lf
+*.env  text eol=lf
+
+# Chặn các file binary bị sửa line ending
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.svg  text  # có thể giữ text vì SVG là XML
+*.ico  binary
+*.ttf  binary
+*.woff binary
+*.woff2 binary
+*.eot  binary

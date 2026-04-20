@@ -1,0 +1,15 @@
+{
+  "projectId": "cmgwgbiel0001w8tybiiyhnlz",
+  "userId": "cmdidp3s400007v4iismrxhf4",
+  "projectName": "Website mới",
+  "deployTime": "2025-10-19T09:44:12.354Z",
+  "fileCount": 9,
+  "userFolderPath": "users/cmdidp3s400007v4iismrxhf4/Website mới-1760867052286/",
+  "deployScriptPath": "deploy-nginx.sh",
+  "serverType": "nginx",
+  "domain": "test.dreaktech.xyz",
+  "includeAssets": true,
+  "version": "2.0-vps-optimized",
+  "vpsSpecs": "4vCPU-16GB-200GB-NVMe",
+  "optimized": true
+}

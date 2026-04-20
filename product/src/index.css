@@ -1,0 +1,223 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* B2B Export Manufacturing Design System - Industrial Professional */
+
+@layer base {
+  :root {
+    /* Core Brand Colors */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    /* Deep Navy - Trust & Authority */
+    --primary: 215 60% 20%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Light Industrial Gray */
+    --secondary: 210 15% 95%;
+    --secondary-foreground: 215 25% 25%;
+
+    /* Muted Tones */
+    --muted: 210 15% 92%;
+    --muted-foreground: 215 15% 45%;
+
+    /* Warm Amber Accent - CTAs & Action */
+    --accent: 35 95% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 215 60% 35%;
+
+    --radius: 0.5rem;
+
+    /* Custom B2B Colors */
+    --navy: 215 60% 20%;
+    --navy-light: 215 45% 35%;
+    --navy-dark: 215 70% 12%;
+    --amber: 35 95% 50%;
+    --amber-hover: 35 95% 45%;
+    --steel: 210 10% 55%;
+    --steel-light: 210 15% 75%;
+    --industrial-bg: 210 15% 97%;
+    --success: 145 65% 40%;
+    --success-foreground: 0 0% 100%;
+
+    /* Sidebar (keeping defaults) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 215 30% 8%;
+    --foreground: 210 20% 95%;
+
+    --card: 215 30% 12%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 215 30% 12%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 35 95% 55%;
+    --primary-foreground: 215 70% 10%;
+
+    --secondary: 215 25% 18%;
+    --secondary-foreground: 210 20% 90%;
+
+    --muted: 215 25% 18%;
+    --muted-foreground: 215 15% 60%;
+
+    --accent: 35 95% 55%;
+    --accent-foreground: 215 70% 10%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 215 25% 22%;
+    --input: 215 25% 22%;
+    --ring: 35 95% 55%;
+
+    --navy: 215 45% 35%;
+    --navy-light: 215 40% 50%;
+    --navy-dark: 215 60% 20%;
+    --amber: 35 95% 55%;
+    --amber-hover: 35 95% 50%;
+    --steel: 210 10% 50%;
+    --steel-light: 210 15% 35%;
+    --industrial-bg: 215 30% 10%;
+    --success: 145 65% 45%;
+
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-foreground;
+  }
+}
+
+@layer components {
+  /* Section Styling */
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16;
+  }
+
+  .section-title {
+    @apply text-2xl md:text-3xl font-bold text-foreground mb-2;
+  }
+
+  .section-subtitle {
+    @apply text-muted-foreground text-lg mb-8;
+  }
+
+  /* Industrial Table Styling */
+  .spec-table {
+    @apply w-full border-collapse bg-card rounded-lg overflow-hidden shadow-sm;
+  }
+
+  .spec-table th {
+    @apply bg-primary text-primary-foreground font-semibold text-left px-4 py-3 text-sm uppercase tracking-wider;
+  }
+
+  .spec-table td {
+    @apply px-4 py-3 border-b border-border text-sm;
+  }
+
+  .spec-table tr:nth-child(even) td {
+    @apply bg-muted/30;
+  }
+
+  .spec-table tr:hover td {
+    @apply bg-muted/50;
+  }
+
+  /* Lead Form Card */
+  .lead-form-card {
+    @apply bg-card border border-border rounded-xl p-6 md:p-8 shadow-lg;
+  }
+
+  /* Trust Badge */
+  .trust-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1.5 bg-success/10 text-success rounded-full text-sm font-medium;
+  }
+
+  /* USP Item */
+  .usp-item {
+    @apply flex items-start gap-3 text-primary-foreground/90;
+  }
+
+  /* Feature Card */
+  .feature-card {
+    @apply bg-card border border-border rounded-lg p-5 hover:shadow-md transition-shadow;
+  }
+
+  /* Sticky Mobile CTA */
+  .sticky-mobile-cta {
+    @apply fixed bottom-0 left-0 right-0 bg-card border-t border-border p-3 shadow-lg md:hidden z-50;
+  }
+}
+
+@layer utilities {
+  /* Text Gradients */
+  .text-gradient-navy {
+    @apply bg-gradient-to-r from-[hsl(var(--navy))] to-[hsl(var(--navy-light))] bg-clip-text text-transparent;
+  }
+
+  /* Background Patterns */
+  .bg-industrial-pattern {
+    background-image: 
+      linear-gradient(135deg, hsl(var(--navy) / 0.03) 25%, transparent 25%),
+      linear-gradient(225deg, hsl(var(--navy) / 0.03) 25%, transparent 25%),
+      linear-gradient(45deg, hsl(var(--navy) / 0.03) 25%, transparent 25%),
+      linear-gradient(315deg, hsl(var(--navy) / 0.03) 25%, transparent 25%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 0, 10px -10px, 0 10px;
+  }
+
+  /* Subtle shadow for cards */
+  .shadow-industrial {
+    box-shadow: 
+      0 1px 3px hsl(var(--navy) / 0.06),
+      0 4px 12px hsl(var(--navy) / 0.04);
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    @apply transition-transform duration-200 hover:-translate-y-0.5;
+  }
+}
