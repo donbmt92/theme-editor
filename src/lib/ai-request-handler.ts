@@ -23,7 +23,7 @@ export async function executeAIRequestWithRetry(prompt: string, initialApiKey?: 
 
       const genAI = new GoogleGenerativeAI(currentApiKey)
       const model = genAI.getGenerativeModel({
-        model: 'gemini-2.5-flash-lite-preview-09-2025',
+        model: 'gemini-3.1-flash-lite-preview',
         generationConfig: {
           maxOutputTokens: 32768, // Tăng lên 32K tokens để đảm bảo đủ chỗ cho response dài
           temperature: 0.7,
