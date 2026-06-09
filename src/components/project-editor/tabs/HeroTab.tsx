@@ -68,6 +68,24 @@ const HeroTab = ({ themeParams, updateThemeParam }: HeroTabProps) => {
 
   return (
     <div className="space-y-6">
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold mb-4">Swap section</h3>
+        <div>
+          <Label htmlFor="heroVariant">Kieu hien thi Hero</Label>
+          <Select
+            value={(hero.variant as string) || 'classic'}
+            onValueChange={(value) => updateThemeParam(['content', 'hero', 'variant'], value)}
+          >
+            <SelectTrigger id="heroVariant">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="classic">Classic split</SelectItem>
+              <SelectItem value="centered">Centered visual</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </Card>
       {/* Nội dung chính */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Nội dung chính</h3>

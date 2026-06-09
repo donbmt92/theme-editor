@@ -552,16 +552,26 @@ async function copyThemeComponents(themeName: string): Promise<ProjectFiles> {
     console.log(`📦 [EXPORT] Copying theme: ${themeName} -> ${normalizedThemeName}`)
 
     const themePath = path.join(process.cwd(), 'src', 'components', 'themes', normalizedThemeName)
-    const themeFiles = await fs.readdir(themePath)
+    const copyThemeDirectory = async (directoryPath: string) => {
+      const entries = await fs.readdir(directoryPath, { withFileTypes: true })
 
-    // Read all component files
-    for (const file of themeFiles) {
-      if (file.endsWith('.tsx') || file.endsWith('.ts')) {
-        const filePath = path.join(themePath, file)
-        const content = await fs.readFile(filePath, 'utf-8')
-        files[`src/components/themes/${normalizedThemeName}/${file}`] = content
+      for (const entry of entries) {
+        const entryPath = path.join(directoryPath, entry.name)
+
+        if (entry.isDirectory()) {
+          await copyThemeDirectory(entryPath)
+          continue
+        }
+
+        if (entry.isFile() && (entry.name.endsWith('.tsx') || entry.name.endsWith('.ts'))) {
+          const content = await fs.readFile(entryPath, 'utf-8')
+          const relativePath = path.relative(themePath, entryPath).replace(/\\/g, '/')
+          files[`src/components/themes/${normalizedThemeName}/${relativePath}`] = content
+        }
       }
     }
+
+    await copyThemeDirectory(themePath)
 
     // Also copy the main theme component
     const mainThemeFile = normalizedThemeName

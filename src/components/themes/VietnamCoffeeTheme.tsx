@@ -3,13 +3,9 @@
 import React from 'react'
 import { ThemeParams } from '@/types'
 import Header from './vietnam-coffee/Header'
-import HeroSection from './vietnam-coffee/HeroSection'
-import ProblemSolution from './vietnam-coffee/ProblemSolution'
-import LeadMagnetSection from './vietnam-coffee/LeadMagnetSection'
-import WhyChooseUsSection from './vietnam-coffee/WhyChooseUsSection'
-import ProductsServices from './vietnam-coffee/ProductsServices'
-import Testimonials from './vietnam-coffee/Testimonials'
 import Footer from './vietnam-coffee/Footer'
+import ThemeSectionRenderer from './vietnam-coffee/sections/library/ThemeSectionRenderer'
+import { DEFAULT_BODY_SECTION_ORDER } from './vietnam-coffee/sections/library/registry'
 // For exported projects, ProductPage is in @/components/product/ProductPage
 // We need to handle this dynamically based on whether files exist
 import ProductPage from './vietnam-coffee-product/ProductPage'
@@ -394,31 +390,26 @@ export default function VietnamCoffeeTheme({ theme, content, onContentUpdate, is
     return <ProductPage theme={theme} content={finalContent} />
   }
 
+  const bodySections = Array.isArray(finalContent.sectionOrder) && finalContent.sectionOrder.length > 0
+    ? finalContent.sectionOrder
+    : DEFAULT_BODY_SECTION_ORDER
+
   return (
     <div
       className="min-h-screen"
       style={getTypographyStyles()}
     >
       <Header theme={theme} content={finalContent.header} />
-      <HeroSection
-        theme={theme}
-        content={finalContent.hero}
-        onContentUpdate={handleHeroContentUpdate}
-      />
-      <ProblemSolution
-        theme={theme}
-        content={{
-          about: finalContent.about,
-          problems: finalContent.problems,
-          solutions: finalContent.solutions,
-          cta: finalContent.cta
-        }}
-      />
-      <LeadMagnetSection theme={theme} content={finalContent.leadMagnet} />
-      <ProductsServices theme={theme} content={finalContent.products} />
-      <WhyChooseUsSection theme={theme} content={finalContent.whyChooseUs} />
-      <Testimonials theme={theme} content={finalContent.testimonials} />
+      {bodySections.map((section) => (
+        <ThemeSectionRenderer
+          key={section.id}
+          section={section}
+          theme={theme}
+          content={finalContent}
+          onHeroContentUpdate={handleHeroContentUpdate}
+        />
+      ))}
       <Footer theme={theme} content={finalContent.footer} />
     </div>
   )
-} 
+}

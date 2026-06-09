@@ -15,6 +15,7 @@ interface ProductsTabProps {
 }
 
 interface ProductsContent {
+  variant?: 'alternating' | 'grid' | 'featured';
   title?: string;
   description?: string;
   backgroundColor?: string;
@@ -124,6 +125,25 @@ const ProductsTab = ({ themeParams, updateThemeParam }: ProductsTabProps) => {
 
   return (
     <div className="space-y-6">
+      <Card className="p-6">
+        <h3 className="text-lg font-semibold mb-4">Swap section</h3>
+        <div>
+          <Label htmlFor="productsVariant">Kieu hien thi san pham</Label>
+          <Select
+            value={products.variant || 'alternating'}
+            onValueChange={(value) => updateThemeParam(['content', 'products', 'variant'], value)}
+          >
+            <SelectTrigger id="productsVariant">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="alternating">Alternating rows</SelectItem>
+              <SelectItem value="grid">Product grid</SelectItem>
+              <SelectItem value="featured">Featured first</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </Card>
       {/* Nội dung chính */}
       <Card className="p-6">
         <h3 className="text-lg font-semibold mb-4">Nội dung chính</h3>

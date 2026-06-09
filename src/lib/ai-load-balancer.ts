@@ -181,9 +181,18 @@ class AILoadBalancer {
       // Reduce response time estimate for failed requests
       metrics.averageResponseTime *= 0.9
 
-      // If it's a quota error, mark this key as temporarily unavailable
-      if (error.includes('quota') || error.includes('429')) {
-        console.log(`🚫 Marking API key ${key.substring(0, 10)}... as quota exceeded`)
+      // If the key cannot be used, mark it as temporarily unavailable.
+      if (
+        error.includes('quota') ||
+        error.includes('429') ||
+        error.includes('401') ||
+        error.includes('403') ||
+        error.includes('PERMISSION_DENIED') ||
+        error.includes('CONSUMER_SUSPENDED') ||
+        error.includes('API key not valid') ||
+        error.includes('has been suspended')
+      ) {
+        console.log(`🚫 Marking API key ${key.substring(0, 10)}... as unavailable`)
         keyInfo.errors = 999 // Mark as heavily errored to avoid selection
       }
     }
@@ -303,4 +312,3 @@ class AILoadBalancer {
 export type { APIKeyInfo, APIPerformanceMetrics }
 export const aiLoadBalancer = new AILoadBalancer()
 export default AILoadBalancer
-

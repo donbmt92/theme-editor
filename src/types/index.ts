@@ -239,6 +239,56 @@ export interface ThemeSections {
   }
 }
 
+export type SectionType =
+  | 'hero'
+  | 'problemSolution'
+  | 'leadMagnet'
+  | 'products'
+  | 'whyChooseUs'
+  | 'testimonials'
+  | 'trustBar'
+  | 'targetBuyers'
+  | 'buyerProblem'
+  | 'solutionOverview'
+  | 'process'
+  | 'proof'
+  | 'faq'
+  | 'finalCta'
+
+export interface ThemeSectionOrderItem {
+  id: string
+  type: SectionType
+  enabled: boolean
+  core?: boolean
+}
+
+export interface CustomSectionContent {
+  type?: SectionType
+  variant?: string
+  title?: string
+  subtitle?: string
+  description?: string
+  badge?: string
+  buttonText?: string
+  secondaryButtonText?: string
+  backgroundColor?: string
+  textColor?: string
+  image?: string
+  stats?: Array<{ value?: string; label?: string }>
+  items?: Array<{
+    id?: string
+    icon?: string
+    title?: string
+    description?: string
+    label?: string
+    value?: string
+    quote?: string
+    author?: string
+    image?: string
+  }>
+  faqs?: Array<{ id?: string; question?: string; answer?: string }>
+}
+
 export interface ThemeContent {
   // Meta/SEO
   meta?: {
@@ -250,6 +300,9 @@ export interface ThemeContent {
     customHeadScripts?: string
     customBodyScripts?: string
   }
+
+  sectionOrder?: ThemeSectionOrderItem[]
+  customSections?: Record<string, CustomSectionContent>
 
   // Header
   header?: {
@@ -278,6 +331,7 @@ export interface ThemeContent {
 
   // Hero
   hero?: {
+    variant?: 'classic' | 'centered'
     title?: string
     subtitle?: string
     description?: string
@@ -461,6 +515,7 @@ export interface ThemeContent {
 
   // Products
   products?: {
+    variant?: 'alternating' | 'grid' | 'featured'
     title?: string
     description?: string
     backgroundColor?: string
@@ -1047,4 +1102,4 @@ export type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P]
 }
 
-export type Override<T, R> = Omit<T, keyof R> & R 
+export type Override<T, R> = Omit<T, keyof R> & R

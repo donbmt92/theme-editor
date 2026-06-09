@@ -9,6 +9,7 @@ import ProblemsTab from './tabs/ProblemsTab'
 import SolutionsTab from './tabs/SolutionsTab'
 import LeadMagnetTab from './tabs/LeadMagnetTab'
 import ProductsTab from './tabs/ProductsTab'
+import SectionsTab from './tabs/SectionsTab'
 import ProductPageTab from './tabs/ProductPageTab'
 import WhyChooseUsTab from './tabs/WhyChooseUsTab'
 import TestimonialsTab from './tabs/TestimonialsTab'
@@ -55,6 +56,9 @@ const TabContent = ({ activeTab, themeParams, updateThemeParam, userTier = 'FREE
 
     case 'products':
       return <ProductsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
+
+    case 'sections':
+      return <SectionsTab themeParams={themeParams} updateThemeParam={updateThemeParam} />
 
     case 'productPage':
       return <ProductPageTab themeParams={themeParams} updateThemeParam={updateThemeParam} userTier={userTier} />

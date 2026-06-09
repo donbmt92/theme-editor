@@ -1,4 +1,4 @@
-import { FileText, Palette, Type, Layout, FileCode, Package } from "lucide-react";
+import { FileText, Palette, Type, Layout, FileCode, Package, Layers } from "lucide-react";
 
 export type TabType =
   | "header"
@@ -8,6 +8,7 @@ export type TabType =
   | "solutions"
   | "leadMagnet"
   | "products"
+  | "sections"
   | "productPage"
   | "whyChooseUs"
   | "testimonials"
@@ -33,6 +34,7 @@ const TabSelector = ({ activeTab, onTabChange, userTier = "FREE" }: TabSelectorP
     { id: "solutions" as TabType, label: "Giải pháp", icon: FileText },
     { id: "leadMagnet" as TabType, label: "Lead Magnet", icon: FileText },
     { id: "products" as TabType, label: "Sản phẩm", icon: FileText },
+    { id: "sections" as TabType, label: "Sections", icon: Layers },
     ...(userTier === "PRO"
       ? [{ id: "productPage" as TabType, label: "Product Page 🌟", icon: Package }]
       : []),

@@ -8,6 +8,7 @@ export { generateStaticProductsSection } from './template/products'
 export { generateStaticTestimonialsSection } from './template/testimonials'
 export { generateStaticFooter } from './template/footer'
 export { generateStaticProductPage } from './template/product-page'
+export { generateStaticLibrarySection } from './template/library-sections'
 
 // Re-export types for convenience
 export type { HeaderParams, HeroParams, LeadMagnetParams, WhyChooseUsParams, ProblemsParams, ProductsParams, TestimonialsParams } from '../types'

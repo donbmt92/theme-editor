@@ -77,14 +77,9 @@ export class TemplateEngine {
     const metaKeywords = content?.meta?.keywords || 'business, website, professional'
     const companyName = content?.header?.title || projectName
 
-    // Generate all sections
+    // Generate shell and body sections
     const headerSection = await this.generateHeaderSection(content, themeParams)
-    const heroSection = await this.generateHeroSection(content, themeParams)
-    const leadMagnetSection = await this.generateLeadMagnetSection(content, themeParams, projectId)
-    const problemsSection = await this.generateProblemsSection(content, themeParams)
-    const productsSection = await this.generateProductsSection(content, themeParams)
-    const whyChooseUsSection = await this.generateWhyChooseUsSection(content, themeParams)
-    const testimonialsSection = await this.generateTestimonialsSection(content, themeParams)
+    const bodySections = await this.generateBodySections(content, themeParams, projectId)
     const productPageSection = await this.generateProductPageSection(content, themeParams)
     const footerSection = await this.generateFooterSection(themeParams)
 
@@ -161,23 +156,7 @@ export class TemplateEngine {
     
     <!-- Main Content -->
     <main id="main-content">
-        <!-- Hero Section -->
-        ${heroSection}
-        
-        <!-- Lead Magnet Section -->
-        ${leadMagnetSection}
-        
-        <!-- Problems Section -->
-        ${problemsSection}
-        
-        <!-- Products Section -->
-        ${productsSection}
-        
-        <!-- Why Choose Us Section -->
-        ${whyChooseUsSection}
-        
-        <!-- Testimonials Section -->
-        ${testimonialsSection}
+        ${bodySections}
         
         <!-- Product Page Section (PRO tier only) -->
         ${productPageSection}
@@ -195,6 +174,59 @@ export class TemplateEngine {
   /**
    * Generate HTML sections using template functions
    */
+  private static getDefaultBodySections(): Array<{ id: string; type: string; enabled: boolean; core?: boolean }> {
+    return [
+      { id: 'hero', type: 'hero', enabled: true, core: true },
+      { id: 'problem-solution', type: 'problemSolution', enabled: true, core: true },
+      { id: 'lead-magnet', type: 'leadMagnet', enabled: true, core: true },
+      { id: 'products', type: 'products', enabled: true, core: true },
+      { id: 'why-choose-us', type: 'whyChooseUs', enabled: true, core: true },
+      { id: 'testimonials', type: 'testimonials', enabled: true, core: true },
+    ]
+  }
+
+  private static async generateBodySections(content: any, themeParams: any, projectId?: string): Promise<string> {
+    const configuredSections = Array.isArray(content?.sectionOrder) && content.sectionOrder.length > 0
+      ? content.sectionOrder
+      : this.getDefaultBodySections()
+
+    const renderedSections = await Promise.all(
+      configuredSections
+        .filter((section: any) => section?.enabled !== false)
+        .map((section: any) => this.generateBodySection(section, content, themeParams, projectId))
+    )
+
+    return renderedSections.filter(Boolean).join('\n\n')
+  }
+
+  private static async generateBodySection(section: any, content: any, themeParams: any, projectId?: string): Promise<string> {
+    switch (section?.type) {
+      case 'hero':
+        return this.generateHeroSection(content, themeParams)
+      case 'problemSolution':
+        return this.generateProblemsSection(content, themeParams)
+      case 'leadMagnet':
+        return this.generateLeadMagnetSection(content, themeParams, projectId)
+      case 'products':
+        return this.generateProductsSection(content, themeParams)
+      case 'whyChooseUs':
+        return this.generateWhyChooseUsSection(content, themeParams)
+      case 'testimonials':
+        return this.generateTestimonialsSection(content, themeParams)
+      case 'trustBar':
+      case 'targetBuyers':
+      case 'buyerProblem':
+      case 'solutionOverview':
+      case 'process':
+      case 'proof':
+      case 'faq':
+      case 'finalCta':
+        return this.generateLibrarySection(section, content, themeParams)
+      default:
+        return ''
+    }
+  }
+
   private static async generateHeaderSection(content: any, themeParams: any): Promise<string> {
     const { generateStaticHeader } = await import('./html-templates')
     return generateStaticHeader({ content: content?.header, colors: themeParams?.colors, themeParams })
@@ -208,7 +240,16 @@ export class TemplateEngine {
 
   private static async generateProblemsSection(content: any, themeParams: any): Promise<string> {
     const { generateStaticProblemsSection } = await import('./html-templates')
-    return generateStaticProblemsSection({ content: content?.problems, colors: themeParams?.colors, themeParams })
+    return generateStaticProblemsSection({
+      content: {
+        about: content?.about,
+        problems: content?.problems,
+        solutions: content?.solutions,
+        cta: content?.cta
+      },
+      colors: themeParams?.colors,
+      themeParams
+    })
   }
 
   private static async generateLeadMagnetSection(content: any, themeParams: any, projectId?: string): Promise<string> {
@@ -240,5 +281,19 @@ export class TemplateEngine {
   private static async generateProductPageSection(content: any, themeParams: any): Promise<string> {
     const { generateStaticProductPage } = await import('./html-templates')
     return generateStaticProductPage({ content, themeParams })
+  }
+
+  private static async generateLibrarySection(section: any, content: any, themeParams: any): Promise<string> {
+    const { generateStaticLibrarySection } = await import('./html-templates')
+    const sectionContent = {
+      ...(content?.customSections?.[section.id] || {}),
+      type: section.type
+    }
+
+    return generateStaticLibrarySection({
+      type: section.type,
+      content: sectionContent,
+      themeParams
+    })
   }
 }

@@ -123,6 +123,7 @@ const createDefaultThemeParams = (): ThemeParams => ({
       ]
     },
     hero: {
+      variant: "classic",
       title: "Cà Phê Việt Nam - Chất Lượng Quốc Tế",
       subtitle: "Xuất khẩu cà phê chất lượng cao",
       description: "Chúng tôi chuyên cung cấp các loại cà phê Việt Nam chất lượng cao cho thị trường quốc tế, đảm bảo hương vị đặc trưng và tiêu chuẩn xuất khẩu.",
@@ -236,6 +237,7 @@ const createDefaultThemeParams = (): ThemeParams => ({
       image: "/assets/cta-image.jpg"
     },
     products: {
+      variant: "alternating",
       title: "Sản Phẩm Của Chúng Tôi",
       description: "Khám phá các loại cà phê đặc trưng của Việt Nam",
       backgroundColor: "#F0F4F8",
@@ -816,4 +818,4 @@ const ProjectEditor = () => {
   )
 }
 
-export default ProjectEditor 
+export default ProjectEditor

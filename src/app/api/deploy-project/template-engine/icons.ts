@@ -49,6 +49,41 @@ const ICON_PATHS: Record<string, string> = {
     <path d="M3.3 7L12 12l8.7-5"/>
     <path d="M12 22V12"/>
   `,
+  PackageCheck: `
+    <path d="m16 16 2 2 4-4"/>
+    <path d="m21 10-9-5-9 5 9 5 9-5Z"/>
+    <path d="M3 10v6l9 5 4.5-2.5"/>
+    <path d="M21 10v3"/>
+    <path d="M12 15v6"/>
+  `,
+  Store: `
+    <path d="m2 7 2-4h16l2 4"/>
+    <path d="M4 7v13h16V7"/>
+    <path d="M8 21v-8h8v8"/>
+    <path d="M2 7h20"/>
+  `,
+  Building2: `
+    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+    <path d="M6 12H4a2 2 0 0 0-2 2v8h20v-8a2 2 0 0 0-2-2h-2"/>
+    <path d="M10 6h4"/>
+    <path d="M10 10h4"/>
+    <path d="M10 14h4"/>
+  `,
+  SearchCheck: `
+    <path d="m8 11 2 2 4-4"/>
+    <circle cx="11" cy="11" r="8"/>
+    <path d="m21 21-4.3-4.3"/>
+  `,
+  ShieldCheck: `
+    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67 0C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+    <path d="m9 12 2 2 4-4"/>
+  `,
+  Ship: `
+    <path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2c1.3 0 1.9.5 2.5 1"/>
+    <path d="M19.38 20A11.6 11.6 0 0 0 21 14l-8-4-8 4a11.6 11.6 0 0 0 1.62 6"/>
+    <path d="M12 10V3"/>
+    <path d="M8 7h8"/>
+  `,
   Zap: `
     <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
   `,
