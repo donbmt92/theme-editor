@@ -32,7 +32,7 @@ jobs:
           VPS_PATH: ${{ secrets.VPS_PATH }}
           DEPLOY_BRANCH: ${{ secrets.DEPLOY_BRANCH || 'main' }}
         run: |
-          ssh -i ~/.ssh/id_ed25519 "$VPS_USER@$VPS_HOST" << EOF
+          ssh -o BatchMode=yes -i ~/.ssh/id_ed25519 "$VPS_USER@$VPS_HOST" << EOF
             set -euo pipefail
 
             cd "$VPS_PATH"
@@ -45,7 +45,7 @@ jobs:
 
             docker compose -f docker-compose-vps.yml build app worker
             docker compose -f docker-compose-vps.yml up -d --remove-orphans
-            docker compose -f docker-compose-vps.yml exec -T app npx prisma db push
+            docker compose -f docker-compose-vps.yml exec -T app npx prisma db push --skip-generate
 
             docker compose -f docker-compose-vps.yml ps
             curl -fsS http://127.0.0.1:3033/auth/signin >/dev/null
