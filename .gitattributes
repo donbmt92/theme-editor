@@ -21,7 +21,8 @@
 *.jpg  binary
 *.jpeg binary
 *.gif  binary
-*.svg  text  # có thể giữ text vì SVG là XML
+# SVG is XML; keep as text
+*.svg  text
 *.ico  binary
 *.ttf  binary
 *.woff binary

@@ -21,9 +21,13 @@
 # production
 /build
 
+# local scratch / reference files (not part of the app)
+/temp/
+
 # misc
 .DS_Store
 *.pem
+theme_editor_deploy_key*
 
 # debug
 npm-debug.log*

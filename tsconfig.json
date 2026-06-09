@@ -37,6 +37,7 @@
   ],
   "exclude": [
     "node_modules",
+    "temp",
     "public/src/**",
     "product/**",
     "templates/**",
